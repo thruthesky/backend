@@ -6,7 +6,7 @@
  */
 
 namespace model\meta;
-class Meta extends \model\base\Base
+class Meta extends \model\entity\Entity
 {
 
     public function __construct()

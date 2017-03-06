@@ -217,3 +217,31 @@ function rsearch($dir, $pattern) {
 
 
 
+
+
+
+function test( $re, $code ) {
+    static $count = 0;
+    $count ++;
+    if ( is_array($re) ) {
+        if ( isset($re['code']) && ! isset($re['idx']) ) { // server data.
+            if ( $re['code'] ) test_error($re, $code, $count);
+            else echo "<div class='success'>$count - SUCCESS: $code</div>";
+        }
+        else { // unknown data.
+            if ( $re ) echo "<div class='success'>$count - SUCCESS: $code</div>";
+            else test_error($re, $code, $count);
+        }
+    }
+    else { //
+        if ( $re ) echo "<div class='success'>$count - SUCCESS: $code</div>";
+        else test_error($re, $code, $count);
+    }
+}
+
+function test_error( $re, $code, $count ) {
+    echo "<div class='error'>$count - ERROR : ( $re[code] $code ) - $re[message]</div>";
+    echo "<pre>";
+    debug_print_backtrace();
+    echo "</pre>";
+}

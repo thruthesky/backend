@@ -7,9 +7,11 @@
  *
  */
 namespace model\entity;
+$_cache_entity_record = [];
+$_cache_entity_record_count = [];
 class Entity extends \model\taxonomy\Taxonomy  {
 
-    public $record = [];
+    private $record = [];
 
 
 
@@ -51,27 +53,51 @@ class Entity extends \model\taxonomy\Taxonomy  {
      *      - if there is no data, empty array will be returned.
      *
      *
-     * @todo test on caching.
+     *
      */
     public function load( $what ) {
 
+
         if ( empty($what) ) return ERROR_EMPTY_SQL_CONDITION;
 
-        if ( is_numeric($what) ) {
-            if ( $this->idx == $what ) return $this;
-            $what = "idx=$what";
-        }
-        else {
-            if ( $this->id == $what ) return $this;
-            $what = "id = '$what'";
-        }
+        $table = $this->getTable();
 
-        $this->record = db()->row("SELECT * FROM {$this->getTable()} WHERE $what");
+
+//        di($what);
+
+        if ( $cache = $this->getCacheEntity( $what ) ) {      /// Check if cache exists.
+
+            $this->reset( $cache );   /// Reset the cache.
+            $this->increaseResetCount( $what );
+
+            return $this;
+        }
+        if ( is_numeric($what) ) $cond = "idx=$what";
+        else $cond = "id = '$what'";
+
+        $this->record = db()->row("SELECT * FROM $table WHERE $cond");
+
+        $this->setCacheEntity( $what, $this->record );
         return $this;
     }
 
 
+    private function getCacheEntity( $what ) {
+        global $_cache_entity_record;
+        $table = $this->getTable();
+        if ( isset( $_cache_entity_record[ $table ][ $what ] ) ) return $_cache_entity_record[ $table ][ $what ];
+        return null;
+    }
 
+    private function setCacheEntity( $what, $record ) {
+
+        global $_cache_entity_record;
+        $table = $this->getTable();
+        /// Save in memory cache
+        if ( $this->record ) $_cache_entity_record[$table][ $what ] = $this->record;
+
+
+    }
 
 
     /**
@@ -136,6 +162,33 @@ class Entity extends \model\taxonomy\Taxonomy  {
         else if ( is_array( $idx ) ) $this->record = $idx;
 
         return $this;
+    }
+
+    /**
+     * Returns reset count of a record.
+     *
+     * @note it tracks memory reset cache count.
+     *
+     *
+     * @param $what
+     */
+    public function increaseResetCount( $what ) {
+        global $_cache_entity_record_count;
+        $table = $this->getTable();
+        if ( isset($_cache_entity_record_count[ $table ]) && isset($_cache_entity_record_count[ $table ][ $what ]) ) {
+            $_cache_entity_record_count[ $table ][ $what ]++;
+        }
+        else $_cache_entity_record_count[ $table ][ $what ] = 1;
+
+    }
+
+    public function getResetCount( $what ) {
+        global $_cache_entity_record_count;
+        $table = $this->getTable();
+        if ( isset($_cache_entity_record_count[ $table ]) && isset($_cache_entity_record_count[ $table ][ $what ]) ) {
+            return $_cache_entity_record_count[ $table ][ $what ];
+        }
+        return 0;
     }
 
 

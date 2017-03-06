@@ -18,9 +18,21 @@ namespace model\base;
 class Base {
 
 
+    private $table = null;
+
     public function __construct()
     {
 
+    }
+
+
+
+    public function setTable( $table ) {
+        $this->table = $table;
+    }
+
+    public function getTable() {
+        return $this->table;
     }
 
 
@@ -38,6 +50,8 @@ class Base {
     public function checkPassword( $plain_text_password, $encrypted_password ) {
         return password_verify( $plain_text_password, $encrypted_password );
     }
+
+
 
 
 }

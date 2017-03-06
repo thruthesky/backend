@@ -13,11 +13,12 @@ include __ROOT_DIR__ . '/core/route.php';
 $route_name = in('route');
 if ( empty( $route_name ) ) error( ERROR_ROUTE_NOT_PROVIDED );
 
+
+
 $route = get_route( $route_name);
 if ( ! $route ) error( ERROR_ROUTE_NOT_EXIST );
 
 ///// run the class method
-
 
     if ( class_exists( $route['path'] ) ) {      // if class file ('model/model-name/class.php') exists?
 
@@ -31,6 +32,6 @@ if ( ! $route ) error( ERROR_ROUTE_NOT_EXIST );
         }
     }
     else {
-        error( ERROR_MODEL_CLASS_NOT_FOUND );
+        error( ERROR_MODEL_CLASS_NOT_FOUND, "model class - $route[path] - is not found" );
     }
 

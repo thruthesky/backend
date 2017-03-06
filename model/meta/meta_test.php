@@ -30,7 +30,6 @@ class Meta_Test {
         $count = meta()->getCount( 'abc', 111, 'code-unit-test');
         test( $count == 0, "Meta abc, 111, code-unit-test has deleted.");
 
-
     }
 }
 

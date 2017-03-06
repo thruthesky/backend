@@ -22,3 +22,8 @@ function get_route( $name ) {
     if ( isset( $routes[ $name ] ) && $routes[ $name ] ) return $routes[ $name ];
     else return FALSE;
 }
+
+function add_route( $name, $option ) {
+    global $routes;
+    $routes[ $name ] = $option;
+}

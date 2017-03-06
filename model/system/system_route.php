@@ -1,14 +1,16 @@
 <?php
 
-$routes['install'] = [
+add_route('install', [
     'path' => "\\model\\system\\install",
     'vars' => []
-];
+]);
 
 
-$routes['version'] = [
+
+add_route('version', [
     'path' => "\\model\\system\\system",
     'method' => 'version',
     'vars' => []
-];
+]);
+
 
