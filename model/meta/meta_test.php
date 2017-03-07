@@ -8,7 +8,8 @@ class Meta_Test {
     }
     public function run() {
 
-
+        $this->create();
+/*
         $idx = meta()->set('abc', 123, 'code-unit-test', 'data');
         test( $idx, "Meta::set() code: code, data: data re: idx: $idx");
 
@@ -29,6 +30,43 @@ class Meta_Test {
         meta()->delete( 'abc', 111, 'code-unit-test' );
         $count = meta()->getCount( 'abc', 111, 'code-unit-test');
         test( $count == 0, "Meta abc, 111, code-unit-test has deleted.");
+    */
+    }
+    public function create() {
+
+        $model = "meta-test-1";
+        $model_idx = 123;
+        $code = 'the code';
+        $data = 'the data';
+
+        $meta = meta()->load( $model, $model_idx, $code );
+        if ( $meta->exist() ) {
+            $meta->delete();
+        }
+
+
+
+        $idx = meta()
+            ->set('model', $model)
+            ->set('model_idx', $model_idx)
+            ->set('code', $code)
+            ->set('data', $data)
+            ->create();
+
+
+
+        test( $idx, "Meta create: model: $model. idx: $idx");
+
+        if ( is_success( $idx ) ) {
+
+            $meta = meta()->load( $idx );
+            test( $meta->model == $model, "Meta model was successfully created");
+
+            meta()->load( $idx )->delete();
+            test( ! meta()->load( $idx )->exist(), "Meta deleted" );
+
+        }
+
 
     }
 }

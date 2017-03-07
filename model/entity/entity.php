@@ -33,6 +33,38 @@ class Entity extends \model\taxonomy\Taxonomy  {
         else return null;
     }
 
+    /**
+     *
+     * @note the difference between setter and set() is that set() returns $this.
+     * @param $name
+     * @param $value
+     * @return $this
+     */
+    public function set($name, $value) {
+        $this->record[$name] = $value;
+        return $this;
+    }
+
+
+
+
+
+    /**
+     *
+     * To check if the record is set or not set.
+     *
+     * @return number|boolean
+     *      - FALSE on error.
+     *      - number of record idx
+     */
+    public function exist()
+    {
+        if ( empty( $this->record ) ) return FALSE;
+        if ( ! isset( $this->record['idx'] ) ) return FALSE;
+        return $this->idx;
+    }
+
+
 
     /**
      * Returns a record.
@@ -44,7 +76,7 @@ class Entity extends \model\taxonomy\Taxonomy  {
      *              - If it is numeric, then it is idx. so, this method will get the record on the idx.
      *              - If it is one word string, then it is an 'ID'
      *              - If it is a string with ' ', =, <, >, then it assumes that is is a WHERE SQL clause.
-     * @return mixed
+     * @return $this
      *
      *      - if error, error code will be return.
      *          -- if there is no data, that is not error. that's just a success with no data.
@@ -82,6 +114,23 @@ class Entity extends \model\taxonomy\Taxonomy  {
     }
 
 
+    /**
+     *
+     * Loads entity data into $this->record.
+     *
+     * @param $cond - SQL Condition
+     * @warning this method must be called only internally for security reason. This should not accept user made query condition.
+     *
+     * @return $this
+     *
+     */
+    public function loadQuery( $cond ) {
+        $table = $this->getTable();
+        $this->record = db()->row("SELECT * FROM $table WHERE $cond");
+        return $this;
+    }
+
+
     private function getCacheEntity( $what ) {
         global $_cache_entity_record;
         $table = $this->getTable();
@@ -95,32 +144,40 @@ class Entity extends \model\taxonomy\Taxonomy  {
         $table = $this->getTable();
         /// Save in memory cache
         if ( $this->record ) $_cache_entity_record[$table][ $what ] = $this->record;
+    }
 
-
+    /**
+     *
+     * Delete cache
+     *
+     * @param $what
+     */
+    private function deleteCacheEntity( $what ) {
+        global $_cache_entity_record;
+        $table = $this->getTable();
+        // di( "_cache_entity_record[$table][ $what ]" );
+        unset( $_cache_entity_record[$table][ $what ]);
     }
 
 
     /**
-     * @param $data
-     * @return array|mixed
-     *      - ERROR CODE ( < 0 ) will be return on error.
-     *      - Array will be return on success.
-    - Success return format
-    Array
-    (
-    [session_id] => 943-fccb4a3fbfd77f7606289c6437400be8
-    )
+     *
+     * @param null $record
+     *
+     *
+     *
+     * @return number
+     *      - number of ERROR CODE ( < 0 ) will be return on error.
+     *      - number of entity idx ( > 0 ) on success.
      *
      * @see readme for detail.
+     *
      */
-    public function create( $data ) {
-
-
-
-        $record['created'] = time();
-        return db()->insert( $this->getTable(), $data );
-
-
+    public function create( $record = null ) {
+        if ( is_array($record) ) $this->record = $record;
+        if ( empty( $this->record ) ) return ERROR_RECORD_NOT_SET;
+        $this->record['created'] = time();
+        return db()->insert( $this->getTable(), $this->record );
     }
 
 
@@ -182,6 +239,7 @@ class Entity extends \model\taxonomy\Taxonomy  {
 
     }
 
+
     public function getResetCount( $what ) {
         global $_cache_entity_record_count;
         $table = $this->getTable();
@@ -209,6 +267,40 @@ class Entity extends \model\taxonomy\Taxonomy  {
             return db()->update( $this->getTable(), $record, "idx={$this->idx}");
         }
         return FALSE;
+    }
+
+
+
+
+
+
+    /**
+     *
+     * Deletes the record.
+     *
+     *
+     * @attention if there is any error on database query, error code will be return.
+     *
+     * @return number
+     *      - number of error code on error
+     *      - 0 on success.
+     *
+     * @code
+     *
+            user()->loadBySessionId( $session_id )->delete();
+     * @endcode
+     */
+    public function delete() {
+        if ( ! $this->exist() ) return ERROR_USER_NOT_SET;
+        $idx = $this->idx;
+        db()->query(" DELETE FROM {$this->getTable()} WHERE idx=$idx ");
+
+        /// Reset ( delete ) all the caches.
+        $this->deleteCacheEntity( $idx );
+        $this->deleteCacheEntity( $this->id );
+        $this->reset( [] );
+
+        return OK;
     }
 
 

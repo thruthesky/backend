@@ -60,6 +60,7 @@ class Taxonomy extends \model\base\Base  {
      *
      *
      */
+    /*
     public function delete( $cond ) {
         if ( empty($cond) ) return ERROR_EMPTY_SQL_CONDITION;
         if ( ! db()->secure_cond( $cond ) ) return ERROR_INSCURE_SQL_CONDITION;
@@ -67,7 +68,7 @@ class Taxonomy extends \model\base\Base  {
         return OK;
     }
 
-
+    */
 
 
 

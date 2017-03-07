@@ -46,26 +46,15 @@ class User extends \model\entity\Entity {
 
     /**
      *
-     * To check if the record is set or not set.
-     *
-     * @return int
-     */
-    public function exist()
-    {
-        return $this->idx;
-    }
-
-    /**
-     *
      * loads a user by session id.
      * @warning it does what 'load()' does.
      * @param $session_id
-     * @return array|null
+     * @return $this
      * @code
      *         $this->load_by_session_id( in('session_id') );
      * @endcode
      */
-    public function load_by_session_id( $session_id ) {
+    public function loadBySessionId( $session_id ) {
         if ( empty($session_id) ) return ERROR_SESSION_ID_EMPTY;
         $user = $this->load( "session_id='$session_id'");
         if ( empty($user) ) return ERROR_WRONG_SESSION_ID;
@@ -120,15 +109,16 @@ class User extends \model\entity\Entity {
     }
 
     /**
-     * @param $data
-     * @return array|mixed
+     *
+     *
+     * @param $data - user record data to create.
+     *
+     *      $data['password'] is the password of the user and it must be in plain-text.
+     *
+     * @return mixed
+     *
      *      - ERROR CODE ( < 0 ) will be return on error.
-     *      - Array will be return on success.
-    - Success return format
-    Array
-    (
-    [session_id] => 943-fccb4a3fbfd77f7606289c6437400be8
-    )
+     *      - string of session id will be return on success.
      *
      * @see readme for detail.
      */

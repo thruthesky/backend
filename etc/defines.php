@@ -23,6 +23,9 @@ define('ERROR_NO_DATA', -40085);                        $em[ERROR_NO_DATA] = 'no
 
 define('ERROR_MALFORMED_RESPONSE', -40090);             $em[ERROR_MALFORMED_RESPONSE] = 'malformed-response.return-data-is-not-array';
 
+define('ERROR_ENTITY_NOT_SET', -40095);                   $em[ERROR_ENTITY_NOT_SET] = 'entity-record-not-set';
+
+
 
 
 define('ERROR_USER_EXIST', -40101);                     $em[ERROR_USER_EXIST] = 'user-exist';

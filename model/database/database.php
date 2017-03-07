@@ -470,7 +470,15 @@ class Database extends \PDO {
         $keys = implode(",", $key_list);
         $values = implode(",", $value_list);
         $q = "INSERT INTO `{$table}` ({$keys}) VALUES ({$values})";
-        $count = $this->exec($q);
+
+        try {
+            $count = $this->exec($q);
+        } catch ( \PDOException $e) {
+            debug_database_log('Connection failed: ' . $e->getMessage());
+            return FALSE;
+        }
+
+
         if ( $count == 0 ) {
             return FALSE;
         }

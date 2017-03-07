@@ -16,6 +16,7 @@ class Meta extends \model\entity\Entity
     }
 
 
+
     /**
      * Create or Update meta data.
      *
@@ -27,22 +28,41 @@ class Meta extends \model\entity\Entity
      *                  - meta.idx will be return on success.
      *                  - ERROR CODE WILL BE return on error.
      */
-    public function set( $model, $model_idx, $code, $data ) {
+    /*
+    public function create( $model=null, $model_idx=null, $code=null, $data=null ) {
 
 
-        db()->delete( 'meta', " model='$model' AND model_idx = $model_idx AND code='$code' " );
 
-        $kvs = [
+        $meta = meta()->loadQuery( " model='$model' AND model_idx = '$model_idx' AND code='$code' " );
+        // db()->delete( 'meta', " model='$model' AND model_idx = $model_idx AND code='$code' " );
+
+        if ( $meta->exist() ) $meta->delete();
+
+        /*
+         *
+         * $this->model = $model;
+        $this->model_idx = $model_idx;
+        $this->code = $code;
+        $this->data = $data;
+        $this->create();
+
+
+
+
+        $record = [
             'model' => $model,
             'model_idx' => $model_idx,
             'code' => $code,
             'data' => $data
         ];
-        $idx = db()->insert( 'meta', $kvs );
-        if ( empty($idx) ) error(ERROR_DATABASE_INSERT_FAILED);
-        return $idx;
 
+        $idx = parent::create( $record );
+
+        if ( is_error($idx) ) return $idx;
+        else if ( empty($idx) ) return ERROR_DATABASE_INSERT_FAILED;
+        else return $idx;
     }
+    */
 
 
     /**
@@ -73,11 +93,15 @@ class Meta extends \model\entity\Entity
      * @param $model
      * @param $model_idx
      * @param $code
-     * @return mixed
+     * @return $this
      */
-    public function get( $model, $model_idx, $code ) {
-        return db()->result(" SELECT data FROM meta WHERE $model = '$model' AND model_idx=$model_idx AND code='$code'");
+    public function load( $model=null, $model_idx=null, $code=null ) {
+
+        if ( is_numeric($model) && $model_idx === null && $code === null ) return parent::load( $model );
+        return $this->loadQuery( "model = '$model' AND model_idx='$model_idx' AND code='$code'" );
+        // return db()->result(" SELECT data FROM meta WHERE $model = '$model' AND model_idx=$model_idx AND code='$code'");
     }
+
 
     /**
      *
@@ -97,7 +121,9 @@ class Meta extends \model\entity\Entity
      * @param $model
      * @param $model_idx - default is null for parent::delete() argument match.
      * @param $code - default is null for parent::delete() argument match.
+     * @return number|void
      */
+    /*
     public function delete( $model, $model_idx=null, $code=null ) {
 
         parent::delete( "model = '$model' AND model_idx = $model_idx AND code = '$code'" );
@@ -105,6 +131,7 @@ class Meta extends \model\entity\Entity
 //        db()->query("DELETE FROM meta WHERE model = '$model' AND model_idx = $model_idx AND code = '$code'");
 
     }
+    */
 
 
 
@@ -113,6 +140,7 @@ class Meta extends \model\entity\Entity
      * @param $model
      * @param $model_idx
      */
+    /*
     public function deletes( $model, $model_idx ) {
 
         parent::delete( "model = '$model' AND model_idx = $model_idx" );
@@ -120,6 +148,7 @@ class Meta extends \model\entity\Entity
         //db()->query("DELETE FROM meta WHERE model = '$model' AND model_idx = $model_idx");
     }
 
+    */
 
 
 
