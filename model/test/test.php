@@ -52,7 +52,7 @@ class Test {
 
 
     public function http_get($route) {
-        $body = file_get_contents("http://localhost/www/backend-0.2/?route=$route");
+        $body = file_get_contents( URL_SITE . "?route=$route" );
         return json_decode($body, true);
     }
 

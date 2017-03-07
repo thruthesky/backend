@@ -9,6 +9,10 @@
  */
 
 
+
+$URL_SITE               = "http://localhost/www/backend-0.2/index.php";
+
+
 $ADMIN_ID               = 'admin';          // this is admin id.
 
 
@@ -62,6 +66,8 @@ if ( file_exists( __ROOT_DIR__ . "/etc/my-config.php") ) require __ROOT_DIR__ . 
 ////////////////////////////////////////////////////////// DO NOT EDIT BELOW
 
 define('DEBUG',             $DEBUG);
+
+define('URL_SITE',          $URL_SITE );
 
 define('DATABASE_USER',     $DATABASE_USER);
 define('DATABASE_PASSWORD', $DATABASE_PASSWORD);
