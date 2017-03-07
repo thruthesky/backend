@@ -101,7 +101,11 @@ function in ( $code, $default = null ) {
  *
  * Saves JSON error info $system['error'];
  *
- * @attention this method does not stop the script. This is for mainly debug/unit test purpose.
+ * @attention this method does NOT exit the script. This is for mainly debug/unit test purpose.
+ *
+ * @note Only interfaces must use error() to echo JSON error string.
+ *
+ *
  *
  * @param $code
  * @param string $message
@@ -120,7 +124,7 @@ function error( $code, $message='' ) {
     if ( empty($message) && isset($em[ $code ]) ) $message = $em[ $code ];
     debug_log("ERROR >> $code : $message");
     echo json_encode( ['code'=>$code, 'message'=>$message] );
-    exit;
+
 }
 
 function get_error_string( $re ) {
@@ -147,6 +151,9 @@ function get_error_string( $re ) {
  * @note and later, it will be served by json_result()
  *
  * @attention when success json data printed out, it does not stop the script. Meaning the script will continue.
+ *
+ * @note Only interfaces must use error() to echo JSON error string.
+ *
  * @param null $data - This must be null or array. Better to be associative array.
  *
  * @return $mixed
@@ -155,7 +162,7 @@ function success( $data = null ) {
     if ( empty($data) || is_array( $data ) ) { }
     else error( ERROR_MALFORMED_RESPONSE );
     echo json_encode(['code'=>OK, 'data'=>$data]);
-    exit;
+
 }
 
 /**

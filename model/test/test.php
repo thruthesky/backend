@@ -38,23 +38,23 @@ class Test {
 
     /**
      *
-     * @param $route
-     * @param array $params
-     * @return mixed
+     * /**
+     *
      */
-    public function route( $route, $params = [] ) {
+    public function route( $route_name, $params = [] ) {
 
         $_REQUEST = $params;
-        $re = $this->http_get( $route );
-        if ( empty($re) ) return [ 'code' => -999, 'message' => 'No data received' ];
-        return $re;
+
+        ob_start();
+        run_route( get_route( $route_name ) );
+        $data = ob_get_clean();
+        if ( empty($data) ) return [ 'code' => -999, 'message' => 'No data received' ];
+        $res = json_decode($data, true);
+
+        return $res;
     }
 
 
-    public function http_get($route) {
-        $body = file_get_contents( URL_SITE . "?route=$route" );
-        return json_decode($body, true);
-    }
 
     /**
      * this returns random string.

@@ -3,6 +3,7 @@
 
 /**
  *
+ * Returns Truthy value if the input is error response.
  *
  * @param $code - is one of the responses
  *      1. HTTP call
@@ -13,9 +14,9 @@
  *
  * @return bool
  */
-function is_error ( $code ) {
-    if ( is_numeric( $code ) && $code < 0 ) return true;
-    else if ( is_array( $code ) && isset( $code['code'] ) && $code['code'] < 0 ) return true;
+function is_error ( $res ) {
+    if ( is_numeric( $res ) && $res < 0 ) return $res;
+    else if ( is_array( $res ) && isset( $res['code'] ) && $res['code'] < 0 ) return $res['code'];
     else return false;
 }
 

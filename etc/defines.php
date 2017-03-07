@@ -10,7 +10,8 @@ define('ERROR_MODEL_CLASS_NOT_FOUND', -40040);          $em[ERROR_MODEL_CLASS_NO
 define('ERROR_NO_RESPONSE', -40041);                    $em[ERROR_NO_RESPONSE] = "no-success-error-response";
 define('ERROR_MODEL_CLASS_EMPTY', -40042);              $em[ERROR_MODEL_CLASS_EMPTY] = 'model-class-empty';
 define('ERROR_MODEL_CLASS_METHOD_NOT_EXIST', -40043);   $em[ERROR_MODEL_CLASS_METHOD_NOT_EXIST] = 'model-class-method-not-exist';
-
+define('ERROR_REQUIRED_INPUT_IS_MISSING', -40044);      $em[ERROR_REQUIRED_INPUT_IS_MISSING] = "required-input-is-missing";
+define('ERROR_INVALID_INPUT_VARIABLE', -40045);         $em[ERROR_INVALID_INPUT_VARIABLE] = "invalid-input-variable";
 
 
 define('ERROR_KEY_EXISTS', -40080);                     $em[ERROR_KEY_EXISTS] = 'key-exists';

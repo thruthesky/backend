@@ -76,10 +76,32 @@ class User_Test extends \model\test\Test {
     public function register() {
         $id = "user-register-test-1";
         $record = [];
-        $record['id'] = $id;
+
 
         $re = $this->route("register", $record );
-        di($re);
+        test( is_error( $re ), "User reigster: " . get_error_string( $re ) );
+
+        $record['id'] = $id;
+        $re = $this->route("register", $record );
+        test( is_error( $re ), "User reigster: " . get_error_string( $re ) );
+
+        $record['password'] = $id;
+        $re = $this->route("register", $record );
+        test( is_error( $re ), "User reigster: " . get_error_string( $re ) );
+
+        $record['name'] = $id;
+        $re = $this->route("register", $record );
+        test( is_error( $re ), "User reigster: " . get_error_string( $re ) );
+
+
+        $record['WRONG-VAR-NAME'] = $id;
+        $re = $this->route("register", $record );
+        test( is_error( $re ), "User reigster: " . get_error_string( $re ) );
+
+
+
+
+
 
     }
 
