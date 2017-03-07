@@ -1,7 +1,7 @@
 <?php
 
 namespace model\user;
-class User_Test {
+class User_Test extends \model\test\Test {
 
 
     public function run() {
@@ -12,6 +12,7 @@ class User_Test {
 
         $this->create();
 
+        $this->register();
     }
 
 
@@ -61,16 +62,25 @@ class User_Test {
         }
 
 
-
-
-        test( is_success( $session_id ), "User created: $id, $session_id" . get_error_string( $session_id ) );
+        test( ! is_error( $session_id ), "User created: $id, $session_id" . get_error_string( $session_id ) );
 
         $user = user()->load( $id );
         test( $user->id == $id, "User id is: $id");
 
-
+        user( $id )->delete();
+        test( ! user()->load($id)->exist(), "User $id deleted." );
     }
 
 
+
+    public function register() {
+        $id = "user-register-test-1";
+        $record = [];
+        $record['id'] = $id;
+
+        $re = $this->route("register", $record );
+        di($re);
+
+    }
 
 }

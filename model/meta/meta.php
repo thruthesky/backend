@@ -33,11 +33,15 @@ class Meta extends \model\entity\Entity
     }
 
 
+    public function loadOf() {
 
-    public function countOf( $model, $model_idx, $code ) {
+    }
 
-        return $this->count("model = '$model' AND model_idx = $model_idx AND code = '$code' AND model = '$model'");
+    public function countOf( $model, $model_idx=null, $code=null ) {
 
+        if ( $model_idx && $code ) return $this->count("model = '$model' AND model_idx = $model_idx AND code = '$code'");
+        else if ( $model_idx )  return $this->count("model = '$model' AND model_idx = $model_idx");
+        else return $this->count("model = '$model'");
     }
 
 }

@@ -102,3 +102,23 @@ Base => Taxonomy => Entity => File
 
 
 
+# Database and Data Relation
+
+## meta table
+
+Meta table holds meta datas.
+
+It has model, model_idx, code and value fields plus idx, created and updated.
+
+### model
+
+meta.model field is for a big category like "user", "forum", "file".
+
+### model_idx
+
+meta.model_idx is to associate the meta data with the object(entity/record) of the model.
+
+
+### code
+meta.code is a sub-category for the meta. It would be a property of a entity like "facebook address", "google plus address" of a user.
+

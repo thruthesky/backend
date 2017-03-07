@@ -9,7 +9,7 @@ define( 'ERROR_ROUTE_NOT_EXIST', -40011);               $em[ERROR_ROUTE_NOT_EXIS
 define('ERROR_MODEL_CLASS_NOT_FOUND', -40040);          $em[ERROR_MODEL_CLASS_NOT_FOUND] = "model-class-not-found";
 define('ERROR_NO_RESPONSE', -40041);                    $em[ERROR_NO_RESPONSE] = "no-success-error-response";
 define('ERROR_MODEL_CLASS_EMPTY', -40042);              $em[ERROR_MODEL_CLASS_EMPTY] = 'model-class-empty';
-define('ERROR_MODEL_CLASS_METHOD_NOT_EXIST', -40043);   $em[ERROR_MODEL_CLASS_METHOD_NOT_EXIST] = 'method-not-exist';
+define('ERROR_MODEL_CLASS_METHOD_NOT_EXIST', -40043);   $em[ERROR_MODEL_CLASS_METHOD_NOT_EXIST] = 'model-class-method-not-exist';
 
 
 

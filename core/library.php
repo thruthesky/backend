@@ -18,6 +18,16 @@ function is_error ( $code ) {
     else if ( is_array( $code ) && isset( $code['code'] ) && $code['code'] < 0 ) return true;
     else return false;
 }
-function is_success( $code ) {
-    return ! is_error( $code );
+
+
+/**
+ *
+ * @attention the input must be a response.
+ *
+ * @param $re
+ * @return bool
+ */
+function is_success( $re ) {
+    if ( is_array( $re ) && isset( $re['code'] ) && $re['code'] == 0 ) return TRUE;
+    else return FALSE;
 }

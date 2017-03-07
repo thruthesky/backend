@@ -126,8 +126,15 @@ function error( $code, $message='' ) {
 function get_error_string( $re ) {
     global $em;
     if ( is_error( $re ) ) {
-        $str = $em[ $re ];
-        return "ERROR( $re ) - <b>$str</b>";
+        if ( is_array( $re ) ) {
+            $code = $re['code'];
+            $message = $re['message'];
+        }
+        else {
+            $code = $re;
+            $message = $em[ $re ];
+        }
+        return "ERROR( $code ) - <b>$message</b>";
     }
     else return null;
 }

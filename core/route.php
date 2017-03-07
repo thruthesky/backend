@@ -27,3 +27,14 @@ function add_route( $name, $option ) {
     global $routes;
     $routes[ $name ] = $option;
 }
+$_current_route = null;
+function set_current_route( $route ) {
+    global $_current_route;
+    $_current_route = $route;
+}
+function get_current_route( ) {
+    global $_current_route;
+    return $_current_route;
+}
+
+
