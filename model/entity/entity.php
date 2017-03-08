@@ -256,17 +256,46 @@ class Entity extends \model\taxonomy\Taxonomy  {
     /**
      * @param $record
      *
+     * @attention it does not support chaining like belwo
+     *
+     *      user()->load(...)->set(...)->update()
+     *
+     *      because when you do this, you will update more data even that are not needed.
+     *
+     *      So,
+     *
+     *      user()->load()->update( [ ... ] )
+     *
+     *      is the only way to minimize the upload data.
+     *
      * @warning it returns a value now.
      *
-     * @return bool|\PDOStatement - same as PDO::query. If there is error, FALSE will be return.
+     * @return bool|number
+     *
+     *      - FALSE on database error.
+     *      - FALSE on logical error. If entity idx does not exist.
+     *      - TRUE if there is no modified/deleted row.
+     *      - TRUE of rows that are modified/deleted.
+     * @note User === to check if it is error.
+     *
+     *
      *
      */
     public function update( $record ) {
         $record['updated'] = time();
         if ( $this->idx ) {
-            return db()->update( $this->getTable(), $record, "idx={$this->idx}");
+            $re = db()->update( $this->getTable(), $record, "idx={$this->idx}");
+            if ( $re === FALSE ) return FALSE;
+            else {
+
+                /// Reset ( delete ) all the caches.
+                $this->deleteCacheEntity( $this->idx );
+                if ( $this->id ) $this->deleteCacheEntity( $this->id );
+                $this->reset( [] );
+                return TRUE;
+            }
         }
-        return FALSE;
+        else return FALSE;
     }
 
 
@@ -297,7 +326,7 @@ class Entity extends \model\taxonomy\Taxonomy  {
 
         /// Reset ( delete ) all the caches.
         $this->deleteCacheEntity( $idx );
-        $this->deleteCacheEntity( $this->id );
+        if ( $this->id ) $this->deleteCacheEntity( $this->id );
         $this->reset( [] );
 
         return OK;

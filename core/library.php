@@ -23,12 +23,33 @@ function is_error ( $res ) {
 
 /**
  *
- * @attention the input must be a response.
+ * Returns true if the $re is a susccess.
+ *
+ * @note if $re['code'] has number less than 0, then it returns FALSE.
+ * @note if $re is number and it is less than 0, then it returns FALSE.
+ *
+ *
+ *
+ * @attention the input can be a response or a primitive value.
  *
  * @param $re
  * @return bool
  */
 function is_success( $re ) {
-    if ( is_array( $re ) && isset( $re['code'] ) && $re['code'] == 0 ) return TRUE;
-    else return FALSE;
+    if ( is_array( $re ) ) {
+        //di("yes array");
+        if ( isset( $re['code'] ) ) {
+            //di("yes code is set");
+            if ( $re['code'] == 0 ) {       // if code is 0.
+                //di("yes code is 0");
+                return TRUE;
+            }
+            else return FALSE;              // if code is NOT 0.
+        }
+    }
+
+    if ( is_numeric( $re ) && $re < 0 ) return FALSE;
+
+
+    return TRUE;
 }

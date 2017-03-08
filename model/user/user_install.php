@@ -25,7 +25,7 @@ db()
     ->add('province', 'varchar', 255)
     ->add('city', 'varchar', 255)
     ->add('zipcode', 'varchar', 32)
-    ->add('stamp_registration', 'INT UNSIGNED DEFAULT 0')
+    // ->add('stamp_registration', 'INT UNSIGNED DEFAULT 0')
     ->add('stamp_resign', 'INT UNSIGNED DEFAULT 0') // time of resigned
     ->add('block', 'INT UNSIGNED DEFAULT 0') // time of blocked until.
     ->add('block_reason', 'varchar', 4096)

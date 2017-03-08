@@ -51,15 +51,24 @@ function check_http_variables() {
     $variables = $route['variables'];
 
 
-    $required = $optional = [];
+    $required = $optional = $system = [];
     if ( isset( $variables['required'] ) ) $required = $variables['required'];
-    if ( isset( $route['optional'] ) ) $optional = $route['optional'];
-    $accepts = array_merge( $required, $optional );
+    if ( isset( $variables['optional'] ) ) $optional = $variables['optional'];
+    if ( isset( $variables['system'] ) ) $system = $variables['system'];
+
+    //debug_log("required:");
+    //debug_log($optional);
+
+    $accepts = array_merge( $required, $optional, $system );
 
 
 
-    debug_log( $_REQUEST );
-    debug_log( $variables );
+
+
+    //debug_log( $_REQUEST );
+    //debug_log( $variables );
+    //debug_log("accepts: ");
+    //debug_log( $accepts );
 
 
 

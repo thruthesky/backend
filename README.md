@@ -101,6 +101,55 @@ Base => Taxonomy => Entity => File
 ````
 
 
+# Security
+
+## HTTP Input Variable Check
+
+The "run_route()" will check the input of the HTTP as stated in the route.
+
+In a route, you might see the `variables`.
+
+````
+add_route('register', [
+    'path' => "\\model\\user\\user_interface",
+    'method' => 'register',
+    'variables' => [
+        'required' => [ 'id', 'password' ],
+        'optional' => [ 'domain', 'name', 'middle_name', 'last_name',
+            'nickname', 'email', 'gender', 'birth_year', 'birth_month', 'birth_day', 'landline',
+                        'mobile', 'address', 'country', 'province', 'city', 'zipcode' ],
+        'system' => [ 'route' ]
+    ]
+]);
+````
+
+The `variables` states what variables the interface accepts.
+
+* If any variables that are not states above has delivered to interface, then the `run_route()` will reject with error.
+* The variables of `required` in `variables` are required. If any of the required variables is missing, then `run_route()` will reject the request with error.
+* `optional` variables are optional.
+* `system` variables are those variables that are used by the interface.
+* `required` and `optional` variables will be inserted into database table record, so you will add only state variables that will be saved into database table.
+
+
+
+
+
+
+# Interface
+
+Interfaces are the methods that are directly called by API call.
+
+All interfaces must be recorded in `{module_name}_interface.php`
+
+For instance
+
+````
+model/user/user_interface.php
+````
+
+
+
 
 # Database and Data Relation
 

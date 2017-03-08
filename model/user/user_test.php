@@ -13,6 +13,9 @@ class User_Test extends \model\test\Test {
         $this->create();
 
         $this->register();
+
+        $this->edit();
+
     }
 
 
@@ -86,19 +89,69 @@ class User_Test extends \model\test\Test {
         test( is_error( $re ), "User reigster: " . get_error_string( $re ) );
 
         $record['password'] = $id;
+
+
+        $wrong_var = "WRONG-VARIABLE-NAME";
+        $record[$wrong_var] = $id;
         $re = $this->route("register", $record );
-        test( is_error( $re ), "User reigster: " . get_error_string( $re ) );
+        test( is_error( $re ), "User reigster: $wrong_var error. " . get_error_string( $re ) );
 
-        $record['name'] = $id;
+        unset( $record[$wrong_var] );
+
+
+        $record['name'] = "User Name";
         $re = $this->route("register", $record );
-        test( is_error( $re ), "User reigster: " . get_error_string( $re ) );
+        if ( is_error( $re ) == ERROR_USER_EXIST ) {
+            user()->load( $id )->delete();
+            test( ! user()->load( $id )->exist(), "User deleted: $id" . get_error_string($re) );
+            $re = $this->route("register", $record );
+        }
+        test( is_success( $re ), "User reigster OK. id: $id " . get_error_string( $re ) );
+
+        test( user()->load( $id )->id == $id, "User ID comparison: $id " . get_error_string($re ) );
+
+        user()->load( $id )->delete();
+        test( ! user()->load( $id )->exist(), "User deleted: $id" . get_error_string($re) );
+
+    }
 
 
-        $record['WRONG-VAR-NAME'] = $id;
-        $re = $this->route("register", $record );
-        test( is_error( $re ), "User reigster: " . get_error_string( $re ) );
+    public function edit() {
+
+        $id = "user-edit-test-1";
+        $name = "name-$id";
+        $new_name = "New name";
+
+        if ( user()->load( $id )->exist() ) user()->load( $id )->delete();
+
+        $record = [];
+        $record[ 'id' ] = $id;
+        $record[ 'password' ] = $id;
+        $record[ 'name' ] = $name;
+        $re = $this->route( "register", $record );
+        test( is_success($re), "User register: $id " . get_error_string($re));
+
+        //
+        $session_id = $re['data']['session_id'];
+
+        test( user( $id )->name == $name, "User name check: $name " . get_error_string( $re ) );
 
 
+        //
+        unset( $record['id'], $record['password'] );
+        $record[ 'session_id' ] = "WRONG SESSION ID" . $session_id;
+        $record[ 'name' ] = $new_name;
+        $record[ 'address' ] = "My Address Is ...";
+
+        $re = $this->route('user.edit', $record);
+        test( is_error($re) == ERROR_WRONG_SESSION_ID, "User edit: $id " . get_error_string($re));
+
+        $record['session_id'] = $session_id
+        $re = $this->route('user.edit', $record);
+        test( is_error($re) == ERROR_WRONG_SESSION_ID, "User edit: $id " . get_error_string($re));
+
+
+        test( user( $id )->name == $new_name, "User name check: $new_name " . get_error_string($re));
 
 
 

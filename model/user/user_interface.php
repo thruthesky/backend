@@ -6,8 +6,28 @@ class User_Interface extends User {
 
 
     public function register() {
+        $record = get_current_route_variables();
+        $re = user()->create( $record );
+        is_success( $re ) ? success([ 'session_id' => $re ]) : error( $re );
+    }
 
-        error( ERROR_UNKNOWN );
+
+    public function edit() {
+
+        $user = user()->load( in( 'session_id' ) );
+        if ( ! $user->exist() ) return error( ERROR_WRONG_SESSION_ID );
+
+
+        $record = get_current_route_optional_variables();
+        $re = $user->update( $record );
+
+
+        if ( empty($re ) ) return error( ERROR_DATABASE_UPDATE_FAILED );
+        else {
+            $session_id = user()->getSessionId();
+            return success( [ 'session_id' => $session_id ] );
+        }
+
     }
 
 

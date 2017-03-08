@@ -497,7 +497,7 @@ class Database extends \PDO {
      *
      *      0 - if it did not update anything.
      *
-     *      ERROR_INSCURE_SQL_CONDITION - on condition error.
+     *
      */
     public function update($table, $fields, $cond=null)
     {

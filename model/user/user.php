@@ -6,6 +6,7 @@
 namespace model\user;
 class User extends \model\entity\Entity {
 
+
     public function __construct()
     {
         parent::__construct();
@@ -14,7 +15,7 @@ class User extends \model\entity\Entity {
 
     /**
      *
-     * Return unique session id for each user.
+     * Return unique session id for each user after reset it.
      *
      * @attention it does not check if the user has authenticated or not.
      *
@@ -43,6 +44,44 @@ class User extends \model\entity\Entity {
 
     }
 
+    /**
+     * Return TRUE $what has session id format.
+     *
+     * @param $what
+     *
+     * @return bool
+     */
+    public function isSessionId( $what ) {
+        if ( empty($what) ) return FALSE;
+        if ( ! strpos( $what, '-' ) ) return FALSE;
+        list( $idx, $md5 ) = explode('-', $what);
+        if ( ! is_numeric( $idx ) ) return FALSE;
+        if ( is_numeric( $md5 ) ) return FALSE;
+        if ( strlen($md5) != 32 ) return FALSE;
+        return TRUE;
+    }
+
+
+    /**
+     *
+     * Overrides of entity()->load()
+     *
+     * @param $what
+     *      - if it is session id, it load data based on session id.
+     *      - or else, it will do entity->load()
+     *
+     * @return $this
+     *
+     * @code example
+     *          $user = user()->load( in( 'session_id' ) );
+     * @endcode
+     *
+     */
+    public function load( $what ) {
+        if ( $this->isSessionId($what) ) return $this->loadBySessionId( $what );
+        else return parent::load( $what );
+    }
+
 
     /**
      *
@@ -54,12 +93,14 @@ class User extends \model\entity\Entity {
      *         $this->load_by_session_id( in('session_id') );
      * @endcode
      */
-    public function loadBySessionId( $session_id ) {
+    private function loadBySessionId( $session_id ) {
         if ( empty($session_id) ) return ERROR_SESSION_ID_EMPTY;
-        $user = $this->load( "session_id='$session_id'");
+        $user = $this->loadQuery( "session_id='$session_id'");
         if ( empty($user) ) return ERROR_WRONG_SESSION_ID;
         return $user;
     }
+
+
 
     public function login() {
         return $this->idx;
@@ -162,22 +203,28 @@ class User extends \model\entity\Entity {
     /**
      * Updates user info.
      * @attention It updates user data based on $this->record. So, before updating a user, the user info must be saved in $this->record.
-     * @param $data
-     * @return void
+     * @param $record
+     * @return bool
+     *
+     * @todo meta update.
      */
-    public function update( $data ) {
+    public function update( $record ) {
 
         $meta = null;
-        if ( array_key_exists( 'meta', $data ) ) {
-            $meta = $data['meta'];
-            unset($data['meta']);
+        if ( array_key_exists( 'meta', $record ) ) {
+            $meta = $record['meta'];
+            unset($record['meta']);
         }
 
-        parent::update( $data );
+        $re = parent::update( $record );
+
+        if ( empty( $re ) ) return FALSE;
+
         if ( $meta ) {
-            meta()->sets( 'user', $this->record['idx'], $meta );
+            // meta()->sets( 'user', $this->record['idx'], $meta );
         }
 
+        return TRUE;
     }
 
 

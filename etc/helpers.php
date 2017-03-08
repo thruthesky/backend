@@ -122,7 +122,7 @@ function in ( $code, $default = null ) {
 function error( $code, $message='' ) {
     global $em;
     if ( empty($message) && isset($em[ $code ]) ) $message = $em[ $code ];
-    debug_log("ERROR >> $code : $message");
+    debug_log(" &gt;&gt;&gt; [ ERROR[ $code ] - \"$message\"");
     echo json_encode( ['code'=>$code, 'message'=>$message] );
 
 }
@@ -138,7 +138,7 @@ function get_error_string( $re ) {
             $code = $re;
             $message = $em[ $re ];
         }
-        return "ERROR( $code ) - <b>$message</b>";
+        return " &gt;&gt;&gt; [ ERROR( $code ) - \"<b>$message</b>\" ] ";
     }
     else return null;
 }

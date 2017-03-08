@@ -32,6 +32,8 @@ class Meta extends \model\entity\Entity
         // return db()->result(" SELECT data FROM meta WHERE $model = '$model' AND model_idx=$model_idx AND code='$code'");
     }
 
+    
+
 
     public function loadOf() {
 

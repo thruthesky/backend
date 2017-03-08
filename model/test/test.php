@@ -7,6 +7,7 @@ class Test {
 
     public function run() {
 
+        $this->reload( 2 );
 
         $this->textRoute();
 
@@ -28,6 +29,17 @@ class Test {
 
         exit;
 
+    }
+
+    public function reload( $n ) {
+        $seconds = $n * 1000;
+        echo "
+            <script>
+                setTimeout( function() {
+                    location.reload( true );
+                }, $seconds );
+            </script>
+        ";
     }
 
     private function textRoute() {
