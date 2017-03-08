@@ -66,21 +66,29 @@ function user( $what = null ) {
 }
 
 /**
- * Returns user table record currently logged in user.
+ * Returns currently logged in user Object.
+ *
  *
  * @warning if there is no $_REQUEST['session_id'], then the User object is empty.
  * @return \model\user\User
  */
-$_currentUser;
-function currentUser() {
-    global $_currentUser; // memory cache.
-    if ( isset( $_currentUser ) || empty( $_currentUser ) ) { // if not set.
-        $_currentUser = user()->load_by_session_id( in('session_id') );
-    }
-    $user = user();
-    $user->reset( $_currentUser );
-    return $user;
+$_currentUser = null;
+function setCurrentUser( $user ) {
+    global $_currentUser;
+    $_currentUser = $user;
 }
+
+
+function currentUser()
+{
+    global $_currentUser;
+    if (empty($_currentUser)) {
+        if (in('session_id')) setCurrentUser(user(in('session_id')));
+    }
+    return $_currentUser;
+}
+
+
 
 /**
  *
@@ -91,7 +99,7 @@ function currentUser() {
 function meta() {
     return new \model\meta\Meta();
 }
-
+/*
 
 function forum_config() {
     return new \model\forum\Config();
@@ -100,7 +108,7 @@ function forum_config() {
 function forum_data() {
     return new \model\forum\Data();
 }
-
+*/
 
 /**
  * @return bool|\model\database\Database|null

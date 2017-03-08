@@ -1,5 +1,11 @@
-# backend-0.2
+# Backend-0.2
 Backend server for Restful APIs
+
+
+# Resources
+
+* The best resource to understand Backend is to read and run the tests.
+
 
 
 # Interface

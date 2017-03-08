@@ -58,9 +58,11 @@ class Test {
         $_REQUEST = $params;
 
         ob_start();
-        run_route( get_route( $route_name ) );
+        $route = get_route( $route_name );
+        if ( empty($route) ) return ['code' => ERROR_ROUTE_NOT_EXIST, 'message' => 'No route exists' ];
+        run_route( $route );
         $data = ob_get_clean();
-        if ( empty($data) ) return [ 'code' => -999, 'message' => 'No data received' ];
+        if ( empty($data) ) return [ 'code' => ERROR_NO_RESPONSE, 'message' => 'No data received' ];
         $res = json_decode($data, true);
 
         return $res;
@@ -85,5 +87,14 @@ class Test {
         return $str;
     }
 
+
+    public function createUser( $record ) {
+
+        user( $record['id'] )->delete();
+
+        $re = $this->route( "register", $record );
+        return is_success($re) ? $re['data']['session_id'] : null;
+
+    }
 
 }

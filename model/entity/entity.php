@@ -60,6 +60,18 @@ class Entity extends \model\taxonomy\Taxonomy  {
      *
      * To check if the record is set or not set.
      *
+     * @warning
+     *
+     *      You cannot do something like below to check entity exist.
+     *
+     *
+     *      if ( ! $this->load( $id ) ) return ERROR_USER_NOT_EXIST;
+     *
+     *      You must do
+     *
+     *      if ( ! $this->load( $id )->exist() ) return ERROR_USER_NOT_EXIST;
+     *
+     *
      * @return number|boolean
      *      - FALSE on error.
      *      - number of record idx
@@ -257,12 +269,26 @@ class Entity extends \model\taxonomy\Taxonomy  {
     }
 
 
-
-
-
     /**
      * @param $record
      *
+     * @param bool $reload
+     *
+     *      - If it is true, then it deletes $this->record and reload the data.
+     *      - If it is false, then it does NOT delete $this->record and does NOT reload the data.
+     *
+     * @warning If $reload is not true, then the Entity object still have the data before it updates
+     *          And you are working with it.
+     *          Be sure you are handling Entity data before update.
+     *
+     * @note You can pass $reload = false, when you do some heavy update of multiple record and you do not need the updated data.
+     *
+     * @return bool|number - FALSE on database error.
+     *
+     * - FALSE on database error.
+     * - FALSE on logical error. If entity idx does not exist.
+     * - TRUE if there is no modified/deleted row.
+     * - TRUE of rows that are modified/deleted.
      * @attention it does not support chaining like belwo
      *
      *      user()->load(...)->set(...)->update()
@@ -277,18 +303,18 @@ class Entity extends \model\taxonomy\Taxonomy  {
      *
      * @warning it returns a value now.
      *
-     * @return bool|number
-     *
-     *      - FALSE on database error.
-     *      - FALSE on logical error. If entity idx does not exist.
-     *      - TRUE if there is no modified/deleted row.
-     *      - TRUE of rows that are modified/deleted.
      * @note User === to check if it is error.
      *
      *
+     * @code
+     *
+     *                  $this->update( $info, false );
+
+     * @endcode
+     *
      *
      */
-    public function update( $record ) {
+    public function update( $record, $reload = true ) {
         $record['updated'] = time();
         if ( $this->idx ) {
             $re = db()->update( $this->getTable(), $record, "idx={$this->idx}");
@@ -296,9 +322,14 @@ class Entity extends \model\taxonomy\Taxonomy  {
             else {
 
                 /// Reset ( delete ) all the caches.
-                $this->deleteCacheEntity( $this->idx );
-                if ( $this->id ) $this->deleteCacheEntity( $this->id );
-                $this->reset( [] );
+                debug_log( "reload : $reload");
+                if ( $reload ) {
+                    $idx = $this->idx;
+                    $this->deleteCacheEntity( $this->idx );
+                    if ( $this->id ) $this->deleteCacheEntity( $this->id );
+                    $this->reset( [] );
+                    $this->load( $idx );
+                }
                 return TRUE;
             }
         }
@@ -335,6 +366,16 @@ class Entity extends \model\taxonomy\Taxonomy  {
      *
             user()->loadBySessionId( $session_id )->delete();
      * @endcode
+     *
+     * @code Example of entity->delete();
+     *
+            $user->delete();
+            $resigned = user()->load( $session_id  );
+            if ( $resigned->exist() ) { ... Error on delete ... }
+            else { ... Success on delete ... }
+     *
+     * @endcode
+     *
      */
     public function delete() {
         if ( ! $this->exist() ) return ERROR_USER_NOT_SET;

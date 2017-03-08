@@ -26,10 +26,19 @@ db()
     ->add('city', 'varchar', 255)
     ->add('zipcode', 'varchar', 32)
     // ->add('stamp_registration', 'INT UNSIGNED DEFAULT 0')
-    ->add('stamp_resign', 'INT UNSIGNED DEFAULT 0') // time of resigned
-    ->add('block', 'INT UNSIGNED DEFAULT 0') // time of blocked until.
+
+    ->add('block_begin_stamp', 'INT UNSIGNED DEFAULT 0') // time of blocked until.
+    ->add('block_end_stamp', 'INT UNSIGNED DEFAULT 0') // time of blocked until.
+    ->add('block_count', 'INT UNSIGNED DEFAULT 0') // time of blocked until.
     ->add('block_reason', 'varchar', 4096)
+
+    ->add('resign_stamp', 'INT UNSIGNED DEFAULT 0') // time of resigned
     ->add('resign_reason', 'varchar', 1024)
+
+    ->add('login_count', 'INT UNSIGNED DEFAULT 0')          // login count
+    ->add('login_stamp', 'INT UNSIGNED DEFAULT 0')          // last login stamp
+    ->add('login_ip', 'varchar', 128)             // last login ip.
+
     ->unique('id')
     ->index('session_id')
     ->index('domain')

@@ -31,6 +31,36 @@ add_route('user.edit', [
 ]);
 
 
+
+
+
+add_route('login', [
+    'path' => "\\model\\user\\user_interface",
+    'method' => 'login',
+    'variables' => [
+        'required' => [ 'id', 'password' ],
+        'optional' => [ ],
+        'system' => [ 'route' ]
+    ]
+]);
+
+
+add_route('resign', [
+    'path' => "\\model\\user\\user_interface",
+    'method' => 'resign',
+    'variables' => [
+        'required' => [ 'session_id' ],
+        'optional' => [ ],
+        'system' => [ 'route' ]
+    ]
+]);
+
+
+
+
+
+
+
 add_route('user.get', [
     'path' => "\\model\\user\\user_interface",
     'method' => 'get',
@@ -39,12 +69,6 @@ add_route('user.get', [
         'optional' => [],
         'system' => [ 'route' ]
     ]
-]);
-
-
-add_route('resign', [
-    'path' => "\\model\\user\\user_interface",
-    'method' => 'regsign'
 ]);
 
 

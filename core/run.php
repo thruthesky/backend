@@ -36,7 +36,7 @@ function run_route( $route )
                 else error( $re['code'], $re['message'] );
             } else {
                 $route = get_current_route();
-                error(ERROR_MODEL_CLASS_METHOD_NOT_EXIST, "method does not exist on the route: $route[path]");
+                error(ERROR_MODEL_CLASS_METHOD_NOT_EXIST, "{$route['method']}() method does not exist on the route: $route[path]");
             }
         }
     } else {

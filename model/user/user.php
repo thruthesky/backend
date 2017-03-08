@@ -83,6 +83,8 @@ class User extends \model\entity\Entity {
     }
 
 
+
+
     /**
      *
      * loads a user by session id.
@@ -102,9 +104,6 @@ class User extends \model\entity\Entity {
 
 
 
-    public function login() {
-        return $this->idx;
-    }
 
 
     /**
@@ -114,7 +113,7 @@ class User extends \model\entity\Entity {
      * @return bool
      */
     public function isAdmin() {
-        if ( ! $this->login() ) return false;
+        if ( ! currentUser()->exist() ) return false;
         return $this->id == $GLOBALS['ADMIN_ID'];
         /*
         if ( array_key_exists( 'id', $this->getRecord() ) ) {
@@ -127,7 +126,10 @@ class User extends \model\entity\Entity {
 
     /**
      *
-     * Returns a new Session ID of a user.
+     * This sets currently logged in user of the input '$id'
+     *
+     * And returns a new Session ID of a user.
+     *
      *
      * @use this method when you want to login a user without password.
      *
@@ -143,14 +145,23 @@ class User extends \model\entity\Entity {
      *
      *
      * @code
+     *
      *      $params['session_id'] = user()->forceLogin('admin');
+     *
      * @endcode
+     *
+     *
+     *
      */
     public function forceLogin( $id ) {
         if ( empty($id ) ) return ERROR_USER_ID_EMPTY;
-        if ( ! $this->load( $id ) ) return ERROR_USER_NOT_EXIST;
+        $user = $this->load( $id );
+        if ( ! $user->exist() ) return ERROR_USER_NOT_EXIST;
+        setCurrentUser( $user );
         return $this->getSessionId();
     }
+
+
 
     /**
      *
@@ -205,13 +216,15 @@ class User extends \model\entity\Entity {
 
     /**
      * Updates user info.
-     * @attention It updates user data based on $this->record. So, before updating a user, the user info must be saved in $this->record.
-     * @param $record
-     * @return bool
+     * @attention
      *
+     *
+     * @param $record
+     * @param bool $reload
+     * @return TRUE
      * @todo meta update.
      */
-    public function update( $record ) {
+    public function update( $record, $reload = true ) {
 
         $meta = null;
         if ( array_key_exists( 'meta', $record ) ) {
@@ -220,9 +233,10 @@ class User extends \model\entity\Entity {
         }
 
 
-        if ( $record ) {
-            $re = parent::update( $record );
-            if ( empty( $re ) ) return FALSE;
+        if ( $record ) {                        // something to update?
+            debug_log("update: reload: $reload ");
+            $re = parent::update( $record, $reload );
+            if ( empty( $re ) ) return FALSE;   // something happened when updating.
         }
 
         if ( $meta ) {
@@ -243,6 +257,22 @@ class User extends \model\entity\Entity {
         }
     }
 
+
+
+    public  function  updateLoginInformation() {
+
+        $info = [];
+        if ( isset( $_SERVER['REMOTE_ADDR'] ) ) $info['login_ip'] = $_SERVER['REMOTE_ADDR'];
+        else $info['login_ip'] = '';
+
+        $info['login_stamp'] = time();
+
+        if ( $this->login_count ) $info['login_count'] = $this->login_count + 1;
+        else $info['login_count'] = 1;
+
+        $this->update( $info, false );
+
+    }
 
 
 

@@ -30,10 +30,11 @@ class User_Interface extends User {
         $re = $user->update( $record );
 
         if ( empty($re ) ) return error( ERROR_DATABASE_UPDATE_FAILED );
-        else {
-            $session_id = user()->getSessionId();
-            return success( [ 'session_id' => $session_id ] );
-        }
+
+
+        $session_id = $user->getSessionId();
+        return success( [ 'session_id' => $session_id ] );
+
 
     }
 
@@ -93,6 +94,36 @@ class User_Interface extends User {
 
         $record['meta'] = meta()->gets( 'user', $record['idx']);
         success( ['user'=>$record] );
+    }
+
+
+
+    public function login() {
+
+        $user = user( in('id') );
+        if ( ! $user->exist() ) return error(ERROR_USER_NOT_EXIST);
+        if ( ! $this->checkPassword( in('password'), $user->password ) ) return error(ERROR_WRONG_PASSWORD);
+
+
+        $user->updateLoginInformation();
+
+        success( [ 'session_id' => $user->getSessionId() ] );
+
+    }
+
+    public function resign() {
+
+        $session_id = in('session_id');
+        if( empty( $session_id ) ) return error( ERROR_SESSION_ID_EMPTY );
+        if ( ! $this->isSessionId( $session_id ) ) return error( ERROR_MALFORMED_SESSION_ID );
+        $user = $this->load( $session_id );
+        if ( ! $user->exist() ) return error( ERROR_USER_NOT_FOUND );
+
+        $user->delete();
+        $resigned = user()->load( $session_id  );
+        if ( $resigned->exist() ) return error( ERROR_USER_RESIGN_FAILED );
+        return success();
+
     }
 
     /**

@@ -50,7 +50,7 @@ define('ERROR_MOBILE_TOO_LONG', -40128);                        $em[ERROR_MOBILE
 define('ERROR_USER_IDX_NOT_MATCHED' , -40129);                  $em[ERROR_USER_IDX_NOT_MATCHED] = 'idx-user-not-matched';
 define('ERROR_USER_NOT_LOGIN', -4010001);                       $em[ERROR_USER_NOT_LOGIN] = 'user-not-login';
 define('ERROR_MALFORMED_SESSION_ID', -400130);          $em[ERROR_MALFORMED_SESSION_ID] = 'session-id-is-malformed';
-
+define('ERROR_USER_RESIGN_FAILED', -40150);             $em[ERROR_USER_RESIGN_FAILED] = 'user-resign-failed';
 
 
 // forum errors. between from -40200 to -40299

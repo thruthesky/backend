@@ -11,9 +11,13 @@ class User_Test extends \model\test\Test {
         $this->create();
         $this->register();
         $this->edit();
-
-
         $this->meta();
+
+        $this->login();
+
+        $this->register_login_edit_resign();
+
+
     }
 
 
@@ -195,12 +199,51 @@ class User_Test extends \model\test\Test {
         $re = $this->route('user.edit', $record);
         test( is_success($re), "user edit for meta update" . get_error_string($re));
 
+        $new_session_id = $re['data']['session_id'];
 
         // get updated meta dta.
-        $re = $this->route('user.get', [ 'session_id' => $session_id ] );
+        $re = $this->route('user.get', [ 'session_id' => $new_session_id ] );
         test( $re['data']['user']['meta']['class_id'] == 'my-id', "Check updated meta data"); // check
 
 
     }
 
+
+    public function login() {
+
+        $this->createuser( [ 'id' => 'user1', 'password' => 'pass1'] );
+
+
+        $re = $this->route("login", ['id'=>'user', 'password'=>'pass1'] );
+        test( is_error($re) == ERROR_USER_NOT_EXIST, "User NOT exist test : " . get_error_string($re) );
+
+
+        $re = $this->route("login", ['id'=>'user1', 'password'=>'pass'] );
+        test( is_error($re) == ERROR_WRONG_PASSWORD, "Wrong Password test : " . get_error_string($re) );
+
+
+        $re = $this->route("login", ['id'=>'user1', 'password'=>'pass1'] );
+        test( is_success($re), "User login: " . get_error_string($re) );
+
+
+    }
+
+    public function register_login_edit_resign() {
+        $id = 'user-crud-test';
+        $pw = 'pass';
+
+        $session_id = $this->createUser( ['id'=>$id, 'password'=>$pw] );
+
+        $re = $this->route('login', ['id'=>$id, 'password'=>$pw] );
+        $login_session_id = $re['data']['session_id'];
+        test( $session_id != $login_session_id, "User CRUD Login Test: " . get_error_string($re));
+
+
+        $re = $this->route('user.edit', [ 'session_id' => $login_session_id, 'name'=>'edited'] );
+        $edit_session_id = $re['data']['session_id'];
+        test( $login_session_id != $edit_session_id, "User CRUD Update Test: " . get_error_string($re));
+
+        $re = $this->route('resign', [ 'session_id' => $edit_session_id ] );
+        test( is_success($re), "User resign success: ");
+    }
 }
