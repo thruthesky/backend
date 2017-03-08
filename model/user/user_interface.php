@@ -14,13 +14,20 @@ class User_Interface extends User {
 
     public function edit() {
 
-        $user = user()->load( in( 'session_id' ) );
-        if ( ! $user->exist() ) return error( ERROR_WRONG_SESSION_ID );
+
+
+        $session_id = in('session_id');
+        if( empty( $session_id ) ) return error( ERROR_SESSION_ID_EMPTY );
+        if ( ! $this->isSessionId( $session_id ) ) return error( ERROR_MALFORMED_SESSION_ID );
+        $user = $this->load( $session_id );
+        if ( ! $user->exist() ) return error( ERROR_USER_NOT_FOUND );
+
 
 
         $record = get_current_route_optional_variables();
-        $re = $user->update( $record );
 
+
+        $re = $user->update( $record );
 
         if ( empty($re ) ) return error( ERROR_DATABASE_UPDATE_FAILED );
         else {
@@ -44,7 +51,9 @@ class User_Interface extends User {
      * @attention if the login user is 'admin', then he can get other user's information.
      *
      *
-     * @return void
+     * @note if the session_id is 'admin', then it can have 'idx' to get other user's data.
+     *
+     * @return mixed
      *
      * @expected JSON return.
     Array
@@ -61,11 +70,13 @@ class User_Interface extends User {
     )
      *
      */
-    public function data() {
+    public function get() {
+        $session_id = in('session_id');
+        if( empty( $session_id ) ) return error( ERROR_SESSION_ID_EMPTY );
+        if ( ! $this->isSessionId( $session_id ) ) return error( ERROR_MALFORMED_SESSION_ID );
+        $user = $this->load( $session_id );
+        if ( ! $user->exist() ) return error( ERROR_USER_NOT_FOUND );
 
-        if( empty( in('session_id')) ) return error( ERROR_SESSION_ID_EMPTY );
-        $user = $this->load_by_session_id( in('session_id') );
-        if ( empty($user) ) return error( ERROR_WRONG_SESSION_ID );
 
 
         if ( $this->isAdmin() ) { // if admin,
@@ -75,16 +86,13 @@ class User_Interface extends User {
             if ( empty($user) ) return error( ERROR_USER_NOT_FOUND );
         }
 
-        unset( $user['password'], $user['session_id'], $user['stamp_registration'] );
+        $record = $this->getRecord();
+        unset( $record['password'], $record['session_id'] );
 
 
-        $_meta = meta()->gets( 'user', $user['idx'] );
-        $metas = [];
-        foreach( $_meta as $arr ) {
-            $metas[ $arr['code'] ] = $arr['data'];
-        }
-        $user['meta'] = $metas;
-        success( ['user'=>$user] );
+
+        $record['meta'] = meta()->gets( 'user', $record['idx']);
+        success( ['user'=>$record] );
     }
 
     /**

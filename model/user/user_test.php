@@ -8,14 +8,12 @@ class User_Test extends \model\test\Test {
 
 
         $this->cache();
-
-
         $this->create();
-
         $this->register();
-
         $this->edit();
 
+
+        $this->meta();
     }
 
 
@@ -144,16 +142,63 @@ class User_Test extends \model\test\Test {
         $record[ 'address' ] = "My Address Is ...";
 
         $re = $this->route('user.edit', $record);
-        test( is_error($re) == ERROR_WRONG_SESSION_ID, "User edit: $id " . get_error_string($re));
+        test( is_error($re) == ERROR_MALFORMED_SESSION_ID, "User edit: $id " . get_error_string($re));
 
-        $record['session_id'] = $session_id
+        $record['session_id'] = $session_id;
         $re = $this->route('user.edit', $record);
-        test( is_error($re) == ERROR_WRONG_SESSION_ID, "User edit: $id " . get_error_string($re));
+        test( is_success($re) == ERROR_WRONG_SESSION_ID, "User edit: $id " . get_error_string($re));
 
 
         test( user( $id )->name == $new_name, "User name check: $new_name " . get_error_string($re));
 
 
+
+
+    }
+
+
+    public function meta() {
+
+
+        $id = "user-meta-test-1";
+        user( $id )->delete();
+
+        $record = [
+            'id' => $id,
+            'password' => $id,
+            'name' => 'User Test Name',
+            'meta' => [
+                'a' => 'b',
+                'class_id' => 'thruthesky'
+            ]
+        ];
+
+        $re = $this->route('register', $record);
+        test( is_success($re), "User registration for meta: $id " . get_error_string( $re ));
+
+        $session_id = $re['data']['session_id'];
+
+
+        // get user data.
+        $re = $this->route('user.get', [ 'session_id' => $session_id ] );
+        test( is_success($re), "Got user: $id " . get_error_string($re));
+        test( $re['data']['user']['meta']['class_id'] == 'thruthesky', "Meta check"); // check
+
+
+        // meta update
+        $record = [
+            'session_id' => $session_id,
+            'meta' => [
+                'class_id' => 'my-id'
+            ]
+        ];
+        $re = $this->route('user.edit', $record);
+        test( is_success($re), "user edit for meta update" . get_error_string($re));
+
+
+        // get updated meta dta.
+        $re = $this->route('user.get', [ 'session_id' => $session_id ] );
+        test( $re['data']['user']['meta']['class_id'] == 'my-id', "Check updated meta data"); // check
 
 
     }

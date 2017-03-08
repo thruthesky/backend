@@ -33,6 +33,9 @@ class Entity extends \model\taxonomy\Taxonomy  {
         else return null;
     }
 
+    public function getRecord() {
+        return $this->record;
+    }
     /**
      *
      * @note the difference between setter and set() is that set() returns $this.
@@ -47,6 +50,10 @@ class Entity extends \model\taxonomy\Taxonomy  {
 
 
 
+    public function debug_log() {
+        debug_log( $this->record );
+        return $this;
+    }
 
 
     /**
@@ -309,6 +316,16 @@ class Entity extends \model\taxonomy\Taxonomy  {
      *
      *
      * @attention if there is any error on database query, error code will be return.
+     *
+     * @warning when you do something like below
+     *
+     *          $this->load( ... )->delete()
+     *
+     *      The '$this->record' becomes empty. so, you should do something like below.
+     *
+     *          $this->set('abc', 'def');
+     *          $this->delete();            //      => This empty $record. So, nothing to create.
+     *          $this->create();
      *
      * @return number
      *      - number of error code on error

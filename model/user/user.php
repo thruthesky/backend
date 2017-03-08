@@ -115,10 +115,13 @@ class User extends \model\entity\Entity {
      */
     public function isAdmin() {
         if ( ! $this->login() ) return false;
-        if ( array_key_exists( 'id', $this->record ) ) {
+        return $this->id == $GLOBALS['ADMIN_ID'];
+        /*
+        if ( array_key_exists( 'id', $this->getRecord() ) ) {
             return $this->record['id'] == $GLOBALS['ADMIN_ID'];
         }
         else return false;
+        */
     }
 
 
@@ -191,7 +194,7 @@ class User extends \model\entity\Entity {
 
         if ( $meta ) {
 
-            meta()->sets( 'user', $user_idx, $meta );
+            meta()->create( $this->getTable(), $user_idx, $meta );
 
         }
 
@@ -216,12 +219,14 @@ class User extends \model\entity\Entity {
             unset($record['meta']);
         }
 
-        $re = parent::update( $record );
 
-        if ( empty( $re ) ) return FALSE;
+        if ( $record ) {
+            $re = parent::update( $record );
+            if ( empty( $re ) ) return FALSE;
+        }
 
         if ( $meta ) {
-            // meta()->sets( 'user', $this->record['idx'], $meta );
+            meta()->create( $this->getTable(), $this->idx, $meta );
         }
 
         return TRUE;

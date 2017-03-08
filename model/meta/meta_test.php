@@ -9,6 +9,8 @@ class Meta_Test {
     public function run() {
 
         $this->create();
+
+        $this->multi_create();
 /*
         $idx = meta()->set('abc', 123, 'code-unit-test', 'data');
         test( $idx, "Meta::set() code: code, data: data re: idx: $idx");
@@ -39,10 +41,13 @@ class Meta_Test {
         $code = 'the code';
         $data = 'the data';
 
+
+        /*
         $meta = meta()->load( $model, $model_idx, $code );
         if ( $meta->exist() ) {
             $meta->delete();
         }
+        */
 
 
 
@@ -51,11 +56,10 @@ class Meta_Test {
             ->set('model_idx', $model_idx)
             ->set('code', $code)
             ->set('data', $data)
+            ->debug_log()
             ->create();
 
-
-
-        test( $idx, "Meta create: model: $model. idx: $idx");
+        test( is_success($idx), "Meta create: model: $model. idx: $idx. " . get_error_string( $idx ));
 
         if ( is_success( $idx ) ) {
 
@@ -67,6 +71,30 @@ class Meta_Test {
 
         }
 
+    }
+
+    public function multi_create() {
+
+        $re = meta()->create();         // error test.
+        test( is_error($re), "Multi meta creation: " . get_error_string($re));
+
+        $metas = [
+            "name" => "JaeHo",
+            "age" => 44,
+            "gender" => "M"
+        ];
+
+        // create multi meta data.
+        $re = meta()->create('multi', 111, $metas);
+
+        $rows = meta()->gets( 'multi', 111 );                   // get multi data
+        test( $rows['age'] == $metas['age'], "Age check ok");   // check
+
+
+        // edit one of the meta data
+        meta()->set('model', 'multi')->set('model_idx', 111)->set('code', 'age')->set('data', 33)->create();
+        $rows = meta()->gets( 'multi', 111 );                   // get multi data
+        test( $rows['age'] == 33, "Age check ok"); // check.
 
     }
 }

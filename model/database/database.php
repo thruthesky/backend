@@ -496,11 +496,14 @@ class Database extends \PDO {
      * @return int - number of affected row.
      *
      *      0 - if it did not update anything.
+     *      FALSE - if $fields is empty.
      *
      *
      */
     public function update($table, $fields, $cond=null)
     {
+
+        if ( empty( $fields ) ) return FALSE;
 
         //if ( ! $this->secure_cond( $cond ) ) return ERROR_INSCURE_SQL_CONDITION;
 

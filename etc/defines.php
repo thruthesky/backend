@@ -49,7 +49,7 @@ define('ERROR_PASSWORD_TOO_LONG', -40127);                      $em[ERROR_PASSWO
 define('ERROR_MOBILE_TOO_LONG', -40128);                        $em[ERROR_MOBILE_TOO_LONG] = 'mobile-is-too-long';
 define('ERROR_USER_IDX_NOT_MATCHED' , -40129);                  $em[ERROR_USER_IDX_NOT_MATCHED] = 'idx-user-not-matched';
 define('ERROR_USER_NOT_LOGIN', -4010001);                       $em[ERROR_USER_NOT_LOGIN] = 'user-not-login';
-
+define('ERROR_MALFORMED_SESSION_ID', -400130);          $em[ERROR_MALFORMED_SESSION_ID] = 'session-id-is-malformed';
 
 
 
@@ -74,6 +74,12 @@ define('ERROR_FORUM_IDX_EMPTY', -40230);                    $em[ERROR_FORUM_IDX_
 
 // permis error
 define('ERROR_PERMISSION_ADMIN', -40800 );                  $em[ERROR_PERMISSION_ADMIN] = 'admin-permission-required';
+
+
+// meta errors
+define("ERROR_WRONG_META_DATA_TO_CREATE", -4090);                     $em[ERROR_WRONG_META_DATA_TO_CREATE] = "wrong-meta-data-to-create";
+define("ERROR_META_MULTI_CREATE_FAILED", -4091);            $em[ERROR_META_MULTI_CREATE_FAILED] = "meta-multi-creation-failed";
+
 
 define('ERROR_FAKE_ERROR', -50999);                         $em[ERROR_FAKE_ERROR] = 'fake-error';
 define('OK', 0);
