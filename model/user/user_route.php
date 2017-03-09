@@ -44,6 +44,14 @@ add_route('login', [
     ]
 ]);
 
+add_route('logout', [
+    'path' => "\\model\\user\\user_interface",
+    'method' => 'logout',
+    'variables' => [
+        'required' => [ 'session_id' ]
+    ]
+]);
+
 
 add_route('resign', [
     'path' => "\\model\\user\\user_interface",

@@ -29,6 +29,7 @@ class Base {
 
     public function setTable( $table ) {
         $this->table = $table;
+        return $this;
     }
 
     public function getTable() {

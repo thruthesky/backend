@@ -72,22 +72,31 @@ function user( $what = null ) {
  * @warning if there is no $_REQUEST['session_id'], then the User object is empty.
  * @return \model\user\User
  */
-$_currentUser = null;
+$_currentUser = user();             // Empty User Object
 function setCurrentUser( $user ) {
     global $_currentUser;
     $_currentUser = $user;
 }
 
 
+/**
+ * @return \model\user\User
+ */
 function currentUser()
 {
     global $_currentUser;
-    if (empty($_currentUser)) {
-        if (in('session_id')) setCurrentUser(user(in('session_id')));
+    if ( ! $_currentUser->exist() ) {   // If there no current User,
+        if ( in('session_id') ) {                       // If session_id has passed,
+            setCurrentUser(user(in('session_id')));     // set current user.
+        }
     }
     return $_currentUser;
 }
 
+
+function entity() {
+    return new \model\entity\Entity();
+}
 
 
 /**
@@ -99,16 +108,30 @@ function currentUser()
 function meta() {
     return new \model\meta\Meta();
 }
-/*
 
-function forum_config() {
-    return new \model\forum\Config();
+
+function config( $what = null ) {
+    $config = new \model\forum\Forum_Config();
+
+    if ( $what ) {
+        $config->load( $what );
+    }
+    return $config;
 }
 
-function forum_data() {
-    return new \model\forum\Data();
+/**
+ * @param null $what
+ * @return \model\forum\Forum_Post
+ */
+function post( $what = null ) {
+    $post = new \model\forum\Forum_Post();
+    if ( $what ) {
+        $post->load( $what );
+    }
+    return $post;
+
 }
-*/
+
 
 /**
  * @return bool|\model\database\Database|null

@@ -2,16 +2,15 @@
 namespace model\test;
 class Test {
 
-
-
-
-    public function run() {
+    public function runAllTests() {
 
         $this->reload( 2 );
 
         $this->textRoute();
 
         $files = rsearch( __MODEL_DIR__, '_test.php' );
+
+
 
         foreach ( $files as $file ) {
 
@@ -22,12 +21,15 @@ class Test {
             $path = "model\\$arr[1]\\$arr[0]";
 
 
+
             $obj = new $path();
 
-            if ( method_exists( $obj, 'run' ) ) $obj->run();
+            if ( method_exists( $obj, 'run' ) ) {
+                $obj->run();
+            }
         }
 
-        exit;
+
 
     }
 
@@ -45,6 +47,7 @@ class Test {
     private function textRoute() {
         $re = $this->route("version");
         test ( is_success( $re ), "Route Access OK. " . get_error_string($re));
+
     }
 
 

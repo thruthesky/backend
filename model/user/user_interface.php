@@ -6,7 +6,7 @@ class User_Interface extends User {
 
 
     public function register() {
-        $record = get_current_route_variables();
+        $record = get_route_variables();
         $re = user()->create( $record );
         is_success( $re ) ? success([ 'session_id' => $re ]) : error( $re );
     }
@@ -14,27 +14,20 @@ class User_Interface extends User {
 
     public function edit() {
 
-
-
         $session_id = in('session_id');
-        if( empty( $session_id ) ) return error( ERROR_SESSION_ID_EMPTY );
         if ( ! $this->isSessionId( $session_id ) ) return error( ERROR_MALFORMED_SESSION_ID );
         $user = $this->load( $session_id );
         if ( ! $user->exist() ) return error( ERROR_USER_NOT_FOUND );
 
 
-
-        $record = get_current_route_optional_variables();
-
+        $record = get_route_optional_variables();
 
         $re = $user->update( $record );
 
         if ( empty($re ) ) return error( ERROR_DATABASE_UPDATE_FAILED );
 
-
         $session_id = $user->getSessionId();
         return success( [ 'session_id' => $session_id ] );
-
 
     }
 
@@ -99,17 +92,29 @@ class User_Interface extends User {
 
 
     public function login() {
-
         $user = user( in('id') );
         if ( ! $user->exist() ) return error(ERROR_USER_NOT_EXIST);
         if ( ! $this->checkPassword( in('password'), $user->password ) ) return error(ERROR_WRONG_PASSWORD);
-
-
         $user->updateLoginInformation();
-
         success( [ 'session_id' => $user->getSessionId() ] );
+    }
+
+
+    public function logout() {
+
+
+        $session_id = in('session_id');
+        if ( ! $this->isSessionId( $session_id ) ) return error( ERROR_MALFORMED_SESSION_ID );
+        $user = $this->load( $session_id );
+        if ( ! $user->exist() ) return error( ERROR_USER_NOT_FOUND );
+
+
+        $user->update( [ 'session_id' => '' ]);
+        success();
 
     }
+
+
 
     public function resign() {
 

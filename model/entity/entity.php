@@ -7,11 +7,38 @@
  *
  */
 namespace model\entity;
+
+/**
+ *
+ * Entity caches in memory for what it hah loaded. Meaning, once you load an entity it is cached in the memory variable.
+ *
+ * $_cache_entity_record contains the record of the entity.
+ *
+ * When you try to load an entity that has already loaded, it checks if the entity exists on the cache and if so, it does not
+ *
+ * load it from database, but just return an Entity object with the cached record.
+ *
+ * $_cache_entity_record_count is the hit count of how many times the cached entity had been used.
+ *
+ *
+ */
 $_cache_entity_record = [];
 $_cache_entity_record_count = [];
+
+/**
+ * Class Entity
+ * @package model\entity
+ */
 class Entity extends \model\taxonomy\Taxonomy  {
 
     private $record = [];
+
+
+    public function __construct()
+    {
+        parent::__construct();
+
+    }
 
 
 
@@ -127,6 +154,7 @@ class Entity extends \model\taxonomy\Taxonomy  {
         else $cond = "id = '$what'";
 
         $this->record = db()->row("SELECT * FROM $table WHERE $cond");
+
 
         $this->setCacheEntity( $what, $this->record );
         return $this;
@@ -256,6 +284,7 @@ class Entity extends \model\taxonomy\Taxonomy  {
         }
         else $_cache_entity_record_count[ $table ][ $what ] = 1;
 
+        // di($_cache_entity_record_count);
     }
 
 
@@ -360,7 +389,7 @@ class Entity extends \model\taxonomy\Taxonomy  {
      *
      * @return number
      *      - number of error code on error
-     *      - 0 on success.
+     *      - 0 (OK) on success.
      *
      * @code
      *

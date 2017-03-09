@@ -12,6 +12,12 @@ define('ERROR_MODEL_CLASS_EMPTY', -40042);              $em[ERROR_MODEL_CLASS_EM
 define('ERROR_MODEL_CLASS_METHOD_NOT_EXIST', -40043);   $em[ERROR_MODEL_CLASS_METHOD_NOT_EXIST] = 'model-class-method-not-exist';
 define('ERROR_REQUIRED_INPUT_IS_MISSING', -40044);      $em[ERROR_REQUIRED_INPUT_IS_MISSING] = "required-input-is-missing";
 define('ERROR_INVALID_INPUT_VARIABLE', -40045);         $em[ERROR_INVALID_INPUT_VARIABLE] = "invalid-input-variable";
+define('ERROR_MALFORMED_VARIABLE_NUMBER', -40045);      $em[ERROR_MALFORMED_VARIABLE_NUMBER] = "malformed-variable-number";
+define('ERROR_VARIABLE_ARRAY', -40046);                         $em[ERROR_VARIABLE_ARRAY] = "variable-is-array";
+define('ERROR_VARIABLE_NUMERIC', -40047);                       $em[ERROR_VARIABLE_NUMERIC] = 'variable-is-numeric';
+define('ERROR_VARIABLE_STRING', -40048);                       $em[ERROR_VARIABLE_STRING] = 'variable-is-string';
+define('ERROR_VARIABLE_EMPTY', -40049);                       $em[ERROR_VARIABLE_EMPTY] = 'variable-is-empty';
+
 
 
 define('ERROR_KEY_EXISTS', -40080);                     $em[ERROR_KEY_EXISTS] = 'key-exists';
@@ -21,6 +27,8 @@ define('ERROR_DATABASE_QUERY', -40083);                 $em[ERROR_DATABASE_QUERY
 define('ERROR_EMPTY_SQL_CONDITION', -40084);            $em[ERROR_EMPTY_SQL_CONDITION] = 'error-empty-sql-condition';
 define('ERROR_INSCURE_SQL_CONDITION', -40085);          $em[ERROR_INSCURE_SQL_CONDITION] = 'sql-condition-not-secure';
 define('ERROR_NO_DATA', -40085);                        $em[ERROR_NO_DATA] = 'no-data-found';
+define('ERROR_DATABASE_DELETE_FAILED', -40081);         $em[ERROR_DATABASE_DELETE_FAILED] = 'database-delete-failed';
+
 
 
 define('ERROR_MALFORMED_RESPONSE', -40090);             $em[ERROR_MALFORMED_RESPONSE] = 'malformed-response.return-data-is-not-array';
@@ -57,7 +65,7 @@ define('ERROR_USER_RESIGN_FAILED', -40150);             $em[ERROR_USER_RESIGN_FA
 
 define('ERROR_FORUM_CONFIG_EXIST', -40200);                 $em[ERROR_FORUM_CONFIG_EXIST] = 'forum-config-exist';
 define('ERROR_FORUM_CONFIG_NOT_EXIST', -40201);             $em[ERROR_FORUM_CONFIG_NOT_EXIST] = 'forum-config-not-exist';
-define('ERROR_FORUM_DATA_NOT_EXIST', -40202);               $em[ERROR_FORUM_DATA_NOT_EXIST] = 'forum-data-not-exist';
+define('ERROR_POST_NOT_EXIST', -40202);               $em[ERROR_POST_NOT_EXIST] = 'post-not-exist';
 define('ERROR_FORUM_ID_EMPTY', -40203 );                    $em[ERROR_FORUM_ID_EMPTY] = 'forum-id-is-empty';
 
 define('ERROR_FORUM_DATA_TITLE_EMPTY', -40204);             $em[ERROR_FORUM_DATA_TITLE_EMPTY] = 'forum-data-title-is-empty';
@@ -71,6 +79,8 @@ define('ERROR_IDX_CONFIG_NOT_NUMBER', -40211);              $em[ERROR_IDX_CONFIG
 define('ERROR_USER_IDX_NOT_NUMBER', -40212);                $em[ERROR_USER_IDX_NOT_NUMBER] = 'user-idx-not-number';
 
 define('ERROR_FORUM_IDX_EMPTY', -40230);                    $em[ERROR_FORUM_IDX_EMPTY] = 'forum-config/data-idx-empty';
+define('ERROR_FORUM_CONFIG_EDIT_FAILED', -40231);                    $em[ERROR_FORUM_CONFIG_EDIT_FAILED] = 'forum-config-edit-failed';
+
 
 // permis error
 define('ERROR_PERMISSION_ADMIN', -40800 );                  $em[ERROR_PERMISSION_ADMIN] = 'admin-permission-required';

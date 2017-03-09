@@ -7,6 +7,28 @@ Backend server for Restful APIs
 * The best resource to understand Backend is to read and run the tests.
 
 
+# TODO
+
+
+## test on forum config, forum post
+
+
+## file upload with cosutomizalbe downloda
+
+* You will upload a file without resizing.
+* When you download image, you can customize.
+* You can choose image type, width, height, quality, resize type.
+	* This will help on image optimization.
+
+**for jpeg**
+````
+?route=download&type=jpeg&width=80&hegiht=120&quality=100&resize=crop
+````
+
+**for png**
+````
+?route=download&type=png&width=100&height=120&resize=center
+````
 
 # Interface
 
@@ -98,6 +120,8 @@ To test class
 
 
 ````
+Base => Taxonomy
+Baes => Taxonomy => Entity
 Base => Taxonomy => Entity => User
 Base => Taxonomy => Entity => Meta
 Base => Taxonomy => Entity => Meta => Config
@@ -134,9 +158,22 @@ The `variables` states what variables the interface accepts.
 * If any variables that are not states above has delivered to interface, then the `run_route()` will reject with error.
 * The variables of `required` in `variables` are required. If any of the required variables is missing, then `run_route()` will reject the request with error.
 * `optional` variables are optional.
-* `system` variables are those variables that are used by the interface.
-* `required` and `optional` variables will be inserted into database table record, so you will add only state variables that will be saved into database table.
+* `system` variables are the variables that are used by the system and interface. `system` variables are not related in content like user information, forum data and any kind of data on database. 
+* `required` and `optional` variables are related in content( data, database data). Any data like user information, forum posts, logs that shuold be saved in the database must be in one of `required` or `optional` variables.
+* The input variable `route` can be omitted since all access needs a route.
 
+
+
+
+
+
+## HTTP variable type checking
+
+* For security enhancement, types of HTTP variable are checked by the system.
+
+* Since many of HTTP variables and routers have same(similiar) names and types, it may be one good idea to check type of HTTP variables in one place. 
+
+See `check_http_variables_type()` for details.
 
 
 

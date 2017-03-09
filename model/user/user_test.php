@@ -12,11 +12,9 @@ class User_Test extends \model\test\Test {
         $this->register();
         $this->edit();
         $this->meta();
-
         $this->login();
-
+        $this->logout();
         $this->register_login_edit_resign();
-
 
     }
 
@@ -29,10 +27,12 @@ class User_Test extends \model\test\Test {
         $admin = user('admin');
         $secondCount = $admin->getResetCount( 'admin' );
 
+
         test( $firstCount == ($secondCount-1), "First cache count test");
 
         $admin = user('admin');
         $thirdCount = $admin->getResetCount( 'admin' );
+
 
         test( $firstCount == ($thirdCount-2), "Second cache count test");
     }
@@ -146,6 +146,7 @@ class User_Test extends \model\test\Test {
         $record[ 'address' ] = "My Address Is ...";
 
         $re = $this->route('user.edit', $record);
+
         test( is_error($re) == ERROR_MALFORMED_SESSION_ID, "User edit: $id " . get_error_string($re));
 
         $record['session_id'] = $session_id;
@@ -186,7 +187,7 @@ class User_Test extends \model\test\Test {
         // get user data.
         $re = $this->route('user.get', [ 'session_id' => $session_id ] );
         test( is_success($re), "Got user: $id " . get_error_string($re));
-        test( $re['data']['user']['meta']['class_id'] == 'thruthesky', "Meta check"); // check
+        test( $re['data']['user']['meta']['class_id'] == 'thruthesky', "Meta check. " . get_error_string($re)); // check
 
 
         // meta update
@@ -225,24 +226,51 @@ class User_Test extends \model\test\Test {
         $re = $this->route("login", ['id'=>'user1', 'password'=>'pass1'] );
         test( is_success($re), "User login: " . get_error_string($re) );
 
+    }
+
+
+    /**
+     *
+     * It simply erase user 'session_id' in database. So, the session_id issued previously is not valid.
+     */
+    public function logout() {
+
+        // create a user
+        $session_id = $this->createUser( ['id' => 'logout-test', 'password' => '1234' ] );
+
+        // check session id
+        test( user( $session_id )->id == 'logout-test', "Logout user create: ");
+
+        // user logout
+        $re = $this->route('logout', [ 'session_id' => $session_id ] );
+        test( is_success($re), "User Logout: $session_id");
+
+        // check session id
+        test( ! user( $session_id )->exist(), "Logout: after logout, session_id check: " . get_error_string($re) );
 
     }
+
+
 
     public function register_login_edit_resign() {
         $id = 'user-crud-test';
         $pw = 'pass';
 
+        // create ( register )
         $session_id = $this->createUser( ['id'=>$id, 'password'=>$pw] );
 
+        // login
         $re = $this->route('login', ['id'=>$id, 'password'=>$pw] );
         $login_session_id = $re['data']['session_id'];
         test( $session_id != $login_session_id, "User CRUD Login Test: " . get_error_string($re));
 
 
+        // edit
         $re = $this->route('user.edit', [ 'session_id' => $login_session_id, 'name'=>'edited'] );
         $edit_session_id = $re['data']['session_id'];
         test( $login_session_id != $edit_session_id, "User CRUD Update Test: " . get_error_string($re));
 
+        // resign
         $re = $this->route('resign', [ 'session_id' => $edit_session_id ] );
         test( is_success($re), "User resign success: ");
     }

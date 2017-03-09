@@ -72,4 +72,40 @@ class Taxonomy extends \model\base\Base  {
 
 
 
+    /**
+     * Returns rows of entity table based on the $cond.
+     *
+     * @WARNING @ATTENTION - This method must NOT be call with unfiltered user input. Meaning the param $cond must NOT take user's input without security filtering.
+     *
+     * @warning Use this method with caution.
+     *
+     * @attention All request to get rows from database MUST use this method IF it is only simple 'SELECT', NOT JOIN-SELECT-QUERY.
+     *
+     * @note it does WEEK 'SQL INJECTION' security check.
+     *
+     * @param $cond
+     * @return array|int
+     *
+     *          - Array of records will be return on success.
+     *          - ERROR_CODE will be returned on error.
+     *
+     *
+     * @note $cond can be
+     *
+     *      - " id LIKE 'abc%' AND ( email LIKE 'abc%' OR nickname == 'def' ) AND age=44 "
+     *      - "1"
+     *
+     */
+    public function loads( $cond )
+    {
+        if ( empty($cond) ) return ERROR_EMPTY_SQL_CONDITION;
+        if ( ! db()->secure_cond( $cond ) ) return ERROR_INSCURE_SQL_CONDITION;
+        return db()->rows("SELECT * FROM {$this->getTable()} WHERE $cond");
+    }
+
+
+
+
+
+
 }

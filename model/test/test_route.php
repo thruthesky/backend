@@ -1,3 +1,3 @@
 <?php
 
-add_route('test', [ 'path' => "\\model\\test\\test", 'method' => 'run' ] );
+add_route('test', [ 'path' => "\\model\\test\\test", 'method' => 'runAllTests' ] );

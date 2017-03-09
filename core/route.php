@@ -40,11 +40,13 @@ function get_current_route( ) {
 
 /**
  *
- * Returns an array of HTTP input data based on route's 'required' and 'optional'
+ * Returns an array of HTTP variables ( GET, POST ) based on route's 'required' and 'optional' without 'system'
+ *
+ * @note this returns Actual HTTP Data.
  *
  * @return array
  */
-function get_current_route_variables( ) {
+function get_route_variables( ) {
 
     $ret = [];
     $route = get_current_route();
@@ -71,7 +73,7 @@ function get_current_route_variables( ) {
  *
  * @return array
  */
-function get_current_route_optional_variables() {
+function get_route_optional_variables() {
     $ret = [];
     $route = get_current_route();
 

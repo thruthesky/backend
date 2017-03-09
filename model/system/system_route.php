@@ -7,16 +7,13 @@ add_route('install', [
 
 
 
-
-
-
 add_route('version', [
     'path' => "\\model\\system\\system_interface",
     'method' => 'version',
-    'vars' => []
+    'variables' => [
+        'system' => [ 'route' ]
+    ]
 ]);
-
-
 
 
 
@@ -38,5 +35,22 @@ add_route('system.timeoutError', [
     'method' => 'timeoutError'
 ]);
 
+add_route('system.routeMethodError', [
+    'path' => "\\model\\system\\system_interface",
+    "method" => "No_Method_Exist",
+    "variables" => [
+        "required" => [ "name" ],
+        "optional" => [ "age" ],
+        "system" => [ "route" ]
+    ]
+]);
 
-
+add_route('system.routeRequiredError', [
+    'path' => "\\model\\system\\system_interface",
+    "method" => "version",
+    "variables" => [
+        "required" => [ 'name' ],
+        "optional" => [ "age" ],
+        "system" => []
+    ]
+]);

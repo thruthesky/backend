@@ -13,6 +13,10 @@ class User extends \model\entity\Entity {
         $this->setTable('user');
     }
 
+
+    public function logged() {
+        return $this->exist();
+    }
     /**
      *
      * Return unique session id for each user after reset it.
@@ -78,8 +82,11 @@ class User extends \model\entity\Entity {
      *
      */
     public function load( $what ) {
+
         if ( $this->isSessionId($what) ) return $this->loadBySessionId( $what );
-        else return parent::load( $what );
+        else {
+            return parent::load( $what );
+        }
     }
 
 
@@ -221,7 +228,11 @@ class User extends \model\entity\Entity {
      *
      * @param $record
      * @param bool $reload
-     * @return TRUE
+     * @return
+     *
+     *      - TRUE on success
+     *      - FALSE on failure
+     *
      * @todo meta update.
      */
     public function update( $record, $reload = true ) {
@@ -258,7 +269,13 @@ class User extends \model\entity\Entity {
     }
 
 
-
+    /**
+     *
+     *
+     * Updates user login information.
+     *
+     *  - It leaves login ip/time/count ( how many times the user has logged in )
+     */
     public  function  updateLoginInformation() {
 
         $info = [];
