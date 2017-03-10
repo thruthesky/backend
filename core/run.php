@@ -35,11 +35,9 @@ function run_route( $route )
 
                 // check http variables type for security
                 if ( $re = check_http_variables_type() ) return error( $re['code'], $re['message'] );
-
-
+  
                 $method = $route['method'];
                 $obj->$method();
-
             } else {
                 $route = get_current_route();
                 error(ERROR_MODEL_CLASS_METHOD_NOT_EXIST, "{$route['method']}() method does not exist on the route: $route[path]");
