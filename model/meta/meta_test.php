@@ -50,13 +50,11 @@ class Meta_Test {
         */
 
 
-
         $idx = meta()
             ->set('model', $model)
             ->set('model_idx', $model_idx)
             ->set('code', $code)
             ->set('data', $data)
-            ->debug_log()
             ->create();
 
         test( is_success($idx), "Meta create: model: $model. idx: $idx. " . get_error_string( $idx ));

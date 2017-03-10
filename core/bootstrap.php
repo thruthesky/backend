@@ -111,12 +111,16 @@ function entity() {
 function meta() {
     return new \model\meta\Meta();
 }
-function meta_injector( $model, $model_idx ) {
-    return new \model\meta\Meta_Injector( $model, $model_idx);
+function meta_proxy( $model, $model_idx ) {
+    return new \model\meta\Meta_Proxy( $model, $model_idx);
 }
 
+/**
+ * @param null $what
+ * @return \model\post\Post_Config
+ */
 function config( $what = null ) {
-    $config = new \model\forum\Forum_Config();
+    $config = new \model\post\Post_Config();
 
     if ( $what ) {
         $config->load( $what );
@@ -126,10 +130,10 @@ function config( $what = null ) {
 
 /**
  * @param null $what
- * @return \model\forum\Forum_Post
+ * @return \model\post\Post_Data
  */
 function post( $what = null ) {
-    $post = new \model\forum\Forum_Post();
+    $post = new \model\post\Post_Data();
     if ( $what ) {
         $post->load( $what );
     }

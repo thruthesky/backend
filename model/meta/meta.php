@@ -85,6 +85,7 @@ class Meta extends \model\entity\Entity
         if ( empty($model_idx) ) return ERROR_MODEL_IDX_IS_EMPTY;
         if ( empty($code) ) return ERROR_CODE_IS_EMPTY;
 
+
         meta()->load( $model, $model_idx, $code )->delete();
 
 
@@ -160,25 +161,39 @@ class Meta extends \model\entity\Entity
 
 
     /**
-     * DELETES all the data of 'model' and its idx.
+     *
+     * Deletes meta data.
+     *
+     * @note if $code is null, then it deletes ALL the meta data of 'model.idx'
+     *
+     * @note if $code is not null, then it only delete one record of the 'code' of 'model.idx'
+     *
      * @param $model
      * @param $model_idx
+     * @param null $code
      * @return int
      */
-    public function deletes( $model, $model_idx ) {
+    public function delete( $model=null, $model_idx=null, $code=null ) {
 
-        return db()->delete( $this->getTable(), "model = '$model' AND model_idx = $model_idx" );
+        if ( $model === null ) return parent::delete();
 
-        //db()->query("DELETE FROM meta WHERE model = '$model' AND model_idx = $model_idx");
+        if ( empty($model) ) return ERROR_MODEL_IS_EMPTY;
+        if ( empty($model_idx) ) return ERROR_MODEL_IDX_IS_EMPTY;
+
+
+        if ( $code ) $and_code = "AND code='$code'";
+        else $and_code = null;
+
+
+        return entity()
+            ->setTable( $this->getTable() )
+            ->loadQuery("model = '$model' AND model_idx = $model_idx $and_code")
+            ->delete();
+
+//        return db()->delete( $this->getTable(), "model = '$model' AND model_idx = $model_idx $and_code" );
+
     }
 
 
-
-    public function count( $model, $model_idx=null, $code=null ) {
-
-        if ( $model_idx && $code ) return parent::count("model = '$model' AND model_idx = $model_idx AND code = '$code'");
-        else if ( $model_idx )  return parent::count("model = '$model' AND model_idx = $model_idx");
-        else return parent::count("model = '$model'");
-    }
 
 }

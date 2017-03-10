@@ -1,6 +1,6 @@
 <?php
 namespace model\meta;
-class Meta_Injector extends Meta {
+class Meta_Proxy {
 
     private $model = null;
     private $model_idx = null;
@@ -12,7 +12,6 @@ class Meta_Injector extends Meta {
      */
     public function __construct( $model, $model_idx )
     {
-        parent::__construct();
         $this->model = $model;
         $this->model_idx = $model_idx;
     }
@@ -25,13 +24,15 @@ class Meta_Injector extends Meta {
      */
     public function set( $code, $data = null) {
 
-        if ( is_array($code) ) return $this->create( $this->model, $this->model_idx, $code );
+
+        if ( is_array($code) ) return meta()->create( $this->model, $this->model_idx, $code );
         else {
-            parent::set( 'model', $this->model );
-            parent::set( 'model_idx', $this->model_idx );
-            parent::set( 'code', $code );
-            parent::set( 'data', $data );
-            return $this->create( $this->model, $this->model_idx, [ $code => $data ] );
+            return meta()
+                ->set( 'model', $this->model )
+                ->set( 'model_idx', $this->model_idx )
+                ->set( 'code', $code )
+                ->set( 'data', $data )
+                ->create();
         }
 
     }
@@ -40,15 +41,19 @@ class Meta_Injector extends Meta {
      * Alias of parent::get()
      *
      * @param null $code
-     * @param null $_
-     * @param null $__
      * @return array
      */
-    public function get( $code = null, $_ = null , $__ = null ) {
-        return parent::get( $this->model, $this->model_idx, $code );
+    public function get( $code = null ) {
+        return meta()->get( $this->model, $this->model_idx, $code );
     }
 
-    public function delete() {
+    /**
+     * @param null $code
+     * @return int
+     */
+    public function delete( $code = null ) {
+
+        return meta()->delete( $this->model, $this->model_idx, $code );
 
     }
 

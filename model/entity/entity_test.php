@@ -60,7 +60,7 @@ class Entity_Test extends \model\test\Test {
 
 
         // Update
-        $re = $copy->update( ['model' =>'new model', 'data'=>'model data']); // it reloads.
+        $re = $copy->update( ['model' =>'entity new model test', 'data'=>'model data']); // it reloads.
         test( $re, "Entity update: ");
 
         // Check
@@ -69,6 +69,8 @@ class Entity_Test extends \model\test\Test {
         // Load and Check
         $loadAgain = entity()->setTable('meta')->load( $idx );
         test( $loadAgain->data == 'model data', 'Reload data check');
+
+        $copy->delete();
 
 
 
