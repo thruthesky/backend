@@ -221,6 +221,8 @@ class Entity extends \model\taxonomy\Taxonomy  {
      *      - number of entity idx ( > 0 ) on success.
      *      - ERROR if somehow failed on Insert.
      *
+     * @note user is_success() to check if it was success()
+     *
      * @see readme for detail.
      *
      */

@@ -39,12 +39,6 @@ class Meta extends \model\entity\Entity
      *
      * Overrides entity create()
      *
-     * @note Returns number higher than 0 as "entity.idx" if a single record is created/inserted without error.
-     *
-     * @note Returns number less than 0 if there is any error with single record creation.
-     *
-     * @note Returns OK if multi record is created without error. Use === to check.
-     * @note Returns ERROR if there is error on inserting a record.
      *
      *
      *
@@ -53,7 +47,14 @@ class Meta extends \model\entity\Entity
      * @param null $model
      * @param null $model_idx
      * @param null $arr
-     * @return bool|int|number
+     * @return bool|int|number - Use is_success() to check if create was success.
+     *
+     * @note Returns number higher than 0 as "entity.idx" if a single record is created/inserted without error.
+     * @note Returns number less than 0 if there is any error with single record creation.
+     * @note Returns OK if multi record is created without error. Use === to check.
+     * @note Returns ERROR if there is error on inserting a record.
+     *
+     *
      */
     public function create( $model = null, $model_idx = null, $arr = null ) {
 
@@ -119,12 +120,13 @@ class Meta extends \model\entity\Entity
      * @param $model
      * @param $model_idx
      * @param null $code
-     * @return array - associative array.
+     * @return string|array - associative array.
      *
      * @code Example return
-     *
-     * [ 'key' => 'value', 'name' => 'JaeHo Song' ]
+     *                      ->get('a', 1, 'code') will return 'string data value'
+     *                      ->get('a', 1) will return array [ 'key' => 'value', 'name' => 'JaeHo Song' ]
      * @endcode
+     *
      */
     public function get( $model, $model_idx, $code=null ) {
 
@@ -135,6 +137,9 @@ class Meta extends \model\entity\Entity
 
         $rows = db()->rows(" SELECT code, data FROM {$this->getTable()} WHERE model='$model' AND model_idx=$model_idx $and_code");
         if ( empty( $rows ) ) return $ret;
+
+
+        if ( $code != null ) return $rows[0]['data'];
         foreach ( $rows as $row ) {
             $ret[ $row['code'] ] = $row['data'] ;
         }
@@ -171,7 +176,7 @@ class Meta extends \model\entity\Entity
      * @param $model
      * @param $model_idx
      * @param null $code
-     * @return int
+     * @return int - use is_success() to check
      */
     public function delete( $model=null, $model_idx=null, $code=null ) {
 
@@ -185,12 +190,17 @@ class Meta extends \model\entity\Entity
         else $and_code = null;
 
 
-        return entity()
-            ->setTable( $this->getTable() )
-            ->loadQuery("model = '$model' AND model_idx = $model_idx $and_code")
-            ->delete();
 
-//        return db()->delete( $this->getTable(), "model = '$model' AND model_idx = $model_idx $and_code" );
+        /*
+        return meta()
+            ->loadQuery("model = '$model' AND model_idx = $model_idx $and_code")
+            ->delete(); // @attention: This may call meta->delete() recursively NOT the one of entity()->delete(). but still okay.
+        */
+
+        /**
+         * Since it is multi row delete, it cannot use entity()->delete()
+         */
+        return db()->delete( $this->getTable(), " model='$model' AND model_idx='$model_idx' $and_code ");
 
     }
 

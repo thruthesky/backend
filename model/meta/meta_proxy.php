@@ -20,7 +20,7 @@ class Meta_Proxy {
      * @param $code
      *          if it is an array, then it sets array of meta on the Entity.
      * @param null $data
-     * @return bool|int|number
+     * @return mixed - Same as entity()->create()
      */
     public function set( $code, $data = null) {
 
