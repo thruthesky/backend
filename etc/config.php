@@ -14,7 +14,7 @@
 
 
 $ADMIN_ID               = 'admin';          // this is admin id.
-
+$ANONYMOUS_ID          = 'anonymous';      // Anonymous ID.
 
 
 
@@ -23,6 +23,7 @@ $DIR_DATA               = './data';
 $DATABASE_USER          = 'root';
 $DATABASE_PASSWORD      = '7777';
 $DATABASE_NAME          = 'backend';
+$DATABASE_PREFIX        = "be_";
 $DATABASE_HOST          = 'localhost';
 $DATABASE_TYPE          = 'mysql';         // 'mysql' | 'sqlite'
 
@@ -38,9 +39,9 @@ $DEFAULT_NO_OF_PAGE_ITEMS   = 10;           // number
  *
  * If false, All the debug related code will not run.
  *      - no log will be save.
- *      - no debug data will be printed to user.
+ *      - no debug data will be printed on the browser ( to user ).
  */
-$DEBUG                  = true;
+$DEBUG                  = false;
 
 /**
  * If 'DEBUG_LOG_FILE_PATH' is not empty, then debug data will not be saved.
@@ -67,11 +68,13 @@ if ( file_exists( __ROOT_DIR__ . "/etc/my-config.php") ) require __ROOT_DIR__ . 
 
 define('DEBUG',             $DEBUG);
 
-
+define('ADMIN_ID',          $ADMIN_ID);
+define('ANONYMOUS_ID',      $ANONYMOUS_ID);
 
 define('DATABASE_USER',     $DATABASE_USER);
 define('DATABASE_PASSWORD', $DATABASE_PASSWORD);
 define('DATABASE_NAME',     $DATABASE_NAME);
+define('DATABASE_PREFIX',   $DATABASE_PREFIX);
 define('DATABASE_HOST',     $DATABASE_HOST);
 define('DATABASE_TYPE',     $DATABASE_TYPE);
 

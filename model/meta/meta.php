@@ -18,105 +18,6 @@ class Meta extends \model\entity\Entity
 
 
 
-    /**
-     * Return a data from a record.
-     * @param $model
-     * @param $model_idx
-     * @param $code
-     * @return \model\meta\Meta
-     */
-    /*
-    public function load( $model=null, $model_idx=null, $code=null ) {
-
-        if ( is_numeric($model) && $model_idx === null && $code === null ) return parent::load( $model );
-        return $this->loadQuery( "model = '$model' AND model_idx='$model_idx' AND code='$code'" );
-        // return db()->result(" SELECT data FROM meta WHERE $model = '$model' AND model_idx=$model_idx AND code='$code'");
-    }
-    */
-
-
-    /**
-     * Overrides entity create()
-     *
-     * @note Returns number higher than 0 as "entity.idx" if a single record is created/inserted without error.
-     *
-     * @note Returns number less than 0 if there is any error with single record creation.
-     *
-     * @note Returns TRUE if multi record is created without error. Use === to check.
-     *
-     * @note Returns FALSE if if there is any error on multi record create. Use === to check.
-     *
-     *
-     * @param null $model_idx
-     * @param null $code
-     * @param null $data
-     * @return int|number
-     */
-    /*
-    public function create( $model_idx=null, $code=null, $data=null ) {
-
-
-
-        if ( $model_idx === null || is_array( $model_idx ) ) {
-            return parent::create( $model_idx );
-        }
-
-        if ( is_string($code) && $data ) {   // single record create.
-            return meta()
-                ->set('model', $this->getTable() )
-                ->set('model_idx', $model_idx)
-                ->set('code', $code)
-                ->set('data', $data)
-                ->create();
-        }
-
-        // multi record creation.
-
-        $multi_re = TRUE;
-        if ( is_array( $code ) && $data === null ) {
-            foreach( $code as $k => $v ) {
-                $idx = meta()->create( $model_idx, $k, $v );        // Re-call.
-                if ( $idx < 0 ) $multi_re = FALSE;
-            }
-        }
-
-        return $multi_re;
-    }
-
-    */
-
-
-
-    /**
-     * Create or Update meta data.
-     *
-     * @attention It is a unique record.
-     *
-     * @param $model
-     * @param $model_idx
-     * @param $code
-     * @param $data
-     * @return number
-     *                  - number higher than 0 as meta.idx on success.
-     *                  - number lower than 0 as ERROR on error.
-     */
-    /*
-    public function set( $model, $model_idx, $code=null, $data=null ) {
-
-
-        db()->delete( 'meta', " model='$model' AND model_idx = '$model_idx' AND code='$code' " );
-
-        $record = [
-            'model' => $model,
-            'model_idx' => $model_idx,
-            'code' => $code,
-            'data' => $data
-        ];
-        $idx = meta()->create( $record );
-        return $idx;
-
-    }
-    */
 
 
     /**
@@ -142,9 +43,9 @@ class Meta extends \model\entity\Entity
      *
      * @note Returns number less than 0 if there is any error with single record creation.
      *
-     * @note Returns FALSE(0, OK) if multi record is created without error. Use === to check.
+     * @note Returns OK if multi record is created without error. Use === to check.
+     * @note Returns ERROR if there is error on inserting a record.
      *
-     * @note Returns ERROR_META_MULTI_CREATE_FAILED if if there is any error on multi record create. Use === to check.
      *
      *
      *
@@ -158,6 +59,10 @@ class Meta extends \model\entity\Entity
 
 
         if ( is_array( $arr ) ) {
+
+            if ( empty($model) ) return ERROR_MODEL_IS_EMPTY;
+            if ( empty($model_idx) ) return ERROR_MODEL_IDX_IS_EMPTY;
+
             $re_multi = OK;
             foreach( $arr as $k => $v ) {
                 $idx = meta()
@@ -165,8 +70,8 @@ class Meta extends \model\entity\Entity
                     ->set( 'model_idx', $model_idx )
                     ->set( 'code', $k )
                     ->set( 'data', $v )
-                    ->create();
-                if ( $idx < 0 ) $re_multi = ERROR_META_MULTI_CREATE_FAILED;
+                    ->create();                 // RE-CALL to create an array of metas.
+                if ( is_error( $idx ) ) $re_multi = ERROR_META_MULTI_CREATE_FAILED;
             }
             return $re_multi;
         }
@@ -175,7 +80,10 @@ class Meta extends \model\entity\Entity
         $model_idx = $this->model_idx;
         $code = $this->code;
 
-        if ( empty($model) || empty($model_idx) || empty($code) ) return ERROR_WRONG_META_DATA_TO_CREATE;
+
+        if ( empty($model) ) return ERROR_MODEL_IS_EMPTY;
+        if ( empty($model_idx) ) return ERROR_MODEL_IDX_IS_EMPTY;
+        if ( empty($code) ) return ERROR_CODE_IS_EMPTY;
 
         meta()->load( $model, $model_idx, $code )->delete();
 
@@ -183,34 +91,6 @@ class Meta extends \model\entity\Entity
         return parent::create();
     }
 
-    /**
-     *
-     * Creates or Updates multiple meta code/data
-     *
-     * @param $model
-     * @param $model_idx
-     * @param $code_data_array
-     * @return bool
-     *          TRUE on success if there is no array while creating all the meta.
-     *          or else, FALSE.
-     */
-    /*
-    public function sets( $model, $model_idx, $code_data_array ) {
-
-        if ( ! is_array( $code_data_array ) ) {
-            debug_log("meta::sets() $code_data_array is not an array");
-            return false;
-        }
-
-        $re = true;
-        foreach ( $code_data_array as $code => $data ) {
-            $idx = $this->set( $model, $model_idx, $code, $data );
-            if ( $idx < 0 ) $re = false;
-        }
-        return $re;
-
-    }
-    */
 
 
     /**
@@ -233,24 +113,26 @@ class Meta extends \model\entity\Entity
      *
      * Returns all code/data of model and model_idx
      *
-     * @deprecated user method 'get()'
+     *
      *
      * @param $model
      * @param $model_idx
+     * @param null $code
      * @return array - associative array.
      *
-     *
      * @code Example return
-
-            [ 'key' => 'value', 'name' => 'JaeHo Song' ]
-
+     *
+     * [ 'key' => 'value', 'name' => 'JaeHo Song' ]
      * @endcode
      */
-    public function gets( $model, $model_idx ) {
+    public function get( $model, $model_idx, $code=null ) {
 
         $ret = [];
 
-        $rows = db()->rows(" SELECT code, data FROM meta WHERE model='$model' AND model_idx=$model_idx");
+        if ( $code ) $and_code = "AND code='$code'";
+        else $and_code = null;
+
+        $rows = db()->rows(" SELECT code, data FROM {$this->getTable()} WHERE model='$model' AND model_idx=$model_idx $and_code");
         if ( empty( $rows ) ) return $ret;
         foreach ( $rows as $row ) {
             $ret[ $row['code'] ] = $row['data'] ;
@@ -277,11 +159,11 @@ class Meta extends \model\entity\Entity
     */
 
 
-
     /**
      * DELETES all the data of 'model' and its idx.
      * @param $model
      * @param $model_idx
+     * @return int
      */
     public function deletes( $model, $model_idx ) {
 

@@ -51,6 +51,7 @@ class Entity_Test extends \model\test\Test {
 
         /// Load and entity
         $e = entity()->setTable('meta')->load($idx); // since entity has no table,
+        test( is_success( $e ), "meta load: " . get_error_string($e));
         test( $e->exist(), "Entity load: $idx");
 
 

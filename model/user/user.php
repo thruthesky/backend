@@ -144,11 +144,14 @@ class User extends \model\entity\Entity {
      * @attention It does not check user's password.
      * @attention previous session-id will be invalid.
      *
+     *
+     * @changed March 10, 2017. It does not return session_id.
+     *
      * @param $id
-     * @return int|string
+     * @return int
      *
      *      - int as error code on error
-     *      - string as session-id on success.
+     *      - OK on success.
      *
      *
      * @code
@@ -165,7 +168,10 @@ class User extends \model\entity\Entity {
         $user = $this->load( $id );
         if ( ! $user->exist() ) return ERROR_USER_NOT_EXIST;
         setCurrentUser( $user );
-        return $this->getSessionId();
+
+        // return $this->getSessionId();
+
+        return OK;
     }
 
 
@@ -264,7 +270,7 @@ class User extends \model\entity\Entity {
     public function pres( &$users ) {
         foreach( $users as &$user ) {
             unset( $user['password'], $user['session_id'] );
-            $user['meta'] = meta()->gets( 'user', $user['idx'] );
+            $user['meta'] = meta()->get( 'user', $user['idx'] );
         }
     }
 

@@ -2,12 +2,12 @@
 /**
  * @see README.md
  */
-namespace model\forum;
-class Forum_Config extends Forum {
+namespace model\post;
+class Post_Config extends Post {
     public function __construct()
     {
         parent::__construct();
-        $this->setTable('forum_config');
+        $this->setTable('post_config');
     }
 
 

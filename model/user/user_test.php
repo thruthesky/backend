@@ -8,6 +8,7 @@ class User_Test extends \model\test\Test {
 
 
         $this->cache();
+        $this->anonymous();
         $this->create();
         $this->register();
         $this->edit();
@@ -37,6 +38,16 @@ class User_Test extends \model\test\Test {
         test( $firstCount == ($thirdCount-2), "Second cache count test");
     }
 
+
+    public function anonymous() {
+
+        $an = currentUser();
+        test( $an->exist(), "Anonymous user exists.");
+        test( $an->logged(), "User : {$an->id}, Anonymous is a user who did not logged in with his password but treated as logged in.");
+        test( $an->id == ANONYMOUS_ID, "Before Login: User is anonymous.");
+        $a = user( ANONYMOUS_ID );
+        test( $a->id == ANONYMOUS_ID, "After loading anonymous user: Anonymous ID Exists");
+    }
 
     public function create() {
         global $_cache_entity_record;
@@ -187,6 +198,7 @@ class User_Test extends \model\test\Test {
         // get user data.
         $re = $this->route('user.get', [ 'session_id' => $session_id ] );
         test( is_success($re), "Got user: $id " . get_error_string($re));
+
         test( $re['data']['user']['meta']['class_id'] == 'thruthesky', "Meta check. " . get_error_string($re)); // check
 
 

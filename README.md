@@ -10,11 +10,46 @@ Backend server for Restful APIs
 # TODO
 
 
-## test on forum config, forum post
+* anonymous cannot login, logout, edit information.
+* anonymous can post with password.
 
 
-## file upload with cosutomizalbe downloda
+## Test on post\_config, post\_post
 
+* Not login user becomes anonymous.
+
+````
+config('abc')->countAll()
+config('abc')->countPost()
+config('abc')->countComment()
+config('abc')->timeLastPost();
+config('abc')->timeFirstPost();
+config('abc')->timeLastComment();
+config('abc')->timeFirstComment();
+````
+
+
+
+## Sample Site
+
+* Simple community site
+* Buy and sell / Online shopping mall site.
+
+
+
+## Installation
+
+* Once installed, it shouldn't be re-installed unless the user manually removes the database.
+
+
+
+## File upload with cosutomizalbe downloda
+
+* `file` table will holds the uploaded file information.
+* `file.finish` will be 0 until the file is really related to its object(parent).
+	* files with `file.finish=0` becomes 24 hours old, then it will be deleted.
+
+* when a file uploaded, it will return `file.idx`, any of file upload form and its related form should keep the `file.idx` and pass it over the parents' form submission. So, 
 * You will upload a file without resizing.
 * When you download image, you can customize.
 * You can choose image type, width, height, quality, resize type.
@@ -29,6 +64,22 @@ Backend server for Restful APIs
 ````
 ?route=download&type=png&width=100&height=120&resize=center
 ````
+
+
+
+## Real Message System
+
+To communiate between users.
+
+* Each room has a configuration in `chat_config` table.
+* Each chat message is save in `chat_message` table.
+* For the same reason of `data integrity` of post, it does not hold `chat_config.time_last_message`. Do SQL query to get it.
+* Users and Chat Rooms are N:M relation for group chatting. So, `chat_relation` table will have the relation ship.
+* If a user leaves a chat room, then he will loose all the data.
+	* When a last user leaves from a chat room, the cat room will be destroyed.
+	* This condition perfectly makes it work like facebook chat or kakaotalk.
+* For new message indication, everty time a user gets a message from a room, the time of the message will be recorded in `chat_relation.time_of_last_message`. When a user visits(checks) the chat rooms, any chat room has newer message then the `chat_relation.time_of_last_message`, then the room has a new message that the user didn't read.
+
 
 # Interface
 
@@ -194,7 +245,19 @@ model/user/user_interface.php
 
 
 
-# Database and Data Relation
+# Data Relation and Database
+
+
+## User
+
+### Anonymous User.
+
+Users who are not logged in with their ID and password will login as anonymous. Meaning, All users are logged in as anonymous when they first visit the site.
+
+
+* Anonymous is a user who did not log in with his password but treated as logged in.
+* Anonymous user cannot login, logout, edit his information.
+* But can post/edit/delete with password.
 
 ## meta table
 
@@ -213,4 +276,75 @@ meta.model_idx is to associate the meta data with the object(entity/record) of t
 
 ### code
 meta.code is a sub-category for the meta. It would be a property of a entity like "facebook address", "google plus address" of a user.
+
+
+
+## Post
+
+Post can be served in many ways like forum posts, blog posts, group( cafe ) posts, etc. So, the name of the functionality shouldn't be something like 'forum'. Instead, It should be a simple `post` to serve variety of functionality.
+
+
+
+### post_config table
+
+Post categories ( or settings ) are saved in `post_config` table.
+
+
+### post_data table
+
+Posts are saved in `post_data` table.
+Comments are saved in `post_data` table together with post for easy managibility and for easy search.
+
+
+### Utility properties.
+
+`post_config` table does not has a field like `post_config.no_of_posts` to hold the number of posts due to the `data integrity`. For instance, you can get no of posts easy by querying `SELECT COUNT(*) FROM post_data WHERE idx_config=123` and it is fast enough.
+
+And for the same reason, `post_config` table has no field like `post_config.time_of_last_post` to maintain when was the time that a post created on that post category. You can query it and it is really fast enough.
+
+MySQL/MariaDB has query cache funtionality also.
+
+Having extra fields to keep post information may take extra care and often produce bugs that break `data integrity`.
+
+
+
+
+# Constants
+
+## Okay and ERROR Constant
+
+Among other constant, there is one thing to notice. That's OK and ERROR.
+
+````
+define('OK', 0);
+define('ERROR', FALSE);
+````
+
+OK tells an action was success while ERROR tells the action was an error.
+
+But both have falsy value. Meaning when you code like below
+
+	if ( OK ) { ... }  // this will NOT run.
+	else { ... }       // this WILL run.
+
+
+so, you need to use `===` to compare it was success or error. `is_error()`, `is_success()` handles this nicely.
+
+
+
+
+# Meta_Injector
+
+
+Meta Injecotr is a handy method to manage mata data of an entity. When `meta()` method is called, it creates an object of Meta_Injector with the model and model\_idx of the entity and returns the object.
+
+
+````
+user( 'abc' )->meta()->get();        // gets all meta data of user 'abc'
+post( 1 )->meta()->get('birthday');  // gets bitrh meta data of post no 1.
+user( 'abc' )->meta()->set([...]);   // sets an array of meta to user 'abc'.
+config( 33 )->meta()->set( 'title', '...' ); // sets title meta to post config 33.
+user( 'def' )->meta()->delete();     // delete all meta of user 'def'
+user( 'def' )->meta()->delete( 'birthday' ); // delete birthday meta of user 'def'.
+````
 

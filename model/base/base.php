@@ -28,7 +28,7 @@ class Base {
 
 
     public function setTable( $table ) {
-        $this->table = $table;
+        $this->table = DATABASE_PREFIX . $table;
         return $this;
     }
 
@@ -51,6 +51,7 @@ class Base {
     public function checkPassword( $plain_text_password, $encrypted_password ) {
         return password_verify( $plain_text_password, $encrypted_password );
     }
+
 
 
 

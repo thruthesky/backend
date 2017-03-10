@@ -2,8 +2,8 @@
 /**
  * @see README.md
  */
-namespace model\forum;
-class Forum_Post extends Forum {
+namespace model\post;
+class Post_Data extends Post {
     public function __construct()
     {
         parent::__construct();
