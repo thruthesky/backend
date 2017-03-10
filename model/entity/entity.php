@@ -61,7 +61,7 @@ class Entity extends \model\taxonomy\Taxonomy  {
     }
 
     public function meta() {
-        return meta_injector( $this->getTable(), $this->idx );
+        return meta_proxy( $this->getTable(), $this->idx );
     }
     public function getRecord() {
         return $this->record;
@@ -407,6 +407,14 @@ class Entity extends \model\taxonomy\Taxonomy  {
             if ( $resigned->exist() ) { ... Error on delete ... }
             else { ... Success on delete ... }
      *
+     * @endcode
+     *
+     *
+     * @code Example of entity()->delete()
+            return entity()
+                ->setTable( $this->getTable() )
+                ->loadQuery("model = '$model' AND model_idx = $model_idx $and_code")
+                ->delete();
      * @endcode
      *
      */

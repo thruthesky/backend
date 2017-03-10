@@ -41,7 +41,7 @@ $DEFAULT_NO_OF_PAGE_ITEMS   = 10;           // number
  *      - no log will be save.
  *      - no debug data will be printed on the browser ( to user ).
  */
-$DEBUG                  = false;
+$DEBUG                  = true;
 
 /**
  * If 'DEBUG_LOG_FILE_PATH' is not empty, then debug data will not be saved.
