@@ -36,8 +36,9 @@ function run_route( $route )
                 // check http variables type for security
                 if ( $re = check_http_variables_type() ) return error( $re['code'], $re['message'] );
 
-
-                $obj->$route['method']();
+                $method = $route['method'];
+                $obj->$method();    
+                // $obj->$route['method']();
 
             } else {
                 $route = get_current_route();
