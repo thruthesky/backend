@@ -75,7 +75,7 @@ class Meta_Test {
 
     public function multi_create() {
 
-        $re = meta()->create();         // error test.
+        $re = meta()->create();         // error test. data is no data to create.
         test( is_error($re), "Multi meta creation: " . get_error_string($re));
 
         $metas = [
@@ -86,14 +86,17 @@ class Meta_Test {
 
         // create multi meta data.
         $re = meta()->create('multi', 111, $metas);
+        test( is_success($re), "meta multi create ok");
 
-        $rows = meta()->gets( 'multi', 111 );                   // get multi data
+
+        $rows = meta()->get( 'multi', 111 );                   // get multi data
+        // di($rows);
         test( $rows['age'] == $metas['age'], "Age check ok");   // check
 
 
         // edit one of the meta data
         meta()->set('model', 'multi')->set('model_idx', 111)->set('code', 'age')->set('data', 33)->create();
-        $rows = meta()->gets( 'multi', 111 );                   // get multi data
+        $rows = meta()->get( 'multi', 111 );                   // get multi data
         test( $rows['age'] == 33, "Age check ok"); // check.
 
     }

@@ -1,8 +1,8 @@
 <?php
-$table= 'forum_config';
+$_table_name = DATABASE_PREFIX . 'post_config';
 db()
-    ->dropTable( $table )
-    ->createTable( $table )
+    ->dropTable( $_table_name )
+    ->createTable( $_table_name )
     ->add('id', 'varchar', 64)
     ->add('name', 'varchar', 128)
     ->add('description', 'LONGTEXT')
@@ -11,18 +11,15 @@ db()
     ->add('level_write', 'TINYINT')
     ->add('level_comment', 'TINYINT')
     ->unique( 'id');
+die_if_table_not_exist( $_table_name );
 
 
 
 
-
-
-
-
-$table= 'forum_post';
+$_table_name = DATABASE_PREFIX . 'post_data';
 db()
-    ->dropTable( $table )
-    ->createTable( $table )
+    ->dropTable( $_table_name )
+    ->createTable( $_table_name )
     ->add('idx_user', 'INT UNSIGNED DEFAULT 0')
     ->add('idx_config', 'INT UNSIGNED DEFAULT 0')
     ->add('idx_parent', 'INT UNSIGNED DEFAULT 0')
@@ -31,4 +28,4 @@ db()
     ->index( 'idx_user' )
     ->index( 'idx_config' )
     ->index( 'idx_config,idx_user' );
-
+die_if_table_not_exist( $_table_name );

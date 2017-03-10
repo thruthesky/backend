@@ -60,6 +60,9 @@ class Entity extends \model\taxonomy\Taxonomy  {
         else return null;
     }
 
+    public function meta() {
+        return meta_injector( $this->getTable(), $this->idx );
+    }
     public function getRecord() {
         return $this->record;
     }
@@ -216,6 +219,7 @@ class Entity extends \model\taxonomy\Taxonomy  {
      * @return number
      *      - number of ERROR CODE ( < 0 ) will be return on error.
      *      - number of entity idx ( > 0 ) on success.
+     *      - ERROR if somehow failed on Insert.
      *
      * @see readme for detail.
      *

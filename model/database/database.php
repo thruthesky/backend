@@ -262,7 +262,13 @@ class Database extends \PDO {
      */
     public function query ($q, $mode = \PDO::ATTR_DEFAULT_FETCH_MODE, $arg3 = null, array $ctorargs = array()) {
         $this->log($q);
-        return parent::query($q);
+        try {
+            return parent::query($q);
+        }
+        catch ( \Exception $e ) {
+            if ( DEBUG ) di($e);
+        }
+
     }
 
 
@@ -440,7 +446,8 @@ class Database extends \PDO {
         }
 
         $statement = $this->query($q);
-        return $statement->fetchAll(\PDO::FETCH_ASSOC);
+        if ( $statement ) return $statement->fetchAll(\PDO::FETCH_ASSOC);
+        else return [];
 
     }
 
@@ -474,13 +481,13 @@ class Database extends \PDO {
         try {
             $count = $this->exec($q);
         } catch ( \PDOException $e) {
-            debug_database_log('Connection failed: ' . $e->getMessage());
+            debug_database_log('Insert failed: ' . $e->getMessage());
             return FALSE;
         }
 
 
         if ( $count == 0 ) {
-            return FALSE;
+            return ERROR;
         }
         else {
 

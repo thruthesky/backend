@@ -1,7 +1,7 @@
 <?php
 
-add_route( 'forum_post_create', [
-    'path' => "\\model\\forum\\forum_post_interface",
+add_route( 'post.create', [
+    'path' => "\\model\\forum\\post_data_interface",
     "method" => "create",
     "variables" => [
         'required' => [ 'session_id', 'idx_config' ],

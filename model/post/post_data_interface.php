@@ -1,7 +1,7 @@
 <?php
 
-namespace model\forum;
-class Forum_Post_Interface extends Forum_Post {
+namespace model\post;
+class Post_Data_Interface extends Post_Data {
 
     /**
      * @param array $record
@@ -13,7 +13,7 @@ class Forum_Post_Interface extends Forum_Post {
 
 
         $config = config()->load( in( 'idx_config' ) );
-        if( ! $config->exist() ) return error( ERROR_FORUM_CONFIG_NOT_EXIST );
+        if( ! $config->exist() ) return error( ERROR_POST_CONFIG_NOT_EXIST );
         if ( ! currentUser()->logged() ) return error( ERROR_USER_NOT_LOGIN );
         
         
@@ -99,7 +99,7 @@ class Forum_Post_Interface extends Forum_Post {
         */
 
 
-        if ( ! config()->load( in('idx_config') )->exist() ) return error( ERROR_FORUM_CONFIG_NOT_EXIST );
+        if ( ! config()->load( in('idx_config') )->exist() ) return error( ERROR_POST_CONFIG_NOT_EXIST );
         $cond = "idx_config=" . in('idx_config');
 
         $posts = $this->loads($cond);

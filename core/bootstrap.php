@@ -72,7 +72,7 @@ function user( $what = null ) {
  * @warning if there is no $_REQUEST['session_id'], then the User object is empty.
  * @return \model\user\User
  */
-$_currentUser = user();             // Empty User Object
+$_currentUser = get_current_user();            // Empty User Object
 function setCurrentUser( $user ) {
     global $_currentUser;
     $_currentUser = $user;
@@ -85,9 +85,12 @@ function setCurrentUser( $user ) {
 function currentUser()
 {
     global $_currentUser;
-    if ( ! $_currentUser->exist() ) {   // If there no current User,
+    if ( ! $_currentUser instanceof \model\user\User) {   // If there no current User,
         if ( in('session_id') ) {                       // If session_id has passed,
             setCurrentUser(user(in('session_id')));     // set current user.
+        }
+        else {
+            user()->forceLogin( ANONYMOUS_ID );
         }
     }
     return $_currentUser;
@@ -108,7 +111,9 @@ function entity() {
 function meta() {
     return new \model\meta\Meta();
 }
-
+function meta_injector( $model, $model_idx ) {
+    return new \model\meta\Meta_Injector( $model, $model_idx);
+}
 
 function config( $what = null ) {
     $config = new \model\forum\Forum_Config();

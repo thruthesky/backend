@@ -1,11 +1,16 @@
 <?php
 $em = [];
 
+define('OK', 0);                                        // success return. It is success and Okay.
+define('ERROR', FALSE);                                   // failure return. It was an error and Bad.
+
+
+
 
 define('ERROR_UNKNOWN', -40000);                        $em[ERROR_UNKNOWN] = 'unknown-error';
 
-define( 'ERROR_ROUTE_NOT_PROVIDED', -40010);            $em[ERROR_ROUTE_NOT_PROVIDED] = 'route-is-not-provided';
-define( 'ERROR_ROUTE_NOT_EXIST', -40011);               $em[ERROR_ROUTE_NOT_EXIST] = 'route-does-not-exists';
+define('ERROR_ROUTE_NOT_PROVIDED', -40010);            $em[ERROR_ROUTE_NOT_PROVIDED] = 'route-is-not-provided';
+define('ERROR_ROUTE_NOT_EXIST', -40011);               $em[ERROR_ROUTE_NOT_EXIST] = 'route-does-not-exists';
 define('ERROR_MODEL_CLASS_NOT_FOUND', -40040);          $em[ERROR_MODEL_CLASS_NOT_FOUND] = "model-class-not-found";
 define('ERROR_NO_RESPONSE', -40041);                    $em[ERROR_NO_RESPONSE] = "no-success-error-response";
 define('ERROR_MODEL_CLASS_EMPTY', -40042);              $em[ERROR_MODEL_CLASS_EMPTY] = 'model-class-empty';
@@ -61,25 +66,25 @@ define('ERROR_MALFORMED_SESSION_ID', -400130);          $em[ERROR_MALFORMED_SESS
 define('ERROR_USER_RESIGN_FAILED', -40150);             $em[ERROR_USER_RESIGN_FAILED] = 'user-resign-failed';
 
 
-// forum errors. between from -40200 to -40299
+// post errors. between from -40200 to -40299
 
-define('ERROR_FORUM_CONFIG_EXIST', -40200);                 $em[ERROR_FORUM_CONFIG_EXIST] = 'forum-config-exist';
-define('ERROR_FORUM_CONFIG_NOT_EXIST', -40201);             $em[ERROR_FORUM_CONFIG_NOT_EXIST] = 'forum-config-not-exist';
+define('ERROR_POST_CONFIG_EXIST', -40200);                 $em[ERROR_POST_CONFIG_EXIST] = 'post-config-exist';
+define('ERROR_POST_CONFIG_NOT_EXIST', -40201);             $em[ERROR_POST_CONFIG_NOT_EXIST] = 'post-config-not-exist';
 define('ERROR_POST_NOT_EXIST', -40202);               $em[ERROR_POST_NOT_EXIST] = 'post-not-exist';
-define('ERROR_FORUM_ID_EMPTY', -40203 );                    $em[ERROR_FORUM_ID_EMPTY] = 'forum-id-is-empty';
+define('ERROR_POST_ID_EMPTY', -40203 );                    $em[ERROR_POST_ID_EMPTY] = 'post-id-is-empty';
 
-define('ERROR_FORUM_DATA_TITLE_EMPTY', -40204);             $em[ERROR_FORUM_DATA_TITLE_EMPTY] = 'forum-data-title-is-empty';
-define('ERROR_FORUM_DATA_CONTENT_EMPTY', -40205);           $em[ERROR_FORUM_DATA_CONTENT_EMPTY] = 'forum-data-content-is-empty';
-define('ERROR_FORUM_IDX_CONFIG_EMPTY', -40206);				$em[ERROR_FORUM_IDX_CONFIG_EMPTY] = 'ERROR_FORUM_IDX_CONFIG_EMPTY';
+define('ERROR_POST_DATA_TITLE_EMPTY', -40204);             $em[ERROR_POST_DATA_TITLE_EMPTY] = 'post-data-title-is-empty';
+define('ERROR_POST_DATA_CONTENT_EMPTY', -40205);           $em[ERROR_POST_DATA_CONTENT_EMPTY] = 'post-data-content-is-empty';
+define('ERROR_POST_IDX_CONFIG_EMPTY', -40206);				$em[ERROR_POST_IDX_CONFIG_EMPTY] = 'ERROR_POST_IDX_CONFIG_EMPTY';
 define('ERROR_TITLE_TOO_LONG', -40207);                     $em[ERROR_TITLE_TOO_LONG] = 'title-is-too-long';
-define('ERROR_FORUM_CONFIG_ID_IS_TOO_LONG', -40208);        $em[ERROR_FORUM_CONFIG_ID_IS_TOO_LONG] = 'forum-config-id-is-too-long';
-define('ERROR_FORUM_CONFIG_NAME_IS_TOO_LONG', -40209);      $em[ERROR_FORUM_CONFIG_NAME_IS_TOO_LONG] = 'forum-config-name-is-too-long';
+define('ERROR_POST_CONFIG_ID_IS_TOO_LONG', -40208);        $em[ERROR_POST_CONFIG_ID_IS_TOO_LONG] = 'post-config-id-is-too-long';
+define('ERROR_POST_CONFIG_NAME_IS_TOO_LONG', -40209);      $em[ERROR_POST_CONFIG_NAME_IS_TOO_LONG] = 'post-config-name-is-too-long';
 define('ERROR_USER_IDX_EMPTY', -40210);                     $em[ERROR_USER_IDX_EMPTY] = 'user-idx-empty';
 define('ERROR_IDX_CONFIG_NOT_NUMBER', -40211);              $em[ERROR_IDX_CONFIG_NOT_NUMBER] = 'config-idx-not-number';
 define('ERROR_USER_IDX_NOT_NUMBER', -40212);                $em[ERROR_USER_IDX_NOT_NUMBER] = 'user-idx-not-number';
 
-define('ERROR_FORUM_IDX_EMPTY', -40230);                    $em[ERROR_FORUM_IDX_EMPTY] = 'forum-config/data-idx-empty';
-define('ERROR_FORUM_CONFIG_EDIT_FAILED', -40231);                    $em[ERROR_FORUM_CONFIG_EDIT_FAILED] = 'forum-config-edit-failed';
+define('ERROR_POST_IDX_EMPTY', -40230);                    $em[ERROR_POST_IDX_EMPTY] = 'post-config/data-idx-empty';
+define('ERROR_POST_CONFIG_EDIT_FAILED', -40231);                    $em[ERROR_POST_CONFIG_EDIT_FAILED] = 'post-config-edit-failed';
 
 
 // permis error
@@ -87,11 +92,11 @@ define('ERROR_PERMISSION_ADMIN', -40800 );                  $em[ERROR_PERMISSION
 
 
 // meta errors
-define("ERROR_WRONG_META_DATA_TO_CREATE", -4090);                     $em[ERROR_WRONG_META_DATA_TO_CREATE] = "wrong-meta-data-to-create";
+
 define("ERROR_META_MULTI_CREATE_FAILED", -4091);            $em[ERROR_META_MULTI_CREATE_FAILED] = "meta-multi-creation-failed";
+define("ERROR_MODEL_IS_EMPTY", -4090);                     $em[ERROR_MODEL_IS_EMPTY] = "model-is-empty";
+define("ERROR_MODEL_IDX_IS_EMPTY", -4090);                     $em[ERROR_MODEL_IDX_IS_EMPTY] = "model-is-empty";
+define("ERROR_CODE_IS_EMPTY", -4090);                     $em[ERROR_CODE_IS_EMPTY] = "model-is-empty";
 
 
 define('ERROR_FAKE_ERROR', -50999);                         $em[ERROR_FAKE_ERROR] = 'fake-error';
-define('OK', 0);
-
-

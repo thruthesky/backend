@@ -2,8 +2,8 @@
 /**
  *
  */
-namespace model\forum;
-class Forum extends \model\entity\Entity
+namespace model\post;
+class Post extends \model\entity\Entity
 {
     public function __construct()
     {

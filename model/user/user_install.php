@@ -1,10 +1,11 @@
 <?php
 
+$_table_name = DATABASE_PREFIX . 'user';
 
 
 db()
-    ->dropTable( 'user' )
-    ->createTable( 'user' )
+    ->dropTable( $_table_name )
+    ->createTable( $_table_name )
     ->add('id', 'varchar', 64)
     ->add('password', 'char', 255)
     ->add('session_id', 'varchar', 255)
@@ -47,17 +48,29 @@ db()
     ->index('email')
     ->index('birth_year,birth_month,birth_day');
 
-global $ADMIN_ID;
+
+
+die_if_table_not_exist( $_table_name );
 
 
 $admin_user_data = [
-    'id' => $ADMIN_ID,
-    'password' => $ADMIN_ID,
-    'name' => $ADMIN_ID
+    'id' => ADMIN_ID,
+    'password' => ADMIN_ID,
+    'name' => ADMIN_ID
 ];
-
 $re = user()->create( $admin_user_data );
+if ( is_error( $re ) ) {
+    die(" error: " . get_error_string($re));
+}
 
+
+
+$anonymous_user_data = [
+    'id' => ANONYMOUS_ID,
+    'password' => ANONYMOUS_ID,
+    'name' => ANONYMOUS_ID
+];
+$re = user()->create( $anonymous_user_data );
 if ( is_error( $re ) ) {
     die(" error: " . get_error_string($re));
 }

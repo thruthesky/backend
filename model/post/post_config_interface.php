@@ -1,6 +1,6 @@
 <?php
-namespace model\forum;
-class Forum_Config_Interface extends Forum_Config {
+namespace model\post;
+class Post_Config_Interface extends Post_Config {
 
 
     /**
@@ -13,14 +13,14 @@ class Forum_Config_Interface extends Forum_Config {
      */
     public function create( $record = [] ) {
 
-        if ( empty(in('id') ) ) return error( ERROR_FORUM_ID_EMPTY ); // @fixed. put right error message.
+        if ( empty(in('id') ) ) return error( ERROR_POST_ID_EMPTY ); // @fixed. put right error message.
 
         $data = [];
         $data['id'] = in('id');
         $data['name'] = in('name');
         $data['description'] = in('description');
-        if( strlen( in('id') ) > 64 ) return error( ERROR_FORUM_CONFIG_ID_IS_TOO_LONG );
-        if( strlen( in('name') ) >128) return error( ERROR_FORUM_CONFIG_NAME_IS_TOO_LONG );
+        if( strlen( in('id') ) > 64 ) return error( ERROR_POST_CONFIG_ID_IS_TOO_LONG );
+        if( strlen( in('name') ) >128) return error( ERROR_POST_CONFIG_NAME_IS_TOO_LONG );
 
 
         if ( ! currentUser()->isAdmin() ) return error( ERROR_PERMISSION_ADMIN );
@@ -28,7 +28,7 @@ class Forum_Config_Interface extends Forum_Config {
 
         $config = $this->load( in('id') );
 
-        if ( $config->exist() ) return error( ERROR_FORUM_CONFIG_EXIST ); //
+        if ( $config->exist() ) return error( ERROR_POST_CONFIG_EXIST ); //
 
         $forum_idx = parent::create( $data );
         if ( is_error( $forum_idx ) ) error( $forum_idx );
@@ -46,7 +46,7 @@ class Forum_Config_Interface extends Forum_Config {
 
         // check-up
         $config = $this->load(in('idx'));
-        if( ! $config->exist() ) return error( ERROR_FORUM_CONFIG_NOT_EXIST );
+        if( ! $config->exist() ) return error( ERROR_POST_CONFIG_NOT_EXIST );
 
         $record = [];
         // $record['idx'] = in('idx');
@@ -55,7 +55,7 @@ class Forum_Config_Interface extends Forum_Config {
         $record['description'] = in('description');
 
         $re = $config->update( $record );
-        if ( $re == FALSE ) return error( ERROR_FORUM_CONFIG_EDIT_FAILED ); // strange error. this error should not happened here.
+        if ( $re == FALSE ) return error( ERROR_POST_CONFIG_EDIT_FAILED ); // strange error. this error should not happened here.
         success();
         return OK;
     }
@@ -70,7 +70,7 @@ class Forum_Config_Interface extends Forum_Config {
 
         // check-up
         $config = $this->load(in('idx'));
-        if( ! $config->exist() ) return error( ERROR_FORUM_CONFIG_NOT_EXIST );
+        if( ! $config->exist() ) return error( ERROR_POST_CONFIG_NOT_EXIST );
 
 
         $re = parent::delete();
@@ -84,7 +84,7 @@ class Forum_Config_Interface extends Forum_Config {
 
         // check-up
         $config = $this->load(in('idx'));
-        if( ! $config->exist() ) return error( ERROR_FORUM_CONFIG_NOT_EXIST );
+        if( ! $config->exist() ) return error( ERROR_POST_CONFIG_NOT_EXIST );
 
         success( [ 'config' => $config->getRecord() ] );
 

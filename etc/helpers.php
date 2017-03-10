@@ -129,7 +129,11 @@ function error( $code, $message='' ) {
 
 function get_error_string( $re ) {
     global $em;
-    if ( is_error( $re ) ) {
+    if ( $re === FALSE ) {
+        // di( debug_backtrace( ) );
+        return "Error code is FALSE";
+    }
+    else if ( is_error( $re ) ) {
         if ( is_array( $re ) ) {
             $code = $re['code'];
             $message = $re['message'];

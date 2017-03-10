@@ -66,7 +66,6 @@ class User_Interface extends User {
      */
     public function get() {
         $session_id = in('session_id');
-        if( empty( $session_id ) ) return error( ERROR_SESSION_ID_EMPTY );
         if ( ! $this->isSessionId( $session_id ) ) return error( ERROR_MALFORMED_SESSION_ID );
         $user = $this->load( $session_id );
         if ( ! $user->exist() ) return error( ERROR_USER_NOT_FOUND );
@@ -85,7 +84,8 @@ class User_Interface extends User {
 
 
 
-        $record['meta'] = meta()->gets( 'user', $record['idx']);
+
+        $record['meta'] = meta()->get( $this->getTable(), $record['idx']);
         success( ['user'=>$record] );
     }
 
