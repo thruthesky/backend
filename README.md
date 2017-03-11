@@ -390,3 +390,11 @@ user( 'def' )->meta()->delete();     // delete all meta of user 'def'
 user( 'def' )->meta()->delete( 'birthday' ); // delete birthday meta of user 'def'.
 ````
 
+
+
+
+# Admin
+
+* `admin id` is set in ./etc/config.php and if you want, you can chage it to any user id and that id becomes admin.
+* admin password is the same as `admin id`. so, by default, admin id is `admin` and the password is `admin`. so, you can login as admin with `admin` as ID and `admin` as password.
+* You need to change the password of the admin immediately after you install.
