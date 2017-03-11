@@ -172,16 +172,19 @@ class Taxonomy extends \model\base\Base  {
 
 
 
-        $q = "SELECT $option[select] FROM {$this->getTable()} $where $order $limit";
-
         $bind = $option['bind'];
         $binds = explode(',', $bind);
         foreach( $binds as $value ) {
             $quoted = db()->quote( $value );
-            $pos = strpos( $q, '?' );
+            $pos = strpos( $where, '?' );
             if ( $pos === false ) return ERROR_SQL_WHERE_BIND_MISMATCH;
-            $q = substr_replace( $q, $quoted, $pos, 1 );
+            $where = substr_replace( $where, $quoted, $pos, 1 );
         }
+
+        if ( strpos($where, '?') ) return ERROR_SQL_WHERE_BIND_MISMATCH;
+
+
+        $q = "SELECT $option[select] FROM {$this->getTable()} $where $order $limit";
 
 
         return db()->rows( $q );

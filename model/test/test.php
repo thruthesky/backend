@@ -6,8 +6,10 @@ class Test {
 
 
         $this->test_style();
-        $this->test_reload( 5 );
+        $this->test_reload( 3 );
 
+
+        $this->test_info();
 
         $this->textRoute();
 
@@ -88,6 +90,10 @@ class Test {
 
     }
 
+    private function test_info() {
+        echo "<div>Database Type: ". DATABASE_TYPE ."</div>";
+        echo "<div>Database Name: ". DATABASE_NAME ."</div>";
+    }
 
     /**
      *
@@ -108,6 +114,22 @@ class Test {
 
         $_REQUEST = [];
         return $res;
+    }
+
+
+
+    public function http_route( $route_name, $params = [] ) {
+
+        $params['route'] = $route_name;
+        $vars = http_build_query( $params );
+        $url = "http://$_SERVER[HTTP_HOST]$_SERVER[PHP_SELF]?$vars";
+
+
+        $body = file_get_contents( $url );
+        $re = json_decode( $body, true );
+
+        return $re;
+
     }
 
 

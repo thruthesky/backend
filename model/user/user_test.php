@@ -129,6 +129,18 @@ class User_Test extends \model\test\Test {
         user()->load( $id )->delete();
         test( ! user()->load( $id )->exist(), "User deleted: $id" . get_error_string($re) );
 
+
+
+        /*
+        user('user14')->delete();
+        $re = $this->http_route( 'register', [ 'id' => 'user14', 'password'=>'pass14']);
+        test( is_success($re), "user_test::register() id: user14. " . get_error_string($re));
+
+
+        $user14_session_id = $re['data']['session_id'];
+        $re = $this->http_route( 'resign', ['session_id' => $user14_session_id]);
+        test( is_success($re), "user_test::resign() id: user14. " . get_error_string($re));
+        */
     }
 
 
@@ -370,8 +382,8 @@ class User_Test extends \model\test\Test {
             'bind' => "%name%",
             'order' => 'idx ASC, name DESC'
         ]);
-        test( is_error($re) == ERROR_DATABASE_QUERY, "search query error test: " . get_error_string($re) );
 
+        test( is_error($re) == ERROR_SQL_WHERE_BIND_MISMATCH, "search query error test: " . get_error_string($re) );
 
 
 

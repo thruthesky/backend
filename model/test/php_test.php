@@ -2,7 +2,7 @@
 
 namespace model\test;
 
-class Php_Test {
+class Php_Test extends Test{
     public function __construct()
     {
     }
@@ -15,6 +15,8 @@ class Php_Test {
         test( $admin instanceof \model\taxonomy\Taxonomy, "User is a child of Taxonomy");
         test( $admin instanceof \model\entity\Entity, "User is a child of Entity");
         test( $admin instanceof \model\user\User, "And user is User");
+
+
 
     }
 }
