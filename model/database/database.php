@@ -214,7 +214,19 @@ class Database extends \PDO {
     }
 
 
-
+    /**
+     *
+     *
+     * @param $column
+     * @param $type
+     * @param int $size
+     * @return Database
+     *
+     * @code example of putting column constraints
+                ->add('id', "VARCHAR(64) DEFAULT ''")           /// To put default, you can set column like this.
+                ->add('name', 'VARCHAR', 128)                   /// default will be null.
+     * @endcode
+     */
     public function add($column, $type, $size=0)  {
         $table = $this->table();
         return $this->addColumn($table, $column, $type, $size);
@@ -527,15 +539,24 @@ class Database extends \PDO {
 
 
     /**
+     *
+     * @deprecated Do not use it. Use Entity->delete()
+     *
+     * @Attention for code consistency, you should not use this method. always use entity()->delete() to delete a record.
+     *
      * @param $table
      * @param $cond
      * @return int
      */
     public function delete($table, $cond)
     {
+        return ERROR;
+
+        /*
         $q = "DELETE FROM $table WHERE $cond";
         $statement = $this->query($q);
         return OK;
+        */
     }
 
 

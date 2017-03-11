@@ -29,6 +29,11 @@ class User extends \model\entity\Entity {
      *          3. return it.
      *
      * @return string
+     *
+     * @code
+     *      user( $id )->getSessionId();
+     * @endcode
+     *
      */
     public function getSessionId() {
 
@@ -120,15 +125,12 @@ class User extends \model\entity\Entity {
      * @return bool
      */
     public function isAdmin() {
-        if ( ! currentUser()->exist() ) return false;
-        return $this->id == $GLOBALS['ADMIN_ID'];
-        /*
-        if ( array_key_exists( 'id', $this->getRecord() ) ) {
-            return $this->record['id'] == $GLOBALS['ADMIN_ID'];
-        }
-        else return false;
-        */
+        return $this->id == ADMIN_ID;
     }
+    public function isAnonymous() {
+        return $this->id == ANONYMOUS_ID;
+    }
+
 
 
     /**
@@ -251,13 +253,14 @@ class User extends \model\entity\Entity {
 
 
         if ( $record ) {                        // something to update?
-            debug_log("update: reload: $reload ");
+            // debug_log("update: reload: $reload ");
             $re = parent::update( $record, $reload );
             if ( empty( $re ) ) return FALSE;   // something happened when updating.
         }
 
         if ( $meta ) {
-            meta()->create( $this->getTable(), $this->idx, $meta );
+            $this->meta()->set( $meta );
+            // meta()->create( $this->getTable(), $this->idx, $meta );
         }
 
         return TRUE;

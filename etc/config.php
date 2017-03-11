@@ -58,13 +58,15 @@ $DEBUG_LOG_FILE_PATH    = $DIR_DATA . "/debug.log";
 $DEBUG_LOG_DATABASE         = true;
 
 
-if ( file_exists( __ROOT_DIR__ . "/etc/my-config.php") ) require __ROOT_DIR__ . "/etc/my-config.php";
+if ( file_exists( __ROOT_DIR__ . "/etc/my_config.php") ) require __ROOT_DIR__ . "/etc/my_config.php";
 
 
 
 
 
 ////////////////////////////////////////////////////////// DO NOT EDIT BELOW
+
+$_config = [];
 
 define('DEBUG',             $DEBUG);
 

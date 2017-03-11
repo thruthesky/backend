@@ -10,30 +10,21 @@ class Post_Config_Interface extends Post_Config {
      *
      * @param array $record
      * @return mixed
+     *
+     * @todo consider to do the form validation of too long string for id and name.
+     *
      */
     public function create( $record = [] ) {
-
-        if ( empty(in('id') ) ) return error( ERROR_POST_ID_EMPTY ); // @fixed. put right error message.
-
-        $data = [];
-        $data['id'] = in('id');
-        $data['name'] = in('name');
-        $data['description'] = in('description');
-        if( strlen( in('id') ) > 64 ) return error( ERROR_POST_CONFIG_ID_IS_TOO_LONG );
-        if( strlen( in('name') ) >128) return error( ERROR_POST_CONFIG_NAME_IS_TOO_LONG );
-
-
         if ( ! currentUser()->isAdmin() ) return error( ERROR_PERMISSION_ADMIN );
+        if ( $this->load( in('id') )->exist() ) return error( ERROR_POST_CONFIG_EXIST, "post config - " . in('id') . " - already exists" );
 
-
-        $config = $this->load( in('id') );
-
-        if ( $config->exist() ) return error( ERROR_POST_CONFIG_EXIST ); //
-
-        $forum_idx = parent::create( $data );
+        $record = get_route_optional_variables();
+        $record['id'] = in('id');
+        $forum_idx = parent::create( $record );
         if ( is_error( $forum_idx ) ) error( $forum_idx );
         else success( ['idx'=>$forum_idx] );
     }
+
 
 
 
@@ -44,9 +35,13 @@ class Post_Config_Interface extends Post_Config {
      */
     public function edit() {
 
+
+        if ( ! currentUser()->isAdmin() ) return error( ERROR_PERMISSION_ADMIN );
+
+
         // check-up
-        $config = $this->load(in('idx'));
-        if( ! $config->exist() ) return error( ERROR_POST_CONFIG_NOT_EXIST );
+        $config = $this->load(in('id'));
+        if( ! $config->exist() ) return error( ERROR_POST_CONFIG_NOT_EXIST, "post config - " . in('id') . ' - already does not exist' );
 
         $record = [];
         // $record['idx'] = in('idx');
@@ -68,10 +63,11 @@ class Post_Config_Interface extends Post_Config {
      */
     public function delete() {
 
-        // check-up
-        $config = $this->load(in('idx'));
-        if( ! $config->exist() ) return error( ERROR_POST_CONFIG_NOT_EXIST );
+        if ( ! currentUser()->isAdmin() ) return error( ERROR_PERMISSION_ADMIN );
 
+        // check-up
+        $config = $this->load(in('id'));
+        if( ! $config->exist() ) return error( ERROR_POST_CONFIG_NOT_EXIST );
 
         $re = parent::delete();
         if ( $re == OK ) return success();
@@ -81,12 +77,9 @@ class Post_Config_Interface extends Post_Config {
 
 
     public function data() {
-
         // check-up
-        $config = $this->load(in('idx'));
-        if( ! $config->exist() ) return error( ERROR_POST_CONFIG_NOT_EXIST );
-
-        success( [ 'config' => $config->getRecord() ] );
+        if( ! config( in('id') )->exist() ) return error( ERROR_POST_CONFIG_NOT_EXIST, "post config - " . in('id') . " - does not exist" );
+        success( [ 'config' => config( in('id') )->getRecord() ] );
 
     }
 

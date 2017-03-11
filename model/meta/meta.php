@@ -200,8 +200,18 @@ class Meta extends \model\entity\Entity
         /**
          * Since it is multi row delete, it cannot use entity()->delete()
          */
-        return db()->delete( $this->getTable(), " model='$model' AND model_idx='$model_idx' $and_code ");
+        // return db()->delete( $this->getTable(), " model='$model' AND model_idx='$model_idx' $and_code ");
 
+
+        $rows = db()->rows("SELECT idx FROM {$this->getTable()} WHERE model='$model' AND model_idx='$model_idx' $and_code ");
+        if ( $rows ) {
+            foreach( $rows as $row ) {
+                $re = $this->load( $row['idx'] )->delete(); // // @attention: This may call meta->delete() recursively NOT the one of entity()->delete(). but still okay.
+                if ( is_error( $re ) ) return ERROR;
+            }
+        }
+
+        return OK;
     }
 
 

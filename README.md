@@ -9,10 +9,13 @@ Backend server for Restful APIs
 
 # TODO
 
+## Post
 
-* anonymous cannot login, logout, edit information.
-* anonymous can post with password.
+* A post can be linked to other forum or other place.
+	* post.linked_with field may be a way.
 
+* A forum can be subcategory of others.
+	* category taxonomy may be needed.
 
 ## Test on post\_config, post\_post
 
@@ -27,6 +30,37 @@ config('abc')->timeFirstPost();
 config('abc')->timeLastComment();
 config('abc')->timeFirstComment();
 ````
+
+## Trash Can
+
+When a forum or post is deleted, the data goes into `trash can` table.
+When a user is deleted, the information goes into `trash can` table.
+
+
+
+
+## User Level
+
+* There is only one `super admin` who has all the previlegdes. It is set to `admin` by default and you can change it in ./etc/config.php
+* `super amdin` can set maximum of 5 users to `sub admin`. `sub admin` can do whatever except setting `sub admin`. `sub admin` can view user private information. They can change user paassword, block user, change user level. They can also create forums and block forums. So be careful to set a user to `sub admin`
+	* `sub admin` cannot
+		* change `sub admin`
+		* delete forum,
+		* cannot empty deleted posts
+
+* `manager` is a moderator of a forum or a cafe. They can;
+	* manage a forum or a group or any category.
+	* create a group and automatically become the `manager` of the cafe.
+
+
+## Gruop
+
+to complete a portal.
+
+
+## SMS service
+
+To reduce the money, SMS shouldn't send more than 1 or 2 times a day to a user.
 
 
 
@@ -281,13 +315,19 @@ meta.code is a sub-category for the meta. It would be a property of a entity lik
 
 ## Post
 
-Post can be served in many ways like forum posts, blog posts, group( cafe ) posts, etc. So, the name of the functionality shouldn't be something like 'forum'. Instead, It should be a simple `post` to serve variety of functionality.
+Post can be served in many ways like forum posts, blog posts, group( cafe ) posts, comments on an image, etc. So, the name of the functionality shouldn't be something like 'forum'. Instead, It should be a simple `post` to serve variety of functionality.
 
 
 
 ### post_config table
 
 Post categories ( or settings ) are saved in `post_config` table.
+
+* `post_config.moderators` holds forum moderators to manage the forum. It is a string of IDs separated by comma.
+
+
+* Only admin can create, edit, delete `post_config` but any can read it. So don't put any critical information on it.
+
 
 
 ### post_data table
@@ -333,10 +373,10 @@ so, you need to use `===` to compare it was success or error. `is_error()`, `is_
 
 
 
-# Meta_Injector
+# Meta_Proxy
 
 
-Meta Injecotr is a handy method to manage mata data of an entity. When `meta()` method is called, it creates an object of Meta_Injector with the model and model\_idx of the entity and returns the object.
+Meta Prxoy is a handy method to manage mata data of an entity. When `meta()` method of an entity is called, it creates an object of Meta_Injector with the model and model\_idx of the entity and returns the object.
 
 
 ````

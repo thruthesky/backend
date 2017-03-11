@@ -158,7 +158,6 @@ class Entity extends \model\taxonomy\Taxonomy  {
 
         $this->record = db()->row("SELECT * FROM $table WHERE $cond");
 
-
         $this->setCacheEntity( $what, $this->record );
         return $this;
     }
@@ -207,6 +206,29 @@ class Entity extends \model\taxonomy\Taxonomy  {
         $table = $this->getTable();
         // di( "_cache_entity_record[$table][ $what ]" );
         unset( $_cache_entity_record[$table][ $what ]);
+    }
+
+
+    /**
+     *
+     * Returns $this->idx or $idx->id or OK ( in this order ) after clearing the cache.
+     *
+     *
+     * @return mixed
+     *
+     */
+    public function deleteCache() {
+
+        $idx_backup = $this->idx;
+        $id_backup = $this->id;
+
+        if ( $this->idx ) $this->deleteCacheEntity( $this->idx );
+        if ( $this->id ) $this->deleteCacheEntity( $this->id );
+        $this->reset( [] );
+
+        if ( $idx_backup ) return $idx_backup;
+        else if ( $id_backup ) return $id_backup;
+        else return OK;
     }
 
 
@@ -355,16 +377,7 @@ class Entity extends \model\taxonomy\Taxonomy  {
             $re = db()->update( $this->getTable(), $record, "idx={$this->idx}");
             if ( $re === FALSE ) return FALSE;
             else {
-
-                /// Reset ( delete ) all the caches.
-                debug_log( "reload : $reload");
-                if ( $reload ) {
-                    $idx = $this->idx;
-                    $this->deleteCacheEntity( $this->idx );
-                    if ( $this->id ) $this->deleteCacheEntity( $this->id );
-                    $this->reset( [] );
-                    $this->load( $idx );
-                }
+                if ( $reload ) $this->load( $this->deleteCache() ); /// @attention it reloads the record if $reload is set.
                 return TRUE;
             }
         }
@@ -380,6 +393,8 @@ class Entity extends \model\taxonomy\Taxonomy  {
      *
      * Deletes the record.
      *
+     * @attention all the entity delete is handled by this method.
+     *
      *
      * @attention if there is any error on database query, error code will be return.
      *
@@ -394,6 +409,9 @@ class Entity extends \model\taxonomy\Taxonomy  {
      *          $this->create();
      *
      * @return number
+     *
+     *      - Use is_success() or is_error() to check the result.
+     *
      *      - number of error code on error
      *      - 0 (OK) on success.
      *
@@ -423,12 +441,11 @@ class Entity extends \model\taxonomy\Taxonomy  {
     public function delete() {
         if ( ! $this->exist() ) return ERROR_USER_NOT_SET;
         $idx = $this->idx;
+
         db()->query(" DELETE FROM {$this->getTable()} WHERE idx=$idx ");
 
         /// Reset ( delete ) all the caches.
-        $this->deleteCacheEntity( $idx );
-        if ( $this->id ) $this->deleteCacheEntity( $this->id );
-        $this->reset( [] );
+        $this->deleteCache();
 
         return OK;
     }

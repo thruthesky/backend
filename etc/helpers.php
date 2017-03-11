@@ -258,7 +258,7 @@ function test( $re, $code ) {
 }
 
 function test_error( $re, $code, $count ) {
-    echo "<div class='error'>$count - ERROR : ( $re[code] $code ) - $re[message]</div>";
+    echo "<div class='error'><span style='color:red; font-weight: bold;'>$count - ERROR</span> $code</div>";
     echo "<pre>";
     debug_print_backtrace();
     echo "</pre>";

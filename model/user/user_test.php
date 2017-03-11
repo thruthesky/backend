@@ -41,6 +41,7 @@ class User_Test extends \model\test\Test {
 
     public function anonymous() {
 
+
         $an = currentUser();
         test( $an->exist(), "Anonymous user exists.");
         test( $an->logged(), "User : {$an->id}, Anonymous is a user who did not logged in with his password but treated as logged in.");
@@ -168,6 +169,47 @@ class User_Test extends \model\test\Test {
         test( user( $id )->name == $new_name, "User name check: $new_name " . get_error_string($re));
 
 
+        // admin edits user id.
+        $admin_session_id = $this->getAdminSessionId();
+
+        $record['session_id'] = $admin_session_id;
+        $record['id'] = $id;            // user id to edit.
+        $record['name'] = 'jaeho';
+        $re = $this->route('user.edit', $record);
+        test( is_success($re), "Admin: User edit: $id " . get_error_string($re));
+
+
+
+        // get user data with malformed session-id
+        $re = $this->route('user.data', [ 'session_id'=>'' ] );
+        test( is_error($re) == ERROR_MALFORMED_SESSION_ID, "user data without session_id: " . get_error_string($re));
+
+
+        // get user data with wrong session id
+        $re = $this->route('user.data', [ 'session_id'=>'123-' . str_repeat( 'a', 32 ) ] );
+        test( is_error($re) == ERROR_USER_NOT_FOUND, "user data with wrong session_id: " . get_error_string($re));
+
+        // admin can get data of other user.
+        $re = $this->route('user.data', [ 'session_id' => $admin_session_id, 'id' => $id ] );
+        test( is_success($re), "admin get other user data: " . get_error_string($re));
+
+
+
+
+        // user get user data
+        $user = $this->route('user.data', [ 'session_id' => $this->getUserSessionId( $id ) ] );
+        test( is_success($user), "user data: " . get_error_string($user));
+
+
+
+        // prove
+
+        test( $re['data']['user']['name'] == $user['data']['user']['name'], "name comparison: " );
+
+
+
+
+
 
 
     }
@@ -196,7 +238,7 @@ class User_Test extends \model\test\Test {
 
 
         // get user data.
-        $re = $this->route('user.get', [ 'session_id' => $session_id ] );
+        $re = $this->route('user.data', [ 'session_id' => $session_id ] );
         test( is_success($re), "Got user: $id " . get_error_string($re));
 
         test( $re['data']['user']['meta']['class_id'] == 'thruthesky', "Meta check. " . get_error_string($re)); // check
@@ -215,7 +257,7 @@ class User_Test extends \model\test\Test {
         $new_session_id = $re['data']['session_id'];
 
         // get updated meta dta.
-        $re = $this->route('user.get', [ 'session_id' => $new_session_id ] );
+        $re = $this->route('user.data', [ 'session_id' => $new_session_id ] );
         test( $re['data']['user']['meta']['class_id'] == 'my-id', "Check updated meta data"); // check
 
 
@@ -274,16 +316,18 @@ class User_Test extends \model\test\Test {
         // login
         $re = $this->route('login', ['id'=>$id, 'password'=>$pw] );
         $login_session_id = $re['data']['session_id'];
-        test( $session_id != $login_session_id, "User CRUD Login Test: " . get_error_string($re));
+        test( $session_id != $login_session_id, "User CRUD Login Test: $login_session_id" . get_error_string($re));
 
 
         // edit
         $re = $this->route('user.edit', [ 'session_id' => $login_session_id, 'name'=>'edited'] );
+
+        test( is_success($re), "user.edit: " . get_error_string($re));
         $edit_session_id = $re['data']['session_id'];
-        test( $login_session_id != $edit_session_id, "User CRUD Update Test: " . get_error_string($re));
+        test( $login_session_id != $edit_session_id, "User edit test session_id: $edit_session_id" . get_error_string($re));
 
         // resign
         $re = $this->route('resign', [ 'session_id' => $edit_session_id ] );
-        test( is_success($re), "User resign success: ");
+        test( is_success($re), "User resign success: " . get_error_string($re));
     }
 }

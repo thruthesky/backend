@@ -14,20 +14,33 @@ class User_Interface extends User {
 
     public function edit() {
 
+        // check ups
         $session_id = in('session_id');
         if ( ! $this->isSessionId( $session_id ) ) return error( ERROR_MALFORMED_SESSION_ID );
         $user = $this->load( $session_id );
         if ( ! $user->exist() ) return error( ERROR_USER_NOT_FOUND );
 
 
+
+
+        if ( currentUser()->isAnonymous() ) return error( ERROR_ANONYMOUS_CAN_NOT_EDIT_PROFILE );
+
+        if ( currentUser()->isAdmin() ) {
+
+            $user = user( in('id') );           // switch $user to the 'user' to be edited.
+            if ( ! $user->exist() ) return error( ERROR_USER_NOT_FOUND );
+            $this->forceLogin( in('id') );
+        }
+
         $record = get_route_optional_variables();
+        $re = $this->update( $record );
 
-        $re = $user->update( $record );
 
-        if ( empty($re ) ) return error( ERROR_DATABASE_UPDATE_FAILED );
-
-        $session_id = $user->getSessionId();
-        return success( [ 'session_id' => $session_id ] );
+        if ( is_success( $re ) ) {
+            $session_id = $this->getSessionId();
+            success( [ 'session_id' => $session_id ] );
+        }
+        else error( ERROR_DATABASE_UPDATE_FAILED );
 
     }
 
@@ -64,25 +77,21 @@ class User_Interface extends User {
     )
      *
      */
-    public function get() {
+    public function data() {
         $session_id = in('session_id');
         if ( ! $this->isSessionId( $session_id ) ) return error( ERROR_MALFORMED_SESSION_ID );
+
         $user = $this->load( $session_id );
-        if ( ! $user->exist() ) return error( ERROR_USER_NOT_FOUND );
+        if ( ! $user->exist() ) return error( ERROR_USER_NOT_FOUND, "user-not-found-by-session-id: $session_id" );
 
-
-
-        if ( $this->isAdmin() ) { // if admin,
-            if ( ! in('idx') ) return error( ERROR_IDX_EMPTY );
-            $user = $this->load( in('idx') ); // load other user.
-            if ( $user < 0 ) return error( $user );
-            if ( empty($user) ) return error( ERROR_USER_NOT_FOUND );
+        if ( $this->isAdmin() && in('id') ) { // if admin,
+            $user = $this->load( in('id') ); // load other user.
+            if ( ! $user->exist() ) return error( ERROR_USER_NOT_FOUND );
+            $this->forceLogin( in('id') );
         }
 
         $record = $this->getRecord();
         unset( $record['password'], $record['session_id'] );
-
-
 
 
         $record['meta'] = meta()->get( $this->getTable(), $record['idx']);

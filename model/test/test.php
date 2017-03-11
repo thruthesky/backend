@@ -4,15 +4,40 @@ class Test {
 
     public function runAllTests() {
 
-        $this->reload( 2 );
+
+        $this->test_style();
+        $this->test_reload( 2 );
+
 
         $this->textRoute();
 
         $files = rsearch( __MODEL_DIR__, '_test.php' );
+        include __ROOT_DIR__ . '/etc/test_config.php';
 
 
 
-        foreach ( $files as $file ) {
+        $new_files = [];
+        global $_config;
+
+        foreach( $_config['test_order'] as $folder ) {
+            for ( $i = 0; $i < count($files); $i ++ ) {
+                $file = $files[$i];
+                if ( empty($file) ) continue;
+                $arr = array_reverse( preg_split( "/[\\\\\/]/", $file));
+                if ( $arr[1] == $folder ) {
+                    $new_files[] = $file;
+                    $files[$i] = null;
+                }
+            }
+        }
+        foreach( $files as $file ) {
+            if ( $file ) $new_files[] = $file;
+        }
+
+
+
+
+        foreach ( $new_files as $file ) {
 
 
             $file = str_replace(".php", '', $file);
@@ -21,10 +46,10 @@ class Test {
             $path = "model\\$arr[1]\\$arr[0]";
 
 
-
             $obj = new $path();
 
             if ( method_exists( $obj, 'run' ) ) {
+                $this->test_break( $path );
                 $obj->run();
             }
         }
@@ -33,7 +58,7 @@ class Test {
 
     }
 
-    public function reload( $n ) {
+    public function test_reload( $n ) {
         $seconds = $n * 1000;
         echo "
             <script>
@@ -43,7 +68,20 @@ class Test {
             </script>
         ";
     }
-
+    public function test_style() {
+        echo "
+            <style>
+                body { font-size: 10pt; }
+                .break { margin-top: 1em; font-weight: bold; }
+                .error { font-size: 13pt; text-decoration: underline; }
+            </style>
+        ";
+    }
+    public function test_break( $path ) {
+        echo "
+        <div class='break'>------------- $path -------------</div>
+        ";
+    }
     private function textRoute() {
         $re = $this->route("version");
         test ( is_success( $re ), "Route Access OK. " . get_error_string($re));
@@ -68,6 +106,7 @@ class Test {
         if ( empty($data) ) return [ 'code' => ERROR_NO_RESPONSE, 'message' => 'No data received' ];
         $res = json_decode($data, true);
 
+        $_REQUEST = [];
         return $res;
     }
 
@@ -91,12 +130,83 @@ class Test {
     }
 
 
+
+    public function getAdminSessionId() {
+
+        // Get admin session id.
+        $re = $this->route("login", ['id'=>ADMIN_ID, 'password'=>ADMIN_ID]);
+        // test( is_success($re), "test::getAdminSessionId() admin login for config test: " . get_error_string($re));
+        return $re['data']['session_id'];
+
+    }
+
+    public function getUserSessionId( $id ) {
+
+
+        return user( $id )->getSessionId();
+
+    }
+
+    /**
+     * @param $record
+     * @return null
+     *
+     * @code
+            $session_id = $this->createUser( ['id' => 'user4', 'password' => 'pass4']);
+     * @endcode
+     */
     public function createUser( $record ) {
 
         user( $record['id'] )->delete();
 
         $re = $this->route( "register", $record );
         return is_success($re) ? $re['data']['session_id'] : null;
+
+    }
+    public function deleteUser( $session_id ) {
+
+        // resign
+        $re = $this->route('resign', [ 'session_id' => $session_id ] );
+        // test( is_success($re), "User resign success: " . get_error_string($re));
+
+    }
+
+
+
+    public function createPostConfig( $post_config_id ) {
+
+        $admin_session_id = $this->getAdminSessionId();
+
+        // Delete test config if exists.
+        $re = $this->route( 'post_config.data', ['id' => $post_config_id ] );
+        // test( is_success($re), "post_config.data() id: $id" . get_error_string( $re ));
+        if ( is_success($re) ) {
+            $re = $this->route( 'post_config.delete', ['session_id' => $admin_session_id, 'id' => $post_config_id ] );
+            test( is_success($re), "test::createPostConfig() deleted. " . get_error_string($re));
+        }
+
+
+
+        // Config create with admin session id. Expect: success
+        $data = [];
+        $data['id'] = $post_config_id;
+        $data['session_id'] = $admin_session_id;
+        $re = $this->route("post_config.create", $data );
+        test( is_success( $re ), "test::createPostConfig() " . get_error_string( $re ) );
+
+    }
+
+    public function deletePostConfig( $post_config_id ) {
+
+        $admin_session_id = $this->getAdminSessionId();
+
+        // Delete. cleaning.
+        $re = $this->route( 'post_config.data', ['id' => $post_config_id] );
+        test( is_success($re), "test::deletePostConfig() id: $post_config_id" . get_error_string( $re ));
+        if ( is_success($re) ) {
+            $re = $this->route( 'post_config.delete', ['session_id' => $admin_session_id, 'id' => $post_config_id] );
+            // test( is_success($re), "test::deletePostConfig() for cleaning: $post_config_id. " . get_error_string($re));
+        }
 
     }
 

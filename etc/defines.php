@@ -31,8 +31,8 @@ define('ERROR_DATABASE_UPDATE_FAILED', -40082);         $em[ERROR_DATABASE_UPDAT
 define('ERROR_DATABASE_QUERY', -40083);                 $em[ERROR_DATABASE_QUERY] = 'database-query-failed';
 define('ERROR_EMPTY_SQL_CONDITION', -40084);            $em[ERROR_EMPTY_SQL_CONDITION] = 'error-empty-sql-condition';
 define('ERROR_INSCURE_SQL_CONDITION', -40085);          $em[ERROR_INSCURE_SQL_CONDITION] = 'sql-condition-not-secure';
-define('ERROR_NO_DATA', -40085);                        $em[ERROR_NO_DATA] = 'no-data-found';
-define('ERROR_DATABASE_DELETE_FAILED', -40081);         $em[ERROR_DATABASE_DELETE_FAILED] = 'database-delete-failed';
+define('ERROR_NO_DATA', -40086);                        $em[ERROR_NO_DATA] = 'no-data-found';
+define('ERROR_DATABASE_DELETE_FAILED', -40088);         $em[ERROR_DATABASE_DELETE_FAILED] = 'database-delete-failed';
 
 
 
@@ -64,23 +64,27 @@ define('ERROR_USER_IDX_NOT_MATCHED' , -40129);                  $em[ERROR_USER_I
 define('ERROR_USER_NOT_LOGIN', -4010001);                       $em[ERROR_USER_NOT_LOGIN] = 'user-not-login';
 define('ERROR_MALFORMED_SESSION_ID', -400130);          $em[ERROR_MALFORMED_SESSION_ID] = 'session-id-is-malformed';
 define('ERROR_USER_RESIGN_FAILED', -40150);             $em[ERROR_USER_RESIGN_FAILED] = 'user-resign-failed';
-
-
+define('ERROR_NOT_YOUR_POST_DATA', -40152);             $em[ERROR_NOT_YOUR_POST_DATA] = 'this-is-not-your-post-data';
+define('ERROR_YOU_ARE_NOT_ANONYMOUS', -40160);          $em[ERROR_YOU_ARE_NOT_ANONYMOUS] = 'you-are-not-anonymous';
+define('ERROR_POST_OWNED_BY_USER_NOT_ANONYMOUS', -40164);   $em[ERROR_POST_OWNED_BY_USER_NOT_ANONYMOUS] = 'post-owned-by-user-but-you-are-anonymous';
+define('ERROR_ANONYMOUS_CAN_NOT_EDIT_PROFILE', -40168); $em[ERROR_ANONYMOUS_CAN_NOT_EDIT_PROFILE] = 'anonymous-can-not-edit-profile';
+define('ERROR_ID_EMPTY', -40170);                           $em[ERROR_ID_EMPTY] = 'id-is-empty';
 // post errors. between from -40200 to -40299
 
 define('ERROR_POST_CONFIG_EXIST', -40200);                 $em[ERROR_POST_CONFIG_EXIST] = 'post-config-exist';
 define('ERROR_POST_CONFIG_NOT_EXIST', -40201);             $em[ERROR_POST_CONFIG_NOT_EXIST] = 'post-config-not-exist';
 define('ERROR_POST_NOT_EXIST', -40202);               $em[ERROR_POST_NOT_EXIST] = 'post-not-exist';
 define('ERROR_POST_ID_EMPTY', -40203 );                    $em[ERROR_POST_ID_EMPTY] = 'post-id-is-empty';
+define('ERROR_POST_DATA_NOT_EXIST', -40244);                $em[ERROR_POST_DATA_NOT_EXIST] = 'post-not-exist';
 
 define('ERROR_POST_DATA_TITLE_EMPTY', -40204);             $em[ERROR_POST_DATA_TITLE_EMPTY] = 'post-data-title-is-empty';
 define('ERROR_POST_DATA_CONTENT_EMPTY', -40205);           $em[ERROR_POST_DATA_CONTENT_EMPTY] = 'post-data-content-is-empty';
-define('ERROR_POST_IDX_CONFIG_EMPTY', -40206);				$em[ERROR_POST_IDX_CONFIG_EMPTY] = 'ERROR_POST_IDX_CONFIG_EMPTY';
+define('ERROR_POST_CONFIG_IDX_EMPTY', -40206);				$em[ERROR_POST_CONFIG_IDX_EMPTY] = 'post-config-idx-is-empty';
 define('ERROR_TITLE_TOO_LONG', -40207);                     $em[ERROR_TITLE_TOO_LONG] = 'title-is-too-long';
 define('ERROR_POST_CONFIG_ID_IS_TOO_LONG', -40208);        $em[ERROR_POST_CONFIG_ID_IS_TOO_LONG] = 'post-config-id-is-too-long';
 define('ERROR_POST_CONFIG_NAME_IS_TOO_LONG', -40209);      $em[ERROR_POST_CONFIG_NAME_IS_TOO_LONG] = 'post-config-name-is-too-long';
 define('ERROR_USER_IDX_EMPTY', -40210);                     $em[ERROR_USER_IDX_EMPTY] = 'user-idx-empty';
-define('ERROR_IDX_CONFIG_NOT_NUMBER', -40211);              $em[ERROR_IDX_CONFIG_NOT_NUMBER] = 'config-idx-not-number';
+define('ERROR_POST_CONFIG_IDX_NOT_NUMBER', -40211);              $em[ERROR_POST_CONFIG_IDX_NOT_NUMBER] = 'post-config-idx-not-number';
 define('ERROR_USER_IDX_NOT_NUMBER', -40212);                $em[ERROR_USER_IDX_NOT_NUMBER] = 'user-idx-not-number';
 
 define('ERROR_POST_IDX_EMPTY', -40230);                    $em[ERROR_POST_IDX_EMPTY] = 'post-config/data-idx-empty';

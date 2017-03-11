@@ -26,7 +26,7 @@ add_route('user.edit', [
             'mobile', 'address', 'country', 'province', 'city', 'zipcode',
             'meta'
         ],
-        'system' => [ 'route' ]
+        'system' => [ 'id' ]
     ]
 ]);
 
@@ -40,7 +40,7 @@ add_route('login', [
     'variables' => [
         'required' => [ 'id', 'password' ],
         'optional' => [ ],
-        'system' => [ 'route' ]
+        'system' => [ ]
     ]
 ]);
 
@@ -69,13 +69,13 @@ add_route('resign', [
 
 
 
-add_route('user.get', [
+add_route('user.data', [
     'path' => "\\model\\user\\user_interface",
-    'method' => 'get',
+    'method' => 'data',
     'variables' => [
         'required' => [ 'session_id' ],
         'optional' => [],
-        'system' => [ 'route' ]
+        'system' => [ 'id' ]
     ]
 ]);
 
