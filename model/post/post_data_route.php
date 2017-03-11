@@ -48,3 +48,12 @@ add_route( 'post.data', [
     ]
 ]);
 
+add_route( 'post.list', [
+    'path' => "\\model\\post\\post_data_interface",
+    "method" => "search",
+    'variables' => [
+        'required' => [],
+        'optional' => [ 'from', 'limit', 'where', 'bind', 'order' ],
+        'system' => [ 'session_id' ]
+    ]
+]);

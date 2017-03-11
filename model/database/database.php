@@ -274,13 +274,7 @@ class Database extends \PDO {
      */
     public function query ($q, $mode = \PDO::ATTR_DEFAULT_FETCH_MODE, $arg3 = null, array $ctorargs = array()) {
         $this->log($q);
-        try {
-            return parent::query($q);
-        }
-        catch ( \Exception $e ) {
-            if ( DEBUG ) di($e);
-        }
-
+        return parent::query($q);
     }
 
 
@@ -457,9 +451,17 @@ class Database extends \PDO {
             if ( ! $this->secure_cond( $where ) ) return ERROR_INSCURE_SQL_CONDITION;
         }
 
-        $statement = $this->query($q);
-        if ( $statement ) return $statement->fetchAll(\PDO::FETCH_ASSOC);
+        try {
+            $statement = $this->query($q);
+        }
+        catch ( \Exception $e ) {
+            return ERROR_DATABASE_QUERY;
+        }
+
+        if ($statement) return $statement->fetchAll(\PDO::FETCH_ASSOC);
         else return [];
+
+
 
     }
 
@@ -621,6 +623,8 @@ class Database extends \PDO {
      */
     public function secure_cond( $cond ) {
         $secure = true;
+
+        if ( empty($cond) ) return $secure;
         if ( stripos( $cond, ';' ) !== false ) $secure = false;
         if ( stripos( $cond, 'SELECT ') !== false ) $secure = false;
         if ( stripos( $cond, 'replace ') !== false ) $secure = false;
@@ -628,6 +632,28 @@ class Database extends \PDO {
         if ( stripos( $cond, 'DELETE ') !== false ) $secure = false;
 
         return $secure;
+    }
+
+
+    /**
+     * Returns TRUE if safe.
+     *
+     * @note This method is used to check the safey of $statement that will be used to query database by search method.
+     *
+     *
+     * @param $statement
+     * @return bool
+     */
+    public function secure_bind_statement( $statement ) {
+
+        if ( empty($statement) ) return TRUE;
+
+        if ( ! $this->secure_cond( $statement ) ) return FALSE;
+
+        if ( strpos( $statement, '\'' ) !== false ) return FALSE;
+        if ( strpos( $statement, "\"" ) !== false ) return FALSE;
+
+        return TRUE;
     }
 
 

@@ -34,11 +34,14 @@ define('ERROR_INSCURE_SQL_CONDITION', -40085);          $em[ERROR_INSCURE_SQL_CO
 define('ERROR_NO_DATA', -40086);                        $em[ERROR_NO_DATA] = 'no-data-found';
 define('ERROR_DATABASE_DELETE_FAILED', -40088);         $em[ERROR_DATABASE_DELETE_FAILED] = 'database-delete-failed';
 
+define('ERROR_UNSECURE_STATEMENT_CONDITION', -40089);    $em[ERROR_UNSECURE_STATEMENT_CONDITION] = 'insecure-statement-condition';
+define('ERROR_SQL_WHERE_BIND_MISMATCH', -40092);        $em[ERROR_SQL_WHERE_BIND_MISMATCH] = 'bind-param-mismatch-on-sql-where-condition';
 
+define('ERROR_MALFORMED_RESPONSE', -40093);             $em[ERROR_MALFORMED_RESPONSE] = 'malformed-response.return-data-is-not-array';
 
-define('ERROR_MALFORMED_RESPONSE', -40090);             $em[ERROR_MALFORMED_RESPONSE] = 'malformed-response.return-data-is-not-array';
-
-define('ERROR_ENTITY_NOT_SET', -40095);                   $em[ERROR_ENTITY_NOT_SET] = 'entity-record-not-set';
+define('ERROR_ENTITY_NOT_SET', -40094);                   $em[ERROR_ENTITY_NOT_SET] = 'entity-record-not-set';
+define('ERROR_FROM_IS_NOT_NUMERIC', -40095);            $em[ERROR_FROM_IS_NOT_NUMERIC] = 'from-is-not-number';
+define('ERROR_LIMIT_IS_NOT_NUMERIC', -40096);           $em[ERROR_LIMIT_IS_NOT_NUMERIC] = 'limit-is-not-number';
 
 
 

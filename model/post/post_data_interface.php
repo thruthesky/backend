@@ -105,17 +105,26 @@ class Post_Data_Interface extends Post_Data {
 
     }
 
-    /*
-    public function gets() {
 
-        if ( ! config()->load( in('post_config_idx') )->exist() ) return error( ERROR_POST_CONFIG_NOT_EXIST );
-        $cond = "post_config_idx=" . in('post_config_idx');
+    /**
+     * @param null $_
+     * @return mixed
+     */
+    public function search( $_=null ) {
 
-        $posts = $this->loads($cond);
+        $option = [
+            'from' => in('from'),
+            'limit' => in('limit'),
+            'statement' => in('where'),
+            'bind' => in('bind'),
+            'order' => in('order')
+        ];
+        $posts = parent::search( $option );
+        if ( is_error( $posts ) ) return error( $posts );
+        success( ['posts' => post()->pres( $posts )] );
 
-        success(['posts' => $posts ]);
     }
-    */
+
 
 
 }

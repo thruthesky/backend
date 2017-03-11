@@ -8,6 +8,7 @@ class Post_Data_Test extends Test {
 
         $this->create();
         $this->secret();
+        $this->search();
 
     }
 
@@ -214,7 +215,45 @@ class Post_Data_Test extends Test {
         $this->deleteUser( $session_id );
 
     }
+
     public function secret() {
+
+    }
+
+    public function search() {
+
+
+
+
+        // prepare
+        $session_id = $this->createUser( ['id' => 'user5', 'password' => 'pass5']);
+        $this->createPostConfig( 'test5' );
+
+        for( $i = 0; $i < 5; $i ++ ) {
+            $re = $this->route( 'post.create', [ 'session_id' => $session_id, 'post_config_id'=>'test5', 'title' => 'hello world ' . $i] );
+        }
+
+
+        $user_idx = user( $session_id )->idx;
+
+
+        //
+        $re = $this->route( 'post.list', [
+            'from' => 1,
+            'limit' => 2,
+            'where' => "user_idx = ? AND title LIKE ?",
+            'bind' => "$user_idx,hello%",
+            'order' => ''
+        ]);
+
+        test( is_success($re), "post search title like hello% " . get_error_string($re));
+        test( count($re['data']['posts']) == 2, "2user searched");
+
+//        di($re['data']['posts'][0]);
+        test( $re['data']['posts'][0]['user_idx'] == user( $session_id )->idx, 'search: user_idx');
+
+
+
 
     }
 }

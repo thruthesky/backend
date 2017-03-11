@@ -63,13 +63,31 @@ class Post_Data extends Post {
      * @return array
      */
     public function pre() {
-
         $record = $this->getRecord();
         unset( $record['password'], $record['user_agent'] );
         $record['meta'] = meta()->get( $this->getTable(), $record['idx']);
         return $record;
-
     }
+
+
+    /**
+     *
+     * Returns an array of post after sanitizing.
+     *
+     * @param $records - array of post records.
+     *
+     * @return array
+     *
+     */
+    public function pres( $records ) {
+        $new_records = [];
+        if ( empty( $records ) ) return $new_records;
+        foreach( $records as $record ) {
+            $new_records[] = post()->reset( $record )->pre();
+        }
+        return $new_records;
+    }
+
 
     public function deleted() {
         return $this->deleted;

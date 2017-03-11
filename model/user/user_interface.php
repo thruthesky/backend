@@ -90,12 +90,8 @@ class User_Interface extends User {
             $this->forceLogin( in('id') );
         }
 
-        $record = $this->getRecord();
-        unset( $record['password'], $record['session_id'] );
 
-
-        $record['meta'] = meta()->get( $this->getTable(), $record['idx']);
-        success( ['user'=>$record] );
+        success( [ 'user' => $this->pre() ] );
     }
 
 
@@ -144,32 +140,21 @@ class User_Interface extends User {
      * Returns rows of user information.
      *
      * @attention this is HTTP interface.
+     * @param null $_
+     * @return int|mixed
      */
-    public function search() {
+    public function search( $_=null ) {
 
-
-        if ( empty( in('session_id') ) ) return error(ERROR_SESSION_ID_EMPTY );
-        if ( ! $this->load_by_session_id( in('session_id') ) ) return error( ERROR_USER_NOT_FOUND );
-        if ( ! $this->isAdmin() ) return error( ERROR_PERMISSION_ADMIN );
-
-
-        $cond = in('cond');
-        if ( empty($cond) ) $cond = 1;
-
-
-        $page = page_no( in('page') );
-        $limit = page_item_limit( in('limit') );
-        $from = (( $page - 1 ) * $limit);
-        $cond .= " LIMIT $from, $limit";
-
-
-        $users = $this->loads( $cond );
-        if ( $users < 0 ) return error( $users );
-
-
-        $this->pres( $users );
-
-        success( ['users' => $users ] );
+        $option = [
+            'from' => in('from'),
+            'limit' => in('limit'),
+            'statement' => in('where'),
+            'bind' => in('bind'),
+            'order' => in('order')
+        ];
+        $users = parent::search( $option );
+        if ( is_error( $users ) ) return error( $users );
+        success( ['users' => user()->pres( $users )] );
 
     }
 

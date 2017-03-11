@@ -267,16 +267,6 @@ class User extends \model\entity\Entity {
     }
 
 
-    /**
-     * @param $users
-     */
-    public function pres( &$users ) {
-        foreach( $users as &$user ) {
-            unset( $user['password'], $user['session_id'] );
-            $user['meta'] = meta()->get( 'user', $user['idx'] );
-        }
-    }
-
 
     /**
      *
@@ -298,6 +288,35 @@ class User extends \model\entity\Entity {
 
         $this->update( $info, false );
 
+    }
+
+
+    public function pre() {
+
+        $record = $this->getRecord();
+        unset( $record['password'], $record['session_id'] );
+        $record['meta'] = meta()->get( $this->getTable(), $record['idx']);
+
+        return $record;
+    }
+
+
+    /**
+     *
+     * Returns an array of users after sanitizing.
+     *
+     * @param $users - array of user records.
+     *
+     * @return array
+     *
+     */
+    public function pres( $users ) {
+        $new_users = [];
+        if ( empty($users) ) return $new_users;
+        foreach( $users as $user ) {
+            $new_users[] = user()->reset( $user )->pre();
+        }
+        return $new_users;
     }
 
 

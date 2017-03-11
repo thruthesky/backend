@@ -6,7 +6,7 @@ class Test {
 
 
         $this->test_style();
-        $this->test_reload( 2 );
+        $this->test_reload( 5 );
 
 
         $this->textRoute();
@@ -209,5 +209,6 @@ class Test {
         }
 
     }
+
 
 }

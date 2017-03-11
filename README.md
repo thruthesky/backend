@@ -11,6 +11,8 @@ Backend server for Restful APIs
 
 ## Post
 
+* secret post
+
 * A post can be linked to other forum or other place.
 	* post.linked_with field may be a way.
 

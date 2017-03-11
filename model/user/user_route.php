@@ -31,9 +31,6 @@ add_route('user.edit', [
 ]);
 
 
-
-
-
 add_route('login', [
     'path' => "\\model\\user\\user_interface",
     'method' => 'login',
@@ -64,11 +61,6 @@ add_route('resign', [
 ]);
 
 
-
-
-
-
-
 add_route('user.data', [
     'path' => "\\model\\user\\user_interface",
     'method' => 'data',
@@ -81,3 +73,12 @@ add_route('user.data', [
 
 
 
+add_route( 'user.list', [
+    'path' => "\\model\\user\\user_interface",
+    'method' => 'search',
+    'variables' => [
+        'required' => [],
+        'optional' => [ 'from', 'limit', 'where', 'bind', 'order' ],
+        'system' => [ 'session_id' ]
+    ]
+]);

@@ -68,18 +68,22 @@ if ( file_exists( __ROOT_DIR__ . "/etc/my_config.php") ) require __ROOT_DIR__ . 
 
 $_config = [];
 
-define('DEBUG',             $DEBUG);
+define('DEBUG',                     $DEBUG);
+define('DEBUG_LOG_DATABASE',        $DEBUG_LOG_DATABASE);
 
-define('ADMIN_ID',          $ADMIN_ID);
-define('ANONYMOUS_ID',      $ANONYMOUS_ID);
+define('ADMIN_ID',                  $ADMIN_ID);
+define('ANONYMOUS_ID',              $ANONYMOUS_ID);
 
-define('DATABASE_USER',     $DATABASE_USER);
-define('DATABASE_PASSWORD', $DATABASE_PASSWORD);
-define('DATABASE_NAME',     $DATABASE_NAME);
-define('DATABASE_PREFIX',   $DATABASE_PREFIX);
-define('DATABASE_HOST',     $DATABASE_HOST);
-define('DATABASE_TYPE',     $DATABASE_TYPE);
+define('DATABASE_USER',             $DATABASE_USER);
+define('DATABASE_PASSWORD',         $DATABASE_PASSWORD);
+define('DATABASE_NAME',             $DATABASE_NAME);
+define('DATABASE_PREFIX',           $DATABASE_PREFIX);
+define('DATABASE_HOST',             $DATABASE_HOST);
+define('DATABASE_TYPE',             $DATABASE_TYPE);
 
 define('DIR_DATA',          $DIR_DATA);
 define('__MODEL_DIR__',     __ROOT_DIR__ . '/model');
 
+
+
+define('DEFAULT_NO_OF_PAGE_ITEMS',  $DEFAULT_NO_OF_PAGE_ITEMS);

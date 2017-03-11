@@ -272,7 +272,8 @@ class Entity extends \model\taxonomy\Taxonomy  {
      *  if it is a numeric, it assumes as 'idx'. it gets the record of 'idx' on the table and saves the records into $record.
      *  if it is an array, it assumes it is already the record, so it just sets to $record.
      *
-     * @return \model\entity\Entity
+     * @return $this
+     *
      *  it returns $this->record, meaning,
      *      - if there is no record by 'idx' and null|empty will be return.
      *      - if the $idx is not an array but empty, then it will return empty.

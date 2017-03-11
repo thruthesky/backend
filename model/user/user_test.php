@@ -17,6 +17,8 @@ class User_Test extends \model\test\Test {
         $this->logout();
         $this->register_login_edit_resign();
 
+        $this->search();
+
     }
 
 
@@ -329,5 +331,71 @@ class User_Test extends \model\test\Test {
         // resign
         $re = $this->route('resign', [ 'session_id' => $edit_session_id ] );
         test( is_success($re), "User resign success: " . get_error_string($re));
+    }
+
+
+    public function search() {
+
+
+
+        // create sample users
+        for( $i=0; $i < 22; $i++ ) {
+            $record = [];
+            $record[ 'id' ] = "searchuser$i";
+            $record[ 'password' ] = "pass$i";
+            $record[ 'name' ] = "name$i";
+            $record[ 'email'] = "email$i";
+            $record[ 'gender' ] = rand( 0, 1 ) ? 'M' : 'F';
+            $re = $this->route( "register", $record );
+            // test( is_success($re), "Test user create : " . get_error_string($re));
+        }
+
+
+        // test mismatch bind param. expect: error
+        $re = $this->route( 'user.list', [
+            'from' => 2,
+            'limit' => 3,
+            'where' => "name LIKE ? AND gender=?",
+            'bind' => "%name%,M,aaa",
+            'order' => 'idx ASC, name DESC'
+        ]);
+        test( is_error($re) == ERROR_SQL_WHERE_BIND_MISMATCH, "bind mismatch" );
+
+
+        // one bind is lacking. expect: query error.
+        $re = $this->route( 'user.list', [
+            'from' => 2,
+            'limit' => 3,
+            'where' => "name LIKE ? AND gender=?",
+            'bind' => "%name%",
+            'order' => 'idx ASC, name DESC'
+        ]);
+        test( is_error($re) == ERROR_DATABASE_QUERY, "search query error test: " . get_error_string($re) );
+
+
+
+
+
+        //
+        $re = $this->route( 'user.list', [
+            'from' => 2,
+            'limit' => 3,
+            'where' => "name LIKE ? AND gender=?",
+            'bind' => "%name%,M",
+            'order' => 'idx ASC, name DESC'
+        ]);
+
+        test( is_success($re), "user search name like name, male");
+        test( count($re['data']['users']) == 3, "3 user searched");
+        test( $re['data']['users'][0]['gender'] == 'M', 'male searched');
+
+
+
+        // delete sample users.
+
+        for( $i=0; $i < 22; $i++ ) {
+            user( "searchuser$i" )->delete();
+        }
+
     }
 }
