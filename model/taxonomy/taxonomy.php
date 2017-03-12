@@ -136,6 +136,11 @@ class Taxonomy extends \model\base\Base  {
                     ]);
      * @endcode
      *
+     * @code        simplest example
+     *
+                    $re = taxonomy()->setTable('meta')->search( [] );
+     *
+     * @endcode
      */
     public function search( $option ) {
 

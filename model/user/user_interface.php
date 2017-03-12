@@ -8,7 +8,18 @@ class User_Interface extends User {
     public function register() {
         $record = get_route_variables();
         $re = user()->create( $record );
-        is_success( $re ) ? success([ 'session_id' => $re ]) : error( $re );
+        if ( is_success($re ) ) {
+            success( [
+                'session_id' => $re,
+                'id' => $record['id'],
+                'name' => $record['name'],
+                'email' => $record['email']
+            ] );
+        }
+        else {
+            error( $re );
+        }
+//        is_success( $re ) ? success([ 'session_id' => $re ]) : error( $re );
     }
 
 
@@ -37,8 +48,13 @@ class User_Interface extends User {
 
 
         if ( is_success( $re ) ) {
-            $session_id = $this->getSessionId();
-            success( [ 'session_id' => $session_id ] );
+            success( [
+                'session_id' => $this->getSessionId(),
+                'id' => $this->id,
+                'name' => $this->name,
+                'email' => $this->mail
+            ] );
+
         }
         else error( ERROR_DATABASE_UPDATE_FAILED );
 
@@ -101,7 +117,13 @@ class User_Interface extends User {
         if ( ! $user->exist() ) return error(ERROR_USER_NOT_EXIST);
         if ( ! $this->checkPassword( in('password'), $user->password ) ) return error(ERROR_WRONG_PASSWORD);
         $user->updateLoginInformation();
-        success( [ 'session_id' => $user->getSessionId() ] );
+
+        success( [
+            'session_id' => $user->getSessionId(),
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->mail
+        ] );
     }
 
 
