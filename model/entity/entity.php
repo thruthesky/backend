@@ -142,6 +142,8 @@ class Entity extends \model\taxonomy\Taxonomy  {
         if ( empty($what) ) return ERROR_EMPTY_SQL_CONDITION;
 
         $table = $this->getTable();
+        if ( empty( $table ) ) return ERROR_TABLE_NOT_SET;
+
 
 
 //        di($what);
@@ -175,6 +177,9 @@ class Entity extends \model\taxonomy\Taxonomy  {
      */
     public function loadQuery( $cond ) {
         $table = $this->getTable();
+
+        if ( empty( $table) ) return ERROR_TABLE_NOT_SET;
+
         $this->record = db()->row("SELECT * FROM $table WHERE $cond");
         return $this;
     }
@@ -249,6 +254,7 @@ class Entity extends \model\taxonomy\Taxonomy  {
      *
      */
     public function create( $record = null ) {
+        if ( empty($this->getTable()) ) return ERROR_TABLE_NOT_SET;
         if ( is_array($record) ) $this->record = $record;
         if ( empty( $this->record ) ) return ERROR_RECORD_NOT_SET;
         $this->record['created'] = time();
@@ -373,6 +379,7 @@ class Entity extends \model\taxonomy\Taxonomy  {
      *
      */
     public function update( $record, $reload = true ) {
+        if ( empty($this->getTable()) ) return ERROR_TABLE_NOT_SET;
         $record['updated'] = time();
         if ( $this->idx ) {
             $re = db()->update( $this->getTable(), $record, "idx={$this->idx}");
@@ -440,14 +447,12 @@ class Entity extends \model\taxonomy\Taxonomy  {
      *
      */
     public function delete() {
+        if ( empty($this->getTable()) ) return ERROR_TABLE_NOT_SET;
         if ( ! $this->exist() ) return ERROR_USER_NOT_SET;
         $idx = $this->idx;
-
         db()->query(" DELETE FROM {$this->getTable()} WHERE idx=$idx ");
-
         /// Reset ( delete ) all the caches.
         $this->deleteCache();
-
         return OK;
     }
 

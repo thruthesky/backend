@@ -9,6 +9,14 @@ Backend server for Restful APIs
 
 # TODO
 
+
+## add more tests.
+
+* to check table is set.
+* to add more tests.
+
+
+
 ## Post
 
 * secret post
@@ -165,9 +173,14 @@ Those files will be run in installation process.
 
 # Unit Test
 
-Test script under module folder will be run on "all test run", "class test" and "method test".
+Model test scripts are on the same folder of each model.
 
-Test script must end with with "_test.php".
+* By default, if you access "?route=test", you will run all the tests in the system.
+
+* You can run a test of an indivisual class/model by adding router.
+
+
+* Test script must end with with "_test.php".
 
 
 ##  Run all tests
@@ -179,25 +192,36 @@ To run all the tests, just access
 ````
 
 
-## Run a test class
+## Run a test of a class/model
 
+**1.** To run a test from a test class, you need to router.
 
-
-To test class
-
-````
-?route=model.class
-````
-
-
-## Run a test method
-
-
-
-To test class
+Example code) Creating a router for a test in taxonomy model.
 
 ````
-?route=model.class.method
+add_route('taxonomy.test.run', [
+    'path' => "\\model\\taxonomy\\taxonomy_test",
+    'method' => 'run'
+]);
+````
+
+
+**2.** Creata test file.
+
+````
+<?php
+namespace model\taxonomy;
+class Taxonomy_Test extends \model\test\Test {
+    public function run() {
+        test(1, "taxonomy test begins");
+    }
+}
+````
+
+**3.** Run the route to run the test.
+
+````
+http://localhost/index.php?route=taxonomy.test.run
 ````
 
 

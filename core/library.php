@@ -377,6 +377,10 @@ function entity() {
     return new \model\entity\Entity();
 }
 
+function taxonomy() {
+    return new \model\taxonomy\Taxonomy();
+}
+
 
 /**
  *

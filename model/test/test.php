@@ -2,14 +2,16 @@
 namespace model\test;
 class Test {
 
+    public function __construct()
+    {
+        $this->test_style();
+        $this->test_reload( 2 );
+        $this->test_info();
+
+    }
+
     public function runAllTests() {
 
-
-        $this->test_style();
-        $this->test_reload( 3 );
-
-
-        $this->test_info();
 
         $this->textRoute();
 

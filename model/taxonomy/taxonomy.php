@@ -24,6 +24,7 @@ class Taxonomy extends \model\base\Base  {
      * @return int|null
      */
     public function count( $cond ) {
+        if ( empty($this->getTable()) ) return ERROR_TABLE_NOT_SET;
         if ( empty($cond) ) return ERROR_EMPTY_SQL_CONDITION;
         if ( ! db()->secure_cond( $cond ) ) return ERROR_INSCURE_SQL_CONDITION;
         return db()->result("SELECT count(*) FROM {$this->getTable()} WHERE $cond" );
@@ -138,6 +139,7 @@ class Taxonomy extends \model\base\Base  {
      */
     public function search( $option ) {
 
+        if ( empty($this->getTable()) ) return ERROR_TABLE_NOT_SET;
 
         /**
          *
@@ -156,14 +158,16 @@ class Taxonomy extends \model\base\Base  {
 
         $limit = "LIMIT $from, $limit";
 
-        if ( isset( $option['statement'] ) ) {
-            if ( ! db()->secure_bind_statement($option['statement']) ) return ERROR_UNSECURE_STATEMENT_CONDITION;
-            $where = "WHERE $option[statement]";
+        //
+        if ( isset( $option['where'] ) ) {
+            if ( ! db()->secure_bind_statement($option['where']) ) return ERROR_UNSECURE_STATEMENT_CONDITION;
+            $where = "WHERE $option[where]";
         }
         else $where = null;
 
         if ( ! isset( $option['select'] ) ) $option['select'] = '*';
 
+        //
         if ( isset( $option['order'] ) ) {
             if ( ! db()->secure_cond( in('order') ) ) return ERROR_INSCURE_SQL_CONDITION;
             $order = 'ORDER BY ' . in('order');
@@ -172,20 +176,22 @@ class Taxonomy extends \model\base\Base  {
 
 
 
-        $bind = $option['bind'];
-        $binds = explode(',', $bind);
-        foreach( $binds as $value ) {
-            $quoted = db()->quote( $value );
-            $pos = strpos( $where, '?' );
-            if ( $pos === false ) return ERROR_SQL_WHERE_BIND_MISMATCH;
-            $where = substr_replace( $where, $quoted, $pos, 1 );
+        //
+        if ( isset( $option['bind'] ) ) {
+            $bind = $option['bind'];
+            $binds = explode(',', $bind);
+            foreach( $binds as $value ) {
+                $quoted = db()->quote( $value );
+                $pos = strpos( $where, '?' );
+                if ( $pos === false ) return ERROR_SQL_WHERE_BIND_MISMATCH;
+                $where = substr_replace( $where, $quoted, $pos, 1 );
+            }
         }
 
+        //
         if ( strpos($where, '?') ) return ERROR_SQL_WHERE_BIND_MISMATCH;
 
-
         $q = "SELECT $option[select] FROM {$this->getTable()} $where $order $limit";
-
 
         return db()->rows( $q );
 

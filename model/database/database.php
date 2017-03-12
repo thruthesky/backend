@@ -455,7 +455,7 @@ class Database extends \PDO {
             $statement = $this->query($q);
         }
         catch ( \Exception $e ) {
-            return ERROR_DATABASE_QUERY;
+            return ERROR_DATABASE_ROWS_QUERY_ERROR;
         }
 
         if ($statement) return $statement->fetchAll(\PDO::FETCH_ASSOC);
