@@ -44,6 +44,7 @@ function is_error ( $res ) {
  * @return bool
  */
 function is_success( $re ) {
+
     if ( is_array( $re ) ) {
         //di("yes array");
         if ( isset( $re['code'] ) ) {
@@ -59,6 +60,9 @@ function is_success( $re ) {
     if ( is_numeric( $re ) && $re < 0 ) return FALSE;
     if ( $re === ERROR ) return FALSE;
 
+    if ( $re === OK ) return TRUE;
+
+    if ( empty($re) ) return FALSE;
 
     return TRUE;
 }
