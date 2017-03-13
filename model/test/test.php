@@ -5,7 +5,7 @@ class Test {
     public function __construct()
     {
         $this->test_style();
-        $this->test_reload( 2 );
+        $this->test_reload( 10 );
         $this->test_info();
 
     }
@@ -111,14 +111,38 @@ class Test {
         if ( empty($route) ) return ['code' => ERROR_ROUTE_NOT_EXIST, 'message' => 'No route exists' ];
         run_route( $route );
         $data = ob_get_clean();
+
+
         if ( empty($data) ) return [ 'code' => ERROR_NO_RESPONSE, 'message' => 'No data received' ];
+
+
         $res = json_decode($data, true);
+        if ( $this->is_json_error() ) return ['code' => ERROR_JSON_PARSE, "message" => "JSON parse error. This may be a server error or PHP script error/warning"];
+
 
         $_REQUEST = [];
         return $res;
     }
 
 
+    /**
+     *
+     * Returns ERROR_JSON_PARSE if there was any error while JSON decoding.
+     * @return int
+     */
+    private function is_json_error() {
+
+        switch (json_last_error()) {
+            case JSON_ERROR_NONE: return OK;
+            case JSON_ERROR_DEPTH: return ERROR_JSON_PARSE;
+            case JSON_ERROR_STATE_MISMATCH: return ERROR_JSON_PARSE;
+            case JSON_ERROR_CTRL_CHAR: return ERROR_JSON_PARSE;
+            case JSON_ERROR_SYNTAX: return ERROR_JSON_PARSE;
+            case JSON_ERROR_UTF8: return ERROR_JSON_PARSE;
+            default: return ERROR_JSON_PARSE;
+        }
+
+    }
 
     public function http_route( $route_name, $params = [] ) {
 

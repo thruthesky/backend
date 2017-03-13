@@ -146,6 +146,27 @@ class Taxonomy extends \model\base\Base  {
 
         if ( empty($this->getTable()) ) return ERROR_TABLE_NOT_SET;
 
+
+        debug_log($option);
+        $where = null;
+        if ( isset($option['where']) && ! empty($option['where']) ) {
+
+            if ( ! db()->secure_bind_statement($option['where']) ) return ERROR_UNSECURE_STATEMENT_CONDITION;
+            if ( strpos($option['where'], '?') === false ) return ERROR_MISSING_BINDING_MARK;
+            if ( ! isset( $option['bind'] ) || empty( $option['bind'] ) ) return ERROR_SQL_BIND_NOT_SET;
+
+            $count_marks = substr_count($option['where'], '?');
+            $count_binds = count( explode(',', $option['bind']) );
+
+
+            if ( $count_marks > $count_binds ) return ERROR_SEARCH_BIND_LACK;
+            if ( $count_marks < $count_binds ) return ERROR_SEARCH_MARK_LACK;
+            // if ( $count_marks != $count_binds ) return ERROR_SQL_WHERE_BIND_MISMATCH;
+            $where = "WHERE $option[where]";
+        }
+
+
+
         /**
          *
          */
@@ -164,12 +185,7 @@ class Taxonomy extends \model\base\Base  {
         $limit = "LIMIT $from, $limit";
 
         //
-        if ( isset( $option['where'] ) ) {
-            if ( strpos('?', $option['where']) === false ) return ERROR_MISSING_BINDING_MARK;
-            if ( ! db()->secure_bind_statement($option['where']) ) return ERROR_UNSECURE_STATEMENT_CONDITION;
-            $where = "WHERE $option[where]";
-        }
-        else $where = null;
+
 
         if ( ! isset( $option['select'] ) ) $option['select'] = '*';
 
@@ -183,21 +199,24 @@ class Taxonomy extends \model\base\Base  {
 
 
         //
+
+
         if ( isset( $option['bind'] ) ) {
             $bind = $option['bind'];
             $binds = explode(',', $bind);
+
             foreach( $binds as $value ) {
                 $quoted = db()->quote( $value );
                 $pos = strpos( $where, '?' );
-                if ( $pos === false ) return ERROR_SQL_WHERE_BIND_MISMATCH;
                 $where = substr_replace( $where, $quoted, $pos, 1 );
             }
         }
 
         //
-        if ( strpos($where, '?') ) return ERROR_SQL_WHERE_BIND_MISMATCH;
 
         $q = "SELECT $option[select] FROM {$this->getTable()} $where $order $limit";
+
+        debug_log("taxonomy_query:");
 
         return db()->rows( $q );
 

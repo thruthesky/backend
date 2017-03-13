@@ -23,6 +23,7 @@ define('ERROR_VARIABLE_NUMERIC', -40047);                       $em[ERROR_VARIAB
 define('ERROR_VARIABLE_STRING', -40048);                       $em[ERROR_VARIABLE_STRING] = 'variable-is-string';
 define('ERROR_VARIABLE_EMPTY', -40049);                       $em[ERROR_VARIABLE_EMPTY] = 'variable-is-empty';
 
+define('ERROR_JSON_PARSE', -40050);                    $em[ERROR_JSON_PARSE] = "json-parse-error-maybe-PHP-script-error-warning";
 
 
 define('ERROR_KEY_EXISTS', -40080);                     $em[ERROR_KEY_EXISTS] = 'key-exists';
@@ -35,7 +36,7 @@ define('ERROR_NO_DATA', -40086);                        $em[ERROR_NO_DATA] = 'no
 define('ERROR_DATABASE_DELETE_FAILED', -40088);         $em[ERROR_DATABASE_DELETE_FAILED] = 'database-delete-failed';
 
 define('ERROR_UNSECURE_STATEMENT_CONDITION', -40089);    $em[ERROR_UNSECURE_STATEMENT_CONDITION] = 'insecure-statement-condition';
-define('ERROR_SQL_WHERE_BIND_MISMATCH', -40092);        $em[ERROR_SQL_WHERE_BIND_MISMATCH] = 'bind-param-mismatch-on-sql-where-condition';
+define('ERROR_SEARCH_BIND_LACK', -40092);        $em[ERROR_SEARCH_BIND_LACK] = 'bind-lack-on-taxonomy-search';
 
 define('ERROR_MALFORMED_RESPONSE', -40093);             $em[ERROR_MALFORMED_RESPONSE] = 'malformed-response.return-data-is-not-array';
 
@@ -46,6 +47,9 @@ define('ERROR_LIMIT_IS_NOT_NUMERIC', -40096);           $em[ERROR_LIMIT_IS_NOT_N
 define('ERROR_DATABASE_ROWS_QUERY_ERROR', -40097);      $em[ERROR_DATABASE_ROWS_QUERY_ERROR] = 'database-rows-query-failed';
 define('ERROR_TABLE_NOT_SET', -40098);                  $em[ERROR_TABLE_NOT_SET] = 'database-table-is-not-set-to-query'; // entity table is empty.
 define('ERROR_MISSING_BINDING_MARK', -40099);           $em[ERROR_MISSING_BINDING_MARK] = 'database-where-has-no-question-mark'; // to query to database, developer needs to bind where clause with question mark. But there is no question marks on the query.
+define('ERROR_SQL_BIND_NOT_SET', -46001);               $em[ERROR_SQL_BIND_NOT_SET] = 'bind-not-set-in-taxonomy-search';
+
+define('ERROR_SEARCH_MARK_LACK', -46002);       $em[ERROR_SEARCH_MARK_LACK] = 'search-mark-lack-on-taxonomy-search';
 
 define('ERROR_USER_EXIST', -40101);                     $em[ERROR_USER_EXIST] = 'user-exist';
 define('ERROR_USER_NOT_EXIST', -40102);                 $em[ERROR_USER_NOT_EXIST] = 'user-not-exist';

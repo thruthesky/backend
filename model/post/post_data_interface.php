@@ -115,7 +115,7 @@ class Post_Data_Interface extends Post_Data {
         $option = [
             'from' => in('from'),
             'limit' => in('limit'),
-            'statement' => in('where'),
+            'where' => in('where'),
             'bind' => in('bind'),
             'order' => in('order')
         ];

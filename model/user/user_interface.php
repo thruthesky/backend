@@ -9,12 +9,18 @@ class User_Interface extends User {
         $record = get_route_variables();
         $re = user()->create( $record );
         if ( is_success($re ) ) {
-            success( [
+
+            $user = user( $re );
+
+            $res = [
                 'session_id' => $re,
-                'id' => $record['id'],
-                'name' => $record['name'],
-                'email' => $record['email']
-            ] );
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email
+            ];
+            // debug_log("res");
+            // debug_log($res);
+            success( $res );
         }
         else {
             error( $re );
@@ -170,7 +176,7 @@ class User_Interface extends User {
         $option = [
             'from' => in('from'),
             'limit' => in('limit'),
-            'statement' => in('where'),
+            'where' => in('where'),
             'bind' => in('bind'),
             'order' => in('order')
         ];

@@ -82,3 +82,15 @@ add_route( 'user.list', [
         'system' => [ 'session_id' ]
     ]
 ]);
+
+
+add_route('user.test.search', [
+    'path' => "\\model\\user\\user_test",
+    'method' => 'search'
+]);
+
+add_route('user.test.run', [
+    'path' => "\\model\\user\\user_test",
+    'method' => 'run'
+]);
+

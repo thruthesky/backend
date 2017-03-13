@@ -117,12 +117,16 @@ class User_Test extends \model\test\Test {
 
         $record['name'] = "User Name";
         $re = $this->route("register", $record );
+
         if ( is_error( $re ) == ERROR_USER_EXIST ) {
             user()->load( $id )->delete();
             test( ! user()->load( $id )->exist(), "User deleted: $id" . get_error_string($re) );
             $re = $this->route("register", $record );
         }
+
+
         test( is_success( $re ), "User reigster OK. id: $id " . get_error_string( $re ) );
+
 
         test( user()->load( $id )->id == $id, "User ID comparison: $id " . get_error_string($re ) );
 
@@ -371,7 +375,8 @@ class User_Test extends \model\test\Test {
             'bind' => "%name%,M,aaa",
             'order' => 'idx ASC, name DESC'
         ]);
-        test( is_error($re) == ERROR_SQL_WHERE_BIND_MISMATCH, "bind mismatch" );
+
+        test( is_error($re) == ERROR_SEARCH_MARK_LACK, "bind mismatch test: " . get_error_string($re) );
 
 
         // one bind is lacking. expect: query error.
@@ -383,7 +388,7 @@ class User_Test extends \model\test\Test {
             'order' => 'idx ASC, name DESC'
         ]);
 
-        test( is_error($re) == ERROR_SQL_WHERE_BIND_MISMATCH, "search query error test: " . get_error_string($re) );
+        test( is_error($re) == ERROR_SEARCH_BIND_LACK, "search query error test: " . get_error_string($re) );
 
 
 
@@ -397,8 +402,9 @@ class User_Test extends \model\test\Test {
             'order' => 'idx ASC, name DESC'
         ]);
 
-        test( is_success($re), "user search name like name, male");
-        test( count($re['data']['users']) == 3, "3 user searched");
+        test( is_success($re), "user search name like name, male" . get_error_string($re));
+        $count = count($re['data']['users']);
+        test( $count == 3, "$count user searched");
         test( $re['data']['users'][0]['gender'] == 'M', 'male searched');
 
 
