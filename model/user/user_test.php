@@ -125,6 +125,7 @@ class User_Test extends \model\test\Test {
         }
 
 
+
         test( is_success( $re ), "User reigster OK. id: $id " . get_error_string( $re ) );
 
 
@@ -161,10 +162,13 @@ class User_Test extends \model\test\Test {
         $record[ 'password' ] = $id;
         $record[ 'name' ] = $name;
         $re = $this->route( "register", $record );
+        di($re);
         test( is_success($re), "User register: $id " . get_error_string($re));
 
         //
         $session_id = $re['data']['session_id'];
+
+        
 
         test( user( $id )->name == $name, "User name check: $name " . get_error_string( $re ) );
 
@@ -181,6 +185,7 @@ class User_Test extends \model\test\Test {
 
         $record['session_id'] = $session_id;
         $re = $this->route('user.edit', $record);
+
         test( is_success($re) == ERROR_WRONG_SESSION_ID, "User edit: $id " . get_error_string($re));
 
 

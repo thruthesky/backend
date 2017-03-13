@@ -13,6 +13,10 @@ define('ERROR_ROUTE_NOT_PROVIDED', -40010);            $em[ERROR_ROUTE_NOT_PROVI
 define('ERROR_ROUTE_NOT_EXIST', -40011);               $em[ERROR_ROUTE_NOT_EXIST] = 'route-does-not-exists';
 define('ERROR_MODEL_CLASS_NOT_FOUND', -40040);          $em[ERROR_MODEL_CLASS_NOT_FOUND] = "model-class-not-found";
 define('ERROR_NO_RESPONSE', -40041);                    $em[ERROR_NO_RESPONSE] = "no-success-error-response";
+define('ERROR_EMPTY_RESPONSE', ERROR_NO_RESPONSE);
+
+
+
 define('ERROR_MODEL_CLASS_EMPTY', -40042);              $em[ERROR_MODEL_CLASS_EMPTY] = 'model-class-empty';
 define('ERROR_MODEL_CLASS_METHOD_NOT_EXIST', -40043);   $em[ERROR_MODEL_CLASS_METHOD_NOT_EXIST] = 'model-class-method-not-exist';
 define('ERROR_REQUIRED_INPUT_IS_MISSING', -40044);      $em[ERROR_REQUIRED_INPUT_IS_MISSING] = "required-input-is-missing";
