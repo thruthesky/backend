@@ -6,6 +6,7 @@
 namespace model\user;
 class User extends \model\entity\Entity {
 
+    const PUBLIC_FIELDS = [ 'id', 'name', 'middle_name', 'last_name', 'nickname', 'gender', 'birth_year', 'birth_month', 'birth_day', 'country', 'province', 'city' ];
 
     public function __construct()
     {
@@ -291,11 +292,37 @@ class User extends \model\entity\Entity {
     }
 
 
+    /**
+     *
+     * Return available user information for the client ( who request the user information )
+     *
+     * If the requesting user is admin, then he will get the full information.
+     * If the requesting user is requesting the user information of his own, then he will get the full record.
+     * If NOT, then the user will only get limited information for security and privacy.
+     *
+     * @param $record
+     * @return array
+     */
+    public function getAvailableData( $record ) {
+
+
+        if ( currentUser()->isAdmin() ) return $record;
+        else if ( $record['idx'] == currentUser()->idx ) return $record;
+
+        $ret = [];
+        foreach( self::PUBLIC_FIELDS as $field ) {
+            if ( array_key_exists( $field, $record ) ) $ret[ $field ] = $record[ $field ];
+        }
+        return $ret;
+    }
+
     public function pre() {
 
         $record = $this->getRecord();
         unset( $record['password'], $record['session_id'] );
         $record['meta'] = meta()->get( $this->getTable(), $record['idx']);
+
+        $record = $this->getAvailableData( $record );
 
         return $record;
     }

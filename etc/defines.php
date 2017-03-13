@@ -45,6 +45,7 @@ define('ERROR_LIMIT_IS_NOT_NUMERIC', -40096);           $em[ERROR_LIMIT_IS_NOT_N
 
 define('ERROR_DATABASE_ROWS_QUERY_ERROR', -40097);      $em[ERROR_DATABASE_ROWS_QUERY_ERROR] = 'database-rows-query-failed';
 define('ERROR_TABLE_NOT_SET', -40098);                  $em[ERROR_TABLE_NOT_SET] = 'database-table-is-not-set-to-query'; // entity table is empty.
+define('ERROR_MISSING_BINDING_MARK', -40099);           $em[ERROR_MISSING_BINDING_MARK] = 'database-where-has-no-question-mark'; // to query to database, developer needs to bind where clause with question mark. But there is no question marks on the query.
 
 define('ERROR_USER_EXIST', -40101);                     $em[ERROR_USER_EXIST] = 'user-exist';
 define('ERROR_USER_NOT_EXIST', -40102);                 $em[ERROR_USER_NOT_EXIST] = 'user-not-exist';

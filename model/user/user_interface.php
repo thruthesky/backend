@@ -52,7 +52,7 @@ class User_Interface extends User {
                 'session_id' => $this->getSessionId(),
                 'id' => $this->id,
                 'name' => $this->name,
-                'email' => $this->mail
+                'email' => $this->email
             ] );
 
         }

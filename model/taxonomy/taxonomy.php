@@ -165,6 +165,7 @@ class Taxonomy extends \model\base\Base  {
 
         //
         if ( isset( $option['where'] ) ) {
+            if ( strpos('?', $option['where']) === false ) return ERROR_MISSING_BINDING_MARK;
             if ( ! db()->secure_bind_statement($option['where']) ) return ERROR_UNSECURE_STATEMENT_CONDITION;
             $where = "WHERE $option[where]";
         }
