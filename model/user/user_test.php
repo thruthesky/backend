@@ -162,13 +162,13 @@ class User_Test extends \model\test\Test {
         $record[ 'password' ] = $id;
         $record[ 'name' ] = $name;
         $re = $this->route( "register", $record );
-        di($re);
+
         test( is_success($re), "User register: $id " . get_error_string($re));
 
         //
         $session_id = $re['data']['session_id'];
 
-        
+
 
         test( user( $id )->name == $name, "User name check: $name " . get_error_string( $re ) );
 
