@@ -182,7 +182,10 @@ class User_Interface extends User {
         ];
         $users = parent::search( $option );
         if ( is_error( $users ) ) return error( $users );
-        success( ['users' => user()->pres( $users )] );
+        success( [
+            'total' => parent::countSearch( $option ),
+            'users' => user()->pres( $users )
+        ] );
 
     }
 

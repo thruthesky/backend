@@ -121,7 +121,10 @@ class Post_Data_Interface extends Post_Data {
         ];
         $posts = parent::search( $option );
         if ( is_error( $posts ) ) return error( $posts );
-        success( ['posts' => post()->pres( $posts )] );
+        success( [
+            'total' => parent::countSearch( $option ),
+            'posts' => post()->pres( $posts )
+        ] );
 
     }
 

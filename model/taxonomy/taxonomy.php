@@ -118,6 +118,7 @@ class Taxonomy extends \model\base\Base  {
      *      User-made conditions are all escaped by PDO::quote()
      *
      *
+     * @note if you need to get total number of record, use countSearch()
      * @return mixed
      *
      *      - use is_error() to check if it was successful.
@@ -147,24 +148,7 @@ class Taxonomy extends \model\base\Base  {
         if ( empty($this->getTable()) ) return ERROR_TABLE_NOT_SET;
 
 
-        debug_log($option);
-        $where = null;
-        if ( isset($option['where']) && ! empty($option['where']) ) {
-
-            if ( ! db()->secure_bind_statement($option['where']) ) return ERROR_UNSECURE_STATEMENT_CONDITION;
-            if ( strpos($option['where'], '?') === false ) return ERROR_MISSING_BINDING_MARK;
-            if ( ! isset( $option['bind'] ) || empty( $option['bind'] ) ) return ERROR_SQL_BIND_NOT_SET;
-
-            $count_marks = substr_count($option['where'], '?');
-            $count_binds = count( explode(',', $option['bind']) );
-
-
-            if ( $count_marks > $count_binds ) return ERROR_SEARCH_BIND_LACK;
-            if ( $count_marks < $count_binds ) return ERROR_SEARCH_MARK_LACK;
-            // if ( $count_marks != $count_binds ) return ERROR_SQL_WHERE_BIND_MISMATCH;
-            $where = "WHERE $option[where]";
-        }
-
+//        debug_log($option);
 
 
         /**
@@ -199,20 +183,7 @@ class Taxonomy extends \model\base\Base  {
 
 
         //
-
-
-        if ( isset( $option['bind'] ) ) {
-            $bind = $option['bind'];
-            $binds = explode(',', $bind);
-
-            foreach( $binds as $value ) {
-                $quoted = db()->quote( $value );
-                $pos = strpos( $where, '?' );
-                $where = substr_replace( $where, $quoted, $pos, 1 );
-            }
-        }
-
-        //
+        $where = $this->getSearchCondition( $option );
 
         $q = "SELECT $option[select] FROM {$this->getTable()} $where $order $limit";
 
@@ -222,7 +193,42 @@ class Taxonomy extends \model\base\Base  {
 
     }
 
+    public function countSearch( $option ) {
+        $where = $this->getSearchCondition( $option );
+        $row = db()->row("SELECT COUNT(*) as cnt FROM {$this->getTable()} $where");
+        return $row['cnt'];
+    }
 
+
+    public function getSearchCondition( $option ) {
+
+        $where = null;
+        if ( isset($option['where']) && ! empty($option['where']) ) {
+
+            if ( ! db()->secure_bind_statement($option['where']) ) return ERROR_UNSECURE_STATEMENT_CONDITION;
+            if ( strpos($option['where'], '?') === false ) return ERROR_MISSING_BINDING_MARK;
+            if ( ! isset( $option['bind'] ) || empty( $option['bind'] ) ) return ERROR_SQL_BIND_NOT_SET;
+
+            $count_marks = substr_count($option['where'], '?');
+            $count_binds = count( explode(',', $option['bind']) );
+
+
+            if ( $count_marks > $count_binds ) return ERROR_SEARCH_BIND_LACK;
+            if ( $count_marks < $count_binds ) return ERROR_SEARCH_MARK_LACK;
+            // if ( $count_marks != $count_binds ) return ERROR_SQL_WHERE_BIND_MISMATCH;
+            $where = "WHERE $option[where]";
+
+            //
+            $bind = $option['bind'];
+            $binds = explode(',', $bind);
+            foreach( $binds as $value ) {
+                $quoted = db()->quote( $value );
+                $pos = strpos( $where, '?' );
+                $where = substr_replace( $where, $quoted, $pos, 1 );
+            }
+        }
+        return $where;
+    }
 
 
 }
