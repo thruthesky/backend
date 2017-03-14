@@ -192,6 +192,8 @@ class User_Test extends \model\test\Test {
         test( user( $id )->name == $new_name, "User name check: $new_name " . get_error_string($re));
 
 
+
+
         // admin edits user id.
         $admin_session_id = $this->getAdminSessionId();
 
@@ -200,6 +202,8 @@ class User_Test extends \model\test\Test {
         $record['name'] = 'jaeho';
         $re = $this->route('user.edit', $record);
         test( is_success($re), "Admin: User edit: $id " . get_error_string($re));
+
+        $admin_session_id = $re['data']['session_id'];
 
 
 

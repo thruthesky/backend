@@ -459,3 +459,15 @@ param : `session_id=USER_SESSION_ID`
 #### Response
 
 none.
+
+
+### User Edit
+
+#### Admin can edit user information.
+
+* When admin edits user information, user's session id may become invalid depending on what data has been changed. see `user::getSessionId()`
+* When admin changes user information, admin's session id will be regenerated. And the response data of user edit is admin's information, NOT the user's information.
+
+
+
+

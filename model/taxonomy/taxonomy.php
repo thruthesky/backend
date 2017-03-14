@@ -184,6 +184,7 @@ class Taxonomy extends \model\base\Base  {
 
         //
         $where = $this->getSearchCondition( $option );
+        if ( is_error( $where ) ) return $where;
 
         $q = "SELECT $option[select] FROM {$this->getTable()} $where $order $limit";
 
@@ -195,6 +196,7 @@ class Taxonomy extends \model\base\Base  {
 
     public function countSearch( $option ) {
         $where = $this->getSearchCondition( $option );
+        if ( is_error( $where ) ) return $where;
         $row = db()->row("SELECT COUNT(*) as cnt FROM {$this->getTable()} $where");
         return $row['cnt'];
     }
