@@ -42,17 +42,23 @@ class User_Interface extends User {
 
         if ( currentUser()->isAnonymous() ) return error( ERROR_ANONYMOUS_CAN_NOT_EDIT_PROFILE );
 
-        if ( currentUser()->isAdmin() ) {
+        $record = get_route_optional_variables();
 
+        if ( currentUser()->isAdmin() ) {
             $user = user( in('id') );           // switch $user to the 'user' to be edited.
             if ( ! $user->exist() ) return error( ERROR_USER_NOT_FOUND );
             $this->forceLogin( in('id') );
+            $re = $this->update( $record );
+            $this->forceLogin( ADMIN_ID );
+        }
+        else {
+            $re = $this->update( $record );
         }
 
-        $record = get_route_optional_variables();
-        $re = $this->update( $record );
 
-
+        /**
+         * For admin, return data is admin's data after changing user's information.
+         */
         if ( is_success( $re ) ) {
             success( [
                 'session_id' => $this->getSessionId(),
@@ -60,7 +66,6 @@ class User_Interface extends User {
                 'name' => $this->name,
                 'email' => $this->email
             ] );
-
         }
         else error( ERROR_DATABASE_UPDATE_FAILED );
 
