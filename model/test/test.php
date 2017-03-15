@@ -109,7 +109,7 @@ class Test {
         ob_start();
         $route = get_route( $route_name );
         if ( empty($route) ) return ['code' => ERROR_ROUTE_NOT_EXIST, 'message' => 'No route exists' ];
-        run_route( $route );
+        route()->run( $route );
         $data = ob_get_clean();
 
 

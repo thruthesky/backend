@@ -91,12 +91,14 @@ function table_post_deleted() {
 /**
  *
  *
+ * @deprecated use Route class()
+ *
  * @param $name
  * @return mixed
  *      return FALSE if there is no route.
  */
 function get_route( $name ) {
-    route()->getRoute( $name );
+    return route()->getRoute( $name );
     /*
     global $routes;
     if ( isset( $routes[ $name ] ) && $routes[ $name ] ) return $routes[ $name ];
@@ -111,7 +113,7 @@ function get_route( $name ) {
  * @param $option
  */
 function add_route( $name, $option ) {
-    route()->addRoute( $name, $option );
+    return route()->addRoute( $name, $option );
     /*
     global $routes;
     $routes[ $name ] = $option;
@@ -123,7 +125,7 @@ function add_route( $name, $option ) {
  * @deprecated use Route class()
  */
 function set_current_route( $route ) {
-    route()->set_current_route( $route );
+    return route()->set_current_route( $route );
     /*
     global $_current_route;
     $_current_route = $route;
@@ -135,7 +137,7 @@ function set_current_route( $route ) {
  * @deprecated use Route class()
  */
 function get_current_route( ) {
-    route()->get_current_route();
+    return route()->get_current_route();
     /*
     global $_current_route;
     return $_current_route;
