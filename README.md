@@ -96,6 +96,7 @@ To reduce the money, SMS shouldn't send more than 1 or 2 times a day to a user.
 * when a file uploaded, it will return `file.idx`, any of file upload form and its related form should keep the `file.idx` and pass it over the parents' form submission. So, 
 * You will upload a file without resizing.
 * When you download image, you can customize.
+* Create thumbnail(optimized image) only on first download or with an option.
 * You can choose image type, width, height, quality, resize type.
 	* This will help on image optimization.
 
