@@ -210,6 +210,15 @@ class Route {
                 if ( is_numeric($v) ) return [ 'code' => ERROR_VARIABLE_NUMERIC, 'message' => "variable $k must not be numeric"];
                 if ( is_array($v) ) return [ 'code' => ERROR_VARIABLE_ARRAY, 'message' => "variable $k must not be array"];
             }
+
+            if ( $k == 'id' ) {
+                if ( preg_match( '/^[\w@.-]{3,64}$/', $v ) ) {
+
+                }
+                else {
+                    return [ 'code' => ERROR_MALFORMED_ID, 'message'=> 'id-has-malformed' ];
+                }
+            }
         }
 
 

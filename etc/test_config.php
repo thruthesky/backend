@@ -14,6 +14,7 @@ $_config['test_order'] = [
     'base',
     'taxonomy',
     'entity',
+    'route',
     'meta',
     'user',
     'post'
