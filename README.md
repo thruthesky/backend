@@ -110,6 +110,7 @@ To reduce the money, SMS shouldn't send more than 1 or 2 times a day to a user.
 ?route=download&type=png&width=100&height=120&resize=center
 ````
 
+## delete old files that were not successfully finished
 
 
 ## Real Message System

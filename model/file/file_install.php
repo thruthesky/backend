@@ -15,7 +15,7 @@ db()
     ->add('type', 'varchar', 255)
     ->add('size', 'INT UNSIGNED DEFAULT 0')
     ->add('finish','char', 1)
-    ->unique('model,model_idx,code')
+    ->index('model,model_idx,code')
     ->index('model,code');
 
 

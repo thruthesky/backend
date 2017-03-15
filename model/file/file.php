@@ -15,6 +15,9 @@ class File extends \model\entity\Entity
     {
         $uploadfile = DIR_FILES . '/' . basename($userfile['name']);
         debug_log("move_uploaded_file($userfile[tmp_name], $uploadfile)");
+
+
+        /*
         while( file_exists( $uploadfile ) ) {
             $basename = basename( $uploadfile );
             list( $filename, $rest )= explode('.', $basename, 2 );
@@ -27,6 +30,21 @@ class File extends \model\entity\Entity
                 $uploadfile = DIR_FILES . '/' . $filename . '(1).' . $rest;
             }
         }
+        */
+
+        // @todo use file index to get file name.
+        // @todo if fail to upload, delete it from db.
+        // @todo delete old files that were not successfully hooked.
+        // @todo hook
+        // @todo download with filename. ?route=download&size=100x200&quality=100&resize=crop&name=/abcdef.jpg
+        // @todo when you get posts, give option of photo size, and other options.
+        // @todo count download
+        // @todo check/select primary photo among others
+        // @todo delete
+        // @todo delete all.
+        // @todo admin management.
+        // @todo
+
         if ( is_test() ) $re = copy( $userfile['tmp_name'], $uploadfile );
         else $re = move_uploaded_file( $userfile['tmp_name'], $uploadfile );
 
