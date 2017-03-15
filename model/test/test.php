@@ -5,7 +5,7 @@ class Test {
     public function __construct()
     {
         $this->test_style();
-        $this->test_reload( 10 );
+        $this->test_reload( 100 );
         $this->test_info();
 
     }
