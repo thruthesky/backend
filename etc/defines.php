@@ -116,5 +116,8 @@ define("ERROR_MODEL_IS_EMPTY", -4090);                     $em[ERROR_MODEL_IS_EM
 define("ERROR_MODEL_IDX_IS_EMPTY", -4090);                     $em[ERROR_MODEL_IDX_IS_EMPTY] = "model-is-empty";
 define("ERROR_CODE_IS_EMPTY", -4090);                     $em[ERROR_CODE_IS_EMPTY] = "model-is-empty";
 
+define("ERROR_MOVE_UPLOADED_FILE", -4220 );                 $em[ERROR_MOVE_UPLOADED_FILE] = "file-upload-error-move-uploaded-file";
+define("ERROR_USERFILE_EMPTY",-4222 );                      $em[ERROR_USERFILE_EMPTY] = "file-upload-error-userfile-is-empty";
+
 
 define('ERROR_FAKE_ERROR', -50999);                         $em[ERROR_FAKE_ERROR] = 'fake-error';

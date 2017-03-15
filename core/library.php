@@ -258,6 +258,23 @@ function post( $what = null ) {
     return $post;
 }
 
+function f( $what = null ){
+    $obj = new \model\file\File();
+    if ( $what ) {
+        $obj->load($what);
+    }
+    return $obj;
+}
+$_is_test = false;
+function is_test(){
+    global $_is_test;
+    return $_is_test;
+}
+
+function set_test(){
+    global $_is_test;
+    $_is_test = true;
+}
 
 
 

@@ -18,7 +18,8 @@ $ANONYMOUS_ID          = 'anonymous';      // Anonymous ID.
 
 
 
-$DIR_DATA               = './data';
+$DIR_DATA               = __ROOT_DIR__ . '/data';
+$DIR_FILES              = __ROOT_DIR__ . '/data/files';
 
 $DATABASE_USER          = 'root';
 $DATABASE_PASSWORD      = '7777';
@@ -82,6 +83,7 @@ define('DATABASE_HOST',             $DATABASE_HOST);
 define('DATABASE_TYPE',             $DATABASE_TYPE);
 
 define('DIR_DATA',          $DIR_DATA);
+define('DIR_FILES',          $DIR_FILES);
 define('__MODEL_DIR__',     __ROOT_DIR__ . '/model');
 
 

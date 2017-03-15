@@ -4,6 +4,7 @@ class Test {
 
     public function __construct()
     {
+        set_test();
         $this->test_style();
         $this->test_reload( 100 );
         $this->test_info();

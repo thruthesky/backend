@@ -9,6 +9,11 @@ class File_Test extends \model\test\Test {
     }
 
     public function run(){
+        $this->input();
+        $this->save_test();
+    }
+
+    public function input(){
         $re = $this->route('upload');
         test(is_error($re) == ERROR_REQUIRED_INPUT_IS_MISSING, 'Model is empty test'  .get_error_string($re));
 
@@ -17,15 +22,21 @@ class File_Test extends \model\test\Test {
         test(is_error($re) == ERROR_REQUIRED_INPUT_IS_MISSING, 'Model is empty test'  .get_error_string($re));
 
         //has model and para
-        $params = ['model'=>111, 'model_idx'=>222];
-        $re = $this->route('upload',$params);
+        //$re = $this->route('upload',$params);
         //test(is_error($re) == ERROR_REQUIRED_INPUT_IS_MISSING, 'Model is empty test'  .get_error_string($re));
+    }
 
+    public function save_test(){
+        $params = ['model'=>111, 'model_idx'=>222];
         $_FILES['userfile']['size'] = 12345;
         $_FILES['userfile']['type'] = 'image/jpeg';
+        $_FILES['userfile']['name'] = 'person.jpg';
         $_FILES['userfile']['tmp_name'] = __ROOT_DIR__ . '/tmp/person.jpg';
 
-        $re = $this->route('upload',$params);
+        $re = f()->save($_FILES['userfile']);
 
+//        $re = $this->route('upload',$params);
+        test(is_success($re), 'Userfile test'  .get_error_string($re));
     }
+
 }
