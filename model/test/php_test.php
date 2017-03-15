@@ -3,9 +3,7 @@
 namespace model\test;
 
 class Php_Test extends Test{
-    public function __construct()
-    {
-    }
+
     public function run()
     {
         $user = user();

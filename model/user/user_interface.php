@@ -6,7 +6,7 @@ class User_Interface extends User {
 
 
     public function register() {
-        $record = get_route_variables();
+        $record =  route()->get_route_variables();
         $re = user()->create( $record );
         if ( is_success($re ) ) {
 
@@ -42,7 +42,7 @@ class User_Interface extends User {
 
         if ( currentUser()->isAnonymous() ) return error( ERROR_ANONYMOUS_CAN_NOT_EDIT_PROFILE );
 
-        $record = get_route_optional_variables();
+        $record = route()->get_route_optional_variables();
 
         if ( currentUser()->isAdmin() ) {
             $user = user( in('id') );           // switch $user to the 'user' to be edited.

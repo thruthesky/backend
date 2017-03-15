@@ -18,7 +18,7 @@ class Post_Config_Interface extends Post_Config {
         if ( ! currentUser()->isAdmin() ) return error( ERROR_PERMISSION_ADMIN );
         if ( $this->load( in('id') )->exist() ) return error( ERROR_POST_CONFIG_EXIST, "post config - " . in('id') . " - already exists" );
 
-        $record = get_route_optional_variables();
+        $record = route()->get_route_optional_variables();
         $record['id'] = in('id');
         $forum_idx = parent::create( $record );
         if ( is_error( $forum_idx ) ) error( $forum_idx );

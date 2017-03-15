@@ -87,237 +87,62 @@ function table_post_deleted() {
 
 
 
-/**
- *
- * HTTP 로 넘오 온 변수 중 'required' 변수들의 '키'만 배열로 리턴한다. 값은 포함되지 않는다.
- *
- * @return array
- */
-function get_keys_of_required_variables() {
-    $route = get_current_route();
-    if ( ! isset( $route['variables'] ) ) return [];
-    $variables = $route['variables'];
-    if ( ! isset( $variables['required'] ) ) return [];
-    return $variables['required'];
-}
-
-
-/**
- *
- * HTTP 로 넘오 온 변수 중 'optional' 변수들의 '키'만 배열로 리턴한다. 값은 포함되지 않는다.
- *
- * @return array
- */
-function get_keys_of_optional_variables() {
-    $route = get_current_route();
-    if ( ! isset( $route['variables'] ) ) return [];
-    $variables = $route['variables'];
-    if ( ! isset( $variables['optional'] ) ) return [];
-    return $variables['optional'];
-}
-
-
-/**
- *
- * HTTP 로 넘오 온 변수 중 'system' 변수들의 '키'만 배열로 리턴한다. 값은 포함되지 않는다.
- *
- * @return array
- */
-function get_keys_of_system_variables() {
-    $route = get_current_route();
-    $system = [];
-    if ( array_key_exists( 'variables', $route ) ) {
-        $variables = $route['variables'];
-        if ( array_key_exists( 'system', $variables ) ) $system = $variables['system'];
-    }
-
-
-
-    /**
-     *
-     *
-     * 'route' variable is accepted by default since all access needs a route.
-     *
-     */
-    if ( ! in_array( 'route', $system ) ) $system[] = 'route';
-
-    return $system;
-}
-
-
-/**
- *
- * HTTP 로 넘어 온 변수들의 '키'만 배열로 리턴한다. 값은 포함되지 않는다.
- *
- * @return array
- */
-function get_keys_of_variables() {
-
-
-
-    $all = array_merge(
-        get_keys_of_required_variables(),
-        get_keys_of_optional_variables(),
-        get_keys_of_system_variables()
-    );
-
-
-
-    return $all;
-
-
-}
 
 /**
  *
  *
- * Checks if the HTTP variables are properly passed.
+ * @deprecated use Route class()
  *
- *
- *
- * @return array|bool
- *
- */
-function check_http_variables() {
-
-    if ( $required = get_keys_of_required_variables()) {
-        foreach ( $required as $v ) {
-            if ( array_key_exists( $v, $_REQUEST ) ) {
-
-            }
-            else {
-                return [ 'code' => ERROR_REQUIRED_INPUT_IS_MISSING, 'message' => "required-variable-is-missing $v" ];
-            }
-        }
-    }
-
-    $variables = get_keys_of_variables();
-    foreach( array_keys( $_REQUEST ) as $key ) {
-        if ( in_array( $key, $variables ) ) {
-
-        }
-        else {
-            return [ 'code' => ERROR_INVALID_INPUT_VARIABLE, 'message' => "$key is-passed-over-http-but-NOT-in-route-variables"];
-        }
-    }
-    return OK;
-}
-
-
-/**
- * @return array|int
- *
- */
-function check_http_variables_type() {
-
-    $number_if_contain = [ 'idx' ];
-    $string = [ 'route', 'session', 'id' ]; // cannot be empty if passed.
-
-    // title, content, data can be a numeric, string, empty, boolean.
-
-
-    //$keys = get_route_variables();
-
-    foreach( $_REQUEST as $k => $v ) {
-
-        foreach ( $number_if_contain as $contain ) {
-            if ( strpos( $k, $contain ) !== false ) {
-                if ( ! is_numeric($v) ) return [ 'code' => ERROR_MALFORMED_VARIABLE_NUMBER, 'message' => "variable $k must be number"];
-            }
-        }
-
-        if ( in_array( $k, $string ) ) {
-            if ( empty($v) ) return [ 'code' => ERROR_VARIABLE_EMPTY, 'message' => "variable $k must not be empty"];
-            if ( is_numeric($v) ) return [ 'code' => ERROR_VARIABLE_NUMERIC, 'message' => "variable $k must not be numeric"];
-            if ( is_array($v) ) return [ 'code' => ERROR_VARIABLE_ARRAY, 'message' => "variable $k must not be array"];
-        }
-    }
-
-
-    return OK;
-}
-
-
-
-
-/**
  * @param $name
  * @return mixed
  *      return FALSE if there is no route.
  */
 function get_route( $name ) {
+    return route()->getRoute( $name );
+    /*
     global $routes;
     if ( isset( $routes[ $name ] ) && $routes[ $name ] ) return $routes[ $name ];
     else return FALSE;
+    */
 }
 
+/**
+ *
+ *
+ * @param $name
+ * @param $option
+ * @return \model\route\Route
+ */
 function add_route( $name, $option ) {
+    return route()->addRoute( $name, $option );
+    /*
     global $routes;
     $routes[ $name ] = $option;
+    */
 }
-$_current_route = null;
+
+/**
+ *
+ * @deprecated use Route class()
+ */
 function set_current_route( $route ) {
+    return route()->set_current_route( $route );
+    /*
     global $_current_route;
     $_current_route = $route;
+    */
 }
+
+/**
+ * @return mixed
+ * @deprecated use Route class()
+ */
 function get_current_route( ) {
+    return route()->get_current_route();
+    /*
     global $_current_route;
     return $_current_route;
-}
-
-
-/**
- *
- * Returns an array of HTTP variables ( GET, POST ) based on route's 'required' and 'optional' without 'system'
- * If you need to get only key, use 'get_keys_of_variables()'.
- *
- * @translate-korean HTTP 로 전달된 GET, POST 의 키와 값을 배열로 리턴한다. 키만 필요한 경우 get_keys_of_variables() 를 사용한다.
- *
- * @note use get_keys_
- *
- * @note this returns Actual HTTP Data.
- *
- * @return array
- *
- */
-function get_route_variables( ) {
-
-    $ret = [];
-    $route = get_current_route();
-
-    if ( ! isset( $route['variables'] ) ) return $ret;
-
-    $variables = $route['variables'];
-
-
-    $required = $optional = [];
-    if ( isset( $variables['required'] ) ) $required = $variables['required'];
-    if ( isset( $variables['optional'] ) ) $optional = $variables['optional'];
-    $accepts = array_merge( $required, $optional );
-
-    foreach( $accepts as $k ) {
-        if ( array_key_exists( $k, $_REQUEST ) ) $ret[ $k ] = $_REQUEST[ $k ];
-    }
-    return $ret;
-}
-
-/**
- *
- * Returns an array of HTTP input based on route's 'optional' variable.
- *
- * @return array
- */
-function get_route_optional_variables() {
-    $ret = [];
-    $route = get_current_route();
-
-    if ( ! isset( $route['variables'] ) || ! isset( $route['variables']['optional'] ) ) return $ret;
-
-    $optional = $route['variables']['optional'];
-    foreach( $optional as $k ) {
-        if ( array_key_exists( $k, $_REQUEST ) ) $ret[ $k ] = $_REQUEST[ $k ];
-    }
-    return $ret;
+    */
 }
 
 
@@ -384,6 +209,15 @@ function entity() {
 function taxonomy() {
     return new \model\taxonomy\Taxonomy();
 }
+
+
+/**
+ * @return \model\route\Route
+ */
+function route() {
+    return new \model\route\Route();
+}
+
 
 
 /**

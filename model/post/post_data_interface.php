@@ -16,7 +16,7 @@ class Post_Data_Interface extends Post_Data {
 
         if ( currentUser()->isAnonymous() && empty( in('password') ) ) return error( ERROR_PASSWORD_EMPTY, "Anonymous must input a password to create a post.");
 
-        $record = get_route_optional_variables();
+        $record = route()->get_route_optional_variables();
         $record['user_idx'] = currentUser()->idx;
         $record['post_config_idx'] = $config->idx;
 
@@ -60,7 +60,7 @@ class Post_Data_Interface extends Post_Data {
 
         if( strlen( in('title') ) > 254 ) return error( ERROR_TITLE_TOO_LONG );
 
-        $record = get_route_optional_variables();
+        $record = route()->get_route_optional_variables();
 
         unset( $record['password'] ); // no need to set password again.
 
