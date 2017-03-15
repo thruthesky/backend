@@ -108,9 +108,10 @@ function get_route( $name ) {
 
 /**
  *
- * @deprecated use Route class()
+ *
  * @param $name
  * @param $option
+ * @return \model\route\Route
  */
 function add_route( $name, $option ) {
     return route()->addRoute( $name, $option );
