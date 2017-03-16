@@ -13,7 +13,7 @@ db()
     ->add('name', 'varchar', 255)
     ->add('type', 'varchar', 64)
     ->add('size', 'INT UNSIGNED DEFAULT 0')
-    ->add('finish','char', 1)
+    ->add('finish',"char(1) DEFAULT 'N'")
     ->add('no_of_download','INT UNSIGNED DEFAULT 0')
     ->index('model,model_idx,code')
     ->index('model,code');

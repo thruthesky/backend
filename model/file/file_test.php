@@ -29,7 +29,7 @@ class File_Test extends \model\test\Test {
 
     public function save_test() {
 
-        $params = ['model'=>111, 'model_idx'=>222];
+        $_REQUEST = ['model'=>111, 'model_idx'=>222];
         $_FILES['userfile']['size'] = 12345;
         $_FILES['userfile']['type'] = 'image/jpeg';
         $_FILES['userfile']['name'] = 'person.jpg';
@@ -51,8 +51,17 @@ class File_Test extends \model\test\Test {
         $_FILES['userfile']['tmp_name'] = __ROOT_DIR__ . '/tmp/person.jpg';
         $re = f()->save($_FILES['userfile']);
 
-        test(is_success($re), 'Userfile test'  .get_error_string($re));
+        test(is_success($re), 'Upload test'  .get_error_string($re));
 
+        //
+        $file = f ( $re );
+        test( $file->exist(), "check if file uploaded: $re");
+        $path = f()->path( $re );
+        test( file_exists( $path ), "file existence check : $path");
+
+
+
+        
 
 //        $re = $this->route('upload',$params);
     }

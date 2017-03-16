@@ -11,22 +11,32 @@ class File extends \model\entity\Entity
     }
 
 
+    /**
+     *
+     * @param $userfile
+     * @return array|int|number
+     */
     public function save($userfile)
     {
+
 
         if ( ! isset($userfile['error'])  ) return ERROR_UPLOAD_ERROR_NOT_SET;
         debug_log($userfile);
         if ( $userfile['error'] === UPLOAD_ERR_OK && $userfile['size'] && $userfile['tmp_name'] ) {
             // uploading from web-browser to web-server was successfully done.
             // continue your work.
-        } else {
+        }
+        else {
             return $this->errorResponse( $userfile['error'] );
         }
 
+
+        // delete old files that are not hooked.
+        $this->deleteUnhooked();
+
+
         $src = $userfile['tmp_name'];
         if ( ! file_exists( $src ) ) return ERROR_UPLOAD_FILE_NOT_EXIST;
-
-
 
 
         $idx = $this->set('name',$userfile['name'])
@@ -41,36 +51,19 @@ class File extends \model\entity\Entity
 
 
 
-        $dst = DIR_FILES . "/$idx";
+        $dst = DIR_UPLOAD . "/$idx";
         debug_log("move_uploaded_file($src, $dst)");
-
-
-        /*
-        while( file_exists( $uploadfile ) ) {
-            $basename = basename( $uploadfile );
-            list( $filename, $rest )= explode('.', $basename, 2 );
-            if( preg_match('/\((\d+)\)$/', $filename, $ms)){
-                debug_log($ms);
-                $filename = preg_replace('/\(\d+\)$/', "(" . ($ms[1]+1) . ")"  , $filename );
-                $uploadfile = DIR_FILES . '/' . $filename . '.' . $rest;
-            }
-            else {
-                $uploadfile = DIR_FILES . '/' . $filename . '(1).' . $rest;
-            }
-        }
-        */
 
         if ( file_exists( $dst ) ) return ERROR_UPLOAD_FILE_EXIST;
         if ( is_test() ) $re = @copy( $src, $dst );
         else $re = @move_uploaded_file( $src, $dst );
 
-
         if( ! $re ) {
             $error = error_get_last();
+            $this->load($idx)->delete();
             return [ 'code' => ERROR_MOVE_UPLOADED_FILE, 'message' => $error['message'] ];
         }
 
-        $idx = $this->load($idx)->update( ['name_saved'])
         return $idx;
     }
 
@@ -112,6 +105,56 @@ class File extends \model\entity\Entity
                 break;
         }
         return [ 'code' => $code, 'message' => $message ];
+    }
+
+
+    private function deleteUnhooked() {
+
+        $files = $this->getOldUnhookedList();
+        if ( $files ) {
+            foreach ( $files as $file ) {
+                $this->delete( $file['idx'] );
+            }
+        }
+
+    }
+
+    /**
+     *
+     * @attention it overrides entity()->delete().
+     */
+    public function delete( $idx = null ) {
+
+        $this->reset($idx);
+        parent::delete();
+
+        // entity()->load($idx)->delete();
+
+        $file_path = $this->path( $idx );
+        @unlink( $file_path );
+        debug_log(">>> $file_path deleted");
+    }
+
+    public function deleteBy( $model, $model_idx, $code=null ) {
+        if ( $code ) $and_code = "AND code='$code'";
+        else $and_code = null;
+        $files = db()->rows("SELECT idx FROM {$this->getTable()} WHERE model='$model' AND model_idx=$model_idx $and_code");
+        if ( $files ) {
+            foreach ( $files as $file ) {
+                $this->delete( $file['idx'] );
+            }
+        }
+    }
+
+    public function path( $idx ) {
+
+        return DIR_UPLOAD . "/$idx";
+
+    }
+
+    private function getOldUnhookedList( $no = 100 ) {
+        $time = time() - TIME_TO_DELETED_OLD_UNHOOKED_FILE;
+        return db()->rows("SELECT idx FROM {$this->getTable()} WHERE finish = 'N' AND created < $time LIMIT $no");
     }
 
 }

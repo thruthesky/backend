@@ -95,17 +95,19 @@ To reduce the money, SMS shouldn't send more than 1 or 2 times a day to a user.
 ## File upload with cosutomizalbe downloda
 
 
-        // @todo use file index to get file name.
-        // @todo if fail to upload, delete it from db.
-        // @todo delete old files that were not successfully hooked.
+@done use file index to get file name.
+@done if fail to upload, delete it from db.
+@done delete old files that were not successfully hooked.
         // @todo hook
         // @todo download with filename. ?route=download&size=100x200&quality=100&resize=crop&name=/abcdef.jpg
         // @todo when you get posts, give option of photo size, and other options.
         // @todo count download
         // @todo check/select primary photo among others
-        // @todo delete
-        // @todo delete all.
+        // @todo delete model + model_idx, idx, model + model_idx + code
         // @todo admin management.
+        	show how many unhooked, show many old unhooked.
+        	show satistics.
+        	
         // @todo
 
 
