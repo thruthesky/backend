@@ -9,6 +9,11 @@ Backend server for Restful APIs
 
 # TODO
 
+## transaction
+* prove pdo transaction is working with race condition.
+
+
+
 
 ## add more tests.
 
@@ -88,6 +93,21 @@ To reduce the money, SMS shouldn't send more than 1 or 2 times a day to a user.
 
 
 ## File upload with cosutomizalbe downloda
+
+
+        // @todo use file index to get file name.
+        // @todo if fail to upload, delete it from db.
+        // @todo delete old files that were not successfully hooked.
+        // @todo hook
+        // @todo download with filename. ?route=download&size=100x200&quality=100&resize=crop&name=/abcdef.jpg
+        // @todo when you get posts, give option of photo size, and other options.
+        // @todo count download
+        // @todo check/select primary photo among others
+        // @todo delete
+        // @todo delete all.
+        // @todo admin management.
+        // @todo
+
 
 * `file` table will holds the uploaded file information.
 * `file.finish` will be 0 until the file is really related to its object(parent).

@@ -1,6 +1,12 @@
 <?php
 namespace model\route;
 class Route_Test extends \model\test\Test {
+
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
     public function run() {
 
         $this->testId();

@@ -1,15 +1,58 @@
 <?php
 namespace model\test;
 class Test {
+    static $count = 0;
+    static $count_success = 0;
+    static $count_error = 0;
+    static $done_test_info = false;
+    static $time_start = 0;
 
     public function __construct()
     {
+        if ( ! self::$time_start ) self::$time_start = microtime(true);
         set_test();
         $this->test_style();
-        $this->test_reload( 100 );
         $this->test_info();
+    }
+
+    public function __destruct()
+    {
+        $this->test_reload( 5 );
+        $this->test_end();
+    }
+
+    public static function test($re, $code)
+    {
+        self::$count ++;
+        if ( is_array($re) ) {
+            if ( isset($re['code']) && ! isset($re['idx']) ) { // server data.
+                if ( $re['code'] ) self::test_error($re, $code);
+                else self::test_success($re, $code);
+            }
+            else { // unknown data.
+                if ( $re ) self::test_success($re, $code);
+                else self::test_error( $re, $code );
+            }
+        }
+        else { //
+            if ( $re ) self::test_success($re, $code);
+            else self::test_error( $re, $code );
+        }
 
     }
+    public static function test_success($re, $code) {
+        self::$count_success ++;
+        echo "<div class='success'>" . self::$count . " - SUCCESS: $code</div>";
+    }
+
+    function test_error( $re, $code ) {
+        self::$count_error ++;
+        echo "<div class='error'><span style='color:red; font-weight: bold;'>" . self::$count . "- ERROR</span> $code</div>";
+        echo "<pre>";
+        debug_print_backtrace();
+        echo "</pre>";
+    }
+
 
     public function runAllTests() {
 
@@ -67,7 +110,9 @@ class Test {
         $seconds = $n * 1000;
         echo "
             <script>
-                setTimeout( function() {
+                var timeout_reload;
+                if ( timeout_reload ) clearTimeout(timeout_reload);
+                timeout_reload = setTimeout( function() {
                     location.reload( true );
                 }, $seconds );
             </script>
@@ -77,10 +122,26 @@ class Test {
         echo "
             <style>
                 body { font-size: 10pt; }
+                .test-info { padding: 1em; background-color: #c5cdd9; }
                 .break { margin-top: 1em; font-weight: bold; }
                 .error { font-size: 13pt; text-decoration: underline; }
             </style>
         ";
+    }
+    public function test_end() {
+
+        $time_end = round(microtime(true) - self::$time_start, 3);
+        $success = self::$count_success;
+        $error = self::$count_error;
+        if ( $error > 0 ) $error = "[[[[[[[[[[[[[[[[[[[ $error ]]]]]]]]]]]]]]]]]]]";
+
+        echo <<<EOH
+<script>
+    var qs = document.querySelector('.test-result');
+    qs.innerText="Success: $success, Error: $error Time: $time_end";
+</script>
+EOH;
+
     }
     public function test_break( $path ) {
         echo "
@@ -94,8 +155,14 @@ class Test {
     }
 
     private function test_info() {
+        if ( self::$done_test_info ) return;
+        self::$done_test_info = true;
+        echo "<div class='test-info'>";
         echo "<div>Database Type: ". DATABASE_TYPE ."</div>";
         echo "<div>Database Name: ". DATABASE_NAME ."</div>";
+        echo "<div class='test-result'>...</div>";
+        echo "</div>";
+
     }
 
     /**
@@ -207,7 +274,6 @@ class Test {
     public function createUser( $record ) {
 
         user( $record['id'] )->delete();
-
         $re = $this->route( "register", $record );
         return is_success($re) ? $re['data']['session_id'] : null;
 

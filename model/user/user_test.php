@@ -364,6 +364,7 @@ class User_Test extends \model\test\Test {
 
 
         // create sample users
+        //db()->beginTransaction();
         for( $i=0; $i < 22; $i++ ) {
             $record = [];
             $record[ 'id' ] = "searchuser$i";
@@ -372,8 +373,9 @@ class User_Test extends \model\test\Test {
             $record[ 'email'] = "email$i";
             $record[ 'gender' ] = rand( 0, 1 ) ? 'M' : 'F';
             $re = $this->route( "register", $record );
-            // test( is_success($re), "Test user create : " . get_error_string($re));
         }
+        //db()->commit();
+
 
 
         // test mismatch bind param. expect: error
@@ -420,9 +422,11 @@ class User_Test extends \model\test\Test {
 
         // delete sample users.
 
+
         for( $i=0; $i < 22; $i++ ) {
             user( "searchuser$i" )->delete();
         }
+
 
     }
 }
