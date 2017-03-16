@@ -11,6 +11,7 @@ class File_Test extends \model\test\Test {
     public function run(){
         $this->input();
         $this->save_test();
+        $this->delete_test();
     }
 
     public function input(){
@@ -59,11 +60,60 @@ class File_Test extends \model\test\Test {
         $path = f()->path( $re );
         test( file_exists( $path ), "file existence check : $path");
 
-
-
-
-
+        $file->delete();
+        test( f($re)->exist() == false,"file delete test ($re)");
+        test( ! file_exists( $path ), "file should be deleted : $path");
 //        $re = $this->route('upload',$params);
+    }
+
+    public function delete_test(){
+
+        $_REQUEST = ['model'=>111, 'model_idx'=>222];
+        $_FILES['userfile']['size'] = 12345;
+        $_FILES['userfile']['type'] = 'image/jpeg';
+        $_FILES['userfile']['name'] = 'person.jpg';
+
+
+        $_FILES['userfile']['tmp_name'] = __ROOT_DIR__ . '/tmp/person.jpg';
+        $re = f()->save($_FILES['userfile']);
+        test(is_success($re), "delete_test::Upload  with model idx $re"  .get_error_string($re));
+
+
+
+        f()->deleteBy(111,222);
+        //test if file exist
+        $file = f ( $re );
+        test( ! $file->exist(), "delete_test::file should not exist: $re");
+        $path = f()->path( $re );
+        test( ! file_exists( $path ), "delete_test::file path should not exist : $path");
+
+
+
+        for( $i=0; $i<3; $i ++) {
+        $_REQUEST = ['model'=>333, 'model_idx'=>444, 'code'=> "abc$i" ];
+        $_FILES['userfile']['size'] = 12345;
+        $_FILES['userfile']['type'] = 'image/jpeg';
+        $_FILES['userfile']['name'] = 'person.jpg';
+
+        $_FILES['userfile']['tmp_name'] = __ROOT_DIR__ . '/tmp/person.jpg';
+        $re = f()->save($_FILES['userfile']);
+        test( is_success( $re ), "delete_test::Upload with code $re"  .get_error_string($re));
+        $path = f()->path( $re );
+        test( file_exists( $path ), "delete_test::file path should exist : $path");
+        }
+        
+        $re = f()->count( 333, 444);
+        test( $re == 3, '3 files are successfully uploaded' );
+
+        f()->deleteBy( 333, 444, 'abc0');
+        $re = f()->count( 333, 444);
+        test( $re == 2, '1 file deleted. there should be 2 files left.' );
+
+
+
+        f()->deleteBy(333, 444 );
+        $re = f()->count( 333, 444);
+        test( $re == 0, 'all model 333 and model_idx 444 should be deleted ' );
     }
 
 }

@@ -180,7 +180,7 @@ EOH;
         route()->run( $route );
         $data = ob_get_clean();
 
-
+//di($data);
         if ( empty($data) ) return [ 'code' => ERROR_NO_RESPONSE, 'message' => 'No data received' ];
 
 
