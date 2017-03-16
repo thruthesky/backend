@@ -128,3 +128,13 @@ define('ERROR_FAKE_ERROR', -50999);                         $em[ERROR_FAKE_ERROR
 
 define('ERROR_UPLOAD_FILE_NOT_EXIST', -43101);               $em[ERROR_UPLOAD_FILE_NOT_EXIST] = 'error-upload-file-not-exist';
 define('ERROR_UPLOAD_FILE_EXIST', -43102);               $em[ERROR_UPLOAD_FILE_EXIST] = 'error-upload-file-already-exist';
+define('ERROR_UPLOAD_ERROR_NOT_SET', -43103);               $em[ERROR_UPLOAD_ERROR_NOT_SET] = 'file-upload-error-must-be-set';
+define('ERROR_FILE_UPLOAD_CREATE_IDX_FAILED', -43104);      $em[ERROR_FILE_UPLOAD_CREATE_IDX_FAILED] = 'file-idx-create-failed';
+
+define('ERROR_UPLOAD_ERR_INI_SIZE', -43201);
+define('ERROR_UPLOAD_ERR_FORM_SIZE', -43202);
+define('ERROR_UPLOAD_ERR_PARTIAL', -43203);
+define('ERROR_UPLOAD_ERR_NO_FILE', -43204);
+define('ERROR_UPLOAD_ERR_NO_TMP_DIR', -43206);
+define('ERROR_UPLOAD_ERR_CANT_WRITE', -43207);
+define('ERROR_UPLOAD_ERR_EXTENSION', -43208);

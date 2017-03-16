@@ -19,19 +19,27 @@ class File_Test extends \model\test\Test {
 
         $params = ['model'=>111];
         $re = $this->route('upload',$params);
-        test(is_error($re) == ERROR_REQUIRED_INPUT_IS_MISSING, 'Model is empty test'  .get_error_string($re));
+        test(is_error($re) == ERROR_REQUIRED_INPUT_IS_MISSING, 'Model_idx is empty test'  .get_error_string($re));
 
         //has model and para
+        $params = ['model'=>111, 'model_idx'=>222];
         $re = $this->route('upload',$params);
-        test(is_error($re) == ERROR_REQUIRED_INPUT_IS_MISSING, 'Model is empty test'  .get_error_string($re));
+        test( is_error($re) != ERROR_REQUIRED_INPUT_IS_MISSING, 'input test'  .get_error_string($re));
     }
 
-    public function save_test(){
+    public function save_test() {
+
         $params = ['model'=>111, 'model_idx'=>222];
         $_FILES['userfile']['size'] = 12345;
         $_FILES['userfile']['type'] = 'image/jpeg';
         $_FILES['userfile']['name'] = 'person.jpg';
 
+        // error test
+        $re = f()->save($_FILES['userfile']);
+        test( is_error($re) == ERROR_UPLOAD_ERROR_NOT_SET, 'upload error must be set. even on success. :'  .get_error_string($re));
+
+        // set file upload error to 0 which means no error.
+        $_FILES['userfile']['error'] = 0;
 
         // wrong source file.
         $_FILES['userfile']['tmp_name'] = __ROOT_DIR__ . '/tmp/person.jpg' . 'wrong';

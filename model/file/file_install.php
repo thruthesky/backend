@@ -11,10 +11,10 @@ db()
     ->add('user_idx', 'INT UNSIGNED DEFAULT 0')
     ->add('code','varchar', 128)
     ->add('name', 'varchar', 255)
-    ->add('name_saved','varchar', 255)
-    ->add('type', 'varchar', 255)
+    ->add('type', 'varchar', 64)
     ->add('size', 'INT UNSIGNED DEFAULT 0')
     ->add('finish','char', 1)
+    ->add('no_of_download','INT UNSIGNED DEFAULT 0')
     ->index('model,model_idx,code')
     ->index('model,code');
 
