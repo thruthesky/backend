@@ -169,4 +169,10 @@ class File extends \model\entity\Entity
 
     }
 
+    public function count( $model, $model_idx = 0, $code =NULL  )
+    {
+        if( $code ) $and_code = "AND code = '$code'";
+        else $and_code = NULL;
+        return parent::count("model = '$model' AND model_idx = $model_idx $and_code");
+    }
 }
