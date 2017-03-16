@@ -19,7 +19,7 @@ $ANONYMOUS_ID          = 'anonymous';      // Anonymous ID.
 
 
 $DIR_DATA               = __ROOT_DIR__ . '/data';
-$DIR_FILES              = __ROOT_DIR__ . '/data/files';
+$DIR_FILES              = __ROOT_DIR__ . '/data/file/upload';
 
 $DATABASE_USER          = 'root';
 $DATABASE_PASSWORD      = '7777';
