@@ -13,8 +13,11 @@ class File extends \model\entity\Entity
 
     public function save($userfile)
     {
-        $uploadfile = DIR_FILES . '/' . basename($userfile['name']);
-        debug_log("move_uploaded_file($userfile[tmp_name], $uploadfile)");
+        $src = $userfile['tmp_name'];
+        if ( ! file_exists( $src ) ) return ERROR_UPLOAD_FILE_NOT_EXIST;
+
+        $dst = DIR_FILES . '/' . basename($userfile['name']);
+        debug_log("move_uploaded_file($src, $dst)");
 
 
         /*
@@ -32,15 +35,18 @@ class File extends \model\entity\Entity
         }
         */
 
-        if ( is_test() ) $re = copy( $userfile['tmp_name'], $uploadfile );
-        else $re = move_uploaded_file( $userfile['tmp_name'], $uploadfile );
 
+        if ( file_exists( $dst ) ) return ERROR_UPLOAD_FILE_EXIST;
+        if ( is_test() ) $re = @copy( $src, $dst );
+        else $re = @move_uploaded_file( $src, $dst );
+
+        debug_log(error_get_last());
         if( ! $re ) return ERROR_MOVE_UPLOADED_FILE;
 
         $idx = $this->set('name',$userfile['name'])
             ->set('size', $userfile['size'])
             ->set('type',$userfile['type'])
-            ->set('name_saved', $uploadfile )
+            ->set('name_saved', $dst )
             ->set('model', in('model') )
             ->set('model_idx', in('model_idx') )
             ->set('user_idx', currentUser()->idx )

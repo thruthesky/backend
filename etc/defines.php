@@ -121,3 +121,10 @@ define("ERROR_USERFILE_EMPTY",-4222 );                      $em[ERROR_USERFILE_E
 
 
 define('ERROR_FAKE_ERROR', -50999);                         $em[ERROR_FAKE_ERROR] = 'fake-error';
+
+
+
+// file upload error
+
+define('ERROR_UPLOAD_FILE_NOT_EXIST', -43101);               $em[ERROR_UPLOAD_FILE_NOT_EXIST] = 'error-upload-file-not-exist';
+define('ERROR_UPLOAD_FILE_EXIST', -43102);               $em[ERROR_UPLOAD_FILE_EXIST] = 'error-upload-file-already-exist';
