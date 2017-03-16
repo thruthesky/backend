@@ -40,8 +40,11 @@ class File extends \model\entity\Entity
         if ( is_test() ) $re = @copy( $src, $dst );
         else $re = @move_uploaded_file( $src, $dst );
 
-        debug_log(error_get_last());
-        if( ! $re ) return ERROR_MOVE_UPLOADED_FILE;
+
+        if( ! $re ) {
+            $error = error_get_last();
+            return [ 'code' => ERROR_MOVE_UPLOADED_FILE, 'message' => $error['message'] ];
+        }
 
         $idx = $this->set('name',$userfile['name'])
             ->set('size', $userfile['size'])

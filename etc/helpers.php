@@ -108,6 +108,7 @@ function in ( $code, $default = null ) {
  *
  *
  * @param $code
+ *          if it is null, it treats as error array.
  * @param string $message
  *
  * @code
@@ -121,6 +122,10 @@ function in ( $code, $default = null ) {
  */
 function error( $code, $message='' ) {
     global $em;
+    if ( is_array( $code ) && isset($code['code']) && $code['code'] < 0 ) {
+        $message = $code['message'];
+        $code = $code['code'];
+    }
     if ( empty($message) && isset($em[ $code ]) ) $message = $em[ $code ];
     debug_log(" &gt;&gt;&gt; [ ERROR[ $code ] - \"$message\"");
     echo json_encode( ['code'=>$code, 'message'=>$message] );
