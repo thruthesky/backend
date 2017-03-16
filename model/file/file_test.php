@@ -11,6 +11,7 @@ class File_Test extends \model\test\Test {
     public function run(){
         $this->input();
         $this->save_test();
+        $this->delete_test();
     }
 
     public function input(){
@@ -59,11 +60,36 @@ class File_Test extends \model\test\Test {
         $path = f()->path( $re );
         test( file_exists( $path ), "file existence check : $path");
 
-
-
-        
-
+        $file->delete();
+        test( f($re)->exist() == false,"file delete test ($re)");
+        test( ! file_exists( $path ), "file should be deleted : $path");
 //        $re = $this->route('upload',$params);
+    }
+
+    public function delete_test(){
+
+        $_REQUEST = ['model'=>111, 'model_idx'=>222];
+        $_FILES['userfile']['size'] = 12345;
+        $_FILES['userfile']['type'] = 'image/jpeg';
+        $_FILES['userfile']['name'] = 'person.jpg';
+
+
+        $_FILES['userfile']['tmp_name'] = __ROOT_DIR__ . '/tmp/person.jpg';
+        $re = f()->save($_FILES['userfile']);
+        test(is_success($re), "delete_test::Upload $re"  .get_error_string($re));
+
+
+        f()->deleteBy(111,222);
+        //test if file exist
+        $file = f ( $re );
+        test( ! $file->exist(), "delete_test::file should not exist: $re");
+        $path = f()->path( $re );
+        test( ! file_exists( $path ), "delete_test::file path should not exist : $path");
+
+
+
+
+
     }
 
 }

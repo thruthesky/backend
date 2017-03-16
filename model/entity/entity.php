@@ -406,6 +406,8 @@ class Entity extends \model\taxonomy\Taxonomy  {
      *
      * @attention if there is any error on database query, error code will be return.
      *
+     * @warning after deleting an entity using this method all the information will be invalid. you cannot use $this->$idx after this method
+     *
      * @warning when you do something like below
      *
      *          $this->load( ... )->delete()

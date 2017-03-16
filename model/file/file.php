@@ -120,21 +120,32 @@ class File extends \model\entity\Entity
     }
 
     /**
+     * @note if parameter idx is empty then it will delete the file of the object
      *
      * @attention it overrides entity()->delete().
+     * @param null $idx - file.idx to delete
+     * @return number|void 
+     * @attentions it doesn't return anything so you will not know if the deletion is success or not
      */
     public function delete( $idx = null ) {
 
-        $this->reset($idx);
-        parent::delete();
-
-        // entity()->load($idx)->delete();
-
-        $file_path = $this->path( $idx );
+        if( $idx ) $this->reset($idx);
+                // entity()->load($idx)->delete();
+        $file_path = $this->path( $this->idx );
+        if(!file_exists($file_path)) return ERROR_UPLOAD_FILE_EXIST;
         @unlink( $file_path );
+        parent::delete();
         debug_log(">>> $file_path deleted");
     }
 
+    /**
+     * this method deletes the file base on model, model_idx and code
+     * @note it uses $this->delete();
+     * @param $model
+     * @param $model_idx
+     * @param null $code
+     *
+     */
     public function deleteBy( $model, $model_idx, $code=null ) {
         if ( $code ) $and_code = "AND code='$code'";
         else $and_code = null;
@@ -155,6 +166,7 @@ class File extends \model\entity\Entity
     private function getOldUnhookedList( $no = 100 ) {
         $time = time() - TIME_TO_DELETED_OLD_UNHOOKED_FILE;
         return db()->rows("SELECT idx FROM {$this->getTable()} WHERE finish = 'N' AND created < $time LIMIT $no");
+
     }
 
 }
