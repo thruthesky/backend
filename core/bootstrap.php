@@ -23,6 +23,7 @@ require __ROOT_DIR__ . '/etc/config.php';
 
 
 debug_log(">>>>>>>> Backend begins : " . date('r') );
+debug_log( $_REQUEST );
 
 
 /**

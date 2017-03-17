@@ -36,7 +36,7 @@ class File_Test extends \model\test\Test {
         $_FILES['userfile']['name'] = 'person.jpg';
 
         // error test
-        $re = f()->save($_FILES['userfile']);
+        $re = f()->save( $_REQUEST, $_FILES['userfile']);
         test( is_error($re) == ERROR_UPLOAD_ERROR_NOT_SET, 'upload error must be set. even on success. :'  .get_error_string($re));
 
         // set file upload error to 0 which means no error.
@@ -44,13 +44,13 @@ class File_Test extends \model\test\Test {
 
         // wrong source file.
         $_FILES['userfile']['tmp_name'] = __ROOT_DIR__ . '/tmp/person.jpg' . 'wrong';
-        $re = f()->save($_FILES['userfile']);
+        $re = f()->save( $_REQUEST, $_FILES['userfile']);
         test( is_error($re) == ERROR_UPLOAD_FILE_NOT_EXIST, 'file is not upload uploaded because of wrong file name:'  .get_error_string($re));
 
 
 
         $_FILES['userfile']['tmp_name'] = __ROOT_DIR__ . '/tmp/person.jpg';
-        $re = f()->save($_FILES['userfile']);
+        $re = f()->save( $_REQUEST, $_FILES['userfile']);
 
         test(is_success($re), 'Upload test'  .get_error_string($re));
 
@@ -75,7 +75,7 @@ class File_Test extends \model\test\Test {
 
 
         $_FILES['userfile']['tmp_name'] = __ROOT_DIR__ . '/tmp/person.jpg';
-        $re = f()->save($_FILES['userfile']);
+        $re = f()->save( $_REQUEST, $_FILES['userfile']);
         test(is_success($re), "delete_test::Upload  with model idx $re"  .get_error_string($re));
 
 
@@ -96,7 +96,7 @@ class File_Test extends \model\test\Test {
         $_FILES['userfile']['name'] = 'person.jpg';
 
         $_FILES['userfile']['tmp_name'] = __ROOT_DIR__ . '/tmp/person.jpg';
-        $re = f()->save($_FILES['userfile']);
+        $re = f()->save( $_REQUEST, $_FILES['userfile']);
         test( is_success( $re ), "delete_test::Upload with code $re"  .get_error_string($re));
         $path = f()->path( $re );
         test( file_exists( $path ), "delete_test::file path should exist : $path");

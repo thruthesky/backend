@@ -13,12 +13,20 @@ class File extends \model\entity\Entity
 
     /**
      *
+     *
+     *
+     * @param $fileinfo - holds all information about saving files like model, model_idx, code, etc.
      * @param $userfile
      * @return array|int|number
      */
-    public function save($userfile)
+    public function save( $fileinfo, $userfile )
     {
+        if ( isset($fileinfo['model']) ) $model = $fileinfo['model'];
+        else return ERROR_MODEL_IS_EMPTY;
+        if ( isset($fileinfo['model_idx']) ) $model_idx = $fileinfo['model_idx'];
+        else return ERROR_MODEL_IDX_IS_EMPTY;
 
+        $code = isset($fileinfo['code']) ? $fileinfo['code'] : null;
 
         if ( ! isset($userfile['error'])  ) return ERROR_UPLOAD_ERROR_NOT_SET;
         debug_log($userfile);
@@ -42,9 +50,9 @@ class File extends \model\entity\Entity
         $idx = $this->set('name',$userfile['name'])
             ->set('size', $userfile['size'])
             ->set('type',$userfile['type'])
-            ->set('model', in('model') )
-            ->set('model_idx', in('model_idx') )
-            ->set('code', in('code') )
+            ->set('model', $model )
+            ->set('model_idx', $model_idx )
+            ->set('code', $code )
             ->set('user_idx', currentUser()->idx )
             ->create();
 
