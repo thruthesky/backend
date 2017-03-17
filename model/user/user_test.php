@@ -428,5 +428,17 @@ class User_Test extends \model\test\Test {
         }
 
 
+/**
+        for( $i=0; $i < 22; $i++ ) {
+            $record = [];
+            $record[ 'id' ] = "list-searchuser$i";
+            $record[ 'password' ] = "list-pass$i";
+            $record[ 'name' ] = "list-name$i";
+            $record[ 'email'] = "list-email$i";
+            $record[ 'gender' ] = rand( 0, 1 ) ? 'M' : 'F';
+            $re = $this->route( "register", $record );
+        }
+**/
+
     }
 }
