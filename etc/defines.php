@@ -4,6 +4,7 @@ $em = [];
 define('OK', 0);                                        // success return. It is success and Okay.
 define('ERROR', FALSE);                                   // failure return. It was an error and Bad.
 
+define('BACKEND_PRIMARY_PHOTO', 'primary_photo');
 
 
 
@@ -116,9 +117,6 @@ define("ERROR_MODEL_IS_EMPTY", -4090);                     $em[ERROR_MODEL_IS_EM
 define("ERROR_MODEL_IDX_IS_EMPTY", -4090);                     $em[ERROR_MODEL_IDX_IS_EMPTY] = "model-is-empty";
 define("ERROR_CODE_IS_EMPTY", -4090);                     $em[ERROR_CODE_IS_EMPTY] = "model-is-empty";
 
-define("ERROR_MOVE_UPLOADED_FILE", -4220 );                 $em[ERROR_MOVE_UPLOADED_FILE] = "file-upload-error-move-uploaded-file";
-define("ERROR_USERFILE_EMPTY",-4222 );                      $em[ERROR_USERFILE_EMPTY] = "file-upload-error-userfile-is-empty";
-
 
 define('ERROR_FAKE_ERROR', -50999);                         $em[ERROR_FAKE_ERROR] = 'fake-error';
 
@@ -126,10 +124,19 @@ define('ERROR_FAKE_ERROR', -50999);                         $em[ERROR_FAKE_ERROR
 
 // file upload error
 
+define("ERROR_MOVE_UPLOADED_FILE", -4220 );                 $em[ERROR_MOVE_UPLOADED_FILE] = "file-upload-error-move-uploaded-file";
+define("ERROR_USERFILE_EMPTY",-4222 );                      $em[ERROR_USERFILE_EMPTY] = "file-upload-error-userfile-is-empty";
+
 define('ERROR_UPLOAD_FILE_NOT_EXIST', -43101);               $em[ERROR_UPLOAD_FILE_NOT_EXIST] = 'error-upload-file-not-exist';
 define('ERROR_UPLOAD_FILE_EXIST', -43102);               $em[ERROR_UPLOAD_FILE_EXIST] = 'error-upload-file-already-exist';
 define('ERROR_UPLOAD_ERROR_NOT_SET', -43103);               $em[ERROR_UPLOAD_ERROR_NOT_SET] = 'file-upload-error-must-be-set';
 define('ERROR_FILE_UPLOAD_CREATE_IDX_FAILED', -43104);      $em[ERROR_FILE_UPLOAD_CREATE_IDX_FAILED] = 'file-idx-create-failed';
+define('ERROR_FILE_NOT_EXIST', -43105);                     $em[ERROR_FILE_NOT_EXIST] = 'file-not-exist';
+
+
+define('ERROR_HOOK_FILE_IDX_IS_NOT_IN_ARRAY', -43106);      $em[ERROR_HOOK_FILE_IDX_IS_NOT_IN_ARRAY] = 'file-idx-must-be-in-array';
+define('ERROR_HOOK_FILE_IDX_IS_WRONG', -43108);             $em[ERROR_HOOK_FILE_IDX_IS_WRONG] = 'wrong-file-idx-maybe-empty-maybe-not-exist';
+define('ERROR_HOOK_NOT_YOUR_FILE', -43110);                 $em[ERROR_HOOK_NOT_YOUR_FILE] = 'uploaded-file-is-not-yours';
 
 define('ERROR_UPLOAD_ERR_INI_SIZE', -43201);
 define('ERROR_UPLOAD_ERR_FORM_SIZE', -43202);

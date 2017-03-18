@@ -170,6 +170,14 @@ function user( $what = null ) {
 /**
  * Returns currently logged in user Object.
  *
+ * @note
+ *
+ * 중요 : setCurrentUser() 를 한 다음에 currentUser() 를 하면,
+ * currentUser() 에서 $_REQUEST['session_id'] 값과 setCurrentUser() 에 기록된 User->session_id 를 비교해서
+ * 틀리면 다시 $_REQUEST['session_id'] 의 사용자가 리턴된다. 이것은 테스트를 할 때 빈번하게 사용된다
+ *
+ * setCurrentUser() 를 하면 아예 $_REQUEST['session_id'] 를 변경해 버린다.
+ *
  *
  * @warning if there is no $_REQUEST['session_id'], then the User object is empty.
  * @return \model\user\User
@@ -178,10 +186,14 @@ $_currentUser = null;
 function setCurrentUser( $user ) {
     global $_currentUser;
     $_currentUser = $user;
+    $_REQUEST['session_id'] = $_currentUser->session_id;
 }
 
 
 /**
+ *
+ *
+ *
  * @return \model\user\User
  */
 function currentUser()
@@ -189,7 +201,8 @@ function currentUser()
     global $_currentUser;
 
     // If not logged in or session id has changed. Session id changes when test.
-    if ( $_currentUser === null || $_currentUser->session_id != in('session_id') ) {
+    if ( $_currentUser === null || $_currentUser->session_id != in('session_id')) {
+        // debug_log("------------ d ?");
         if ( in('session_id') ) {                       // If session_id has passed,
             setCurrentUser( user( in('session_id') ) );     // set current user.
         }
@@ -200,6 +213,11 @@ function currentUser()
 
     return $_currentUser;
 }
+
+function anonymousUser() {
+    return user( ANONYMOUS_ID );
+}
+
 
 
 function entity() {

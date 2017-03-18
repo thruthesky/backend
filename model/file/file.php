@@ -14,6 +14,24 @@ class File extends \model\entity\Entity
     /**
      *
      *
+     * @important When you upload/save a file, you CAN save 'model', 'mode_idx', 'code' BUT these might be replaced on hooking.
+     *  Especially, the 'model_idx' will mostly be changed since you don't know what model_idx is if you don't create the entity.
+     *  You can think of 'model_idx' as entity idx since model idx is really mean entity idx and how will you know an entity idx when it is not actually created and exists
+     *  Of course, there is a way to know it. You create entity first and upload photo later. If you want, you can do it. may be there might some occasion to do it.
+     *  For instance, you want users to update their photos, you have entity idx already of the user. user.idx is entity idx. User can edit post and update/change photos. And the entity idx is the post.idx and you know it already.
+     *
+     *  So, inputting model, model_idx, code is not really mandatory and not important.
+     *
+     *  BUT, ONCE, you fill/input "model, model_idx, code", these values will NOT be changed while hooking with file::hookUpload().
+     *
+     *  IF you leave these variables EMPTY while uploading files, then these will be FILLED/changed according to the entity that you are going to create in file::hookUoload().
+     *      If the user is registering, then the model will be user, model_idx will be the user.idx, and code maybe set to 'primary-photo' depending on the registration interface.
+     *      Normally You leave these variables when you upload files before creating entity like registration, creating new post, new comment, etc.
+     *
+     *
+     * @note If the 'file.user_idx' is anonymous idx, then it will be changed to the currentUser()'s idx while hooking.
+     * @note If the 'file.model' is 'user', then 'file.model_idx' and 'file.user_idx' maybe the same since the model of the entity is owned by the same user whose user.idx is just the same as model_idx(but there might a change that model_idx and user_idx may differ)
+     *
      *
      * @param $fileinfo - holds all information about saving files like model, model_idx, code, etc.
      * @param $userfile
@@ -21,15 +39,22 @@ class File extends \model\entity\Entity
      */
     public function save( $fileinfo, $userfile )
     {
+        debug_log($fileinfo);
+
+        /////////////// Prepare variables
+
         if ( isset($fileinfo['model']) ) $model = $fileinfo['model'];
-        else return ERROR_MODEL_IS_EMPTY;
+        else $model = ''; // return ERROR_MODEL_IS_EMPTY;
+
         if ( isset($fileinfo['model_idx']) ) $model_idx = $fileinfo['model_idx'];
-        else return ERROR_MODEL_IDX_IS_EMPTY;
+        else $model_idx = 0;
 
         $code = isset($fileinfo['code']) ? $fileinfo['code'] : null;
 
         if ( ! isset($userfile['error'])  ) return ERROR_UPLOAD_ERROR_NOT_SET;
-        debug_log($userfile);
+        //debug_log($userfile);
+
+
         if ( $userfile['error'] === UPLOAD_ERR_OK && $userfile['size'] && $userfile['tmp_name'] ) {
             // uploading from web-browser to web-server was successfully done.
             // continue your work.
@@ -37,6 +62,16 @@ class File extends \model\entity\Entity
         else {
             return $this->errorResponse( $userfile['error'] );
         }
+
+        $unique = 'N';
+        if ( isset($fileinfo['unique']) ) $unique = $fileinfo['unique'];
+
+        $finish = 'N';
+        if ( isset($fileinfo['finish']) ) $finish = $fileinfo['finish'];
+
+        ///////////// End of Prepare Variables
+
+
 
 
         // delete old files that are not hooked.
@@ -47,6 +82,16 @@ class File extends \model\entity\Entity
         if ( ! file_exists( $src ) ) return ERROR_UPLOAD_FILE_NOT_EXIST;
 
 
+        /**
+         * If unique option is set, delete previously uploaded files.
+         */
+        if ( $unique == 'Y' ) {
+            $this->deleteBy( $model, $model_idx, $code );
+        }
+
+
+        //
+
         $idx = $this->set('name',$userfile['name'])
             ->set('size', $userfile['size'])
             ->set('type',$userfile['type'])
@@ -54,6 +99,7 @@ class File extends \model\entity\Entity
             ->set('model_idx', $model_idx )
             ->set('code', $code )
             ->set('user_idx', currentUser()->idx )
+            ->set('finish', $finish)
             ->create();
 
         if ( is_error($idx) ) return ERROR_FILE_UPLOAD_CREATE_IDX_FAILED;
@@ -61,7 +107,7 @@ class File extends \model\entity\Entity
 
 
         $dst = DIR_UPLOAD . "/$idx";
-        debug_log("move_uploaded_file($src, $dst)");
+        // debug_log("move_uploaded_file($src, $dst)");
 
         if ( file_exists( $dst ) ) return ERROR_UPLOAD_FILE_EXIST;
         if ( is_test() ) $re = @copy( $src, $dst );
@@ -133,7 +179,7 @@ class File extends \model\entity\Entity
      *
      * @attention it overrides entity()->delete().
      * @param null $idx - file.idx to delete
-     * @return number|void 
+     * @return number
      * @attentions it doesn't return anything so you will not know if the deletion is success or not
      */
     public function delete( $idx = null ) {
@@ -162,6 +208,7 @@ class File extends \model\entity\Entity
      *
      */
     public function deleteBy( $model, $model_idx, $code=null ) {
+        debug_log("file::deleteBy( $model, $model_idx, $code )");
         if ( $code ) $and_code = "AND code='$code'";
         else $and_code = null;
         $files = db()->rows("SELECT idx FROM {$this->getTable()} WHERE model='$model' AND model_idx=$model_idx $and_code");
@@ -189,5 +236,49 @@ class File extends \model\entity\Entity
         if( $code ) $and_code = "AND code = '$code'";
         else $and_code = NULL;
         return parent::count("model = '$model' AND model_idx = $model_idx $and_code");
+    }
+
+    /**
+     *
+     * @see \model\file\File::save()
+     *
+     * @param $model
+     * @param $model_idx
+     * @param $code
+     * @param $file_idxes
+     * @return int
+     */
+    public function hook($model, $model_idx, $code, $file_idxes)
+    {
+
+        //debug_log("File::hook( $model, $model_idx, $code )");
+        //debug_log( $file_idxes );
+
+
+        if ( empty( $file_idxes ) ) return OK;
+        if ( ! is_array( $file_idxes ) ) return ERROR_HOOK_FILE_IDX_IS_NOT_IN_ARRAY;
+        foreach ( $file_idxes as $idx ) {
+            if ( empty($idx) || ! is_numeric($idx) ) return ERROR_HOOK_FILE_IDX_IS_WRONG;
+            $this->load( $idx );
+            //$this->debug_log();
+            if ( ! $this->user_idx || $this->user_idx == currentUser()->idx || $this->user_idx == anonymousUser()->idx ) {
+                //currentUser()->debug_log();
+
+                $up = [ 'finish' => 'Y' ];
+                if ( ! $this->model ) $up['model'] = $model;
+                if ( ! $this->model_idx ) $up['model_idx'] = $model_idx;
+                if ( ! $this->code ) $up['code'] = $code;
+                if ( $this->user_idx != currentUser()->idx ) $up['user_idx'] = currentUser()->idx;
+                if ( $up ) $this->update( $up );
+            }
+            else {
+                return ERROR_HOOK_NOT_YOUR_FILE;
+            }
+        }
+        return OK;
+    }
+
+    public function increaseNoOfDownload() {
+        return $this->update( ['no_of_download' => $this->no_of_download + 1] );
     }
 }

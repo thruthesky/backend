@@ -11,7 +11,7 @@ add_route('register', [
             'mobile', 'address', 'country', 'province', 'city', 'zipcode',
             'meta'
         ],
-        'system' => [ 'route' ]
+        'system' => [ 'route', 'file_hooks' ]
     ]
 ]);
 

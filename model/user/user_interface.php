@@ -7,16 +7,36 @@ class User_Interface extends User {
 
     public function register() {
         $record =  route()->get_route_variables();
-        $re = user()->create( $record );
+        $re = user()->create( $record ); // session id.
+
+
         if ( is_success($re ) ) {
 
+
+
             $user = user( $re );
+            $this->reset( $user );
+            //debug_log('this');
+            //$user->debug_log();
+
+            setCurrentUser( $user );
+            //debug_log('current');
+            //global $_currentUser;
+            //debug_log($_currentUser->getRecord());
+
+            //debug_log(currentUser()->getRecord());
+
+
+
+
+            $re_upload = $this->hookUpload( $this, BACKEND_PRIMARY_PHOTO ); if ( is_error( $re_upload ) ) return error( $re_upload );
+
 
             $res = [
                 'session_id' => $re,
-                'id' => $user->id,
-                'name' => $user->name,
-                'email' => $user->email
+                'id' => $this->id,
+                'name' => $this->name,
+                'email' => $this->email
             ];
             // debug_log("res");
             // debug_log($res);
@@ -60,6 +80,7 @@ class User_Interface extends User {
          * For admin, return data is admin's data after changing user's information.
          */
         if ( is_success( $re ) ) {
+            $re_upload = $this->hookUpload( $user, BACKEND_PRIMARY_PHOTO ); if ( is_error( $re_upload ) ) return error( $re_upload );
             success( [
                 'session_id' => $this->getSessionId(),
                 'id' => $this->id,

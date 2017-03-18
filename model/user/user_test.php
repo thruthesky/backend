@@ -9,6 +9,7 @@ class User_Test extends \model\test\Test {
 
         $this->cache();
         $this->anonymous();
+        $this->loadTest();
         $this->create();
         $this->register();
         $this->edit();
@@ -50,6 +51,21 @@ class User_Test extends \model\test\Test {
         test( $an->id == ANONYMOUS_ID, "Before Login: User is anonymous.");
         $a = user( ANONYMOUS_ID );
         test( $a->id == ANONYMOUS_ID, "After loading anonymous user: Anonymous ID Exists");
+    }
+
+    public function loadTest() {
+        $user = user( ADMIN_ID );
+        test( $user->id == ADMIN_ID, "User load: admin");
+
+        $user->reset( user( ANONYMOUS_ID ) );
+        test( $user->id == ANONYMOUS_ID, "User load: anonymous");
+
+        $user->reset( user( ADMIN_ID )->getRecord() );
+        test( $user->id == ADMIN_ID, "User load: admin by record");
+
+        $user->reset( user( ANONYMOUS_ID )->idx );
+        test( $user->id == ANONYMOUS_ID, "User load: anonymous by idx");
+
     }
 
     public function create() {

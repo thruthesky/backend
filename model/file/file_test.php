@@ -12,15 +12,20 @@ class File_Test extends \model\test\Test {
         $this->input();
         $this->save_test();
         $this->delete_test();
+        $this->hook();
+        $this->optimization();
+
+
+        $this->unique();
     }
 
     public function input(){
         $re = $this->route('upload');
         test(is_error($re) == ERROR_REQUIRED_INPUT_IS_MISSING, 'Model is empty test'  .get_error_string($re));
 
-        $params = ['model'=>111];
-        $re = $this->route('upload',$params);
-        test(is_error($re) == ERROR_REQUIRED_INPUT_IS_MISSING, 'Model_idx is empty test'  .get_error_string($re));
+        //$params = ['model'=>111];
+        //$re = $this->route('upload',$params);
+        //test(is_error($re) == ERROR_REQUIRED_INPUT_IS_MISSING, 'Model_idx is empty test'  .get_error_string($re));
 
         //has model and para
         $params = ['model'=>111, 'model_idx'=>222];
@@ -116,4 +121,41 @@ class File_Test extends \model\test\Test {
         test( $re == 0, 'all model 333 and model_idx 444 should be deleted ' );
     }
 
+
+    public function unique() {
+        $file_idx = $this->createFile('test', 1, 'code1');
+        $file_idx = $this->createFile('test', 1, 'code1');
+        $re = f()->count( 'test', 1, 'code1');
+        test( $re == 2, "two file created.");
+
+        $file_idx = $this->createFile('test', 1, 'code1', 'Y' );
+        $re = f()->count( 'test', 1, 'code1');
+        test( $re == 1, "two file deleted and 1 file left since it is created as unique.");
+
+
+
+        f()->deleteBy( 'test', 1, 'code1' );
+    }
+
+    public function hook() {
+
+        $file_idx = $this->createFile( 'user', 3, BACKEND_PRIMARY_PHOTO);
+
+
+        $re = $this->createUser([
+            'id' => 'hook-' . date('his'),
+            'password' => 'pass',
+            'file_hooks' => [ $file_idx ]
+        ]);
+
+        $user = user( $re );
+
+        $file = new \model\file\File();
+        $file->load( $file_idx );
+
+        test( $file->user_idx == $user->idx, "File hook test: ");
+    }
+    public function optimization() {
+
+    }
 }

@@ -322,11 +322,27 @@ class User extends \model\entity\Entity {
         unset( $record['password'], $record['session_id'] );
         $record['meta'] = meta()->get( $this->getTable(), $record['idx']);
 
+
+
+
         $record = $this->getAvailableData( $record );
+
+        $record['primary_photo_idx'] = $this->getPrimaryPhotoIdx();
 
         return $record;
     }
 
+    public function getPrimaryPhotoIdx() {
+        debug_log("user::getPrimaryPhotoIdx()");
+        $photo = $this->primaryPhoto();
+        $photo->debug_log();
+        if ( $photo->exist() ) return $photo->idx;
+        return 0;
+    }
+
+    public function primaryPhoto() {
+        return ( new \model\file\File() )->loadQuery("user_idx={$this->idx} AND code='". BACKEND_PRIMARY_PHOTO ."'");
+    }
 
     /**
      *

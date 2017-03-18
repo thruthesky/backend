@@ -99,19 +99,23 @@ To reduce the money, SMS shouldn't send more than 1 or 2 times a day to a user.
 @done if fail to upload, delete it from db.
 @done delete old files that were not successfully hooked.
         
-@todo delete model + model_idx, idx, model + model_idx + code
-        
-        // @todo hook
+@donw delete model + model_idx, idx, model + model_idx + code
+
+@done hook
         // @todo download with filename. ?route=download&size=100x200&quality=100&resize=crop&name=/abcdef.jpg
-        // @todo when you get posts, give option of photo size, and other options.
+        // @todo when you get posts, give option of photo si
+        ze, and
+         other options.
         // @todo count download
         // @todo check/select primary photo among others
         // @todo admin management.
         	show how many unhooked, show many old unhooked.
         	show satistics.
         	
+        // @todo add user primary photo idx. so, the. user can see/edit his photo.
+        @todo view, edit, delete.
 
-
+@todo upload file with angular http formdata without file transfer of cordova.
 
 * `file` table will holds the uploaded file information.
 * `file.finish` will be 0 until the file is really related to its object(parent).
@@ -496,4 +500,67 @@ none.
 
 
 
+## File Upload
 
+
+When you successfully uploaded a photo, you will get a file.idx and you can do whatever you want with the file.idx.
+
+
+#### Request
+
+route : `?route=upload`
+
+params :
+
+* optional`session_id` - User session id.
+* optional `model` - if unset, backend may set.
+* optional `model_idx` - if unset, backend may set.
+* optional `code` - if unset, backend may set.
+* optional `uniqie` - if it is set to 'Y', then all previously uploaded file with same `model`, 'model_idx`, `code` will be deleted.
+* optional `finish` - if it is set to 'Y', then backend will mark the uploaded file as finished, meaning the fill will not be deleted by grabage trashing.
+
+
+When `unique` is set to 'Y' on request, backend will delete previously uploaded files.
+**Fitfall with `unique` option** is that, if a user don't submit the form( for instance, if the user stops edit profile and do not submit the edit form ) after primary photo upload with `unique` set to 'Y', then even though the user did not submit the profile edit form, all the primary photo has been deleted already due to `unique` of 'Y'. To avoid this, it is better to handle `unique` option on server side(backend) or send `finish` optional param with 'Y' value together with `unique` so, backend will delete old files and upload new file and mark it as `finish`ed.
+
+
+#### Response
+
+file idx
+
+
+### Common pitfalls
+
+#### File uploading
+
+There are many file size restriction conditions on server side and you must pass/update them all to upload a big size file.
+
+* in php.ini
+	* post\_max\_size
+	* upload\_max\_filesize
+	* max\_file\_uploads - for uploading multiple files.
+* in nginx configuration
+	* client\_max\_body\_size
+
+You may need to change other configurations depending on your server environment.
+
+
+
+
+
+### Hook
+
+To hook image(s) you uploaded to an entity, you just send the file idx(es) in `file_hooks` array of http variables to the server. And the serve will attach those files(images) to the entity.
+
+
+
+
+
+### Optimazation
+
+There are many image libraries and we could even develop one by by ourselves. But we chose [php-image-resize](https://github.com/eventviva/php-image-resize). This is very simple and clear library to use.
+
+Refer [examples of its github repository](https://github.com/eventviva/php-image-resize/blob/master/test/Test.php).
+
+Refer [API explanation page](https://eventviva.github.io/php-image-resize/class-Eventviva.ImageResize.html)
+ 

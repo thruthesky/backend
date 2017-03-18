@@ -17,7 +17,7 @@ class Test {
 
     public function __destruct()
     {
-        $this->test_reload( 15 );
+        $this->test_reload( 4 );
         $this->test_end();
     }
 
@@ -275,9 +275,15 @@ EOH;
 
         user( $record['id'] )->delete();
         $re = $this->route( "register", $record );
+
+        if ( is_error($re) ) {
+            test(is_success($re), "Create a user failed: $record[id]"  .get_error_string($re));
+        }
         return is_success($re) ? $re['data']['session_id'] : null;
 
     }
+
+
     public function deleteUser( $session_id ) {
 
         // resign
@@ -286,6 +292,21 @@ EOH;
 
     }
 
+    public function createFile( $model, $model_idx, $code = null, $unique="N" ) {
+
+        $_REQUEST = ['model'=> $model, 'model_idx'=> $model_idx, 'code' => $code, 'unique' => $unique ];
+        $_FILES['userfile']['size'] = 12345;
+        $_FILES['userfile']['type'] = 'image/jpeg';
+        $_FILES['userfile']['name'] = 'person.jpg';
+        $_FILES['userfile']['tmp_name'] = __ROOT_DIR__ . '/tmp/person.jpg';
+        $_FILES['userfile']['error'] = 0;
+        $re = f()->save( $_REQUEST, $_FILES['userfile']);
+        if ( is_error($re) ) {
+            test(is_success($re), "Create/upload failed: $re"  .get_error_string($re));
+        }
+        return $re;
+
+    }
 
 
     public function createPostConfig( $post_config_id ) {

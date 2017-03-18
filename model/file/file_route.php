@@ -4,11 +4,24 @@ add_route('upload',[
     'path'=> '\\model\\file\\file_interface',
     'method'=> 'upload',
     'variables'=>[
-        'required'=>['model','model_idx'],
-        'optional'=>['code'],
-        'system'=>['session_id']
+        'required'=>[],
+        'optional'=>[ 'model', 'model_idx', 'code', 'finish' ],
+        'system'=>['session_id', 'unique']
     ]
 ]);
+
+
+
+add_route('download',[
+    'path'=> '\\model\\file\\file_interface',
+    'method'=> 'download',
+    'variables'=>[
+        'required'=>[ 'idx' ],
+        'optional'=>[ 'width', 'height', 'quality', 'resize' ],
+        'system'=>[ ]
+    ]
+]);
+
 
 add_route('upload_test', [
     'path'=> '\\model\\file\\file_test',

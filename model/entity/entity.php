@@ -22,6 +22,8 @@ namespace model\entity;
  *
  *
  */
+use model\user\User;
+
 $_cache_entity_record = [];
 $_cache_entity_record_count = [];
 
@@ -291,6 +293,9 @@ class Entity extends \model\taxonomy\Taxonomy  {
      *
      * @code
      *      $this->reset( [ 'a'=>'b' ] );
+     *      $this->reset( user( 123 ) );
+     *      this->reset( user( $session_id ) );
+
      * @endcode
      *
      *
@@ -299,6 +304,7 @@ class Entity extends \model\taxonomy\Taxonomy  {
         $this->record = [];
         if ( is_numeric($idx) ) $this->load( $idx );
         else if ( is_array( $idx ) ) $this->record = $idx;
+        else if ( $idx instanceof User ) $this->record = $idx->getRecord();
 
         return $this;
     }
@@ -311,7 +317,7 @@ class Entity extends \model\taxonomy\Taxonomy  {
      *
      * @param $what
      */
-    public function increaseResetCount( $what ) {
+    private function increaseResetCount( $what ) {
         global $_cache_entity_record_count;
         $table = $this->getTable();
         if ( isset($_cache_entity_record_count[ $table ]) && isset($_cache_entity_record_count[ $table ][ $what ]) ) {
@@ -459,7 +465,17 @@ class Entity extends \model\taxonomy\Taxonomy  {
     }
 
 
+    /**
+     * @param $entity - this is the entity to hook the (uploaded) files with. it can be user, post, etc.
+     * @param null $code - optional, code.
+     *
+     * @attention - a file can be hooked(attached) to an entiy IF the file is belongs to the entity or IF the owner of the file is anonymous.
+     * @return int
+     */
+    public function hookUpload( Entity $entity, $code = null ) {
+        return ( new \model\file\File() )->hook( $entity->getTable(), $entity->idx, $code, in('file_hooks') );
 
+    }
 
 
 
