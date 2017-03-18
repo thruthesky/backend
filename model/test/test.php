@@ -17,7 +17,7 @@ class Test {
 
     public function __destruct()
     {
-        $this->test_reload( 4 );
+        $this->test_reload( 14 );
         $this->test_end();
     }
 

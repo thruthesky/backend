@@ -1,4 +1,5 @@
-# Backend-0.2
+# Backend-0.4.0
+
 Backend server for Restful APIs
 
 
@@ -46,12 +47,9 @@ config('abc')->timeLastComment();
 config('abc')->timeFirstComment();
 ````
 
-## Trash Can
+## Privacy
 
-When a forum or post is deleted, the data goes into `trash can` table.
-When a user is deleted, the information goes into `trash can` table.
-
-
+* is it okay to let api search by id and email? phone numbers? isn't it breaking privacy policy?
 
 
 ## User Level

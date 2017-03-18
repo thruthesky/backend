@@ -20,8 +20,8 @@ class File_Test extends \model\test\Test {
     }
 
     public function input(){
-        $re = $this->route('upload');
-        test(is_error($re) == ERROR_REQUIRED_INPUT_IS_MISSING, 'Model is empty test'  .get_error_string($re));
+//        $re = $this->route('upload');
+//        test(is_error($re) == ERROR_REQUIRED_INPUT_IS_MISSING, 'Model is empty test'  .get_error_string($re));
 
         //$params = ['model'=>111];
         //$re = $this->route('upload',$params);
@@ -128,11 +128,9 @@ class File_Test extends \model\test\Test {
         $re = f()->count( 'test', 1, 'code1');
         test( $re == 2, "two file created.");
 
-        $file_idx = $this->createFile('test', 1, 'code1', 'Y' );
+        $file_idx = $this->createFile( 'test', 1, 'code1', 'Y' );
         $re = f()->count( 'test', 1, 'code1');
         test( $re == 1, "two file deleted and 1 file left since it is created as unique.");
-
-
 
         f()->deleteBy( 'test', 1, 'code1' );
     }

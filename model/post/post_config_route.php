@@ -48,3 +48,13 @@ add_route('post_config.data', [
     ]
 ]);
 
+
+add_route( 'post_config.list', [
+    'path' => "\\model\\post\\post_config_interface",
+    "method" => "search",
+    'variables' => [
+        'required' => [],
+        'optional' => [ 'from', 'limit', 'where', 'bind', 'order' ],
+        'system' => [ 'session_id' ]
+    ]
+]);

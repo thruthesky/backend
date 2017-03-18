@@ -79,13 +79,27 @@ class Post_Data extends Post {
      * @return array
      *
      */
-    public function pres( $records ) {
+    public function pres( & $records ) {
         $new_records = [];
         if ( empty( $records ) ) return $new_records;
         foreach( $records as $record ) {
             $new_records[] = post()->reset( $record )->pre();
         }
         return $new_records;
+    }
+
+    public function getConfigs( & $records ) {
+        if ( empty( $records ) ) return [];
+
+        $configs = [];
+        foreach( $records as $post ) {
+            if ( isset($post['post_config_idx']) ) {
+                $config = config( $post['post_config_idx'] );
+                if ( $config->exist() ) $configs[ $config->id ] = $config->getRecord();
+            }
+        }
+        return $configs;
+
     }
 
 

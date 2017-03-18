@@ -48,7 +48,7 @@ add_route( 'post.data', [
     ]
 ]);
 
-add_route( 'post.list', [
+add_route( 'post_data.list', [
     'path' => "\\model\\post\\post_data_interface",
     "method" => "search",
     'variables' => [
@@ -56,4 +56,10 @@ add_route( 'post.list', [
         'optional' => [ 'from', 'limit', 'where', 'bind', 'order' ],
         'system' => [ 'session_id' ]
     ]
+]);
+
+
+add_route( 'post.test', [
+    'path' => "\\model\\post\\post_data_test",
+    'method' => 'run'
 ]);

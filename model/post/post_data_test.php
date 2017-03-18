@@ -240,7 +240,7 @@ class Post_Data_Test extends Test {
 
         //
         $re = $this->route( 'post.list', [
-            'from' => 1,
+            'from' => 0,
             'limit' => 2,
             'where' => "user_idx = ? AND title LIKE ?",
             'bind' => "$user_idx,hello%",
@@ -248,12 +248,28 @@ class Post_Data_Test extends Test {
         ]);
 
         test( is_success($re), "post search title like hello% " . get_error_string($re));
-        test( count($re['data']['posts']) == 2, "2user searched");
+        test( count($re['data']['posts']) == 2, "2 posts searched");
 
 //        di($re['data']['posts'][0]);
         test( $re['data']['posts'][0]['user_idx'] == user( $session_id )->idx, 'search: user_idx');
 
 
+
+        $this->createPostConfig( 'test6' );
+        $re = $this->route( 'post.create', [ 'session_id' => $session_id, 'post_config_id'=>'test6', 'title' => 'hello world you. '] );
+
+
+
+        $re = $this->route( 'post.list', [
+            'from' => 0,
+            'limit' => 20,
+            'where' => "user_idx = ? AND title LIKE ?",
+            'bind' => "$user_idx,hello%",
+            'order' => 'idx DESC'
+        ]);
+
+        test( count($re['data']['configs']) == 2, "Two configs" );
+        test( $re['data']['configs']['test6']['id'] == 'test6' && $re['data']['configs']['test5']['id'] == 'test5', "Two config name: test5, test6" );
 
 
     }

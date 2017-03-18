@@ -84,4 +84,30 @@ class Post_Config_Interface extends Post_Config {
     }
 
 
+
+    /**
+     * @param null $_
+     * @return mixed
+     */
+    public function search( $_=null ) {
+
+        $option = [
+            'from' => in('from'),
+            'limit' => in('limit'),
+            'where' => in('where'),
+            'bind' => in('bind'),
+            'order' => in('order')
+        ];
+        $post_configs = parent::search( $option );
+        if ( is_error( $post_configs ) ) return error( $post_configs );
+        success( [
+            'total' => parent::countSearch( $option ),
+            'configs' => $post_configs
+        ] );
+
+    }
+
+
+
+
 }

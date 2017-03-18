@@ -123,6 +123,7 @@ class Post_Data_Interface extends Post_Data {
         if ( is_error( $posts ) ) return error( $posts );
         success( [
             'total' => parent::countSearch( $option ),
+            'configs' => post()->getConfigs( $posts ),
             'posts' => post()->pres( $posts )
         ] );
 
