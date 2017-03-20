@@ -6,7 +6,7 @@ $_optional = [
     'country', 'province', 'city', 'address'
 ];
 
-add_route( 'post.create', [
+add_route( 'post_data.create', [
     'path' => "\\model\\post\\post_data_interface",
     "method" => "create",
     "variables" => [
@@ -16,7 +16,7 @@ add_route( 'post.create', [
     ]
 ]);
 
-add_route( 'post.edit', [
+add_route( 'post_data.edit', [
     'path' => "\\model\\post\\post_data_interface",
     "method" => "edit",
     "variables" => [
@@ -27,7 +27,7 @@ add_route( 'post.edit', [
 ]);
 
 
-add_route( 'post.delete', [
+add_route( 'post_data.delete', [
     'path' => "\\model\\post\\post_data_interface",
     "method" => "delete",
     "variables" => [
@@ -38,7 +38,7 @@ add_route( 'post.delete', [
 ]);
 
 
-add_route( 'post.data', [
+add_route( 'post_data.data', [
     'path' => "\\model\\post\\post_data_interface",
     "method" => "data",
     "variables" => [
