@@ -130,7 +130,7 @@ define("ERROR_USERFILE_EMPTY",-4222 );                      $em[ERROR_USERFILE_E
 define('ERROR_UPLOAD_FILE_NOT_EXIST', -43101);               $em[ERROR_UPLOAD_FILE_NOT_EXIST] = 'error-upload-file-not-exist';
 define('ERROR_UPLOAD_FILE_EXIST', -43102);               $em[ERROR_UPLOAD_FILE_EXIST] = 'error-upload-file-already-exist';
 define('ERROR_UPLOAD_ERROR_NOT_SET', -43103);               $em[ERROR_UPLOAD_ERROR_NOT_SET] = 'file-upload-error-must-be-set';
-define('ERROR_FILE_UPLOAD_CREATE_IDX_FAILED', -43104);      $em[ERROR_FILE_UPLOAD_CREATE_IDX_FAILED] = 'file-idx-create-failed';
+define('ERROR_FILE_UPLOAD_CREATE_IDX_FAILED', -43104);      $em[ERROR_FILE_UPLOAD_CREATE_IDX_FAILED] = 'file-upload-create-file-record-failed';
 define('ERROR_FILE_NOT_EXIST', -43105);                     $em[ERROR_FILE_NOT_EXIST] = 'file-not-exist';
 
 

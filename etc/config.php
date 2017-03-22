@@ -22,7 +22,7 @@ $DIR_DATA               = __ROOT_DIR__ . '/data';
 $DIR_FILE               = __ROOT_DIR__ . '/data/file';
 
 $DATABASE_USER          = 'root';
-$DATABASE_PASSWORD      = '7777';
+$DATABASE_PASSWORD      = '';
 $DATABASE_NAME          = 'backend';
 $DATABASE_PREFIX        = "be_";
 $DATABASE_HOST          = 'localhost';

@@ -92,7 +92,9 @@ class File extends \model\entity\Entity
 
         //
 
-        $idx = $this->set('name',$userfile['name'])
+        
+        $idx = $this->reset( [] )
+            ->set('name',$userfile['name'])
             ->set('size', $userfile['size'])
             ->set('type',$userfile['type'])
             ->set('model', $model )
