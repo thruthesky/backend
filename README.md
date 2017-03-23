@@ -10,7 +10,13 @@ Backend server for Restful APIs
 
 # TODO
 
-## transaction
+## reject request of register when `session_id` is provided.
+
+## Bug Check
+
+* file upload does not response right error message. for instance, too big file upload should response 'max-file-upload-size-limit-excedded' or sonmething but the error responseded is like 'cannot create idx'
+
+## Transaction
 * prove pdo transaction is working with race condition.
 
 
@@ -29,6 +35,8 @@ Backend server for Restful APIs
 
 * A post can be linked to other forum or other place.
 	* post.linked_with field may be a way.
+	    * but this will be a trouble on search.
+	* copy may be one way.
 
 * A forum can be subcategory of others.
 	* category taxonomy may be needed.
@@ -70,11 +78,13 @@ config('abc')->timeFirstComment();
 
 to complete a portal.
 
+## PUSH Notification.
+
+use external lib
 
 ## SMS service
 
 To reduce the money, SMS shouldn't send more than 1 or 2 times a day to a user.
-
 
 
 ## Sample Site
@@ -89,31 +99,56 @@ To reduce the money, SMS shouldn't send more than 1 or 2 times a day to a user.
 * Once installed, it shouldn't be re-installed unless the user manually removes the database.
 
 
+## Multi installation - next version
 
-## File upload with cosutomizalbe downloda
+- do it on next version.
+
+* for backend server hosting
+* do it based on sub-domain.
 
 
-@done use file index to get file name.
-@done if fail to upload, delete it from db.
-@done delete old files that were not successfully hooked.
+
+
+
+## File upload with customizalbe download
+
+
+@ done use file index to get file name.
+@ done if fail to upload, delete it from db.
+@ done delete old files that were not successfully hooked.
         
-@donw delete model + model_idx, idx, model + model_idx + code
+@done delete model + model_idx, idx, model + model_idx + code
 
 @done hook
-        // @todo download with filename. ?route=download&size=100x200&quality=100&resize=crop&name=/abcdef.jpg
-        // @todo when you get posts, give option of photo si
-        ze, and
-         other options.
-        // @todo count download
-        // @todo check/select primary photo among others
-        // @todo admin management.
-        	show how many unhooked, show many old unhooked.
-        	show satistics.
-        	
-        // @todo add user primary photo idx. so, the. user can see/edit his photo.
-        @todo view, edit, delete.
 
-@todo upload file with angular http formdata without file transfer of cordova.
+ 	
+- file delete.
+
+- download with filename.
+
+    ?route=download&idx=1234&size=100x200&quality=100&resize=crop&name=/abcdef.jpg
+
+**for jpeg**
+````
+?route=download&type=jpeg&width=80&hegiht=120&quality=100&resize=crop
+````
+
+**for png**
+````
+?route=download&type=png&width=100&height=120&resize=center
+````
+
+- when you get posts, give option of photo size, and other photo options.
+
+@done count download
+
+- check/select primary photo among others in forum post.
+
+- admin file management.
+    show how many unhooked, show many old unhooked.
+    show satistics.
+       
+- upload file with angular http formdata without file transfer of cordova.
 
 * `file` table will holds the uploaded file information.
 * `file.finish` will be 0 until the file is really related to its object(parent).
@@ -125,16 +160,6 @@ To reduce the money, SMS shouldn't send more than 1 or 2 times a day to a user.
 * Create thumbnail(optimized image) only on first download or with an option.
 * You can choose image type, width, height, quality, resize type.
 	* This will help on image optimization.
-
-**for jpeg**
-````
-?route=download&type=jpeg&width=80&hegiht=120&quality=100&resize=crop
-````
-
-**for png**
-````
-?route=download&type=png&width=100&height=120&resize=center
-````
 
 ## delete old files that were not successfully finished
 
@@ -299,9 +324,8 @@ The `variables` states what variables the interface accepts.
 * `optional` variables are optional.
 * `system` variables are the variables that are used by the system and interface. `system` variables are not related in content like user information, forum data and any kind of data on database. 
 * `required` and `optional` variables are related in content( data, database data). Any data like user information, forum posts, logs that shuold be saved in the database must be in one of `required` or `optional` variables.
-* The input variable `route` can be omitted since all access needs a route.
-
-
+* The HTTP input variable `route` and `session_id` can be omitted since all access needs a route and most of route needs `session_id`. There is no need to put `session_id` in required variables since it is needed in most route and it is less harmful even it is provided when you don't needed it for one route.
+If you really don't want it for a route, reject it in the interface.
 
 
 

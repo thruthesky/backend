@@ -118,10 +118,11 @@ class Route {
         /**
          *
          *
-         * 'route' variable is accepted by default since all access needs a route.
+         * 'route', 'session_id' variable is accepted by default since all access needs a route.
          *
          */
-        if ( ! in_array( 'route', $system ) ) $system[] = 'route';
+        if ( ! array_key_exists( 'route', $system ) ) $system[] = 'route';
+        if ( ! array_key_exists( 'session_id', $system ) ) $system[] = 'session_id';
 
         return $system;
     }
