@@ -156,7 +156,7 @@ class Route {
      * @return array|bool
      *
      */
-    public function check_http_variables_existency() {
+    public function check_route_variables_existency() {
 
         if ( $required = $this->get_keys_of_required_variables()) {
             foreach ( $required as $v ) {
@@ -183,15 +183,18 @@ class Route {
 
 
     /**
-     * HTTP Variable validation
+     * Basic HTTP Variable validation
      *
      * @return array|int
      *
      */
-    public function validate_http_variables() {
+    public function validate_route_variables() {
 
-        $number_if_contain = [ 'idx' ];
-        $string = [ 'route', 'session', 'id' ]; // cannot be empty if passed.
+        // number only.
+        $number_if_contain = [ 'idx', 'birth_year', 'birth_month', 'birth_day' ];
+
+        // string only. cannot be numeric, no empty, no array.
+        $string = [ 'route', 'session', 'id', 'password', 'name', 'email', 'nickname', 'gender', 'address', 'country', 'province', 'city' ];
 
         // title, content, data can be a numeric, string, empty, boolean.
 
@@ -298,10 +301,10 @@ class Route {
 
                     // check http variables for security.
 
-                    if ( $re = $this->check_http_variables_existency() ) return error( $re['code'], $re['message'] );
+                    if ( $re = $this->check_route_variables_existency() ) return error( $re['code'], $re['message'] );
 
                     // check http variables type for security
-                    if ( $re = $this->validate_http_variables() ) return error( $re['code'], $re['message'] );
+                    if ( $re = $this->validate_route_variables() ) return error( $re['code'], $re['message'] );
 
                     $method = $route['method'];
                     $obj->$method();

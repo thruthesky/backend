@@ -15,9 +15,18 @@ class User extends \model\entity\Entity {
     }
 
 
+    /**
+     *
+     * @Warnung Anonymous user is not considered as logged in.
+     *
+     * @return bool|number
+     */
     public function logged() {
-        return $this->exist();
+        if ( ! $this->exist() ) return FALSE;
+        if ( $this->id == ANONYMOUS_ID ) return FALSE;
+        return TRUE;
     }
+
     /**
      *
      * Return unique session id for each user after reset it.

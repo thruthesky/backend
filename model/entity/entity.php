@@ -90,8 +90,10 @@ class Entity extends \model\taxonomy\Taxonomy  {
 
     /**
      *
+     *
      * To check if the record is set or not set.
      *
+     * @warning this return FALSE if the user didn't logged in. or if the user is anonymous.
      * @warning
      *
      *      You cannot do something like below to check entity exist.

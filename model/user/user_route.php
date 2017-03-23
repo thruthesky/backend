@@ -12,7 +12,11 @@ add_route('register', [
             'meta'
         ],
         'system' => [ 'route', 'file_hooks' ]
-    ]
+    ],
+    'validator' => function() {
+        if ( currentUser()->logged() ) return ERROR_USER_EXIST;
+        return OK;
+    }
 ]);
 
 

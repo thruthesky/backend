@@ -71,10 +71,11 @@ define('ERROR_IDX_EMPTY', -40123);                      $em[ERROR_IDX_EMPTY] = '
 define('ERROR_ID_IS_TOO_LONG', -40124);                 $em[ERROR_ID_IS_TOO_LONG] = 'id-is-too-long';
 define('ERROR_MOBILE_NOT_NUMERIC', -40125);             $em[ERROR_MOBILE_NOT_NUMERIC] = 'mobile-not-numeric';
 define('ERROR_CANNOT_CHANGE_PASSWORD_IN_UPDATE', -40126);       $em[ERROR_CANNOT_CHANGE_PASSWORD_IN_UPDATE] = 'password-cannot-change-here';
-define('ERROR_PASSWORD_TOO_LONG', -40127);                      $em[ERROR_PASSWORD_TOO_LONG] = 'password-too-log';
+define('ERROR_PASSWORD_TOO_LONG', -40127);                      $em[ERROR_PASSWORD_TOO_LONG] = 'password-too-long';
 define('ERROR_MOBILE_TOO_LONG', -40128);                        $em[ERROR_MOBILE_TOO_LONG] = 'mobile-is-too-long';
 define('ERROR_USER_IDX_NOT_MATCHED' , -40129);                  $em[ERROR_USER_IDX_NOT_MATCHED] = 'idx-user-not-matched';
 define('ERROR_USER_NOT_LOGIN', -4010001);                       $em[ERROR_USER_NOT_LOGIN] = 'user-not-login';
+define('ERROR_USER_LOGGED_IN', -4010002);               $em[ERROR_USER_LOGGED_IN] = 'user-already-logged-in';
 define('ERROR_MALFORMED_SESSION_ID', -400130);          $em[ERROR_MALFORMED_SESSION_ID] = 'session-id-is-malformed';
 define('ERROR_MALFORMED_ID', -400131);          $em[ERROR_MALFORMED_ID] = 'id-is-malformed';
 

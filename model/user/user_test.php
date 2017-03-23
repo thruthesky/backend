@@ -48,7 +48,7 @@ class User_Test extends \model\test\Test {
 
         $an = currentUser();
         test( $an->exist(), "Anonymous user exists.");
-        test( $an->logged(), "User : {$an->id}, Anonymous is a user who did not logged in with his password but treated as logged in.");
+        test( ! $an->logged(), "User : {$an->id}, Anonymous is a user who did not logged in with his password. So, he is NOT treated as logged in.");
         test( $an->id == ANONYMOUS_ID, "Before Login: User is anonymous.");
         $a = user( ANONYMOUS_ID );
         test( $a->id == ANONYMOUS_ID, "After loading anonymous user: Anonymous ID Exists");
