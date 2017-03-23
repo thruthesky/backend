@@ -11,6 +11,7 @@ class User_Test extends \model\test\Test {
         $this->anonymous();
         $this->loadTest();
         $this->create();
+        $this->register_with_login();
         $this->register();
         $this->edit();
         $this->meta();
@@ -107,6 +108,16 @@ class User_Test extends \model\test\Test {
     }
 
 
+    public function register_with_login() {
+        $session_id = $this->createUser(['id'=>'id-' . date('his'), 'password'=>'pass']);
+
+        $record['session_id'] = $session_id;
+        $record['id'] = 'id2-' . date('his');
+        $record['password'] = 'password';
+        $re = $this->route("register", $record );
+        di($re);
+
+    }
 
     public function register() {
         $id = "user-register-test-1";
@@ -152,16 +163,6 @@ class User_Test extends \model\test\Test {
 
 
 
-        /*
-        user('user14')->delete();
-        $re = $this->http_route( 'register', [ 'id' => 'user14', 'password'=>'pass14']);
-        test( is_success($re), "user_test::register() id: user14. " . get_error_string($re));
-
-
-        $user14_session_id = $re['data']['session_id'];
-        $re = $this->http_route( 'resign', ['session_id' => $user14_session_id]);
-        test( is_success($re), "user_test::resign() id: user14. " . get_error_string($re));
-        */
     }
 
 
@@ -443,18 +444,6 @@ class User_Test extends \model\test\Test {
             user( "searchuser$i" )->delete();
         }
 
-
-/**
-        for( $i=0; $i < 22; $i++ ) {
-            $record = [];
-            $record[ 'id' ] = "list-searchuser$i";
-            $record[ 'password' ] = "list-pass$i";
-            $record[ 'name' ] = "list-name$i";
-            $record[ 'email'] = "list-email$i";
-            $record[ 'gender' ] = rand( 0, 1 ) ? 'M' : 'F';
-            $re = $this->route( "register", $record );
-        }
-**/
 
     }
 }

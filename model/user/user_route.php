@@ -89,7 +89,7 @@ add_route('user.test.search', [
     'method' => 'search'
 ]);
 
-add_route('user.test.run', [
+add_route('user.test', [
     'path' => "\\model\\user\\user_test",
     'method' => 'run'
 ]);
