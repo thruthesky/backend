@@ -12,7 +12,7 @@ add_route( 'post_data.create', [
     "variables" => [
         'required' => [ 'post_config_id' ],
         'optional' => $_optional,
-        'system' => [ 'session_id', 'post_config_id' ]
+        'system' => [ 'session_id', 'post_config_id', 'file_hooks' ]
     ]
 ]);
 
@@ -22,7 +22,7 @@ add_route( 'post_data.edit', [
     "variables" => [
         'required' => [ 'idx' ],
         'optional' => $_optional,
-        'system' => [ 'session_id' ]
+        'system' => [ 'session_id', 'file_hooks' ]
     ]
 ]);
 

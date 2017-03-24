@@ -20,6 +20,8 @@ class Post_Config_Test extends Test {
         $admin_session_id = $re['data']['session_id'];
 
 
+        // $this->createPostConfig('forum');
+
         //
         $id = "config-create-test-1";
 

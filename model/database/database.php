@@ -448,13 +448,19 @@ class Database extends \PDO {
 
         if ( stripos( $q, 'WHERE ') ) {
             list ( $trash, $where ) = explode( 'where', strtolower( $q ) );
-            if ( ! $this->secure_cond( $where ) ) return ERROR_INSCURE_SQL_CONDITION;
+            if ( ! $this->secure_cond( $where ) ) {
+                $this->log("ERROR: ERROR_INSCURE_SQL_CONDITION");
+                $this->log($q);
+                return ERROR_INSCURE_SQL_CONDITION;
+            }
         }
 
         try {
             $statement = $this->query($q);
         }
         catch ( \Exception $e ) {
+
+            $this->log("Above SQL has Query ERROR");
             return ERROR_DATABASE_ROWS_QUERY_ERROR;
         }
 

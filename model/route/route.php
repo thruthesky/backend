@@ -299,12 +299,17 @@ class Route {
             if (isset($route['method'])) { // if method is to be called?
                 if (method_exists($obj, $route['method'])) {    // if method of router found?
 
-                    // check http variables for security.
-
+                    // check http (route) variables existence for security.
                     if ( $re = $this->check_route_variables_existency() ) return error( $re['code'], $re['message'] );
 
-                    // check http variables type for security
+                    // check http (route) variables type for security
                     if ( $re = $this->validate_route_variables() ) return error( $re['code'], $re['message'] );
+
+                    // do route validation
+                    if ( isset($route['validator']) ) {
+                        $re = $route['validator']();
+                        if ( $re ) return error( $re );
+                    }
 
                     $method = $route['method'];
                     $obj->$method();

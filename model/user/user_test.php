@@ -115,8 +115,7 @@ class User_Test extends \model\test\Test {
         $record['id'] = 'id2-' . date('his');
         $record['password'] = 'password';
         $re = $this->route("register", $record );
-        di($re);
-
+        test( is_error($re) == ERROR_USER_LOGGED_IN, "User cannot register while logged in");
     }
 
     public function register() {
@@ -334,7 +333,7 @@ class User_Test extends \model\test\Test {
     public function logout() {
 
         // create a user
-        $session_id = $this->createUser( ['id' => 'logout-test', 'password' => '1234' ] );
+        $session_id = $this->createUser( ['id' => 'logout-test', 'password' => 'abc1234' ] );
 
         // check session id
         test( user( $session_id )->id == 'logout-test', "Logout user create: ");

@@ -10,7 +10,8 @@ Backend server for Restful APIs
 
 # TODO
 
-## reject request of register when `session_id` is provided.
+
+
 
 ## Bug Check
 
@@ -330,16 +331,42 @@ If you really don't want it for a route, reject it in the interface.
 
 
 
-## HTTP variable type checking
+## Basic Route(HTTP) variable type checking
 
-* For security enhancement, types of HTTP variable are checked by the system.
-
-* Since many of HTTP variables and routers have same(similiar) names and types, it may be one good idea to check type of HTTP variables in one place. 
-
-See `check_http_variables_type()` for details.
-
+* For security enhancement, types of Route(HTTP) variable are checked by the system.
+* Since many of Route variables have same(similar) names and types,
+Backend does basic type check based on the name of the route vairable.
+* See see `Router::validate_route_variables()` for details.
 
 
+
+
+## Route Validation
+
+You can do a deep validation aside from route's variables and basic route variable checking.
+
+The `validator` property of router is anonymous function that will return OK when everything is okay. Or it should return error response.
+
+
+````
+add_route('register', [
+    'path' => "\\model\\user\\user_interface",
+    'method' => 'register',
+    'variables' => [
+        'required' => [ 'id', 'password' ],
+        'optional' => [ 'domain', 'name', 'middle_name', 'last_name',
+            'nickname', 'email', 'gender', 'birth_year', 'birth_month', 'birth_day', 'landline',
+            'mobile', 'address', 'country', 'province', 'city', 'zipcode',
+            'meta'
+        ],
+        'system' => [ 'route', 'file_hooks' ]
+    ],
+    'validator' => function() {
+        if ( currentUser()->logged() ) return ERROR_USER_LOGGED_IN;
+        return OK;
+    }
+]);
+````
 
 
 # Interface
@@ -478,6 +505,15 @@ user( 'def' )->meta()->delete( 'birthday' ); // delete birthday meta of user 'de
 
 
 # API
+
+## Common API
+
+### Delete
+
+* all request must have idx
+* and all response has idx to know which entity was deleted.
+
+
 
 ## USER
 

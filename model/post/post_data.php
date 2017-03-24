@@ -3,6 +3,8 @@
  * @see README.md
  */
 namespace model\post;
+use model\file\File;
+
 class Post_Data extends Post {
     public function __construct()
     {
@@ -66,6 +68,12 @@ class Post_Data extends Post {
         $record = $this->getRecord();
         unset( $record['password'], $record['user_agent'] );
         $record['meta'] = meta()->get( $this->getTable(), $record['idx']);
+
+
+        $record['files'] = (new File())->getRecords( " model='post' AND model_idx=$record[idx] ", 'idx, type, name');
+
+
+        // debug_log($record);
         return $record;
     }
 

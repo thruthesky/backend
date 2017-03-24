@@ -22,6 +22,16 @@ add_route('download',[
     ]
 ]);
 
+add_route('file.delete',[
+    'path'=> '\\model\\file\\file_interface',
+    'method'=> 'delete',
+    'variables'=>[
+        'required'=>[ 'idx' ],
+        'optional'=>[ ],
+        'system'=>[ ]
+    ]
+]);
+
 
 add_route('upload_test', [
     'path'=> '\\model\\file\\file_test',

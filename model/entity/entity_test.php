@@ -8,10 +8,25 @@
  * @todo meta()->load( ... )->set()->update()
  */
 namespace model\entity;
+use model\meta\Meta;
+
 class Entity_Test extends \model\test\Test {
+
+    public function single_test() {
+
+        parent::$reload = 2;
+        $this->run();
+    }
+
 
     public function run() {
 
+        $this->basic();
+        $this->multi_load();
+
+    }
+
+    public function basic() {
 
 
         $entity = entity();
@@ -26,7 +41,7 @@ class Entity_Test extends \model\test\Test {
 
 
         $b = $entity->set('b', 'banana')    // set
-            ->getRecord()['b'];             // get
+        ->getRecord()['b'];             // get
 
         test( $entity->b == $b, "Entity setter, getter, record tdst");
 
@@ -76,8 +91,57 @@ class Entity_Test extends \model\test\Test {
         $copy->delete();
 
 
-
     }
 
+
+    public function multi_load() {
+
+        $idxes = [];
+
+        $idx = meta()
+            ->set('model', 'abc')
+            ->set('model_idx', 124)
+            ->set('code', 'a')
+            ->set('data', 'data')
+            ->create();
+        $idxes[] = $idx;
+
+        $idx = meta()
+            ->set('model', 'abc')
+            ->set('model_idx', 124)
+            ->set('code', 'b')
+            ->set('data', 'data')
+            ->create();
+        $idxes[] = $idx;
+
+
+
+        $idx = meta()
+            ->set('model', 'abc')
+            ->set('model_idx', 124)
+            ->set('code', 'c')
+            ->set('data', 'data')
+            ->create();
+        $idxes[] = $idx;
+
+        $meta = meta()->load( $idx );
+
+        test( $meta instanceof Entity, "meta is instance of Entity");
+        test( $meta instanceof Meta, "meta is instance of Meta");
+
+
+        $metas = meta()->loads( $idxes );
+
+        test( $metas, "meta()->loads() " . get_error_string($metas) );
+        test( $metas[0] instanceof Meta, "metas[0] is an instance of Meta" );
+
+        $loads = meta()->loadsQuery("model='abc' and model_idx=124");
+
+        array_walk( $metas, function( $v, $index ) use ( $loads ) {
+            test( $v == $loads[$index], "meta[$index] equal");
+            test( $v->code == $loads[$index]->code, "meta[$index] equal: code = {$v->code}");
+        });
+
+    }
 }
 

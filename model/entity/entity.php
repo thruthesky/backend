@@ -171,6 +171,29 @@ class Entity extends \model\taxonomy\Taxonomy  {
 
     /**
      *
+     * Loads multiple entities.
+     *
+     * @param $idxes
+     *
+     * @see Entity_Test::multi_load()
+     *
+     *
+     * @return mixed
+     *      if there is error, error code will be returned.
+     */
+    public function loads( $idxes ) {
+        $rets = [];
+        if ( empty( $idxes ) ) return $rets;
+        foreach ( $idxes as $idx ) {
+            $this_entity = $this->load( $idx );
+            if ( is_error( $this_entity ) ) return $this_entity; // error
+            $rets[] = clone( $this_entity );
+        }
+        return $rets;
+    }
+
+    /**
+     *
      * Loads entity data into $this->record.
      *
      * @param $cond - SQL Condition
@@ -181,12 +204,26 @@ class Entity extends \model\taxonomy\Taxonomy  {
      */
     public function loadQuery( $cond ) {
         $table = $this->getTable();
-
         if ( empty( $table) ) return ERROR_TABLE_NOT_SET;
-
         $this->record = db()->row("SELECT * FROM $table WHERE $cond");
         return $this;
     }
+
+
+    /**
+     *
+     * @see Entity_Test::multi_load()
+     *
+     * @param $cond
+     * @return mixed
+     */
+    public function loadsQuery( $cond ) {
+        return $this->loads( $this->idxes( $cond ) );
+    }
+
+
+
+
 
 
     private function getCacheEntity( $what ) {

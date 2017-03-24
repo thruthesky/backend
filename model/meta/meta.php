@@ -59,6 +59,7 @@ class Meta extends \model\entity\Entity
     public function create( $model = null, $model_idx = null, $arr = null ) {
 
 
+        // if it creates 'multiple' meta, then it does recursive call.
         if ( is_array( $arr ) ) {
 
             if ( empty($model) ) return ERROR_MODEL_IS_EMPTY;
@@ -77,17 +78,23 @@ class Meta extends \model\entity\Entity
             return $re_multi;
         }
 
+        // get data to create meta.
         $model = $this->model;
         $model_idx = $this->model_idx;
         $code = $this->code;
-
 
         if ( empty($model) ) return ERROR_MODEL_IS_EMPTY;
         if ( empty($model_idx) ) return ERROR_MODEL_IDX_IS_EMPTY;
         if ( empty($code) ) return ERROR_CODE_IS_EMPTY;
 
 
-        meta()->load( $model, $model_idx, $code )->delete();
+        // delete if model, idx, code exsits.
+        $m = meta()->load( $model, $model_idx, $code );
+        if ( $m->exist() ) {
+            // debug_log( $m );
+            $m->delete();
+        }
+        //meta()->load( $model, $model_idx, $code )->delete();
 
 
         return parent::create();

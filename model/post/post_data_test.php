@@ -47,10 +47,11 @@ class Post_Data_Test extends Test {
         test( is_error($re) == ERROR_PASSWORD_EMPTY, get_error_string($re));
 
         // anonymous post with password.
-        $p['password'] = '1234';
+        $p['password'] = 'abc1234';
         $re = $this->route( 'post_data.create', $p);
         test( is_success($re), "Anonymous create with password : " . get_error_string($re));
-        $post_idx = $re['data']['post_idx'];
+        test( isset( $re['data'] ) &&  isset( $re['data']['idx'] ), "post idx is set" );
+        $post_idx = $re['data']['idx'];
 
 
         // anonymous get data
@@ -108,7 +109,7 @@ class Post_Data_Test extends Test {
         $re = $this->route( 'post_data.create', $p);
         test( is_success($re), "A user creates a post: " . get_error_string($re));
 
-        $post_idx = $re['data']['post_idx'];
+        $post_idx = $re['data']['idx'];
 
 
 
@@ -136,7 +137,7 @@ class Post_Data_Test extends Test {
 
 
         // edit without session_id( Anonymously ) with wrong password. expect: Not Your Post
-        $re = $this->route('post_data.edit', [ 'idx' => $post_idx, 'password' => time(), 'title' => 'title edited'] );
+        $re = $this->route('post_data.edit', [ 'idx' => $post_idx, 'password' => 'abcdef', 'title' => 'title edited'] );
         test( is_error($re) == ERROR_NOT_YOUR_POST_DATA, "edit with wrong password: " . get_error_string($re));
 
         // edit it. expect: success.
@@ -162,7 +163,7 @@ class Post_Data_Test extends Test {
 
 
         // delete with wrong password
-        $re = $this->route( 'post_data.delete', ['idx' => $post_idx, 'password' => time() ]);
+        $re = $this->route( 'post_data.delete', ['idx' => $post_idx, 'password' => 'abcdef' ]);
         test( is_error($re) == ERROR_POST_OWNED_BY_USER_NOT_ANONYMOUS, "delete with wrong password: " . get_error_string($re));
 
 
@@ -189,7 +190,7 @@ class Post_Data_Test extends Test {
         $p = [ 'session_id' => $session_id, 'post_config_id'=>'test2', 'title'=>'admin test', 'content'=>'content 4' ];
         $re = $this->route( 'post_data.create', $p);
         test( is_success($re), "Admin test: A user creates a post: " . get_error_string($re));
-        $post_idx = $re['data']['post_idx'];
+        $post_idx = $re['data']['idx'];
 
         $admin_session_id = $this->getAdminSessionId();
 

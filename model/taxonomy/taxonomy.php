@@ -202,7 +202,7 @@ class Taxonomy extends \model\base\Base  {
     }
 
 
-    public function getSearchCondition( $option ) {
+    private function getSearchCondition( $option ) {
 
         $where = null;
         if ( isset($option['where']) && ! empty($option['where']) ) {
@@ -232,5 +232,40 @@ class Taxonomy extends \model\base\Base  {
         return $where;
     }
 
+
+    /**
+     *
+     * Retuerns an array of idx based on the cond.
+     * @param $cond
+     *
+     * @warning no table set test. If table is not set, then it would result in unexptected query error.
+     * @return array
+     */
+    public function idxes( $cond ) {
+        $idxes = [];
+        $table = $this->getTable();
+        $rows = db()->rows("SELECT idx FROM $table WHERE $cond");
+        foreach( $rows as $row ) {
+            $idxes[] = $row['idx'];
+        }
+        return $idxes;
+    }
+
+    /**
+     * Returns the records based on the condition
+     * @param $cond
+     * @param string $select
+     * @return array|int
+     *
+     * @code
+     *        $record['files'] = (new File())->getRecords( " model='post' AND model_idx=$record[idx] ", 'idx, type, name');
+     * @endcode
+     *
+     *
+     */
+    public function getRecords( $cond, $select="*") {
+        $table = $this->getTable();
+        return db()->rows("SELECT $select FROM $table WHERE $cond ");
+    }
 
 }

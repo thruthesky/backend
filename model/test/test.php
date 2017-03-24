@@ -6,9 +6,10 @@ class Test {
     static $count_error = 0;
     static $done_test_info = false;
     static $time_start = 0;
-
-    public function __construct()
+    static $reload = 15;
+    public function __construct( $reload = 15 )
     {
+        self::$reload = $reload;
         if ( ! self::$time_start ) self::$time_start = microtime(true);
         set_test();
         $this->test_style();
@@ -17,7 +18,7 @@ class Test {
 
     public function __destruct()
     {
-        $this->test_reload( 14 );
+        $this->test_reload( self::$reload );
         $this->test_end();
     }
 

@@ -39,5 +39,15 @@ class File_Interface extends File {
 
     
     
-    
+    public function delete( $_ = null ) {
+        $this->load( in('idx') );
+
+        if ( ! $this->exist() ) return error( ERROR_FILE_NOT_EXIST );
+        $re = parent::delete();
+
+        if ( is_success( $re ) ) success( ['idx'=>in('idx')] );
+        else error( $re );
+
+
+    }
 }

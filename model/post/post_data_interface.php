@@ -10,10 +10,10 @@ class Post_Data_Interface extends Post_Data {
     public function create( $record = [] ) {
 
 
+
+        // @todo move it to validator
         $config = config()->load( in( 'post_config_id' ) );
         if( ! $config->exist() ) return error( ERROR_POST_CONFIG_NOT_EXIST );
-
-
         if ( currentUser()->isAnonymous() && empty( in('password') ) ) return error( ERROR_PASSWORD_EMPTY, "Anonymous must input a password to create a post.");
 
         $record = route()->get_route_optional_variables();
@@ -33,11 +33,18 @@ class Post_Data_Interface extends Post_Data {
         debug_log('record:'); debug_log( $record);
         */
 
-        if( strlen( $record['title'] ) > 254 ) return error( ERROR_TITLE_TOO_LONG );
+        // @todo move it to validator
+        if( isset($record['title']) && strlen( $record['title'] ) > 254 ) return error( ERROR_TITLE_TOO_LONG );
 
         $post_idx = parent::create( $record );
         if ( is_error( $post_idx ) ) return error( ERROR_DATABASE_INSERT_FAILED );
-        return success( ['post_idx'=>$post_idx] );
+
+
+
+        $re_upload = $this->hookUpload( post( $post_idx ) ); if ( is_error( $re_upload ) ) return error( $re_upload );
+
+
+        return success( ['idx'=>$post_idx] );
 
     }
 
@@ -50,7 +57,11 @@ class Post_Data_Interface extends Post_Data {
      */
     public function edit() {
 
+        // @todo move checkups and permission check to 'validator'
+        if ( empty( in('idx') ) ) return error( ERROR_IDX_EMPTY );
         if ( currentUser()->isAnonymous() && empty( in('password') ) ) return error( ERROR_PASSWORD_EMPTY, "Anonymous must input a password to edit a post.");
+        $re = $this->load( in('idx') );
+        if ( is_error($re) ) return error( $re );
         if ( ! $this->load( in('idx') )->exist() ) return error( ERROR_POST_NOT_EXIST );
 
 
@@ -66,7 +77,10 @@ class Post_Data_Interface extends Post_Data {
 
         $re = $this->update($record);
 
-        if ( is_success( $re ) ) success( ['post_idx'=> $this->idx] );
+        if ( is_success( $re ) ) {
+            $re_upload = $this->hookUpload( post( in('idx') ) ); if ( is_error( $re_upload ) ) return error( $re_upload );
+            success( ['idx'=> $this->idx] );
+        }
         else error( ERROR_DATABASE_UPDATE_FAILED ); // should not happened.
 
     }

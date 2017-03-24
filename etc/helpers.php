@@ -109,6 +109,8 @@ function in ( $code, $default = null ) {
  *
  * @param $code
  *          if it is null, it treats as error array.
+ *              $re = $route['validator']();
+ *              if ( $re ) return error( $re );
  * @param string $message
  *
  * @code

@@ -182,6 +182,8 @@ class File extends \model\entity\Entity
      * @attention it overrides entity()->delete().
      * @param null $idx - file.idx to delete
      * @return number
+     *          OK on success.
+     *          ERROR_CODE otherwise.
      * @attentions it doesn't return anything so you will not know if the deletion is success or not
      */
     public function delete( $idx = null ) {
@@ -193,6 +195,7 @@ class File extends \model\entity\Entity
         @unlink( $file_path );
         parent::delete();
         debug_log(">>> $file_path deleted");
+        return OK;
     }
 
     /**
@@ -283,4 +286,8 @@ class File extends \model\entity\Entity
     public function increaseNoOfDownload() {
         return $this->update( ['no_of_download' => $this->no_of_download + 1] );
     }
+
+
+
+
 }
