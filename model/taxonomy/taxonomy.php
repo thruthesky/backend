@@ -171,7 +171,7 @@ class Taxonomy extends \model\base\Base  {
         //
 
 
-        if ( ! isset( $option['select'] ) ) $option['select'] = '*';
+        if ( ! isset( $option['select'] ) && empty( $option['select']) ) $option['select'] = '*';
 
         //
         if ( isset( $option['order'] ) ) {
@@ -208,15 +208,24 @@ class Taxonomy extends \model\base\Base  {
         if ( isset($option['where']) && ! empty($option['where']) ) {
 
             if ( ! db()->secure_bind_statement($option['where']) ) return ERROR_UNSECURE_STATEMENT_CONDITION;
-            if ( strpos($option['where'], '?') === false ) return ERROR_MISSING_BINDING_MARK;
+            if ( strpos($option['where'], '?') === false ) {
+                debug_log( $option );
+                return ERROR_MISSING_BINDING_MARK;
+            }
             if ( ! isset( $option['bind'] ) || empty( $option['bind'] ) ) return ERROR_SQL_BIND_NOT_SET;
 
             $count_marks = substr_count($option['where'], '?');
             $count_binds = count( explode(',', $option['bind']) );
 
 
-            if ( $count_marks > $count_binds ) return ERROR_SEARCH_BIND_LACK;
-            if ( $count_marks < $count_binds ) return ERROR_SEARCH_MARK_LACK;
+            if ( $count_marks > $count_binds ) {
+                debug_log( $option );
+                return ERROR_SEARCH_BIND_LACK;
+            }
+            if ( $count_marks < $count_binds ) {
+                debug_log( $option );
+                return ERROR_SEARCH_MARK_LACK;
+            }
             // if ( $count_marks != $count_binds ) return ERROR_SQL_WHERE_BIND_MISMATCH;
             $where = "WHERE $option[where]";
 
@@ -252,7 +261,11 @@ class Taxonomy extends \model\base\Base  {
     }
 
     /**
-     * Returns the records based on the condition
+     * Returns the records based on the condition.
+     *
+     * @note 'getRecords()' is similar to 'search()'. But it does raw SQL query.
+     *
+     * @attention Interfaces should not use this method directly.
      * @param $cond
      * @param string $select
      * @return array|int
@@ -263,9 +276,20 @@ class Taxonomy extends \model\base\Base  {
      *
      *
      */
-    public function getRecords( $cond, $select="*") {
+    public function loadRecords( $cond, $select="*") {
         $table = $this->getTable();
         return db()->rows("SELECT $select FROM $table WHERE $cond ");
+    }
+
+
+    /**
+     * @deprecated  use loadRecords()
+     * @param $cond
+     * @param string $select
+     * @return array|int
+     */
+    public function getRecords( $cond, $select="*") {
+        return $this->loadRecords( $cond, $select = '*' );
     }
 
 }

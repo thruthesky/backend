@@ -103,6 +103,12 @@ function in ( $code, $default = null ) {
  *
  * @attention this method does NOT exit the script. This is for mainly debug/unit test purpose.
  *
+ * @attention If you need to exit after printing out error use like below.
+ * @code
+ *          exit( error( -410, 'hooks: action is empty') );
+ * @endcode
+ *
+ *
  * @note Only interfaces must use error() to echo JSON error string.
  *
  *
@@ -121,6 +127,8 @@ function in ( $code, $default = null ) {
  * @endcode
  * @return mixed - error code.
  *
+ *
+ *
  */
 function error( $code, $message='' ) {
     global $em;
@@ -129,9 +137,9 @@ function error( $code, $message='' ) {
         $code = $code['code'];
     }
     if ( empty($message) && isset($em[ $code ]) ) $message = $em[ $code ];
-    debug_log(" &gt;&gt;&gt; [ ERROR[ $code ] - \"$message\"");
-    echo json_encode( ['code'=>$code, 'message'=>$message] );
-
+                                        debug_log(" &gt;&gt;&gt; [ ERROR[ $code ] - \"$message\"");
+    echo json_encode( ['code'=>$code, 'message'=>$message ] );
+    return $code;
 }
 
 function get_error_string( $re ) {

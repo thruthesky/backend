@@ -1,11 +1,14 @@
-# Backend-0.4.0
+# Backend-0.4.4
 
-Backend server for Restful APIs
+Backend Server for Restful APIs
+
 
 
 # Resources
 
-* The best resource to understand Backend is to read and run the tests.
+* @see tests to understand Backend.
+
+
 
 
 # TODO
@@ -27,7 +30,8 @@ Backend server for Restful APIs
 
 * to check table is set.
 * to add more tests.
-
+* file proxy test.
+* search test.
 
 
 ## Post
@@ -279,6 +283,45 @@ http://localhost/index.php?route=taxonomy.test.run
 ````
 
 
+## Working with Unit Test
+
+### Running a test file and extending Test class
+
+You need to extend `Test` class to facilitate the test functionality.
+
+
+Route for a test class )
+
+````
+route()->add( 'hook.test', [
+    'path' => '\\model\\hook\\hook_test',
+    'method' => 'run',
+    'validator' => function() {
+        \model\test\Test::$reload = 1;
+    }
+]);
+
+````
+
+#### Refresh Interval.
+
+You can adjust refresh time in validator.
+
+Test class )
+
+````
+<?php
+namespace model\hook;
+class Hook_Test extends \model\test\Test
+{
+    public function run( ) {
+    }
+}
+````
+
+
+
+
 
 
 # Class Hierarchy
@@ -345,9 +388,12 @@ Backend does basic type check based on the name of the route vairable.
 
 You can do a deep validation aside from route's variables and basic route variable checking.
 
-The `validator` property of router is anonymous function that will return OK when everything is okay. Or it should return error response.
+The `validator` property of router is anonymous function that will return OK when everything is okay. Or it should return error.
+
+* `validator` cannot return error response. It can only return ERROR CODE or ERROR ARRAY
 
 
+Example of validator )
 ````
 add_route('register', [
     'path' => "\\model\\user\\user_interface",
@@ -363,10 +409,64 @@ add_route('register', [
     ],
     'validator' => function() {
         if ( currentUser()->logged() ) return ERROR_USER_LOGGED_IN;
+        if ( currentUser()->id = 'u' ) return [ 'code'=>-1234, 'message'=> 'error message' ];
         return OK;
     }
 ]);
 ````
+
+
+### Route Validation and Variable Injection
+
+
+* Return values of route `validator` is not ERROR, then the return value will be passed over the interface.
+
+
+Example of validator )
+
+````
+route()->add( 'post_comment.create', [
+    'path' => '\\model\\post\\post_comment_interface',
+    'method' => 'create',
+    'variables' => [
+        'required' => [ 'parent_idx' ],
+        'optional' => $_optional
+    ],
+    'validator' => function() {
+        if ( currentUser()->isAnonymous() && empty( in('password') ) ) return [ 'code' => ERROR_PASSWORD_EMPTY, 'message' => "Anonymous must input a password to create a post." ];
+        $post = post( in('parent_idx') );
+        if ( ! $post->exist() ) return ERROR_POST_NOT_EXIST;
+        $config = config()->load( $post->post_config_idx );
+        if ( ! $post->exist() ) return ERROR_POST_NOT_EXIST;
+        return [ $post, $config ];
+    }
+]);
+````
+
+
+Example of Interface) See how it gets variable passed from validator.
+
+* If you are using phpStorm, setting param with type hinting will populate intelligence.
+
+````
+    /**
+     *
+     * @param Post_Data $post
+     * @param Post_Config $config
+     * @return mixed
+     *
+     */
+    public function create( $post=null, $config=null ) // for variable compatibilities.
+    {
+        // $post-> ...
+        // $config-> ...
+    }
+
+````
+
+
+
+
 
 
 # Interface
@@ -397,6 +497,12 @@ Users who are not logged in with their ID and password will login as anonymous. 
 * Anonymous is a user who did not log in with his password but treated as logged in.
 * Anonymous user cannot login, logout, edit his information.
 * But can post/edit/delete with password.
+
+
+### User Delete
+
+
+
 
 ## meta table
 
@@ -506,12 +612,111 @@ user( 'def' )->meta()->delete( 'birthday' ); // delete birthday meta of user 'de
 
 # API
 
+Clients will use API to communicate with Backend. API is mostly about how to use the routes and interfaces of Backend.
+
+
 ## Common API
+
+
+### Data
+
+Gets the data of the `model.idx`.
+
+request)
+
+````
+?route=data&session_id=xxxx&idx=xxxx
+````
+
+response)
+
+````
+{
+  code: 0,
+  data: {
+	...
+  }
+}
+````
+
+* all request must have `model.idx`.
+* response data varies depending on the model.
+
+
+
+### List & Search
+
+request)
+
+````
+?route=list&session_id=xxxx&select=xxxxx&from=xxxxx&where=xxxx&bind=xxxxx&order=xxxx&limit=xxxxx&extra=xxxxx
+````
+
+* `extra` varies on each model.
+* `extra` will be handled on each model's `pre()` method.
+
+Example of list request with `extra` )
+
+````
+    let list: LIST = {
+        select: 'idx, title, created',
+        order: 'idx DESC',
+        extra: { file: false, meta: true }
+    };
+````
+
+* Properties of extra can have one of "true, 1, 'Y'" indicating as positive inquery to get the data.
+* You can set falsy values like 'false', '0', '' If you don't want the data of the property. Be careful that 'N' is truthy value.
+* If `extra` is omitted, Backend will reponse with all the extra information by default.
 
 ### Delete
 
-* all request must have idx
-* and all response has idx to know which entity was deleted.
+Each model has a delete functioanlity and Backend provides one united way to do it on each model.
+
+The request can provide `idx` as model entity idx or `id` as model entity id if the entity has `id` field.
+
+request with `idx`)
+
+````
+?route=delete&session_id=xxxx&idx=xxxx
+````
+
+response of `request with idx`)
+
+````
+{
+  code: 0,
+  data: {
+    idx: number
+  }
+}
+````
+
+When request provide `idx`, then response will return the `idx` of deleted entity.
+
+or
+
+
+request with `id`)
+
+````
+?route=delete&session_id=xxxx&id=xxxx
+````
+
+
+response of `request with id`)
+
+````
+{
+  code: 0,
+  data: {
+    id: string
+  }
+}
+````
+
+As the same idea of providing `idx`, when request provide `id`, then the response will return the `id` of deleted entity.
+
 
 
 
@@ -553,8 +758,8 @@ none.
 
 #### Admin can edit user information.
 
-* When admin edits user information, user's session id may become invalid depending on what data has been changed. see `user::getSessionId()`
-* When admin changes user information, admin's session id will be regenerated. And the response data of user edit is admin's information, NOT the user's information.
+* When admin edits user information, user's session id will become invalid. So the user needs to login again.
+* When admin changes user information, admin's session id will be not regenerated. And there will be no session_id returned from the request if admin edits user information.
 
 
 
@@ -606,7 +811,7 @@ You may need to change other configurations depending on your server environment
 
 
 
-### Hook
+### File Upload Hook
 
 To hook image(s) you uploaded to an entity, you just send the file idx(es) in `file_hooks` array of http variables to the server. And the serve will attach those files(images) to the entity.
 
@@ -614,11 +819,65 @@ To hook image(s) you uploaded to an entity, you just send the file idx(es) in `f
 
 
 
-### Optimazation
+
+
+
+### Image Optimization
 
 There are many image libraries and we could even develop one by by ourselves. But we chose [php-image-resize](https://github.com/eventviva/php-image-resize). This is very simple and clear library to use.
 
 Refer [examples of its github repository](https://github.com/eventviva/php-image-resize/blob/master/test/Test.php).
 
 Refer [API explanation page](https://eventviva.github.io/php-image-resize/class-Eventviva.ImageResize.html)
- 
+
+
+
+
+# Hooks
+
+Hook is one way to alter the behavior backend. By hooking, you can inject your code into backend routes, methods.
+
+* Hooks are not for altering the output or JSON response. Be careful not to print out anything from hooks.
+
+## How to hook
+
+````
+add_hook( 'after_route_load', function() { } );         // Run after route load complete.
+add_hook( 'after_route', 'user.register', function() use ( $var1 ) { } );       // Run after user register interface.
+````
+
+
+## Hook List
+
+
+You can use 'before', 'after' to put the hook 'before' or 'after' an action.
+
+for instance: `before_route_load`, `after_route_load`, `after_route` with additional variable 'user.register'
+
+
+
+* `after_route_load` - runs after all route had been loaded.
+* `before_route` - runs when route procedure begins.
+* `before_interface` - runs before interface is called.
+* `after_interface` - runs after interface finish. Note: interface may print out 'success' or 'error' response to browser.
+* `after_route` - runs after route finish. This means all the work has been finishd and the script will end.
+
+
+Note: if you only want to run hook for 'user.register' route, then you need to do conditional exception on your hook that if the current route is not 'user.register', then don't do anything but just return.
+
+
+Example) Hook that runs only on specific route.
+
+````
+hook()->add( 'after_route', function () {
+    $route = in('route');
+    if ( $route != 'hook.test' ) return; // return if it's not your hook.
+    
+    test( true, "Do something for hook.test route");
+});
+````
+
+
+
+
+

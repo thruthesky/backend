@@ -246,12 +246,12 @@ class User extends \model\entity\Entity {
      *
      * @param $record
      * @param bool $reload
-     * @return
+     * @return boolean
      *
      *      - TRUE on success
      *      - FALSE on failure
      *
-     * @todo meta update.
+     *
      */
     public function update( $record, $reload = true ) {
 
@@ -262,15 +262,13 @@ class User extends \model\entity\Entity {
         }
 
 
-        if ( $record ) {                        // something to update?
-            // debug_log("update: reload: $reload ");
+        if ( $record ) {                        // If the user has something to update?
             $re = parent::update( $record, $reload );
             if ( empty( $re ) ) return FALSE;   // something happened when updating.
         }
 
         if ( $meta ) {
             $this->meta()->set( $meta );
-            // meta()->create( $this->getTable(), $this->idx, $meta );
         }
 
         return TRUE;

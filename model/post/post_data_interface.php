@@ -13,7 +13,6 @@ class Post_Data_Interface extends Post_Data {
 
         // @todo move it to validator
         $config = config()->load( in( 'post_config_id' ) );
-        if( ! $config->exist() ) return error( ERROR_POST_CONFIG_NOT_EXIST );
         if ( currentUser()->isAnonymous() && empty( in('password') ) ) return error( ERROR_PASSWORD_EMPTY, "Anonymous must input a password to create a post.");
 
         $record = route()->get_route_optional_variables();
@@ -37,7 +36,7 @@ class Post_Data_Interface extends Post_Data {
         if( isset($record['title']) && strlen( $record['title'] ) > 254 ) return error( ERROR_TITLE_TOO_LONG );
 
         $post_idx = parent::create( $record );
-        if ( is_error( $post_idx ) ) return error( ERROR_DATABASE_INSERT_FAILED );
+        if ( is_error( $post_idx ) ) return error( $post_idx );
 
 
 
@@ -66,8 +65,6 @@ class Post_Data_Interface extends Post_Data {
 
 
         if ( $re = $this->editPermission() ) return error( $re );
-
-
 
         if( strlen( in('title') ) > 254 ) return error( ERROR_TITLE_TOO_LONG );
 
@@ -106,7 +103,7 @@ class Post_Data_Interface extends Post_Data {
 
         // $re = post( in('idx') )->delete(); // it does not delete.
 
-        if ( is_success($re) ) success( ['post_idx' => in('idx') ]);
+        if ( is_success($re) ) success( ['idx' => in('idx') ]);
         else error( ERROR_DATABASE_DELETE_FAILED );
 
     }
@@ -126,19 +123,41 @@ class Post_Data_Interface extends Post_Data {
      */
     public function search( $_=null ) {
 
+
+        $extra = in('extra');
+
         $option = [
+            'select' => in('select'),
             'from' => in('from'),
             'limit' => in('limit'),
             'where' => in('where'),
             'bind' => in('bind'),
             'order' => in('order')
         ];
+        if ( isset($extra['post_config_id']) ) {
+            $config = config( $extra['post_config_id'] );
+            if ( $config->exist() ) {
+                debug_log($option);
+                $option['where'] = "post_config_idx = ? " . ( $option['where']  ?  "AND ($option[where])" : '' );
+                $option['bind'] = $config->idx . ( $option['bind'] ? ",$option[bind]" : '' );
+            }
+            else {
+                return error( ERROR_FORUM_NOT_EXIST );
+            }
+        }
         $posts = parent::search( $option );
+
+
         if ( is_error( $posts ) ) return error( $posts );
+
+
+        $pre_option = [];
+        if ( isset($_REQUEST['extra']) ) $pre_option['extra'] = $_REQUEST['extra'];
+
         success( [
             'total' => parent::countSearch( $option ),
             'configs' => post()->getConfigs( $posts ),
-            'posts' => post()->pres( $posts )
+            'posts' => post()->pres( $posts, $pre_option )
         ] );
 
     }

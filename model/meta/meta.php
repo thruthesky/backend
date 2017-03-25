@@ -120,7 +120,7 @@ class Meta extends \model\entity\Entity
 
     /**
      *
-     * Returns all code/data of model and model_idx
+     * Returns all code/data of model and model_idx in array.
      *
      *
      *

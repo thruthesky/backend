@@ -91,7 +91,6 @@ function table_post_deleted() {
 /**
  *
  *
- * @deprecated use Route class()
  *
  * @param $name
  * @return mixed
@@ -108,6 +107,8 @@ function get_route( $name ) {
 
 /**
  *
+ *
+ * @deprecated use route()->add()
  *
  * @param $name
  * @param $option
@@ -170,6 +171,8 @@ function user( $what = null ) {
 /**
  * Returns currently logged in user Object.
  *
+ * @Attention IF there is error here, double check if the session_id has been invalidated.
+ *
  * @note
  *
  * 중요 : setCurrentUser() 를 한 다음에 currentUser() 를 하면,
@@ -193,6 +196,7 @@ function setCurrentUser( $user ) {
 /**
  *
  *
+ * @Attention IF there is error here, double check if the session_id has been invalidated.
  *
  * @return \model\user\User
  */
@@ -200,13 +204,23 @@ function currentUser()
 {
     global $_currentUser;
 
+
     // If not logged in or session id has changed. Session id changes when test.
     if ( $_currentUser === null || $_currentUser->session_id != in('session_id')) {
+
         // debug_log("------------ d ?");
         if ( in('session_id') ) {                       // If session_id has passed,
-            setCurrentUser( user( in('session_id') ) );     // set current user.
+
+            $user = user( in('session_id') );
+            if ( ! $user->exist() ) {
+                error( ERROR_WRONG_SESSION_ID );
+                exit;
+            }
+            setCurrentUser( $user );     // set current user.
         }
         else {
+
+
             user()->forceLogin( ANONYMOUS_ID );
         }
     }
@@ -276,6 +290,19 @@ function post( $what = null ) {
     return $post;
 }
 
+/**
+ * @param null $what
+ * @return \model\post\Post_Comment
+ */
+function comment( $what = null ) {
+    $obj = new \model\post\Post_Comment();
+    if ( $what ) {
+        $obj->load( $what );
+    }
+    return $obj;
+}
+
+
 function f( $what = null ){
     $obj = new \model\file\File();
     if ( $what ) {
@@ -283,6 +310,12 @@ function f( $what = null ){
     }
     return $obj;
 }
+
+function file_proxy( $model, $model_idx ) {
+    return new \model\file\File_Proxy( $model, $model_idx);
+}
+
+
 $_is_test = false;
 function is_test(){
     global $_is_test;
@@ -303,4 +336,10 @@ function set_test(){
 function db() {
     return \model\database\Database::load();
 }
+
+function hook() {
+    return new \model\hook\Hook();
+}
+
+
 

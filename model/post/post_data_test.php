@@ -4,18 +4,32 @@ use model\test\Test;
 
 class Post_Data_Test extends Test {
 
+    public function single_test() {
+        parent::$reload = 3;
+        $this->run();
+    }
     public function run() {
 
 
+        $this->post_config_test();
         $this->create();
         $this->secret();
         $this->search();
 
     }
 
+    public function post_config_test() {
+
+        $re = $this->route( 'post_data.create', [ 'post_config_id' => 'ddd', 'title' => 'abc' ] );
+        test( is_error($re), "wrong forum id. " . get_error_string($re) );
+
+
+    }
 
 
     public function create() {
+
+
 
         // create by program.
         $idx = post()->set('title', "hi")->create();
@@ -31,6 +45,7 @@ class Post_Data_Test extends Test {
 
         // prepare
         $session_id = $this->createUser( ['id' => 'user4', 'password' => 'pass4']);
+        $session_id_back = $this->createUser( ['id' => 'user4back', 'password' => 'pass4']);
         $this->createPostConfig( 'test2' );
 
 
@@ -132,19 +147,19 @@ class Post_Data_Test extends Test {
 
 
         // edit with wrong session_id
-        $re = $this->route('post_data.edit', [ 'idx' => $post_idx, 'session_id' => time(), 'title' => 'title edited'] );
+        $re = $this->route('post_data.edit', [ 'idx' => $post_idx, 'session_id' => $session_id_back, 'title' => 'title edited'] );
         test( is_error($re) == ERROR_NOT_YOUR_POST_DATA, "edit wrong user_idx: " . get_error_string($re));
 
 
         // edit without session_id( Anonymously ) with wrong password. expect: Not Your Post
         $re = $this->route('post_data.edit', [ 'idx' => $post_idx, 'password' => 'abcdef', 'title' => 'title edited'] );
-        test( is_error($re) == ERROR_NOT_YOUR_POST_DATA, "edit with wrong password: " . get_error_string($re));
+        test( is_error($re) == ERROR_WRONG_PASSWORD, "edit with wrong password: " . get_error_string($re));
 
         // edit it. expect: success.
         $re = $this->route( 'post_data.edit', ['idx' => $post_idx, 'session_id'=>$session_id, 'title' => 'title 3'] );
         test( is_success( $re ), "post edit: ");
 
-        // check if post edited. expect: susccess.
+        // check if post edited. expect: success.
         $re = $this->route( 'post_data.data', ['idx' => $post_idx] );
         test( is_success($re), "post_data.data after edit: " . get_error_string($re) );
         test( $re['data']['post']['title'] == 'title 3', "title comparision after post edit: ");
@@ -168,7 +183,7 @@ class Post_Data_Test extends Test {
 
 
         // delete with wrong session_id. expect: error.
-        $re = $this->route( 'post_data.delete', ['idx' => $post_idx, 'session_id' => time() ]);
+        $re = $this->route( 'post_data.delete', ['idx' => $post_idx, 'session_id' => $session_id_back ]);
         test( is_error($re) == ERROR_NOT_YOUR_POST_DATA, "delete with wrong session_id: " . get_error_string($re));
 
 
@@ -250,6 +265,7 @@ class Post_Data_Test extends Test {
 
         test( is_success($re), "post search title like hello% " . get_error_string($re));
         test( count($re['data']['posts']) == 2, "2 posts searched");
+
 
 //        di($re['data']['posts'][0]);
         test( $re['data']['posts'][0]['user_idx'] == user( $session_id )->idx, 'search: user_idx');

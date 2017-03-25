@@ -38,7 +38,7 @@ class Post_Config_Test extends Test {
 
         //
         $data['id'] = $id;
-        $data['session_id'] = null;
+        $data['session_id'] = $this->createUser(['id'=>'id-' . date('His'), 'password' => 'password' ]);
         $data['name'] = "name" . $id;
         $data['description'] = "description-" . $id;
 

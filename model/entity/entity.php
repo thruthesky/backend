@@ -62,9 +62,16 @@ class Entity extends \model\taxonomy\Taxonomy  {
         else return null;
     }
 
+
+
     public function meta() {
         return meta_proxy( $this->getTable(), $this->idx );
     }
+    public function file() {
+        return file_proxy( $this->getModel(), $this->idx );
+    }
+
+
     public function getRecord() {
         return $this->record;
     }
@@ -512,7 +519,7 @@ class Entity extends \model\taxonomy\Taxonomy  {
      * @return int
      */
     public function hookUpload( Entity $entity, $code = null ) {
-        return ( new \model\file\File() )->hook( $entity->getTable(), $entity->idx, $code, in('file_hooks') );
+        return ( new \model\file\File() )->hook( $entity->getModel(), $entity->idx, $code, in('file_hooks') );
 
     }
 

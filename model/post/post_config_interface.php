@@ -11,7 +11,8 @@ class Post_Config_Interface extends Post_Config {
      * @param array $record
      * @return mixed
      *
-     * @todo consider to do the form validation of too long string for id and name.
+     *
+     *
      *
      */
     public function create( $record = [] ) {

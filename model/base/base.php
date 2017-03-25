@@ -36,6 +36,10 @@ class Base {
         return $this->table;
     }
 
+    public function getModel() {
+        return substr( $this->getTable(), strlen( DATABASE_PREFIX ) );
+    }
+
 
     public function encryptPassword( $str ) {
         return password_hash( $str, PASSWORD_DEFAULT );

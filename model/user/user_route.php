@@ -35,6 +35,28 @@ add_route('user.edit', [
 ]);
 
 
+
+add_route( 'user.delete', [
+    'path' => "\\model\\user\\user_interface",
+    "method" => "delete",
+    "variables" => [
+        'required' => [ 'session_id', 'id' ],
+        'optional' => [ ],
+        'system' => []
+    ],
+    'validator' => function() {
+        if ( ! currentUser()->isAdmin() ) return ERROR_PERMISSION_ADMIN;
+
+        $user = user( in('id') );
+        if ( ! $user->exist() ) return ERROR_USER_NOT_EXIST;
+
+        return OK;
+    }
+]);
+
+
+
+
 add_route('login', [
     'path' => "\\model\\user\\user_interface",
     'method' => 'login',
@@ -61,7 +83,11 @@ add_route('resign', [
         'required' => [ 'session_id' ],
         'optional' => [ ],
         'system' => [ 'route' ]
-    ]
+    ],
+    'validator' => function () {
+        $user = user()->load( in('session_id') );
+        if ( ! $user->exist() ) return ERROR_WRONG_SESSION_ID;
+    }
 ]);
 
 
@@ -95,6 +121,6 @@ add_route('user.test.search', [
 
 add_route('user.test', [
     'path' => "\\model\\user\\user_test",
-    'method' => 'run'
+    'method' => 'single_test'
 ]);
 

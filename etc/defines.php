@@ -105,6 +105,7 @@ define('ERROR_USER_IDX_NOT_NUMBER', -40212);                $em[ERROR_USER_IDX_N
 
 define('ERROR_POST_IDX_EMPTY', -40230);                    $em[ERROR_POST_IDX_EMPTY] = 'post-config/data-idx-empty';
 define('ERROR_POST_CONFIG_EDIT_FAILED', -40231);                    $em[ERROR_POST_CONFIG_EDIT_FAILED] = 'post-config-edit-failed';
+define('ERROR_FORUM_NOT_EXIST', -40232);                    $em[ERROR_FORUM_NOT_EXIST] = "forum-not-exist";
 
 
 // permis error

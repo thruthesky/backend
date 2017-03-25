@@ -10,7 +10,7 @@ define('__ROOT_DIR__', __DIR__ );
 
 include_once 'core/bootstrap.php';
 
-route()->loadRoutes();
 
-(new \model\system\System())->run();
+
+(new \model\system\System())->run( route()->loadRoutes() );
 

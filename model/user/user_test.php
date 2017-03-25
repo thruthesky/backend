@@ -4,6 +4,10 @@ namespace model\user;
 class User_Test extends \model\test\Test {
 
 
+    public function single_test() {
+        parent::$reload = 4;
+        $this->run();
+    }
     public function run() {
 
 
@@ -20,6 +24,8 @@ class User_Test extends \model\test\Test {
         $this->register_login_edit_resign();
 
         $this->search();
+
+        $this->deleteTest();
 
     }
 
@@ -115,7 +121,8 @@ class User_Test extends \model\test\Test {
         $record['id'] = 'id2-' . date('his');
         $record['password'] = 'password';
         $re = $this->route("register", $record );
-        test( is_error($re) == ERROR_USER_LOGGED_IN, "User cannot register while logged in");
+        //di($re);
+        test( is_error($re) == ERROR_USER_LOGGED_IN, "User cannot register while logged in" . get_error_string($re));
     }
 
     public function register() {
@@ -197,7 +204,9 @@ class User_Test extends \model\test\Test {
 
         $re = $this->route('user.edit', $record);
 
-        test( is_error($re) == ERROR_MALFORMED_SESSION_ID, "User edit: $id " . get_error_string($re));
+//        di($re);
+
+        test( is_error($re) == ERROR_MALFORMED_SESSION_ID, "session id should be malformed: $record[session_id] " . get_error_string($re));
 
         $record['session_id'] = $session_id;
         $re = $this->route('user.edit', $record);
@@ -219,7 +228,7 @@ class User_Test extends \model\test\Test {
         $re = $this->route('user.edit', $record);
         test( is_success($re), "Admin: User edit: $id " . get_error_string($re));
 
-        $admin_session_id = $re['data']['session_id'];
+        // $admin_session_id = $re['data']['session_id'];
 
 
 
@@ -369,6 +378,12 @@ class User_Test extends \model\test\Test {
         $edit_session_id = $re['data']['session_id'];
         test( $login_session_id != $edit_session_id, "User edit test session_id: $edit_session_id" . get_error_string($re));
 
+
+
+        // resign
+        $re = $this->route('resign', [ 'session_id' => '731016' . $edit_session_id ] );
+        test( is_error($re) == ERROR_WRONG_SESSION_ID, "User resign, wrong session_id test: " . get_error_string($re));
+
         // resign
         $re = $this->route('resign', [ 'session_id' => $edit_session_id ] );
         test( is_success($re), "User resign success: " . get_error_string($re));
@@ -445,4 +460,28 @@ class User_Test extends \model\test\Test {
 
 
     }
+
+    public function deleteTest() {
+        $id = "user-delete-test";
+        $session_id = $this->createUser(['id' => $id, 'password' => 'test']);
+        $re = $this->route('user.delete', [
+            'session_id' => $session_id,
+            'id' => $id
+        ]);
+        test( is_error($re) == ERROR_PERMISSION_ADMIN, "User cannot delete himself or other." . get_error_string($re));
+
+        $admin_session_id = $this->getAdminSessionId();
+        $re = $this->route("user.delete", [ 'session_id' => $admin_session_id, 'id' => 'abc197' . time() ] );
+        test( is_error($re) == ERROR_USER_NOT_EXIST, "Wrong user id." . get_error_string($re));
+
+        $admin_session_id = $this->getAdminSessionId();
+        $re = $this->route("user.delete", [ 'session_id' => $admin_session_id, 'id' => $id ] );
+        test( is_success($re) , "ADMIN - user delete." . get_error_string($re));
+
+        test( ! user( $id )->exist(), "User not exists after delete" );
+
+
+
+    }
+
 }

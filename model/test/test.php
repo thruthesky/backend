@@ -186,7 +186,12 @@ EOH;
 
 
         $res = json_decode($data, true);
-        if ( $this->is_json_error() ) return ['code' => ERROR_JSON_PARSE, "message" => "JSON parse error. This may be a server error or PHP script error/warning"];
+        if ( $this->is_json_error() ) {
+            echo "<pre>js_error:";
+            echo $data;
+            echo "</pre>";
+            return ['code' => ERROR_JSON_PARSE, "message" => "JSON parse error. This may be a server error or PHP script error/warning"];
+        }
 
 
         $_REQUEST = [];
@@ -329,7 +334,7 @@ EOH;
         $data['id'] = $post_config_id;
         $data['session_id'] = $admin_session_id;
         $re = $this->route("post_config.create", $data );
-        test( is_success( $re ), "test::createPostConfig() " . get_error_string( $re ) );
+        if ( is_error($re) ) test( is_success( $re ), "test::createPostConfig() " . get_error_string( $re ) );
 
     }
 

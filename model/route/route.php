@@ -16,13 +16,18 @@ class Route {
     }
 
 
+    /**
+     *
+     *
+     * @return $this
+     */
     public function loadRoutes() {
-
         $route_files = rsearch( __MODEL_DIR__, '_route.php' );
         foreach (  $route_files as $file ) {
             include $file;
         }
-
+        hook()->run('after_route_load');
+        return $this;
     }
 
 
@@ -41,14 +46,29 @@ class Route {
     }
 
     /**
+     *
+     * @deprecated use route()->add()
      * @param $name
      * @param $option
      * @return $this
      */
     public function addRoute( $name, $option ) {
+        return $this->add( $name, $option);
+    }
+
+    /**
+     *
+     *
+     * @param $name
+     * @param $option
+     * @return $this
+     */
+    public function add( $name, $option ) {
         self::$routes[ $name ] = $option;
         return $this;
     }
+
+
 
 
     /**
@@ -224,7 +244,13 @@ class Route {
                     return [ 'code' => ERROR_MALFORMED_ID, 'message'=> 'id-has-malformed' ];
                 }
             }
+
+            if ( $k == 'session_id' ) {
+                if ( ! user()->isSessionId( $v ) ) return [ 'code'=> ERROR_MALFORMED_SESSION_ID, 'message' => 'session-is-malformed' ];
+            }
         }
+
+
 
 
         return OK;
@@ -276,7 +302,10 @@ class Route {
      */
     public function get_route_optional_variables() {
         $ret = [];
+
         $route = $this->get_current_route();
+
+
 
         if ( ! isset( $route['variables'] ) || ! isset( $route['variables']['optional'] ) ) return $ret;
 
@@ -284,15 +313,28 @@ class Route {
         foreach( $optional as $k ) {
             if ( array_key_exists( $k, $_REQUEST ) ) $ret[ $k ] = $_REQUEST[ $k ];
         }
+
+
         return $ret;
     }
 
 
-///// run the class method
+    /**
+     *
+     * run the class method
+     *
+     *
+     * @param $route
+     * @return mixed
+     */
     function run( $route )
     {
 
         if ( ! $route ) return error( ERROR_ROUTE_NOT_EXIST );
+
+
+        hook()->run('before_route');
+
         $this->set_current_route( $route );
         if (class_exists($route['path'])) {      // if class file ('model/model-name/class.php') exists?
             $obj = new $route['path']();                 // __constructor() runs.
@@ -305,14 +347,26 @@ class Route {
                     // check http (route) variables type for security
                     if ( $re = $this->validate_route_variables() ) return error( $re['code'], $re['message'] );
 
+
+                    $method = $route['method'];
+                    hook()->run('before_interface');
                     // do route validation
                     if ( isset($route['validator']) ) {
                         $re = $route['validator']();
-                        if ( $re ) return error( $re );
+                        if ( is_error( $re ) ) return error( $re );
+                        if ( is_array($re) ) {
+                            switch ( count($re) ) {
+                                case 1: $obj->$method( $re[0] ); break;
+                                case 2: $obj->$method( $re[0], $re[1] ); break;
+                                case 3: $obj->$method( $re[0], $re[1], $re[2] ); break;
+                                default : $obj->$method();
+                            }
+                        }
+                        else return $obj->$method( $re );
                     }
+                    else $obj->$method();
+                    hook()->run('after_interface');
 
-                    $method = $route['method'];
-                    $obj->$method();
                 } else {
                     $route = $this->get_current_route();
                     error(ERROR_MODEL_CLASS_METHOD_NOT_EXIST, "{$route['method']}() method does not exist on the route: $route[path]");
@@ -322,6 +376,8 @@ class Route {
             error(ERROR_MODEL_CLASS_NOT_FOUND, "model class - $route[path] - is not found");
         }
 
+
+        hook()->run('after_route');
     }
 
 

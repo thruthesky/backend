@@ -8,6 +8,7 @@
  */
 global $_config;
 $_config['test_order'] = [
+    'hook',
     'database',
     'system',
     'test',

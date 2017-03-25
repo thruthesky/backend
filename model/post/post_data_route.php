@@ -13,7 +13,12 @@ add_route( 'post_data.create', [
         'required' => [ 'post_config_id' ],
         'optional' => $_optional,
         'system' => [ 'session_id', 'post_config_id', 'file_hooks' ]
-    ]
+    ],
+    'validator' => function () {
+        $config = config()->load( in( 'post_config_id' ) );
+        if( ! $config->exist() ) return ERROR_POST_CONFIG_NOT_EXIST;
+        return OK;
+    }
 ]);
 
 add_route( 'post_data.edit', [
@@ -53,7 +58,7 @@ add_route( 'post_data.list', [
     "method" => "search",
     'variables' => [
         'required' => [],
-        'optional' => [ 'from', 'limit', 'where', 'bind', 'order' ],
+        'optional' => [ 'from', 'limit', 'where', 'bind', 'order', 'select', 'extra' ],
         'system' => [ 'session_id' ]
     ]
 ]);
@@ -61,5 +66,5 @@ add_route( 'post_data.list', [
 
 add_route( 'post.test', [
     'path' => "\\model\\post\\post_data_test",
-    'method' => 'run'
+    'method' => 'single_test'
 ]);

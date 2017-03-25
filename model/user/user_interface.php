@@ -51,42 +51,43 @@ class User_Interface extends User {
 
     public function edit() {
 
-        // check ups
-        $session_id = in('session_id');
-        if ( ! $this->isSessionId( $session_id ) ) return error( ERROR_MALFORMED_SESSION_ID );
-        $user = $this->load( $session_id );
-        if ( ! $user->exist() ) return error( ERROR_USER_NOT_FOUND );
 
-
-
-
+        // check-ups
         if ( currentUser()->isAnonymous() ) return error( ERROR_ANONYMOUS_CAN_NOT_EDIT_PROFILE );
+
+        //di($_REQUEST);
+
+
 
         $record = route()->get_route_optional_variables();
 
+
+
+
         if ( currentUser()->isAdmin() ) {
-            $user = user( in('id') );           // switch $user to the 'user' to be edited.
-            if ( ! $user->exist() ) return error( ERROR_USER_NOT_FOUND );
-            $this->forceLogin( in('id') );
-            $re = $this->update( $record );
-            $this->forceLogin( ADMIN_ID );
+            $user = user( in('id') );
         }
         else {
-            $re = $this->update( $record );
+            $user = user( in('session_id') );
         }
+
+        if ( ! $user->exist() ) return error( ERROR_USER_NOT_FOUND );
+        $re = $user->update( $record );
 
 
         /**
          * For admin, return data is admin's data after changing user's information.
          */
         if ( is_success( $re ) ) {
-            $re_upload = $this->hookUpload( $user, BACKEND_PRIMARY_PHOTO ); if ( is_error( $re_upload ) ) return error( $re_upload );
-            success( [
-                'session_id' => $this->getSessionId(),
+            $re_upload = $this->hookUpload( $user, BACKEND_PRIMARY_PHOTO );
+            if ( is_error( $re_upload ) ) return error( $re_upload );
+            $res = [
                 'id' => $this->id,
                 'name' => $this->name,
                 'email' => $this->email
-            ] );
+            ] ;
+            if ( ! currentUser()->isAdmin() ) $res[ 'session_id' ] = $user->getSessionId();
+            success( $res );
         }
         else error( ERROR_DATABASE_UPDATE_FAILED );
 
@@ -163,10 +164,8 @@ class User_Interface extends User {
 
 
         $session_id = in('session_id');
-        if ( ! $this->isSessionId( $session_id ) ) return error( ERROR_MALFORMED_SESSION_ID );
         $user = $this->load( $session_id );
         if ( ! $user->exist() ) return error( ERROR_USER_NOT_FOUND );
-
 
         $user->update( [ 'session_id' => '' ]);
         success();
@@ -178,13 +177,10 @@ class User_Interface extends User {
     public function resign() {
 
         $session_id = in('session_id');
-        if( empty( $session_id ) ) return error( ERROR_SESSION_ID_EMPTY );
-        if ( ! $this->isSessionId( $session_id ) ) return error( ERROR_MALFORMED_SESSION_ID );
-        $user = $this->load( $session_id );
-        if ( ! $user->exist() ) return error( ERROR_USER_NOT_FOUND );
-
+        $user = user()->load( $session_id );
         $user->delete();
         $resigned = user()->load( $session_id  );
+                                                                    // debug_log( $resigned ); exit;
         if ( $resigned->exist() ) return error( ERROR_USER_RESIGN_FAILED );
         return success();
 
@@ -215,5 +211,25 @@ class User_Interface extends User {
 
     }
 
+
+
+    /**
+     *
+     * Only admin can delete a user.
+     *
+     * Users can resign but cannot delete.
+     *
+     *
+     * @return mixed
+     */
+    public function delete() {
+                                                        //        debug_log("User_Interface::delete()");
+
+        $user = user( in('id') );
+                                                        //        debug_log( $user );
+        $re = $user->delete();
+        if ( is_success($re) ) success( ['id' => in('id') ]);
+        else error( ERROR_DATABASE_DELETE_FAILED );
+    }
 
 }

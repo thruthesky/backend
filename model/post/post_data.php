@@ -58,24 +58,46 @@ class Post_Data extends Post {
     }
 
 
+
+
+
     /**
      *
      * Returns sanitized post_data record to user.
      *
+     * @note this method works on '$this'
+     *
+     * @param array $option
      * @return array
      */
-    public function pre() {
+    public function pre( $option = [] ) {
         $record = $this->getRecord();
+
+        // delete security data.
         unset( $record['password'], $record['user_agent'] );
-        $record['meta'] = meta()->get( $this->getTable(), $record['idx']);
 
 
-        $record['files'] = (new File())->getRecords( " model='post' AND model_idx=$record[idx] ", 'idx, type, name');
+
+
+        //
+        if ( $option && isset($option['extra']) && $option['extra'] ) {
+            if ( isset($option['extra']['meta']) && $option['extra']['meta'] ) $record['meta'] = $this->meta()->get();
+            if ( isset($option['extra']['file']) && $option['extra']['file'] ) $record['files'] = $this->file()->get();
+        }
+        else {
+            $record['meta'] = $this->meta()->get();
+            $record['files'] = $this->file()->get();
+
+            //$record['files'] = (new File())->getRecords( " model='post' AND model_idx=$record[idx] ", 'idx, type, name');
+
+        }
 
 
         // debug_log($record);
         return $record;
     }
+
+
 
 
     /**
@@ -84,14 +106,14 @@ class Post_Data extends Post {
      *
      * @param $records - array of post records.
      *
+     * @param array $option
      * @return array
-     *
      */
-    public function pres( & $records ) {
+    public function pres( & $records, $option = [] ) {
         $new_records = [];
         if ( empty( $records ) ) return $new_records;
         foreach( $records as $record ) {
-            $new_records[] = post()->reset( $record )->pre();
+            $new_records[] = post()->reset( $record )->pre( $option );
         }
         return $new_records;
     }
