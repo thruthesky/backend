@@ -73,7 +73,7 @@ class Entity_Test extends \model\test\Test {
 
         // Update
 
-        $re = $copy->update( ['model' =>'entity new model test', 'data'=>'model data']); // it reloads.
+        $re = $copy->update( ['model' =>'entity new model test', 'data'=>'model data'] ); // it reloads.
 
 
         test( is_success( $re ), "Entity update: " . get_error_string($re));

@@ -37,13 +37,36 @@ route()->add( 'post_comment.edit', [
         $comment = comment( in('idx') );
         if ( is_error( $comment ) ) return $comment;
         if ( ! $comment->exist() ) return ERROR_COMMENT_NOT_EXIST;
-        if ( $re = $comment->editPermission() ) return $re;
+
         $config = config()->load( $comment->post_config_idx );
         if ( ! $config->exist() ) return ERROR_POST_CONFIG_NOT_EXIST;
+
+        if ( $re = $comment->editPermission() ) return $re;
+
         return [ $comment, $config ];
     }
 ]);
 
+
+
+route()->add( 'post_comment.delete', [
+    'path' => '\\model\\post\\post_comment_interface',
+    'method' => 'delete',
+    'variables' => [
+        'required' => [ 'idx' ]
+    ],
+    'validator' => function() {
+        $comment = comment( in('idx') );
+        if ( is_error( $comment ) ) return $comment;
+        if ( ! $comment->exist() ) return ERROR_COMMENT_NOT_EXIST;
+
+        $config = config()->load( $comment->post_config_idx );
+        if ( ! $config->exist() ) return ERROR_POST_CONFIG_NOT_EXIST;
+
+        if ( $re = $comment->deletePermission() ) return $re;
+        return [ $comment, $config ];
+    }
+]);
 
 route()->add( 'comment.test', [
     'path' => "\\model\\post\\post_comment_test",

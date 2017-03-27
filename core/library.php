@@ -227,8 +227,10 @@ function currentUser()
 
             $user = user( in('session_id') );
             if ( ! $user->exist() ) {
-                error( ERROR_WRONG_SESSION_ID );
-                exit;
+                /**
+                 * If session_id is wrong, it exists here !!
+                 */
+                exit( error( ERROR_WRONG_SESSION_ID ) );
             }
             setCurrentUser( $user );     // set current user.
         }
@@ -246,8 +248,14 @@ function anonymousUser() {
     return user( ANONYMOUS_ID );
 }
 
+// first test user
 function testUser() {
     return user( TEST_USER_ID );
+}
+
+// second test user
+function thruthesky() {
+    return user( 'thruthesky' );
 }
 
 

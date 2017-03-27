@@ -32,20 +32,7 @@ class User_Test extends \model\test\Test {
 
     public function cache() {
 
-        $admin = user()->load('admin');
-        $firstCount = $admin->getResetCount( 'admin' );
 
-        $admin = user()->load('admin', false);
-        $secondCount = $admin->getResetCount( 'admin' );
-
-
-        test( $firstCount == ($secondCount-1), "First cache count test");
-
-        $admin = user()->load('admin', false);
-        $thirdCount = $admin->getResetCount( 'admin' );
-
-
-        test( $firstCount == ($thirdCount-2), "Second cache count test");
     }
 
 

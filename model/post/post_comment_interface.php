@@ -99,4 +99,21 @@ class Post_Comment_Interface extends Post_Comment
         else error( ERROR_DATABASE_UPDATE_FAILED ); // should not happened.
 
     }
+
+
+    /**
+     *
+     * This does not actually delete post. it just mark as delete. it does not delete meta data of the post also.
+     *
+     * @param Post_Comment $comment
+     * @param Post_Config $config
+     * @return mixed
+     */
+    public function delete( $comment=null, $config=null ) {
+        $re = $comment->delete();
+        if ( is_success($re) ) success( ['idx' => in('idx') ]);
+        else error( $re );
+
+    }
+
 }

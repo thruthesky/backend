@@ -136,7 +136,7 @@ class Post_Data_Test extends Test {
 
         // edit without session_id( Anonymous ). if no session id, he is anonymous. need a password.
         $re = $this->route('post_data.edit', [ 'idx' => $post_idx, 'title' => 'title edited'] );
-        test( is_error($re) == ERROR_PASSWORD_EMPTY, "edit without session_id: " . get_error_string($re));
+        test( is_error($re) == ERROR_POST_OWNED_BY_USER_NOT_ANONYMOUS, "edit without session_id: " . get_error_string($re));
 
 
 
@@ -153,7 +153,7 @@ class Post_Data_Test extends Test {
 
         // edit without session_id( Anonymously ) with wrong password. expect: Not Your Post
         $re = $this->route('post_data.edit', [ 'idx' => $post_idx, 'password' => 'abcdef', 'title' => 'title edited'] );
-        test( is_error($re) == ERROR_WRONG_PASSWORD, "edit with wrong password: " . get_error_string($re));
+        test( is_error($re) == ERROR_POST_OWNED_BY_USER_NOT_ANONYMOUS, "edit with wrong password: " . get_error_string($re));
 
         // edit it. expect: success.
         $re = $this->route( 'post_data.edit', ['idx' => $post_idx, 'session_id'=>$session_id, 'title' => 'title 3'] );
@@ -174,7 +174,7 @@ class Post_Data_Test extends Test {
 
         // delete with Anonymous. without session_id and without password. expect: password empty. Anonymous must send password.
         $re = $this->route( 'post_data.delete', ['idx' => $post_idx]);
-        test( is_error($re) == ERROR_PASSWORD_EMPTY, "delete without session_id: " . get_error_string($re));
+        test( is_error($re) == ERROR_POST_OWNED_BY_USER_NOT_ANONYMOUS, "delete without session_id: " . get_error_string($re));
 
 
         // delete with wrong password

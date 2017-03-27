@@ -17,7 +17,6 @@ define('ERROR_NO_RESPONSE', -40041);                    $em[ERROR_NO_RESPONSE] =
 define('ERROR_EMPTY_RESPONSE', ERROR_NO_RESPONSE);
 
 
-
 define('ERROR_MODEL_CLASS_EMPTY', -40042);              $em[ERROR_MODEL_CLASS_EMPTY] = 'model-class-empty';
 define('ERROR_MODEL_CLASS_METHOD_NOT_EXIST', -40043);   $em[ERROR_MODEL_CLASS_METHOD_NOT_EXIST] = 'model-class-method-not-exist';
 define('ERROR_REQUIRED_INPUT_IS_MISSING', -40044);      $em[ERROR_REQUIRED_INPUT_IS_MISSING] = "required-input-is-missing";
@@ -30,7 +29,8 @@ define('ERROR_VARIABLE_EMPTY', -40049);                       $em[ERROR_VARIABLE
 
 define('ERROR_JSON_PARSE', -40050);                    $em[ERROR_JSON_PARSE] = "json-parse-error-maybe-PHP-script-error-warning";
 
-
+define('ERROR_ALREADY_DELETED', -40051);                $em[ERROR_ALREADY_DELETED] = 'already-deleted';
+define('ERROR_ALREADY_INSTALLED', -40052);              $em[ERROR_ALREADY_INSTALLED] = 'already-installed';
 define('ERROR_KEY_EXISTS', -40080);                     $em[ERROR_KEY_EXISTS] = 'key-exists';
 define('ERROR_DATABASE_INSERT_FAILED', -40081);         $em[ERROR_DATABASE_INSERT_FAILED] = 'database-insert-failed';
 define('ERROR_DATABASE_UPDATE_FAILED', -40082);         $em[ERROR_DATABASE_UPDATE_FAILED] = 'database-update-failed';

@@ -63,6 +63,8 @@ class Post_Data extends Post {
      *
      */
     public function delete() {
+
+        if ( $this->deleted() ) return ERROR_ALREADY_DELETED;
         $record_copy = $this->getRecord();
         $re = $this->update([
             'deleted' => '1',
@@ -72,7 +74,7 @@ class Post_Data extends Post {
         if ( is_success($re) ) {
             db()->insert( table_post_deleted(), $record_copy );
         }
-        $this->deleteCache();
+
 
         return $re;
     }
@@ -111,7 +113,6 @@ class Post_Data extends Post {
         return $configs;
 
     }
-
 
     public function deleted() {
         return $this->deleted;

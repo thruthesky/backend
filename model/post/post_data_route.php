@@ -55,7 +55,18 @@ add_route( 'post_data.delete', [
         'required' => [ 'idx' ],
         'optional' => [ 'session_id', 'password' ],
         'system' => []
-    ]
+    ],
+    'validator' => function() {
+        $post = post( in('idx') );
+        if ( is_error( $post ) ) return $post;
+        if ( ! $post->exist() ) return ERROR_POST_NOT_EXIST;
+
+        $config = config()->load( $post->post_config_idx );
+        if ( ! $config->exist() ) return ERROR_POST_CONFIG_NOT_EXIST;
+
+        if ( $re = $post->deletePermission() ) return $re;
+        return [ $post, $config ];
+    }
 ]);
 
 

@@ -7,7 +7,7 @@ class Post_Comment_Test extends Test {
     private  $test_config_id;
 
     public function single_test() {
-        parent::$reload = 5545;
+        parent::$reload = 5;
         $this->run();
     }
     public function run() {
@@ -18,7 +18,7 @@ class Post_Comment_Test extends Test {
 
         $this->createPostConfig( $this->test_config_id );
 
-        //$this->crud();
+        $this->crud();
         $this->tree_test();
 
 
@@ -53,15 +53,120 @@ class Post_Comment_Test extends Test {
         $comment_idx = $re['data']['idx'];
 
 
-        $re = $this->route('post_comment.edit', [
+        $edit = [
             'idx' => $comment_idx,
             'content' => 'edited',
             'password' => '1234abc'
-        ]);
+        ];
+        $re = $this->route('post_comment.edit', $edit);
         test( is_error($re) == ERROR_WRONG_PASSWORD, "comment edit: " . get_error_string($re) );
 
 
+        $edit['password'] = '1234a';
+        $re = $this->route('post_comment.edit', $edit);
+        test( is_success($re), "comment edit: " . get_error_string($re) );
 
+
+
+        $param = [
+            'parent_idx' => $parent_idx,
+            'content' => 'user',
+            'session_id' => testUser()->getSessionId()
+        ];
+        $re = $this->route('post_comment.create', $param);
+        test( is_success($re), "comment create by test user: " . get_error_string($re) );
+        $comment_idx = $re['data']['idx'];
+
+
+        $param = [
+            'idx' => $comment_idx,
+            'content' => 'updated'
+        ];
+        $re = $this->route('post_comment.edit', $param);
+        test( is_error($re) == ERROR_POST_OWNED_BY_USER_NOT_ANONYMOUS, "comment edit: " . get_error_string($re) );
+
+
+        $param = [
+            'idx' => $comment_idx,
+            'session_id' => thruthesky()->getSessionId(),
+            'content' => 'updated'
+        ];
+        $re = $this->route('post_comment.edit', $param);
+        test( is_error($re) == ERROR_NOT_YOUR_POST_DATA, "comment edit: " . get_error_string($re) );
+
+
+        $param = [
+            'idx' => $comment_idx,
+            'session_id' => $this->getAdminSessionId(),
+            'content' => 'updated'
+        ];
+        $re = $this->route('post_comment.edit', $param);
+        test( is_success($re), "comment edit: " . get_error_string($re) );
+
+
+        $param = [
+            'idx' => $comment_idx,
+            'session_id' => testUser()->getSessionId(),
+            'content' => 'updated by test user'
+        ];
+        $re = $this->route('post_comment.edit', $param);
+        test( is_success($re), "comment edit: " . get_error_string($re) );
+
+        test( comment( $comment_idx )->content == 'updated by test user', 'content match');
+
+
+
+        $param = [
+            'idx' => $comment_idx
+        ];
+        $re = $this->route('post_comment.delete', $param);
+        test( is_error($re) == ERROR_POST_OWNED_BY_USER_NOT_ANONYMOUS, "comment delete: " . get_error_string($re) );
+
+
+        $param = [
+            'idx' => $comment_idx,
+            'session_id' => thruthesky()->getSessionId()
+        ];
+        $re = $this->route('post_comment.delete', $param);
+        test( is_error($re) == ERROR_NOT_YOUR_POST_DATA, "comment delete: " . get_error_string($re) );
+
+
+        $param = [
+            'idx' => $comment_idx,
+            'session_id' => testUser()->getSessionId()
+        ];
+        $re = $this->route('post_comment.delete', $param);
+        test( is_success($re), "comment delete: " . get_error_string($re) );
+
+        $re = $this->route('post_comment.delete', $param);
+        test( is_error($re) == ERROR_ALREADY_DELETED, "comment already delete: " . get_error_string($re) );
+
+
+
+
+        $comment_idx = $this->createComment([
+            'parent_idx' => $parent_idx,
+            'session_id' => thruthesky()->getSessionId(),
+            'content' => "by thruthesky"
+        ]);
+
+
+        $param = [
+            'idx' => $comment_idx,
+            'session_id' => $this->getAdminSessionId()
+        ];
+        $re = $this->route('post_comment.delete', $param);
+        test( is_success($re), "comment delete: " . get_error_string($re) );
+        test( comment( $comment_idx )->deleted == 1, "comment deleted");
+
+
+        $param = [
+            'idx' => $parent_idx,
+            'session_id' => $this->getAdminSessionId()
+        ];
+        $re = $this->route('post_data.delete', $param);
+        test( is_success($re), "post delete: " . get_error_string($re) );
+        test( post( $parent_idx )->deleted == 1, "post deleted");
 
     }
 

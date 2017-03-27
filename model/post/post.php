@@ -44,10 +44,10 @@ class Post extends \model\entity\Entity
         if ( ! $this->exist() ) return ERROR_POST_NOT_EXIST;
 
         $config = config()->load( $this->post_config_idx );
-        if ( ! $config->exist() ) return ERROR_POST_CONFIG_NOT_EXIST;
 
         if ( currentUser()->isAdmin() ) return OK;
         else if ( currentUser()->isAnonymous() ) {
+            if ( $this->user_idx != currentUser()->idx ) return ERROR_POST_OWNED_BY_USER_NOT_ANONYMOUS;
             if ( empty( in('password') ) ) return ERROR_PASSWORD_EMPTY;
             if ( $this->checkPassword( in('password') ) ) return OK;
             else return ERROR_WRONG_PASSWORD;
@@ -59,27 +59,28 @@ class Post extends \model\entity\Entity
 
     public function deletePermission() {
 
+        if ( ! $this->exist() ) return ERROR_POST_NOT_EXIST;
+
+        $config = config()->load( $this->post_config_idx );
 
 
         if ( currentUser()->isAdmin() ) return OK;
 
-
-
         if ( currentUser()->isAnonymous() ) {
-
-            if ( empty( in('password') ) ) return ERROR_PASSWORD_EMPTY;
-
             if ( $this->user_idx != currentUser()->idx ) return ERROR_POST_OWNED_BY_USER_NOT_ANONYMOUS;
+            if ( empty( in('password') ) ) return ERROR_PASSWORD_EMPTY;
             if ( $this->checkPassword( in('password') ) ) return OK;
             else return ERROR_WRONG_PASSWORD;
 
         }
-
         if ( $this->user_idx == currentUser()->idx ) return OK;
-
         return ERROR_NOT_YOUR_POST_DATA;
 
     }
+
+
+
+
 
 
 

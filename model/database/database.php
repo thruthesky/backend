@@ -104,6 +104,8 @@ class Database extends \PDO {
 
 
 
+
+
     /**
      *
      * @Attention It only creates a single object and re-use it.
@@ -136,22 +138,12 @@ class Database extends \PDO {
         }
     }
 
-    /**
-     *
-     * @param $field
-     * @return string
-     *
-     */
-    /*
-    private static function escapeField($field)
-    {
-        if ( strpos($field,'*') !== false ) return $field;
-        else if ( strpos($field, ',') ) return $field;
-        else if ( strpos($field, '.') ) return $field;
-        else if ( strpos($field, '(') !== false ) return $field;
-        else return "`$field`";
+    public function prefix() {
+        return DATABASE_PREFIX;
     }
-    */
+    public function tableName( $name ) {
+        return $this->prefix() . $name;
+    }
 
 
     /**

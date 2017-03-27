@@ -78,24 +78,16 @@ class Post_Data_Interface extends Post_Data {
      *
      * This does not actually delete post. it just mark as delete. it does not delete meta data of the post also.
      *
+     * @param Post_Data $post
+     * @param Post_Config $config
      * @return mixed
      */
-    public function delete( ) {
+    public function delete( $post=null, $config=null ) {
 
-        $this->load( in('idx') );
-
-        if ( ! $this->exist() ) return error( ERROR_POST_NOT_EXIST );
-
-
-        if ( $re = $this->deletePermission() ) return error( $re );
-
-        $re = parent::delete();
-
-
-        // $re = post( in('idx') )->delete(); // it does not delete.
+        $re = $post->delete();
 
         if ( is_success($re) ) success( ['idx' => in('idx') ]);
-        else error( ERROR_DATABASE_DELETE_FAILED );
+        else error( $re );
 
     }
 
