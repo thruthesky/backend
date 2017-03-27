@@ -176,6 +176,18 @@ To communiate between users.
 * For new message indication, everty time a user gets a message from a room, the time of the message will be recorded in `chat_relation.time_of_last_message`. When a user visits(checks) the chat rooms, any chat room has newer message then the `chat_relation.time_of_last_message`, then the room has a new message that the user didn't read.
 
 
+
+## LONG-TERM TODO
+
+
+This section describes what to do in next version.
+
+* move core module in core folder.
+
+
+
+
+
 # Interface
 
 Is more likey a router.
