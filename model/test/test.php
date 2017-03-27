@@ -6,7 +6,7 @@ class Test {
     static $count_error = 0;
     static $done_test_info = false;
     static $time_start = 0;
-    static $reload = 15;
+    static $reload = 100;
     public function __construct( $reload = 15 )
     {
         self::$reload = $reload;
