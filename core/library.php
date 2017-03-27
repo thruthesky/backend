@@ -1,6 +1,20 @@
 <?php
 
 
+
+$_is_test = false;
+function is_test(){
+    global $_is_test;
+    return $_is_test;
+}
+
+function set_test(){
+    global $_is_test;
+    $_is_test = true;
+}
+
+
+
 /**
  *
  * Returns Truthy value if the input is error response.
@@ -232,6 +246,10 @@ function anonymousUser() {
     return user( ANONYMOUS_ID );
 }
 
+function testUser() {
+    return user( TEST_USER_ID );
+}
+
 
 
 function entity() {
@@ -316,17 +334,15 @@ function file_proxy( $model, $model_idx ) {
 }
 
 
-$_is_test = false;
-function is_test(){
-    global $_is_test;
-    return $_is_test;
-}
 
-function set_test(){
-    global $_is_test;
-    $_is_test = true;
-}
 
+function category( $what = null ){
+    $obj = new \model\category\Category();
+    if ( $what ) {
+        $obj->load($what);
+    }
+    return $obj;
+}
 
 
 
@@ -342,4 +358,9 @@ function hook() {
 }
 
 
-
+/**
+ * @return \model\system\System
+ */
+function backend() {
+    return new \model\system\System();
+}

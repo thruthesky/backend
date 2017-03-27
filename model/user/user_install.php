@@ -76,3 +76,15 @@ if ( is_error( $re ) ) {
 }
 
 
+
+$first_user_data = [
+    'id' => TEST_USER_ID,
+    'password' => TEST_USER_ID,
+    'name' => TEST_USER_ID
+];
+$re = user()->create( $first_user_data );
+if ( is_error( $re ) ) {
+    die(" error: " . get_error_string($re));
+}
+
+

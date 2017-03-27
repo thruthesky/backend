@@ -354,15 +354,16 @@ class Route {
                     if ( isset($route['validator']) ) {
                         $re = $route['validator']();
                         if ( is_error( $re ) ) return error( $re );
-                        if ( is_array($re) ) {
-                            switch ( count($re) ) {
-                                case 1: $obj->$method( $re[0] ); break;
-                                case 2: $obj->$method( $re[0], $re[1] ); break;
-                                case 3: $obj->$method( $re[0], $re[1], $re[2] ); break;
-                                default : $obj->$method();
-                            }
-                        }
-                        else return $obj->$method( $re );
+                        else call_user_func_array([ $obj, $method ], $re ? $re : [] );          //
+                                                                            //                        if ( is_array($re) ) {
+                                                                            //                            switch ( count($re) ) {
+                                                                            //                                case 1: $obj->$method( $re[0] ); break;
+                                                                            //                                case 2: $obj->$method( $re[0], $re[1] ); break;
+                                                                            //                                case 3: $obj->$method( $re[0], $re[1], $re[2] ); break;
+                                                                            //                                default : $obj->$method();
+                                                                            //                            }
+                                                                            //                        }
+                                                                            //                        else return $obj->$method( $re );
                     }
                     else $obj->$method();
                     hook()->run('after_interface');

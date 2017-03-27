@@ -125,7 +125,6 @@ class Entity extends \model\taxonomy\Taxonomy  {
     }
 
 
-
     /**
      * Returns a record.
      *
@@ -136,18 +135,16 @@ class Entity extends \model\taxonomy\Taxonomy  {
      *              - If it is numeric, then it is idx. so, this method will get the record on the idx.
      *              - If it is one word string, then it is an 'ID'
      *              - If it is a string with ' ', =, <, >, then it assumes that is is a WHERE SQL clause.
-     * @return $this
+     * @param bool $reload - If true, it get all the data from database NOT from 'memory cache'.
+     * @return $this - if error, error code will be return.
      *
-     *      - if error, error code will be return.
-     *          -- if there is no data, that is not error. that's just a success with no data.
-     *      - if success, array will be returned.
+     * - if error, error code will be return.
+     * -- if there is no data, that is not error. that's just a success with no data.
+     * - if success, array will be returned.
      *
-     *      - if there is no data, empty array will be returned.
-     *
-     *
-     *
+     * - if there is no data, empty array will be returned.
      */
-    public function load( $what ) {
+    public function load( $what, $reload=false ) {
 
 
         if ( empty($what) ) return ERROR_EMPTY_SQL_CONDITION;
@@ -159,7 +156,7 @@ class Entity extends \model\taxonomy\Taxonomy  {
 
 //        di($what);
 
-        if ( $cache = $this->getCacheEntity( $what ) ) {      /// Check if cache exists.
+        if ( $reload == false && $cache = $this->getCacheEntity( $what ) ) {      /// Check if cache exists.
 
             $this->reset( $cache );   /// Reset the cache.
             $this->increaseResetCount( $what );
@@ -188,11 +185,11 @@ class Entity extends \model\taxonomy\Taxonomy  {
      * @return mixed
      *      if there is error, error code will be returned.
      */
-    public function loads( $idxes ) {
+    public function loads( $idxes, $reload=false ) {
         $rets = [];
         if ( empty( $idxes ) ) return $rets;
         foreach ( $idxes as $idx ) {
-            $this_entity = $this->load( $idx );
+            $this_entity = $this->load( $idx, $reload );
             if ( is_error( $this_entity ) ) return $this_entity; // error
             $rets[] = clone( $this_entity );
         }

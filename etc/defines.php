@@ -55,7 +55,7 @@ define('ERROR_MISSING_BINDING_MARK', -40099);           $em[ERROR_MISSING_BINDIN
 define('ERROR_SQL_BIND_NOT_SET', -46001);               $em[ERROR_SQL_BIND_NOT_SET] = 'bind-not-set-in-taxonomy-search';
 
 define('ERROR_SEARCH_MARK_LACK', -46002);       $em[ERROR_SEARCH_MARK_LACK] = 'search-mark-lack-on-taxonomy-search';
-
+define('ERROR_DATABASE_UNIQUE_KEY', -46003);            $em[ERROR_DATABASE_UNIQUE_KEY] = 'unique-key-exists';
 define('ERROR_USER_EXIST', -40101);                     $em[ERROR_USER_EXIST] = 'user-exist';
 define('ERROR_USER_NOT_EXIST', -40102);                 $em[ERROR_USER_NOT_EXIST] = 'user-not-exist';
 define('ERROR_CANNOT_CHANGE_USER_ID', -40103);          $em[ERROR_CANNOT_CHANGE_USER_ID] = 'cannot-change-user-id';

@@ -501,7 +501,9 @@ class Database extends \PDO {
         try {
             $count = $this->exec($q);
         } catch ( \PDOException $e) {
-            debug_database_log('Insert failed: ' . $e->getMessage());
+            $message = $e->getMessage();
+            debug_database_log('Insert failed: ' . $message);
+            if ( strpos( $message, "Integrity constraint") !== false ) return ERROR_DATABASE_UNIQUE_KEY;
             return FALSE;
         }
 

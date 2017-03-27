@@ -15,6 +15,10 @@ Backend Server for Restful APIs
 
 
 
+## Comment
+
+## Category
+
 
 ## Bug Check
 
@@ -218,6 +222,23 @@ Any methods that are not 'route' should return a value.
 ````
 http://localhost/www/backend-0.2/?route=install
 ````
+
+
+## What would be installed
+
+### User accounts
+ 
+3 account will be created at installation
+
+    * `admin` for admin account. Admin account can be changed. @refer 'Admin' section.
+    
+    * `anonymous` for anonymous
+    
+    * `user` for a normal user. this is more like a  test purpose.
+
+
+All these accounts can be changed on config.php
+
 
 
 ## How to code on installation
@@ -545,6 +566,9 @@ Post categories ( or settings ) are saved in `post_config` table.
 
 Posts are saved in `post_data` table.
 Comments are saved in `post_data` table together with post for easy managibility and for easy search.
+
+
+* `post_data.root_idx` and `post_data.parent_idx` are 0 if it is a post ( not a comment. )
 
 
 ### Utility properties.

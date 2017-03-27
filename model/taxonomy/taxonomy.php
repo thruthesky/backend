@@ -249,6 +249,10 @@ class Taxonomy extends \model\base\Base  {
      *
      * @warning no table set test. If table is not set, then it would result in unexptected query error.
      * @return array
+     *
+     * @code    example of return array)
+     *          [ 1, 2, 3 ]
+     * @endcode
      */
     public function idxes( $cond ) {
         $idxes = [];
@@ -259,6 +263,18 @@ class Taxonomy extends \model\base\Base  {
         }
         return $idxes;
     }
+
+    /**
+     * @deprecated  use getRecords()
+     * @param $cond
+     * @param string $select
+     * @return array|int
+     */
+    public function loadRecords( $cond, $select="*") {
+        return $this->getRecords( $cond, $select );
+    }
+
+
 
     /**
      * Returns the records based on the condition.
@@ -275,21 +291,54 @@ class Taxonomy extends \model\base\Base  {
      * @endcode
      *
      *
+     * @note You can pass order by, limit on $cond.
+     *
      */
-    public function loadRecords( $cond, $select="*") {
+    public function getRecords( $cond, $select="*") {
         $table = $this->getTable();
         return db()->rows("SELECT $select FROM $table WHERE $cond ");
     }
 
 
     /**
-     * @deprecated  use loadRecords()
-     * @param $cond
-     * @param string $select
-     * @return array|int
+     *
+     *
+     * Returns all the children of an entity.
+     *
+     * @note this can be used for 'comment' sorting and 'category' sorting.
+     *
+     * @note This returns children. It does not include the parent( the caller of parent )
+     *
+     * @attention The table must have idx and parent_idx fields to do this perform.
+     * @param $parent_idx
+     * @param array $idxes
+     * @return array - Array of idx(es) of children of an entity.
      */
-    public function getRecords( $cond, $select="*") {
-        return $this->loadRecords( $cond, $select = '*' );
+    public function getChildren( $parent_idx, $idxes = [] ) {
+
+        $idx_brothers = $this->getBrothers($parent_idx);
+        foreach( $idx_brothers as $idx_brother ) {
+            $idxes[] = $idx_brother;
+            $idxes = $this->getChildren( $idx_brother, $idxes );
+        }
+        return $idxes;
+
+
+    }
+
+    public function getParents() {
+
+    }
+
+    /**
+     *
+     * Returns bothers of an entity.
+     *
+     * @param $parent_idx
+     * @return array - An array of idx(es) of an entity.
+     */
+    public function getBrothers( $parent_idx ) {
+        return $this->idxes( "parent_idx=$parent_idx ");
     }
 
 }

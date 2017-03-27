@@ -10,11 +10,9 @@
 
 
 
-
-
-
-$ADMIN_ID               = 'admin';          // this is admin id.
-$ANONYMOUS_ID          = 'anonymous';      // Anonymous ID.
+$ADMIN_ID               = 'admin';          // This is admin id.
+$ANONYMOUS_ID           = 'anonymous';      // Anonymous ID.
+$TEST_USER_ID           = 'user';           // Test User ID.
 
 
 
@@ -24,7 +22,7 @@ $DIR_FILE               = __ROOT_DIR__ . '/data/file';
 $DATABASE_USER          = 'root';
 $DATABASE_PASSWORD      = '7777';
 $DATABASE_NAME          = 'backend';
-$DATABASE_PREFIX        = "be_";
+$DATABASE_PREFIX        = "be04_";
 $DATABASE_HOST          = 'localhost';
 $DATABASE_TYPE          = 'mysql';         // 'mysql' | 'sqlite'
 
@@ -80,6 +78,7 @@ define('DEBUG_LOG_DATABASE',        $DEBUG_LOG_DATABASE);
 
 define('ADMIN_ID',                  $ADMIN_ID);
 define('ANONYMOUS_ID',              $ANONYMOUS_ID);
+define('TEST_USER_ID',              $TEST_USER_ID);
 
 define('DATABASE_USER',             $DATABASE_USER);
 define('DATABASE_PASSWORD',         $DATABASE_PASSWORD);

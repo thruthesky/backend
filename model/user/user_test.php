@@ -321,7 +321,7 @@ class User_Test extends \model\test\Test {
         $this->createuser( [ 'id' => 'user1', 'password' => 'pass1'] );
 
 
-        $re = $this->route("login", ['id'=>'user', 'password'=>'pass1'] );
+        $re = $this->route("login", ['id'=>'user73nu', 'password'=>'pass1'] );
         test( is_error($re) == ERROR_USER_NOT_EXIST, "User NOT exist test : " . get_error_string($re) );
 
 

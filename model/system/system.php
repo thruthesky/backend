@@ -10,10 +10,11 @@ class System {
     /**
      *
      * run the route
-     * @param null $_
      * @return mixed
      */
-    public function run( $_=null ) {
+    public final function run() {
+
+        route()->loadRoutes();
 
         $route_name = in('route');
         if ( empty( $route_name ) ) return error( ERROR_ROUTE_NOT_PROVIDED );
@@ -21,6 +22,8 @@ class System {
         $route = route()->getRoute( $route_name );
         route()->run( $route );
 
+        return OK;
     }
 
 }
+

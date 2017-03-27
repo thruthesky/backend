@@ -10,7 +10,5 @@ define('__ROOT_DIR__', __DIR__ );
 
 include_once 'core/bootstrap.php';
 
-
-
-(new \model\system\System())->run( route()->loadRoutes() );
+backend()->run();
 

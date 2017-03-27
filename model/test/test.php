@@ -338,6 +338,14 @@ EOH;
 
     }
 
+
+    public function createComment( $param ) {
+
+        $re = $this->route( 'post_comment.create', $param );
+        if ( is_error($re) ) test( false, "commemtCreate: " . get_error_string($re));
+        else return $re['data']['idx'];
+
+    }
     public function deletePostConfig( $post_config_id ) {
 
         $admin_session_id = $this->getAdminSessionId();
@@ -351,6 +359,17 @@ EOH;
         }
 
     }
+
+    public function  createCategory( $record, $replace=true ) {
+
+        if ( empty( $record['id'] ) ) test( false, "crateCategory: input id to create a category");
+        if ( $replace ) category( $record['id'] )->delete();
+        $re = $this->route('category.create', $record);
+        if ( is_error($re) ) test(false, "createCategory: " . get_error_string($re));
+        return $re['data']['idx'];
+
+    }
+
 
 
 }

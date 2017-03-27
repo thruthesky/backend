@@ -191,7 +191,8 @@ function success( $data = null ) {
  * @param $re - It gets error code defined in defines.php
  */
 function result( $re ) {
-    if ( isset($re['code'] ) && $re['code'] ) error( $re );
+    //if ( isset($re['code'] ) && $re['code'] ) error( $re );
+    if ( is_error( $re ) ) error( $re );
     else success( $re );
 }
 
