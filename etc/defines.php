@@ -60,7 +60,7 @@ define('ERROR_USER_EXIST', -40101);                     $em[ERROR_USER_EXIST] = 
 define('ERROR_USER_NOT_EXIST', -40102);                 $em[ERROR_USER_NOT_EXIST] = 'user-not-exist';
 define('ERROR_CANNOT_CHANGE_USER_ID', -40103);          $em[ERROR_CANNOT_CHANGE_USER_ID] = 'cannot-change-user-id';
 define('ERROR_SESSION_ID_EMPTY', -40104);               $em[ERROR_SESSION_ID_EMPTY] = 'session-id-is-empty';
-define('ERROR_WRONG_SESSION_ID', -40105);               $em[ERROR_WRONG_SESSION_ID] = 'wrong-session-id';
+define('ERROR_WRONG_SESSION_ID', -40105);               $em[ERROR_WRONG_SESSION_ID] = 'wrong-session-id--session-id-has-been-invalidated--login-again';
 define('ERROR_USER_ID_EMPTY', -40106 );                 $em[ERROR_USER_ID_EMPTY] = 'user-id-empty';
 define('ERROR_PASSWORD_EMPTY', -40107 );                $em[ERROR_PASSWORD_EMPTY] = 'password-empty';
 define('ERROR_USER_NOT_FOUND',-40108 );                 $em[ERROR_USER_NOT_FOUND] = 'user-not-found';
@@ -125,7 +125,7 @@ define('ERROR_FAKE_ERROR', -50999);                         $em[ERROR_FAKE_ERROR
 
 // category
 define('ERROR_CATEGORY_NOT_EXIST', -4900);                    $em[ERROR_CATEGORY_NOT_EXIST] = "category-not-exist";
-
+define('ERROR_CATEGORY_CHILDREN_EXIST', -4901);                 $em[ERROR_CATEGORY_CHILDREN_EXIST] = 'category-children-exists';
 
 
 // file upload error

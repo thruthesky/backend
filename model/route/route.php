@@ -330,7 +330,10 @@ class Route {
     function run( $route )
     {
 
+
+
         if ( ! $route ) return error( ERROR_ROUTE_NOT_EXIST );
+
 
 
         hook()->run('before_route');

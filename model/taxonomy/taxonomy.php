@@ -295,7 +295,8 @@ class Taxonomy extends \model\base\Base  {
      *
      * Returns all the children of an entity.
      *
-     * @note this can be used for 'comment' sorting and 'category' sorting.
+     * @note This is general function. It is being used by 'comment' and 'category' and can be used for many other model.
+     *          So, This cannot be placed in a model.
      *
      * @note This returns children. It does not include the parent( the caller of parent )
      *
@@ -304,8 +305,8 @@ class Taxonomy extends \model\base\Base  {
      * @param array $idxes
      * @return array - Array of idx(es) of children of an entity.
      */
-    public function getChildren( $parent_idx, $idxes = [] ) {
-
+    public function getChildren( $parent_idx=null, $idxes = [] ) {
+        if ( $parent_idx === null ) $parent_idx = $this->idx;
         $idx_brothers = $this->getBrothers($parent_idx);
         foreach( $idx_brothers as $idx_brother ) {
             $idxes[] = $idx_brother;
@@ -321,7 +322,8 @@ class Taxonomy extends \model\base\Base  {
      * @param $parent_idx
      * @return array - Array of Category object.
      */
-    public function loadChildren( $parent_idx ) {
+    public function loadChildren( $parent_idx=null ) {
+        if ( $parent_idx === null ) $parent_idx = $this->idx;
         $idxes = $this->getChildren( $parent_idx );
         $ret = [];
         foreach ( $idxes as $idx ) {
@@ -343,7 +345,8 @@ class Taxonomy extends \model\base\Base  {
      *
      * @return array
      */
-    public function getParents( $self_idx, $self_include = false ) {
+    public function getParents( $self_idx=null, $self_include = false ) {
+        if ( $self_idx === null ) $self_idx = $this->idx;
         $ret = [];
         if ( $self_include ) $ret[] = $self_idx;
 
@@ -356,14 +359,16 @@ class Taxonomy extends \model\base\Base  {
         return $ret;
     }
 
-    public function getParent( $self_idx ) {
+    public function getParent( $self_idx=null ) {
+        if ( $self_idx === null ) $self_idx = $this->idx;
         $table = $this->getTable();
         return db()->result("SELECT parent_idx FROM $table WHERE idx=$self_idx");
     }
 
 
-    public function loadParents( $self_dx, $self_include = false ) {
-        $idxes = $this->getParents( $self_dx, $self_include );
+    public function loadParents( $self_idx=null, $self_include = false ) {
+        if ( $self_idx === null ) $self_idx = $this->idx;
+        $idxes = $this->getParents( $self_idx, $self_include );
         $ret = [];
         foreach ( $idxes as $idx ) {
             $ret[] = category( $idx );
@@ -381,7 +386,23 @@ class Taxonomy extends \model\base\Base  {
      * @return array - An array of idx(es) of an entity.
      */
     public function getBrothers( $parent_idx ) {
+        if ( $parent_idx === null ) $parent_idx = $this->idx;
         return $this->idxes( "parent_idx=$parent_idx ");
+    }
+
+    /**
+     * Returns an array of category objects of the brothers of the parent.
+     * @param $parent_idx
+     * @return array
+     */
+    public function loadBrothers( $parent_idx ) {
+        if ( $parent_idx === null ) $parent_idx = $this->idx;
+        $idxes = $this->getBrothers( $parent_idx );
+        $ret = [];
+        foreach ( $idxes as $idx ) {
+            $ret[] = category( $idx );
+        }
+        return $ret;
     }
 
 }
