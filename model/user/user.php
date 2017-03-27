@@ -340,9 +340,9 @@ class User extends \model\entity\Entity {
     }
 
     public function getPrimaryPhotoIdx() {
-        debug_log("user::getPrimaryPhotoIdx()");
+        //debug_log("user::getPrimaryPhotoIdx()");
         $photo = $this->primaryPhoto();
-        $photo->debug_log();
+        //$photo->debug_log();
         if ( $photo->exist() ) return $photo->idx;
         return 0;
     }
