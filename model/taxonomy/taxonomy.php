@@ -264,17 +264,6 @@ class Taxonomy extends \model\base\Base  {
         return $idxes;
     }
 
-    /**
-     * @deprecated  use getRecords()
-     * @param $cond
-     * @param string $select
-     * @return array|int
-     */
-    public function loadRecords( $cond, $select="*") {
-        return $this->getRecords( $cond, $select );
-    }
-
-
 
     /**
      * Returns the records based on the condition.
@@ -300,6 +289,7 @@ class Taxonomy extends \model\base\Base  {
     }
 
 
+
     /**
      *
      *
@@ -322,13 +312,66 @@ class Taxonomy extends \model\base\Base  {
             $idxes = $this->getChildren( $idx_brother, $idxes );
         }
         return $idxes;
-
-
     }
 
-    public function getParents() {
-
+    /**
+     *
+     * Returns an array of category objects of children.
+     *
+     * @param $parent_idx
+     * @return array - Array of Category object.
+     */
+    public function loadChildren( $parent_idx ) {
+        $idxes = $this->getChildren( $parent_idx );
+        $ret = [];
+        foreach ( $idxes as $idx ) {
+            $ret[] = category( $idx );
+        }
+        return $ret;
     }
+
+
+    /**
+     *
+     * Returns an array of parents of a category.
+     *
+     * @note If you want to load objects, then use `loadParents()`
+     *
+     * @param $self_idx - a category whose parents will be returned.
+     * @param $self_include - if true, 'self' category will be included.
+     *
+     *
+     * @return array
+     */
+    public function getParents( $self_idx, $self_include = false ) {
+        $ret = [];
+        if ( $self_include ) $ret[] = $self_idx;
+
+        $parent_idx = $this->getParent( $self_idx );
+        while ( $parent_idx ) {
+            $ret[] = $parent_idx;
+            $parent_idx = $this->getParent( $parent_idx );
+        }
+
+        return $ret;
+    }
+
+    public function getParent( $self_idx ) {
+        $table = $this->getTable();
+        return db()->result("SELECT parent_idx FROM $table WHERE idx=$self_idx");
+    }
+
+
+    public function loadParents( $self_dx, $self_include = false ) {
+        $idxes = $this->getParents( $self_dx, $self_include );
+        $ret = [];
+        foreach ( $idxes as $idx ) {
+            $ret[] = category( $idx );
+        }
+        return $ret;
+    }
+
+
 
     /**
      *

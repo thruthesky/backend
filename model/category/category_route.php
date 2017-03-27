@@ -10,16 +10,27 @@ route()->add('category.create', [
         'required' => ['id', 'model', 'model_idx'],
         'optional' => ['name', 'description', 'parent_idx'],
         'system' => []
-    ]
+    ],
+    'validator' => function() {
+        if ( ! currentUser()->isAdmin() ) return ERROR_PERMISSION_ADMIN;
+    }
 ]);
 route()->add('category.edit', [
     'path' => '\\model\\category\\category_interface',
-    'method' => 'create',
+    'method' => 'edit',
     'variables' => [
-        'required' => [],
-        'optional' => [],
+        'required' => ['id', 'model', 'model_idx' ],
+        'optional' => ['name', 'description', 'parent_idx'],
         'system' => []
-    ]
+    ],
+    'validator' => function() {
+        if ( ! currentUser()->isAdmin() ) return ERROR_PERMISSION_ADMIN;
+        if ( empty( in('id') ) ) return ERROR_ID_EMPTY;
+        $category = category( in('id') );
+        if ( is_error($category) ) return $category;
+        if ( ! $category->exist() ) return ERROR_POST_NOT_EXIST;
+        return [ $category ];
+    }
 ]);
 route()->add('category.delete', [
     'path' => '\\model\\category\\category_interface',

@@ -334,8 +334,14 @@ function file_proxy( $model, $model_idx ) {
 }
 
 
-
-
+/**
+ *
+ *
+ * @param null $what
+ * @return \model\category\Category
+ *
+ *
+ */
 function category( $what = null ){
     $obj = new \model\category\Category();
     if ( $what ) {
@@ -343,6 +349,7 @@ function category( $what = null ){
     }
     return $obj;
 }
+
 
 
 

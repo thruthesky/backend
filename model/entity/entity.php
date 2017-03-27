@@ -402,7 +402,7 @@ class Entity extends \model\taxonomy\Taxonomy  {
      * - FALSE on logical error. If entity idx does not exist.
      * - TRUE if there is no modified/deleted row.
      * - TRUE of rows that are modified/deleted.
-     * @attention it does not support chaining like belwo
+     * @attention it does not support chaining like below
      *
      *      user()->load(...)->set(...)->update()
      *

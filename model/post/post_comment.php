@@ -17,12 +17,6 @@ class Post_Comment extends Post_Data
 
 
 
-    /*
-    public function getChildren( $parent_idx ) {
 
-        return $this->loadRecords( " parent_idx=$parent_idx " );
-
-    }
-    */
 
 }

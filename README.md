@@ -544,6 +544,11 @@ meta.model_idx is to associate the meta data with the object(entity/record) of t
 meta.code is a sub-category for the meta. It would be a property of a entity like "facebook address", "google plus address" of a user.
 
 
+## Category
+
+`Category` is to manage tree like data structure. It has a parent and has chilren and childrent's children. `Category` model will help to handle this kind of data structure. You can use this as category management of `forum` or `shoppmall`.
+
+
 
 ## Post
 
