@@ -17,8 +17,6 @@ Backend Server for Restful APIs
 
 ## Comment
 
-## Category
-
 
 ## Bug Check
 
@@ -311,7 +309,8 @@ http://localhost/index.php?route=taxonomy.test.run
 You need to extend `Test` class to facilitate the test functionality.
 
 
-Route for a test class )
+Route for a test class
+
 
 ````
 route()->add( 'hook.test', [
@@ -323,6 +322,8 @@ route()->add( 'hook.test', [
 ]);
 
 ````
+$
+
 
 #### Refresh Interval.
 
@@ -339,6 +340,11 @@ class Hook_Test extends \model\test\Test
     }
 }
 ````
+
+
+
+
+
 
 
 
@@ -546,7 +552,10 @@ meta.code is a sub-category for the meta. It would be a property of a entity lik
 
 ## Category
 
-`Category` is to manage tree like data structure. It has a parent and has chilren and childrent's children. `Category` model will help to handle this kind of data structure. You can use this as category management of `forum` or `shoppmall`.
+`Category` model is to manage tree like data structure. It has a parent and has children and childrent's children hierachical structure. `Category` model has methods like `getParents()`, `loadParents()`, `getBrothers()`, `loadBrothers()`, `getChildren()`, `loadChildren()` dirived fron `Taxonomy` model and will help you to handle tree kinds of data structure. You can use this as category management of `forum` or `shoppmall`.
+
+See category tests to get some sample codes.
+
 
 
 
@@ -861,10 +870,27 @@ Refer [API explanation page](https://eventviva.github.io/php-image-resize/class-
 
 
 
+# Model Initialization
+
+Backend will load and run `*_init.php` scripts under each model. The purpose of this scripts is for initializing model like writing `hooks`, loading some data for the model, etc.
+
+
+* Be sure that you keep light `*_init.php` scripts.
+* `*_init.php` is a good place to write hooks.
+
+
+
 
 # Hooks
 
-Hook is one way to alter the behavior backend. By hooking, you can inject your code into backend routes, methods.
+Hook is one way to alter the behavior backend. By hooking, you can inject your code deep into Backend and do whatever you want.
+
+* Best cases to write hooks are that you want to change the behavior of Backend but you do not want to touch the core code because
+
+	* your changes will be deleted or have to rewrite when Backend updates.
+	* your changes may not be sharable if you change it in Backend core code.
+
+* To write hook codes, create your own model and hook something by putting the code in `*_init.php`
 
 * Hooks are not for altering the output or JSON response. Be careful not to print out anything from hooks.
 

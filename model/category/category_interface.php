@@ -36,7 +36,6 @@ class Category_Interface extends Category
      * @param Category $category
      */
     public function edit( $category ) {
-
         $re = $category
             ->update([
                 'model' => in('model'),
@@ -45,9 +44,24 @@ class Category_Interface extends Category
                 'description' => in('description'),
             ]);
 
-
         if ( is_error($re) ) error( $re );
         else success( [] );
 
     }
+
+
+    /**
+     * @param Category $category
+     * @return mixed|number
+     */
+    public function delete( $category=null ) {
+
+        $re = $category->delete();
+
+        if ( is_success( $re ) ) success( ['idx'=>in('idx')] );
+        else error( $re );
+
+
+    }
+
 }

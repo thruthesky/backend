@@ -18,7 +18,7 @@ class Category_Test extends \model\test\Test
 
     public function crud() {
 
-        $this->createCategory( [
+        $forum_category_idx = $this->createCategory( [
             'session_id' => $this->getAdminSessionId(),
             'id' => 'forum',
             'model' => 'post_config',
@@ -34,7 +34,51 @@ class Category_Test extends \model\test\Test
             ]);
 
         test( $re, "Category_Test::crud() " . get_error_string($re) );
+
+
+        test( category('forum')->description == 'forum category', "description match");
+
+
+
+        $child_idx = $this->createCategory( [
+            'session_id' => $this->getAdminSessionId(),
+            'parent_idx' => $forum_category_idx,
+            'id' => 'freetalk',
+            'model' => 'post_config',
+            'model_idx' => 2 ] );
+
+
+        $re = $this->route('category.delete', [
+                'session_id' => $this->getAdminSessionId(),
+                'id'=>'forum'
+            ]);
+
+
+        test( is_error($re) == ERROR_CATEGORY_CHILDREN_EXIST, "category childrent exist: " . get_error_string($re));
+
+
+        $re = $this->route('category.delete', [
+            'session_id' => $this->getAdminSessionId(),
+            'id'=>'freetalk'
+        ]);
+        test( is_success($re), "category delete - freetalk: " . get_error_string($re));
+
+
+        $re = $this->route('category.delete', [
+            'session_id' => $this->getAdminSessionId(),
+            'id'=>'forum'
+        ]);
+        test( is_success($re), "category delete - forum category: " . get_error_string($re));
+
+
+
+
+
     }
+
+
+
+
 
     public function tree_test() {
 
@@ -54,7 +98,6 @@ class Category_Test extends \model\test\Test
 
         test( is_success($re), "create animal root category: " . get_error_string($re));
         $animal_idx = $re['data']['idx'];
-
 
 
         $animals = [];
@@ -92,14 +135,10 @@ class Category_Test extends \model\test\Test
 
 
 
-
-
         $record = $animal_record;
         $record['id'] = 'duck';
         $record['parent_idx'] = $animal_idx;
         $duck_idx = $this->createCategory( $record, true );
-
-
 
 
         $record = $animal_record;
@@ -287,20 +326,31 @@ class Category_Test extends \model\test\Test
 
 
 
-        // $parents = category()->getParents( $student_idx );
-        // di($parents);
 
-
+        /// parents test
         $parents = category()->loadParents( $student_idx, true );
-
         $student_parents = [ 'student', 'gongja', 'master', 'bester', 'better', 'runner', 'landlacer', 'pig', 'animal'];
         for( $i=0; $i < count($student_parents); $i++ ) {
             $id = $student_parents[ $i ];
             $parent = $parents[ $i ];
             if ( $id != $parent->id ) break;
         }
-
         test( $i == count($parents), "category parents match: $id");
+
+        /// brothers test
+        $brothers = category()->loadBrothers( $hero_idx );
+        $hero_brothers = [
+            'majesty',
+            'superman',
+            'superwoman',
+            'betman',
+            'hong'];
+        for( $i=0; $i < count($hero_brothers); $i++ ) {
+            $id = $hero_brothers[ $i ];
+            $brother = $brothers[ $i ];
+            if ( $id != $brother->id ) break;
+        }
+        test( $i == count($brothers), "category brother match: $id");
 
 
     }

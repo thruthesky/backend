@@ -96,7 +96,7 @@ class User extends \model\entity\Entity {
      * @endcode
      *
      */
-    public function load( $what ) {
+    public function load( $what, $_=false ) { // for variable compatibilities with Entity
 
         if ( $this->isSessionId($what) ) return $this->loadBySessionId( $what );
         else {

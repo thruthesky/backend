@@ -14,6 +14,7 @@ class System {
      */
     public final function run() {
 
+        $this->loadInit();
         route()->loadRoutes();
 
         $route_name = in('route');
@@ -23,6 +24,17 @@ class System {
         route()->run( $route );
 
         return OK;
+    }
+
+
+
+    private function loadInit() {
+        $init_files = rsearch( __MODEL_DIR__, '_init.php' );
+        foreach (  $init_files as $file ) {
+            include $file;
+        }
+        hook()->run('after_init');
+        return $this;
     }
 
 }
