@@ -342,7 +342,7 @@ EOH;
     public function createComment( $param ) {
 
         $re = $this->route( 'post_comment.create', $param );
-        if ( is_error($re) ) test( false, "commemtCreate: " . get_error_string($re));
+        if ( is_error($re) ) test( false, "createComment: " . get_error_string($re));
         else return $re['data']['idx'];
 
     }

@@ -308,28 +308,13 @@ class Taxonomy extends \model\base\Base  {
     public function getChildren( $parent_idx=null, $idxes = [] ) {
         if ( $parent_idx === null ) $parent_idx = $this->idx;
         $idx_brothers = $this->getBrothers($parent_idx);
+        debug_log("brothers: $parent_idx");
+        debug_log($idx_brothers);
         foreach( $idx_brothers as $idx_brother ) {
             $idxes[] = $idx_brother;
             $idxes = $this->getChildren( $idx_brother, $idxes );
         }
         return $idxes;
-    }
-
-    /**
-     *
-     * Returns an array of category objects of children.
-     *
-     * @param $parent_idx
-     * @return array - Array of Category object.
-     */
-    public function loadChildren( $parent_idx=null ) {
-        if ( $parent_idx === null ) $parent_idx = $this->idx;
-        $idxes = $this->getChildren( $parent_idx );
-        $ret = [];
-        foreach ( $idxes as $idx ) {
-            $ret[] = category( $idx );
-        }
-        return $ret;
     }
 
 
@@ -366,16 +351,6 @@ class Taxonomy extends \model\base\Base  {
     }
 
 
-    public function loadParents( $self_idx=null, $self_include = false ) {
-        if ( $self_idx === null ) $self_idx = $this->idx;
-        $idxes = $this->getParents( $self_idx, $self_include );
-        $ret = [];
-        foreach ( $idxes as $idx ) {
-            $ret[] = category( $idx );
-        }
-        return $ret;
-    }
-
 
 
     /**
@@ -390,19 +365,5 @@ class Taxonomy extends \model\base\Base  {
         return $this->idxes( "parent_idx=$parent_idx ");
     }
 
-    /**
-     * Returns an array of category objects of the brothers of the parent.
-     * @param $parent_idx
-     * @return array
-     */
-    public function loadBrothers( $parent_idx ) {
-        if ( $parent_idx === null ) $parent_idx = $this->idx;
-        $idxes = $this->getBrothers( $parent_idx );
-        $ret = [];
-        foreach ( $idxes as $idx ) {
-            $ret[] = category( $idx );
-        }
-        return $ret;
-    }
 
 }

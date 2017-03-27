@@ -28,7 +28,23 @@ add_route( 'post_data.edit', [
         'required' => [ 'idx' ],
         'optional' => $_optional,
         'system' => [ 'session_id', 'file_hooks' ]
-    ]
+    ],
+    'validator' => function () {
+
+        if( strlen( in('title') ) > 254 ) return ERROR_TITLE_TOO_LONG;
+        $post = post( in('idx') );
+        if ( is_error( $post ) ) return $post;
+        if ( ! $post->exist() ) return ERROR_POST_NOT_EXIST;
+
+
+        $config = config()->load( $post->post_config_idx );
+        if ( ! $config->exist() ) return ERROR_POST_CONFIG_NOT_EXIST;
+
+
+        if ( $re = $post->editPermission() ) return $re;
+
+        return [ $post, $config ];
+    }
 ]);
 
 

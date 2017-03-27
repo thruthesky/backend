@@ -14,16 +14,14 @@ class Post_Comment_Interface extends Post_Comment
     public function create( $post=null, $config=null ) // for variable compatibilities of parent.
     {
 
-
-
         // post info.
         $record = route()->get_route_optional_variables();
 
 
-        if ( $post->parent_idx == 0 ) {             // the post is a root post.
+        if ( $post->parent_idx == 0 ) {             // the post is a root post. it will be a child ( not decendant )
             $record['root_idx'] = $post->idx;
         }
-        else {                                      // the post is a comment of a root post.
+        else {                                      // the post is a comment of a root post or a comment. it is a decentant.
             $record['root_idx'] = $post->root_idx;
             $record['depth'] = $post->depth + 1;
         }
@@ -51,13 +49,9 @@ class Post_Comment_Interface extends Post_Comment
             $my_order_no = db()->result("SELECT MAX(order_no) FROM $table WHERE root_idx=$record[root_idx]");
         }
         else {
-            //$my_order_no = $post->order_no;
-//            $my_order_no = db()->result("SELECT MAX(order_no) FROM $table WHERE root_idx=$record[root_idx] AND parent_idx=$record[parent_idx]");
-//            $my_order_no = $my_order_no ? $my_order_no : $post->order_no;
-
-            $children_idx = $this->getChildren( $post->idx );
-            if ( $children_idx ) {
-                $last_idx = array_pop( $children_idx );
+            $children = $this->getChildren( $post->idx );
+            if ( $children ) {
+                $last_idx = array_pop( $children );
                 $cmt = $this->load( $last_idx );
                 $my_order_no = $cmt->order_no;
             }
@@ -67,35 +61,9 @@ class Post_Comment_Interface extends Post_Comment
             db()->query("UPDATE $table SET order_no=order_no+1 WHERE root_idx=$record[root_idx] AND order_no>$my_order_no");
         }
 
-        // 여기서 부터.
-        // 자식들을 재귀 함수로 구하는 함수를 만들어서 현재 코멘트(의 코멘트)의 맨 아래 order no 를 구해서 + 1 을 해야 한다.
-
-
-//        $my_order_no = db()->result("SELECT MAX(order_no) FROM $table WHERE root_idx=$record[root_idx] AND parent_idx=$record[parent_idx]");
-//        if ( $my_order_no ) {
-//            $q = "UPDATE $table SET order_no=order_no+1 WHERE root_idx=$record[root_idx] AND order_no>$my_order_no";
-//            db()->query( $q );
-//        }
-//        else {
-//            $my_order_no = db()->result("SELECT MAX(order_no) FROM $table WHERE root_idx=$record[root_idx]");
-//        }
 
         $record['order_no'] = $my_order_no + 1;
 
-
-//
-//        $table = $this->getTable();
-//
-//        if ( $post->parent_idx == 0 ) { // new comment of root.
-//            $order_no = db()->result("SELECT MAX(order_no) FROM $table WHERE root_idx=$record[root_idx]");
-//
-//        }
-//        else {
-//            $order_no = $post->order_no;
-//            $q = "UPDATE $table SET order_no=order_no+1 WHERE root_idx=$record[root_idx] AND order_no>$order_no";
-//            db()->query( $q );
-//        }
-//        $record['order_no'] = $order_no + 1;
 
 
         // create
@@ -103,8 +71,32 @@ class Post_Comment_Interface extends Post_Comment
 
         if ( is_error( $comment_idx ) ) return error( $comment_idx );
 
+        $comment = comment( $comment_idx );
+        $re_upload = $comment->hookUpload( $comment ); if ( is_error( $re_upload ) ) return error( $re_upload );
+
 
         return success( [ 'idx' => $comment_idx ] );
+
+    }
+
+    /**
+     * @param Post_Comment $comment
+     * @param Post_Config $config
+     * @return mixed
+     */
+    public function edit( $comment, $config ) {
+
+        $record = route()->get_route_optional_variables();
+
+        unset( $record['password'] ); // no need to set password again.
+
+        $re = $comment->update($record);
+
+        if ( is_success( $re ) ) {
+            $re_upload = $comment->hookUpload( $comment ); if ( is_error( $re_upload ) ) return error( $re_upload );
+            success( ['idx'=> $this->idx] );
+        }
+        else error( ERROR_DATABASE_UPDATE_FAILED ); // should not happened.
 
     }
 }

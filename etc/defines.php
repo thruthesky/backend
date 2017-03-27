@@ -123,6 +123,9 @@ define("ERROR_CODE_IS_EMPTY", -4090);                     $em[ERROR_CODE_IS_EMPT
 define('ERROR_FAKE_ERROR', -50999);                         $em[ERROR_FAKE_ERROR] = 'fake-error';
 
 
+// comment
+define('ERROR_COMMENT_NOT_EXIST', -4850);                   $em[ERROR_COMMENT_NOT_EXIST] = 'comment-not-exist';
+
 // category
 define('ERROR_CATEGORY_NOT_EXIST', -4900);                    $em[ERROR_CATEGORY_NOT_EXIST] = "category-not-exist";
 define('ERROR_CATEGORY_CHILDREN_EXIST', -4901);                 $em[ERROR_CATEGORY_CHILDREN_EXIST] = 'category-children-exists';

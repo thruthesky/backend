@@ -136,6 +136,8 @@ class Entity extends \model\taxonomy\Taxonomy  {
      *              - If it is one word string, then it is an 'ID'
      *              - If it is a string with ' ', =, <, >, then it assumes that is is a WHERE SQL clause.
      * @param bool $reload - If true, it get all the data from database NOT from 'memory cache'.
+     *          it is true by default.
+     *
      * @return $this - if error, error code will be return.
      *
      * - if error, error code will be return.
@@ -144,7 +146,7 @@ class Entity extends \model\taxonomy\Taxonomy  {
      *
      * - if there is no data, empty array will be returned.
      */
-    public function load( $what, $reload=false ) {
+    public function load( $what, $reload=true ) {
 
 
         if ( empty($what) ) return ERROR_EMPTY_SQL_CONDITION;
@@ -520,6 +522,69 @@ class Entity extends \model\taxonomy\Taxonomy  {
 
     }
 
+
+    /**
+     *
+     * Returns an array of category objects of children.
+     *
+     *
+     * @note $reload is set 'false' by default. If you need to memory cache, you need to set it true.
+     *
+     * @param $parent_idx
+     * @param bool $reload
+     * @return array - Array of Category object.
+     */
+    public function loadChildren( $parent_idx=null, $reload=true ) {
+        if ( $parent_idx === null ) $parent_idx = $this->idx;
+        $idxes = $this->getChildren( $parent_idx );
+        $ret = [];
+        foreach ( $idxes as $idx ) {
+            $ret[] = clone $this->load( $idx, $reload );
+        }
+        return $ret;
+    }
+
+
+    /**
+     * Returns an array of category objects of the brothers of the parent.
+     *
+     *
+     * @note $reload is set 'false' by default. If you need to memory cache, you need to set it true.
+     *
+     *
+     * @param $parent_idx
+     * @param bool $reload
+     * @return array
+     */
+    public function loadBrothers( $parent_idx, $reload = true ) {
+        if ( $parent_idx === null ) $parent_idx = $this->idx;
+        $idxes = $this->getBrothers( $parent_idx );
+        $ret = [];
+        foreach ( $idxes as $idx ) {
+            $ret[] = clone $this->load( $idx, $reload );
+        }
+        return $ret;
+    }
+
+
+    /**
+     *
+     * @note $reload is set 'false' by default. If you need to memory cache, you need to set it true.
+     *
+     * @param null $self_idx
+     * @param bool $self_include
+     * @param bool $reload
+     * @return array
+     */
+    public function loadParents( $self_idx=null, $self_include = false, $reload = true ) {
+        if ( $self_idx === null ) $self_idx = $this->idx;
+        $idxes = $this->getParents( $self_idx, $self_include );
+        $ret = [];
+        foreach ( $idxes as $idx ) {
+            $ret[] = clone $this->load( $idx, $reload );
+        }
+        return $ret;
+    }
 
 
 }
