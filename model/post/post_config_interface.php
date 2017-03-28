@@ -78,11 +78,12 @@ class Post_Config_Interface extends Post_Config {
     }
 
 
-    public function data() {
-        // check-up
-        if( ! config( in('id') )->exist() ) return error( ERROR_POST_CONFIG_NOT_EXIST, "post config - " . in('id') . " - does not exist" );
-        success( [ 'config' => config( in('id') )->getRecord() ] );
-
+    /**
+     * @param Post_Config $config
+     * @return mixed
+     */
+    public function data( $config ) {
+        success( [ 'config' => $config->getRecord() ] );
     }
 
 

@@ -9,7 +9,7 @@ define('BACKEND_PRIMARY_PHOTO', 'primary_photo');
 
 
 define('ERROR_UNKNOWN', -40000);                        $em[ERROR_UNKNOWN] = 'unknown-error';
-
+define('ERROR_TOO_MANY_VARIABLES_IN_ROUTE', -40001);    $em[ERROR_TOO_MANY_VARIABLES_IN_ROUTE] = 'too-many-variables-declared-in-route-variables';
 define('ERROR_ROUTE_NOT_PROVIDED', -40010);            $em[ERROR_ROUTE_NOT_PROVIDED] = 'route-is-not-provided';
 define('ERROR_ROUTE_NOT_EXIST', -40011);               $em[ERROR_ROUTE_NOT_EXIST] = 'route-does-not-exists';
 define('ERROR_MODEL_CLASS_NOT_FOUND', -40040);          $em[ERROR_MODEL_CLASS_NOT_FOUND] = "model-class-not-found";
@@ -144,7 +144,7 @@ define('ERROR_FILE_NOT_EXIST', -43105);                     $em[ERROR_FILE_NOT_E
 
 
 define('ERROR_HOOK_FILE_IDX_IS_NOT_IN_ARRAY', -43106);      $em[ERROR_HOOK_FILE_IDX_IS_NOT_IN_ARRAY] = 'file-idx-must-be-in-array';
-define('ERROR_HOOK_FILE_IDX_IS_WRONG', -43108);             $em[ERROR_HOOK_FILE_IDX_IS_WRONG] = 'wrong-file-idx-maybe-empty-maybe-not-exist';
+define('ERROR_HOOK_FILE_IDX_IS_WRONG', -43108);             $em[ERROR_HOOK_FILE_IDX_IS_WRONG] = 'wrong-file-idx--maybe-empty--maybe-not-exist--may-be-wrong-input-value-like-undefined';
 define('ERROR_HOOK_NOT_YOUR_FILE', -43110);                 $em[ERROR_HOOK_NOT_YOUR_FILE] = 'uploaded-file-is-not-yours';
 
 define('ERROR_UPLOAD_ERR_INI_SIZE', -43201);

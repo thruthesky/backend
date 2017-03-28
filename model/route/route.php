@@ -210,6 +210,17 @@ class Route {
      */
     public function validate_route_variables() {
 
+
+        // find human error
+        $route = route()->get_current_route();
+        if ( isset($route['variables']) && count($route['variables']) > 3 ) {
+            $variables = implode(',', array_keys( $route['variables'] ));
+            return [
+                'code' => ERROR_TOO_MANY_VARIABLES_IN_ROUTE,
+                'message' => "too-many-variables-declared-in-route: $variables"
+            ];
+        }
+
         // number only.
         $number_if_contain = [ 'idx', 'birth_year', 'birth_month', 'birth_day' ];
 

@@ -117,6 +117,10 @@ class Post_Data_Interface extends Post_Data {
             'bind' => in('bind'),
             'order' => in('order')
         ];
+
+        /**
+         * post search by 'id'
+         */
         if ( isset($extra['post_config_id']) ) {
             $config = config( $extra['post_config_id'] );
             if ( $config->exist() ) {

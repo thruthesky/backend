@@ -142,7 +142,7 @@ class Entity extends \model\taxonomy\Taxonomy  {
      * -- if there is no data, that is not error. that's just a success with no data.
      * - if success, array will be returned.
      *
-     * - if there is no data, empty array will be returned.
+     *
      */
     public function load( $what ) {
 

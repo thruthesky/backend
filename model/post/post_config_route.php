@@ -50,10 +50,18 @@ add_route('post_config.data', [
     'path' => "\\model\\post\\post_config_interface",
     'method' => 'data',
     'variables' => [
-        'required' => [ 'id' ],
-        'optional' => [],
-        'system' => []
-    ]
+        'required' => [  ],
+        'optional' => [ ],
+        'system' => [ 'idx', 'id' ]        // it gets one of 'idx' or 'id'
+    ],
+    'validator' => function () {
+        if ( in('idx') ) $config = config( in('idx') );
+        else if ( in('id') ) $config = config( in('id') );
+        else return ERROR_REQUIRED_INPUT_IS_MISSING;
+        if ( is_error( $config ) ) return $config;
+        if( ! $config->exist() ) return ERROR_POST_CONFIG_NOT_EXIST;
+        return [ $config ];
+    }
 ]);
 
 

@@ -38,14 +38,7 @@ class Post_Data extends Post {
             if ( isset($option['extra']['meta']) && $option['extra']['meta'] ) $record['meta'] = $this->meta()->get();
             if ( isset($option['extra']['file']) && $option['extra']['file'] ) $record['files'] = $this->file()->get();
         }
-        else {
-            $record['meta'] = $this->meta()->get();
-            $record['files'] = $this->file()->get();
-
-            //$record['files'] = (new File())->getRecords( " model='post' AND model_idx=$record[idx] ", 'idx, type, name');
-
-        }
-
+        
 
         // debug_log($record);
         return $record;

@@ -21,9 +21,30 @@ Backend Server for Restful APIs
 	* there is no HTML to be indexed by search engine.
 	* and it cannot be previewed by other site like facebook.
 
-And this is why SEO functuonality comes.
+And this is why SEO pages comes.
+
+* By supporting IE6 ~ IE9, Human can read SEO pages. So, seo.php must prepare nice design with Machine readable SEO friendly page.
+
+
+
 
 * @see http://luisfbmelo.com/blog/2015/12/04/angularjs-seo-with-php/
+
+### Todo
+
+
+* set web server directory index to seo.php
+* save all client file on Backend root folder. Add .gitignore to make it easy work.
+* seo.php will read angular 'index.html'
+* seo.php will patch 'SEO' things into 'index.html' based on the URL.
+	* Metas
+	* Open Grahps
+	* Titter codes
+	* Sitemaps
+	* Links to posts.
+* seo.php will delever the payload to browser.
+* If browser understands angular code, it will bootstrap Angular or it will just show the first payload to user.
+
 
 
 
@@ -730,6 +751,9 @@ Example of list request with `extra` )
 * Properties of extra can have one of "true, 1, 'Y'" indicating as positive inquery to get the data.
 * You can set falsy values like 'false', '0', '' If you don't want the data of the property. Be careful that 'N' is truthy value.
 * If `extra` is omitted, Backend will reponse with all the extra information by default.
+* @see `post_list` API section to know more about `post_data.extra`.
+
+
 
 ### Delete
 
@@ -891,6 +915,15 @@ There are many image libraries and we could even develop one by by ourselves. Bu
 Refer [examples of its github repository](https://github.com/eventviva/php-image-resize/blob/master/test/Test.php).
 
 Refer [API explanation page](https://eventviva.github.io/php-image-resize/class-Eventviva.ImageResize.html)
+
+
+
+## POST
+
+### POST LIST
+
+* If extra.file of request is set to true, you will get uploaded file information.
+* If extra.meta of request is set to true, you will get meta data of the post.
 
 
 
