@@ -15,6 +15,19 @@ Backend Server for Restful APIs
 
 * Check if file upload responses with right error message. for instance, too big file upload should response 'max-file-upload-size-limit-excedded' or sonmething but the error responseded is like 'cannot create idx'
 
+## SEO Friendly Fetch For Client End
+
+* Since Backend works as Restful API,
+	* there is no HTML to be indexed by search engine.
+	* and it cannot be previewed by other site like facebook.
+
+And this is why SEO functuonality comes.
+
+* @see http://luisfbmelo.com/blog/2015/12/04/angularjs-seo-with-php/
+
+
+
+
 ## Transaction
 * prove pdo transaction is working with race condition. It is very important with playing point, user level system.
 
@@ -174,6 +187,18 @@ To communiate between users.
 	* When a last user leaves from a chat room, the cat room will be destroyed.
 	* This condition perfectly makes it work like facebook chat or kakaotalk.
 * For new message indication, everty time a user gets a message from a room, the time of the message will be recorded in `chat_relation.time_of_last_message`. When a user visits(checks) the chat rooms, any chat room has newer message then the `chat_relation.time_of_last_message`, then the room has a new message that the user didn't read.
+
+
+
+## LONG-TERM TODO
+
+
+This section describes what to do in next version.
+
+* move core module in core folder.
+
+
+
 
 
 # Interface
@@ -572,6 +597,7 @@ Post categories ( or settings ) are saved in `post_config` table.
 
 * Only admin can create, edit, delete `post_config` but any can read it. So don't put any critical information on it.
 
+* When a forum is deleted, the record of `post_config` is NOT deleted. Instead, it is marked as deleted.
 
 
 ### post_data table

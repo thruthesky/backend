@@ -61,22 +61,29 @@ class Post_Config_Interface extends Post_Config {
     }
 
 
-
     /**
      * HTTP interface
+     * @param Post_Config $config
      * @return mixed
      */
-    public function delete() {
+    public function delete( $config=null ) {
 
-        if ( ! currentUser()->isAdmin() ) return error( ERROR_PERMISSION_ADMIN );
 
-        // check-up
-        $config = $this->load(in('id'));
-        if( ! $config->exist() ) return error( ERROR_POST_CONFIG_NOT_EXIST );
+        if ( $config->deleted() ) return error( ERROR_ALREADY_DELETED );
 
-        $re = parent::delete();
-        if ( $re == OK ) return success();
-        else return error( $re );
+
+
+        $re = $config->update([
+            'deleted' => '1',
+        ]);
+
+        if ( is_error($re) ) {
+            if ( $re === false ) error( ERROR_DATABASE_UPDATE_FAILED );
+            else error( $re );
+        }
+        else success( [] );
+
+
 
     }
 

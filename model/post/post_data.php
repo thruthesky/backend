@@ -75,7 +75,6 @@ class Post_Data extends Post {
             db()->insert( table_post_deleted(), $record_copy );
         }
 
-
         return $re;
     }
 
@@ -114,8 +113,5 @@ class Post_Data extends Post {
 
     }
 
-    public function deleted() {
-        return $this->deleted;
-    }
 
 }

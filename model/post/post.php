@@ -80,6 +80,9 @@ class Post extends \model\entity\Entity
 
 
 
+    public function deleted() {
+        return $this->deleted;
+    }
 
 
 

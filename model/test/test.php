@@ -327,8 +327,6 @@ EOH;
             test( is_success($re), "test::createPostConfig() deleted. " . get_error_string($re));
         }
 
-
-
         // Config create with admin session id. Expect: success
         $data = [];
         $data['id'] = $post_config_id;
