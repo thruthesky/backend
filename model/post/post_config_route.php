@@ -23,7 +23,15 @@ add_route('post_config.delete', [
         'required' => [ 'session_id', 'id' ],
         'optional' => [],
         'system' => []
-    ]
+    ],
+    'validator' => function() {
+
+        if ( ! currentUser()->isAdmin() ) return ERROR_PERMISSION_ADMIN;
+        $config = config()->load(in('id'));
+        if( ! $config->exist() ) return ERROR_POST_CONFIG_NOT_EXIST;
+        return [ $config ];
+
+    }
 ]);
 
 
@@ -57,4 +65,10 @@ add_route( 'post_config.list', [
         'optional' => [ 'from', 'limit', 'where', 'bind', 'order' ],
         'system' => [ 'session_id' ]
     ]
+]);
+
+
+route()->add('config.test', [
+    'path' => '\\model\\post\\post_config_test',
+    'method' => 'run'
 ]);

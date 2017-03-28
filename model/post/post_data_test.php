@@ -44,9 +44,13 @@ class Post_Data_Test extends Test {
 
 
         // prepare
+        user('user4')->delete();
         $session_id = $this->createUser( ['id' => 'user4', 'password' => 'pass4']);
         $session_id_back = $this->createUser( ['id' => 'user4back', 'password' => 'pass4']);
-        $this->createPostConfig( 'test2' );
+
+
+        $post_config_id = 'test2-' . date('his') ;
+        $this->createPostConfig( $post_config_id);
 
 
         // create by router.
@@ -228,7 +232,7 @@ class Post_Data_Test extends Test {
 
 
 
-        $this->deletePostConfig( 'test2' );
+        $this->deletePostConfig( $post_config_id );
         $this->deleteUser( $session_id );
 
     }
@@ -244,7 +248,9 @@ class Post_Data_Test extends Test {
 
         // prepare
         $session_id = $this->createUser( ['id' => 'user5', 'password' => 'pass5']);
-        $this->createPostConfig( 'test5' );
+
+        $config_id = 'test5-'. date('his');
+        $this->createPostConfig( $config_id );
 
         for( $i = 0; $i < 5; $i ++ ) {
             $re = $this->route( 'post_data.create', [ 'session_id' => $session_id, 'post_config_id'=>'test5', 'title' => 'hello world ' . $i] );
@@ -272,7 +278,7 @@ class Post_Data_Test extends Test {
 
 
 
-        $this->createPostConfig( 'test6' );
+        $this->createPostConfig( 'test6-' . date('his') );
         $re = $this->route( 'post_data.create', [ 'session_id' => $session_id, 'post_config_id'=>'test6', 'title' => 'hello world you. '] );
 
 
@@ -289,5 +295,42 @@ class Post_Data_Test extends Test {
         test( $re['data']['configs']['test6']['id'] == 'test6' && $re['data']['configs']['test5']['id'] == 'test5', "Two config name: test5, test6" );
 
 
+    }
+
+
+    /**
+     * @see readme
+     */
+    public function create_test_data() {
+        parent::$reload = 10000;
+        $param = [
+            'id' => 'test',
+            'session_id' => $this->getAdminSessionId()
+        ];
+        $re = $this->route("post_config.create", $param );
+        if ( is_success($re) || is_error($re) == ERROR_POST_CONFIG_EXIST ) {
+
+        }
+        else {
+            test(false, get_error_string($re));
+        }
+
+
+        for( $i = 0; $i < 250; $i ++ ) {
+            $param = [
+                'post_config_id' => 'test',
+                'title' => "$i - title",
+                'content' => "$i - content",
+                'session_id' => testUser()->getSessionId()
+            ];
+            $re = $this->route('post_data.create', $param);
+            if ( is_error($re) ) {
+                test(false, get_error_string($re));
+                echo 'failed';
+                return;
+            }
+        }
+
+        echo 'success';
     }
 }

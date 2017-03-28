@@ -313,6 +313,7 @@ class Entity extends \model\taxonomy\Taxonomy  {
      *
      * - FALSE on database error.
      * - FALSE on logical error. If entity idx does not exist.
+     * - ERROR CODE Numbers less than 0 for error.
      * - TRUE if there is no modified/deleted row.
      * - TRUE of rows that are modified/deleted.
      * @attention it does not support chaining like below

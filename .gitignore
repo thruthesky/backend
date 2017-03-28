@@ -1,6 +1,11 @@
 
 
 
+*.js
+*.css
+*.html
+*.ico
+assets/
 
 
 data

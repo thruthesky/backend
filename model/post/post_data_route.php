@@ -95,3 +95,10 @@ add_route( 'post.test', [
     'path' => "\\model\\post\\post_data_test",
     'method' => 'single_test'
 ]);
+
+
+
+route()->add( 'post.test.create', [
+    'path' => "\\model\\post\\post_data_test",
+    'method' => 'create_test_data'
+]);

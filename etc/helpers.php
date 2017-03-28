@@ -137,6 +137,10 @@ function error( $code, $message='' ) {
         $code = $code['code'];
     }
     if ( empty($message) && isset($em[ $code ]) ) $message = $em[ $code ];
+    if ( empty($code) && empty($message) ) {
+        $code = ERROR_UNKNOWN;
+        $message = $em[ $code ];
+    }
                                         debug_log(" &gt;&gt;&gt; [ ERROR[ $code ] - \"$message\"");
     echo json_encode( ['code'=>$code, 'message'=>$message ] );
     return $code;

@@ -23,13 +23,14 @@ class Post_Config_Test extends Test {
         // $this->createPostConfig('forum');
 
         //
-        $id = "config-create-test-1";
+        $id = "config-create-test-" . date('his');
 
 
 
         // Delete test config if exists.
         $re = $this->route( 'post_config.data', ['id' => $id] );
         // test( is_success($re), "post_config.data() id: $id" . get_error_string( $re ));
+
         if ( is_success($re) ) {
             $re = $this->route( 'post_config.delete', ['session_id' => $admin_session_id, 'id' => $id] );
             test( is_success($re), "Config deleted. " . get_error_string($re));

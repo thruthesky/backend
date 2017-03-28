@@ -15,6 +15,19 @@ Backend Server for Restful APIs
 
 * Check if file upload responses with right error message. for instance, too big file upload should response 'max-file-upload-size-limit-excedded' or sonmething but the error responseded is like 'cannot create idx'
 
+## SEO Friendly Fetch For Client End
+
+* Since Backend works as Restful API,
+	* there is no HTML to be indexed by search engine.
+	* and it cannot be previewed by other site like facebook.
+
+And this is why SEO functuonality comes.
+
+* @see http://luisfbmelo.com/blog/2015/12/04/angularjs-seo-with-php/
+
+
+
+
 ## Transaction
 * prove pdo transaction is working with race condition. It is very important with playing point, user level system.
 
@@ -584,6 +597,7 @@ Post categories ( or settings ) are saved in `post_config` table.
 
 * Only admin can create, edit, delete `post_config` but any can read it. So don't put any critical information on it.
 
+* When a forum is deleted, the record of `post_config` is NOT deleted. Instead, it is marked as deleted.
 
 
 ### post_data table
