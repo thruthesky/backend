@@ -44,16 +44,9 @@ class Post_Config_Interface extends Post_Config {
         $config = $this->load(in('id'));
         if( ! $config->exist() ) return error( ERROR_POST_CONFIG_NOT_EXIST, "post config - " . in('id') . ' - already does not exist' );
 
-        $record = [];
-        // $record['idx'] = in('idx');
-        // $data['id'] = in('id');          // you cannot edit id.
-        $record['name'] = in('name');
-        $record['description'] = in('description');
-        $record['moderators'] = in('moderators');
-        $record['level_list'] = in('level_list');
-        $record['level_view'] = in('level_view');
-        $record['level_write'] = in('level_write');
-        $record['level_comment'] = in('level_comment');
+
+        $record = route()->get_route_optional_variables();
+        $record['id'] = in('id');
         $re = $config->update( $record );
         if ( $re == FALSE ) return error( ERROR_POST_CONFIG_EDIT_FAILED ); // strange error. this error should not happened here.
         success();
