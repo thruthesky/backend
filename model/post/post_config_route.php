@@ -1,7 +1,7 @@
 <?php
 
 $_optional = [
-    'name', 'description',
+    'name', 'description', 'moderators',
     'level_list', 'level_view', 'level_write', 'level_comment'
 ];
 
