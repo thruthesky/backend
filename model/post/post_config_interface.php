@@ -49,8 +49,7 @@ class Post_Config_Interface extends Post_Config {
         $record['id'] = in('id');
         $re = $config->update( $record );
         if ( $re == FALSE ) return error( ERROR_POST_CONFIG_EDIT_FAILED ); // strange error. this error should not happened here.
-        success();
-        return OK;
+        success([]);
     }
 
 
