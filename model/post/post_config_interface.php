@@ -73,8 +73,8 @@ class Post_Config_Interface extends Post_Config {
             if ( $re === false ) error( ERROR_DATABASE_UPDATE_FAILED );
             else error( $re );
         }
-        else success( [] );
-        
+        else success( [ 'id' => $config->id ] );
+
     }
 
 
