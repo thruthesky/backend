@@ -1,4 +1,4 @@
-# Backend-0.4.4
+# Backend-0.8
 
 Backend Server for Restful APIs
 
@@ -13,19 +13,10 @@ Backend Server for Restful APIs
 
 # TODO
 
-
-
-## Comment
-
-
-## Bug Check
-
-* file upload does not response right error message. for instance, too big file upload should response 'max-file-upload-size-limit-excedded' or sonmething but the error responseded is like 'cannot create idx'
+* Check if file upload responses with right error message. for instance, too big file upload should response 'max-file-upload-size-limit-excedded' or sonmething but the error responseded is like 'cannot create idx'
 
 ## Transaction
-* prove pdo transaction is working with race condition.
-
-
+* prove pdo transaction is working with race condition. It is very important with playing point, user level system.
 
 
 ## add more tests.
@@ -34,6 +25,8 @@ Backend Server for Restful APIs
 * to add more tests.
 * file proxy test.
 * search test.
+* file upload for comment, user profile.
+* file download.
 
 
 ## Post
@@ -81,13 +74,16 @@ config('abc')->timeFirstComment();
 	* create a group and automatically become the `manager` of the cafe.
 
 
-## Gruop
+## Gruop, Cafe
 
 to complete a portal.
+
 
 ## PUSH Notification.
 
 use external lib
+
+
 
 ## SMS service
 
@@ -99,11 +95,6 @@ To reduce the money, SMS shouldn't send more than 1 or 2 times a day to a user.
 * Simple community site
 * Buy and sell / Online shopping mall site.
 
-
-
-## Installation
-
-* Once installed, it shouldn't be re-installed unless the user manually removes the database.
 
 
 ## Multi installation - next version
@@ -524,6 +515,13 @@ Users who are not logged in with their ID and password will login as anonymous. 
 * Anonymous is a user who did not log in with his password but treated as logged in.
 * Anonymous user cannot login, logout, edit his information.
 * But can post/edit/delete with password.
+
+
+### Test Users
+
+* There are two test users. one of them is `user` ( whose id is simply `user` ) and the other is `thruthesky` ( whose id is `thruthesjy` )
+* These two users are for `tests`.
+
 
 
 ### User Delete

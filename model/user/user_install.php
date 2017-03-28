@@ -67,7 +67,7 @@ if ( is_error( $re ) ) {
 
 $anonymous_user_data = [
     'id' => ANONYMOUS_ID,
-    'password' => ANONYMOUS_ID,
+    'password' => md5(time()),
     'name' => ANONYMOUS_ID
 ];
 $re = user()->create( $anonymous_user_data );
@@ -77,14 +77,24 @@ if ( is_error( $re ) ) {
 
 
 
-$first_user_data = [
+$test_user_data = [
     'id' => TEST_USER_ID,
-    'password' => TEST_USER_ID,
+    'password' => md5(time()),
     'name' => TEST_USER_ID
 ];
-$re = user()->create( $first_user_data );
+$re = user()->create( $test_user_data );
 if ( is_error( $re ) ) {
     die(" error: " . get_error_string($re));
 }
 
 
+
+$thruthesky_user_data = [
+    'id' => 'thruthesky',
+    'password' => md5(time()),
+    'name' => 'thruthesky'
+];
+$re = user()->create( $thruthesky_user_data );
+if ( is_error( $re ) ) {
+    die(" error: " . get_error_string($re));
+}

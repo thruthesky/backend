@@ -24,8 +24,7 @@ namespace model\entity;
  */
 use model\user\User;
 
-$_cache_entity_record = [];
-$_cache_entity_record_count = [];
+
 
 /**
  * Class Entity
@@ -135,7 +134,8 @@ class Entity extends \model\taxonomy\Taxonomy  {
      *              - If it is numeric, then it is idx. so, this method will get the record on the idx.
      *              - If it is one word string, then it is an 'ID'
      *              - If it is a string with ' ', =, <, >, then it assumes that is is a WHERE SQL clause.
-     * @param bool $reload - If true, it get all the data from database NOT from 'memory cache'.
+     *
+     *
      * @return $this - if error, error code will be return.
      *
      * - if error, error code will be return.
@@ -144,7 +144,7 @@ class Entity extends \model\taxonomy\Taxonomy  {
      *
      * - if there is no data, empty array will be returned.
      */
-    public function load( $what, $reload=false ) {
+    public function load( $what ) {
 
 
         if ( empty($what) ) return ERROR_EMPTY_SQL_CONDITION;
@@ -152,23 +152,12 @@ class Entity extends \model\taxonomy\Taxonomy  {
         $table = $this->getTable();
         if ( empty( $table ) ) return ERROR_TABLE_NOT_SET;
 
-
-
-//        di($what);
-
-        if ( $reload == false && $cache = $this->getCacheEntity( $what ) ) {      /// Check if cache exists.
-
-            $this->reset( $cache );   /// Reset the cache.
-            $this->increaseResetCount( $what );
-
-            return $this;
-        }
         if ( is_numeric($what) ) $cond = "idx=$what";
         else $cond = "id = '$what'";
 
         $this->record = db()->row("SELECT * FROM $table WHERE $cond");
 
-        $this->setCacheEntity( $what, $this->record );
+
         return $this;
     }
 
@@ -176,6 +165,8 @@ class Entity extends \model\taxonomy\Taxonomy  {
     /**
      *
      * Loads multiple entities.
+     *
+     * @note This must be here( instead of taxonomy ) to support entity.
      *
      * @param $idxes
      *
@@ -185,11 +176,11 @@ class Entity extends \model\taxonomy\Taxonomy  {
      * @return mixed
      *      if there is error, error code will be returned.
      */
-    public function loads( $idxes, $reload=false ) {
+    public function loads( $idxes ) {
         $rets = [];
         if ( empty( $idxes ) ) return $rets;
         foreach ( $idxes as $idx ) {
-            $this_entity = $this->load( $idx, $reload );
+            $this_entity = $this->load( $idx );
             if ( is_error( $this_entity ) ) return $this_entity; // error
             $rets[] = clone( $this_entity );
         }
@@ -216,6 +207,8 @@ class Entity extends \model\taxonomy\Taxonomy  {
 
     /**
      *
+     *
+     * @note This must be here( instead of taxonomy ) to support entity.
      * @see Entity_Test::multi_load()
      *
      * @param $cond
@@ -228,58 +221,6 @@ class Entity extends \model\taxonomy\Taxonomy  {
 
 
 
-
-
-    private function getCacheEntity( $what ) {
-        global $_cache_entity_record;
-        $table = $this->getTable();
-        if ( isset( $_cache_entity_record[ $table ][ $what ] ) ) return $_cache_entity_record[ $table ][ $what ];
-        return null;
-    }
-
-    private function setCacheEntity( $what, $record ) {
-
-        global $_cache_entity_record;
-        $table = $this->getTable();
-        /// Save in memory cache
-        if ( $this->record ) $_cache_entity_record[$table][ $what ] = $this->record;
-    }
-
-    /**
-     *
-     * Delete cache
-     *
-     * @param $what
-     */
-    private function deleteCacheEntity( $what ) {
-        global $_cache_entity_record;
-        $table = $this->getTable();
-        // di( "_cache_entity_record[$table][ $what ]" );
-        unset( $_cache_entity_record[$table][ $what ]);
-    }
-
-
-    /**
-     *
-     * Returns $this->idx or $idx->id or OK ( in this order ) after clearing the cache.
-     *
-     *
-     * @return mixed
-     *
-     */
-    public function deleteCache() {
-
-        $idx_backup = $this->idx;
-        $id_backup = $this->id;
-
-        if ( $this->idx ) $this->deleteCacheEntity( $this->idx );
-        if ( $this->id ) $this->deleteCacheEntity( $this->id );
-        $this->reset( [] );
-
-        if ( $idx_backup ) return $idx_backup;
-        else if ( $id_backup ) return $id_backup;
-        else return OK;
-    }
 
 
     /**
@@ -352,34 +293,6 @@ class Entity extends \model\taxonomy\Taxonomy  {
         return $this;
     }
 
-    /**
-     * Returns reset count of a record.
-     *
-     * @note it tracks memory reset cache count.
-     *
-     *
-     * @param $what
-     */
-    private function increaseResetCount( $what ) {
-        global $_cache_entity_record_count;
-        $table = $this->getTable();
-        if ( isset($_cache_entity_record_count[ $table ]) && isset($_cache_entity_record_count[ $table ][ $what ]) ) {
-            $_cache_entity_record_count[ $table ][ $what ]++;
-        }
-        else $_cache_entity_record_count[ $table ][ $what ] = 1;
-
-        // di($_cache_entity_record_count);
-    }
-
-
-    public function getResetCount( $what ) {
-        global $_cache_entity_record_count;
-        $table = $this->getTable();
-        if ( isset($_cache_entity_record_count[ $table ]) && isset($_cache_entity_record_count[ $table ][ $what ]) ) {
-            return $_cache_entity_record_count[ $table ][ $what ];
-        }
-        return 0;
-    }
 
 
     /**
@@ -427,14 +340,16 @@ class Entity extends \model\taxonomy\Taxonomy  {
      *
      *
      */
-    public function update( $record, $reload = true ) {
+    public function update( $record, $reload=true ) {
         if ( empty($this->getTable()) ) return ERROR_TABLE_NOT_SET;
         $record['updated'] = time();
         if ( $this->idx ) {
             $re = db()->update( $this->getTable(), $record, "idx={$this->idx}");
             if ( $re === FALSE ) return FALSE;
             else {
-                if ( $reload ) $this->load( $this->deleteCache() ); /// @attention it reloads the record if $reload is set.
+                if ( $reload ) {
+                    $this->reset( $this->idx );
+                }
                 return TRUE;
             }
         }
@@ -502,8 +417,6 @@ class Entity extends \model\taxonomy\Taxonomy  {
         if ( ! $this->exist() ) return ERROR_USER_NOT_SET;
         $idx = $this->idx;
         db()->query(" DELETE FROM {$this->getTable()} WHERE idx=$idx ");
-        /// Reset ( delete ) all the caches.
-        $this->deleteCache();
         return OK;
     }
 
@@ -520,6 +433,77 @@ class Entity extends \model\taxonomy\Taxonomy  {
 
     }
 
+
+    /**
+     *
+     * Returns an array of category objects of children.
+     *
+     *
+     *
+     * @note This must be here( instead of taxonomy ) to support entity.
+     *
+     * @note $reload is set 'false' by default. If you need to memory cache, you need to set it true.
+     *
+     * @param $parent_idx
+     * @param bool $reload
+     * @return array - Array of Category object.
+     */
+    public function loadChildren( $parent_idx=null, $reload=true ) {
+        if ( $parent_idx === null ) $parent_idx = $this->idx;
+        $idxes = $this->getChildren( $parent_idx );
+        $ret = [];
+        foreach ( $idxes as $idx ) {
+            $ret[] = clone $this->load( $idx, $reload );
+        }
+        return $ret;
+    }
+
+
+    /**
+     * Returns an array of category objects of the brothers of the parent.
+     *
+     *
+     * @note This must be here( instead of taxonomy ) to support entity.
+     *
+     * @note $reload is set 'false' by default. If you need to memory cache, you need to set it true.
+     *
+     *
+     * @param $parent_idx
+     * @param bool $reload
+     * @return array
+     */
+    public function loadBrothers( $parent_idx, $reload = true ) {
+        if ( $parent_idx === null ) $parent_idx = $this->idx;
+        $idxes = $this->getBrothers( $parent_idx );
+        $ret = [];
+        foreach ( $idxes as $idx ) {
+            $ret[] = clone $this->load( $idx, $reload );
+        }
+        return $ret;
+    }
+
+
+    /**
+     *
+     *
+     * @note This must be here( instead of taxonomy ) to support entity.
+     *
+     * @note $reload is set 'false' by default. If you need to memory cache, you need to set it true.
+     *
+     * @param null $self_idx
+     * @param bool $self_include
+     * @param bool $reload
+     * @return array
+     */
+    public function loadParents( $self_idx=null, $self_include = false, $reload = true ) {
+        if ( $self_idx === null ) $self_idx = $this->idx;
+        $idxes = $this->getParents( $self_idx, $self_include );
+        $ret = [];
+        foreach ( $idxes as $idx ) {
+            $ret[] = clone $this->load( $idx, $reload );
+        }
+        return $ret;
+    }
 
 
 }

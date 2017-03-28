@@ -52,30 +52,21 @@ class Post_Data_Interface extends Post_Data {
      *
      * @note ip, user_agent does not changes when edit.
      *
+     * @param Post $post
+     * @param Post_Config $config
      * @return mixed
      */
-    public function edit() {
+    public function edit( $post, $config ) {
 
-        // @todo move checkups and permission check to 'validator'
-        if ( empty( in('idx') ) ) return error( ERROR_IDX_EMPTY );
-        if ( currentUser()->isAnonymous() && empty( in('password') ) ) return error( ERROR_PASSWORD_EMPTY, "Anonymous must input a password to edit a post.");
-        $re = $this->load( in('idx') );
-        if ( is_error($re) ) return error( $re );
-        if ( ! $this->load( in('idx') )->exist() ) return error( ERROR_POST_NOT_EXIST );
-
-
-        if ( $re = $this->editPermission() ) return error( $re );
-
-        if( strlen( in('title') ) > 254 ) return error( ERROR_TITLE_TOO_LONG );
 
         $record = route()->get_route_optional_variables();
 
         unset( $record['password'] ); // no need to set password again.
 
-        $re = $this->update($record);
+        $re = $post->update($record);
 
         if ( is_success( $re ) ) {
-            $re_upload = $this->hookUpload( post( in('idx') ) ); if ( is_error( $re_upload ) ) return error( $re_upload );
+            $re_upload = $post->hookUpload( post( in('idx') ) ); if ( is_error( $re_upload ) ) return error( $re_upload );
             success( ['idx'=> $this->idx] );
         }
         else error( ERROR_DATABASE_UPDATE_FAILED ); // should not happened.
@@ -87,24 +78,16 @@ class Post_Data_Interface extends Post_Data {
      *
      * This does not actually delete post. it just mark as delete. it does not delete meta data of the post also.
      *
+     * @param Post_Data $post
+     * @param Post_Config $config
      * @return mixed
      */
-    public function delete( ) {
+    public function delete( $post=null, $config=null ) {
 
-        $this->load( in('idx') );
-
-        if ( ! $this->exist() ) return error( ERROR_POST_NOT_EXIST );
-
-
-        if ( $re = $this->deletePermission() ) return error( $re );
-
-        $re = parent::delete();
-
-
-        // $re = post( in('idx') )->delete(); // it does not delete.
+        $re = $post->delete();
 
         if ( is_success($re) ) success( ['idx' => in('idx') ]);
-        else error( ERROR_DATABASE_DELETE_FAILED );
+        else error( $re );
 
     }
 
