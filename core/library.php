@@ -161,6 +161,23 @@ function get_current_route( ) {
 }
 
 
+/**
+ * Returns a url of installed 'root folder'.
+ *
+ * @return mixed
+ *
+ *      - http://abc.org
+ *      - http://abc.def.ghi.com/backend
+ */
+function get_site_url() {
+    $pu = pathinfo( current_script_url() );
+    return $pu['dirname'];
+}
+
+function get_index_php_url() {
+    return get_site_url() . '/index.php';
+}
+
 
 
 

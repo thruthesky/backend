@@ -13,7 +13,8 @@ url:
 # TITLE of the site
 # {post_config.name} will be replace by the actual name of the post config(forum)
 # {post_data.title} will be replace by the actual title of the post
-title: "{site_name} {post_config.name} {post_data.title}"
+title: "{site_name}{post_data.title}"
+padding_after_site_name: ' - '          # padding after site name ONLY IF site name exists.
 
 
 
@@ -34,7 +35,8 @@ author: JaeHo Song
 
 # Default site image
 # This may be replaced by post's photo
-image: /etc/res/img/backend.png
+# {site_url} is an auto generate site url based on the root folder.
+image: '{site_url}/etc/res/img/backend.jpg'
 
 
 

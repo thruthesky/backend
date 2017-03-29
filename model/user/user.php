@@ -329,9 +329,6 @@ class User extends \model\entity\Entity {
         unset( $record['password'], $record['session_id'] );
         $record['meta'] = meta()->get( $this->getTable(), $record['idx']);
 
-
-
-
         $record = $this->getAvailableData( $record );
 
         $record['primary_photo_idx'] = $this->getPrimaryPhotoIdx();
@@ -369,6 +366,17 @@ class User extends \model\entity\Entity {
         return $new_users;
     }
 
+    /**
+     * It returns (safe) user name. Meaning it will return something meaningful if there is no name for the user.
+     *
+     *
+     * @return string
+     */
+    public function getSafeName()
+    {
+        if ( empty( $this->name ) ) return $this->id;
+        else return $this->name;
+    }
 
 
 }

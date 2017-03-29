@@ -253,10 +253,19 @@ function rsearch($dir, $pattern) {
 }
 
 
-
-
+/**
+ * Returns a url string that appears on the browser address bar.
+ * @return string
+ */
 function current_url() {
     return (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+}
+
+/**
+ * Returns a url string of the PHP script. ( before URL rewriting ).
+ */
+function current_script_url() {
+    return (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[PHP_SELF]";
 }
 
 

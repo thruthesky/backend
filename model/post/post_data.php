@@ -106,5 +106,49 @@ class Post_Data extends Post {
 
     }
 
+    /**
+     * Returns a string as title of the post
+     *
+     * @note If there is no title, it gets title from the first part of content.
+     * @note it strips off HTML tags.
+     * @note it returns less than 250 characters.
+     *
+     * @return mixed|null|string
+     */
+    public function getSafeTitle()
+    {
+        $title = $this->title;
+        if ( empty( $title ) ) $title = $this->content;
+        $title = strip_tags( $title );
+        $title = strcut( $title, 250 );
+        return $title;
+    }
+
+    /**
+     * Returns a safe content just like title.
+     *
+     * @note if there is no content, it returns title.
+     *
+     */
+    public function getSafeContent()
+    {
+        $content = $this->content;
+        if ( empty( $content ) ) $content = $this->title;
+        $content = strip_tags( $content );
+        return $content;
+    }
+
+    /**
+     * @return \model\user\User
+     *
+     * @code
+     *          $author = $this->post_data->getUser()->getSafeName();
+     * @endcode
+     */
+    public function getUser()
+    {
+        return user( $this->user_idx );
+    }
+
 
 }

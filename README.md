@@ -9,7 +9,7 @@ Backend Server for Restful APIs
 * @see tests to understand Backend.
 
 
-# Work Environtment
+# Work Environment
 
 ## thruthesky
 
@@ -34,9 +34,8 @@ And this is why SEO pages comes.
 
 
 
-
-
 * @see http://luisfbmelo.com/blog/2015/12/04/angularjs-seo-with-php/
+
 
 ### Todo
 
@@ -50,9 +49,14 @@ And this is why SEO pages comes.
 	* Titter codes
 	* Sitemaps
 	* Links to posts.
-* seo.php will delever the payload to browser.
+* seo.php will deliver the payload to browser.
 * If browser understands angular code, it will bootstrap Angular or it will just show the first payload to user.
 
+
+### Flowchart of SEO
+
+* On front page, it displays links of latest 40 posts including comments.
+* On post/comment page, it displays content of the post/comment and displays previous 40 posts including comments.
 
 ### Customizing and Testing
 
@@ -84,8 +88,12 @@ Example ) How to configure Nginx for SEO
 
 
 
+
+
 ## Transaction
 * prove pdo transaction is working with race condition. It is very important with playing point, user level system.
+
+
 
 
 ## add more tests.
@@ -113,6 +121,7 @@ Example ) How to configure Nginx for SEO
 ## Test on post\_config, post\_post
 
 * Not login user becomes anonymous.
+
 
 ````
 config('abc')->countAll()
@@ -143,7 +152,8 @@ config('abc')->timeFirstComment();
 	* create a group and automatically become the `manager` of the cafe.
 
 
-## Gruop, Cafe
+## Group, Cafe
+
 
 to complete a portal.
 
@@ -159,7 +169,9 @@ use external lib
 To reduce the money, SMS shouldn't send more than 1 or 2 times a day to a user.
 
 
+
 ## Sample Site
+
 
 * Simple community site
 * Buy and sell / Online shopping mall site.
@@ -188,7 +200,6 @@ To reduce the money, SMS shouldn't send more than 1 or 2 times a day to a user.
 
 @done hook
 
- 	
 - file delete.
 
 - download with filename.
@@ -233,7 +244,7 @@ To reduce the money, SMS shouldn't send more than 1 or 2 times a day to a user.
 
 ## Real Message System
 
-To communiate between users.
+To communicate between users.
 
 * Each room has a configuration in `chat_config` table.
 * Each chat message is save in `chat_message` table.
@@ -242,7 +253,7 @@ To communiate between users.
 * If a user leaves a chat room, then he will loose all the data.
 	* When a last user leaves from a chat room, the cat room will be destroyed.
 	* This condition perfectly makes it work like facebook chat or kakaotalk.
-* For new message indication, everty time a user gets a message from a room, the time of the message will be recorded in `chat_relation.time_of_last_message`. When a user visits(checks) the chat rooms, any chat room has newer message then the `chat_relation.time_of_last_message`, then the room has a new message that the user didn't read.
+* For new message indication, every time a user gets a message from a room, the time of the message will be recorded in `chat_relation.time_of_last_message`. When a user visits(checks) the chat rooms, any chat room has newer message then the `chat_relation.time_of_last_message`, then the room has a new message that the user didn't read.
 
 
 
@@ -252,10 +263,6 @@ To communiate between users.
 This section describes what to do in next version.
 
 * move core module in core folder.
-
-
-
-
 
 # Interface
 
@@ -355,7 +362,7 @@ add_route('taxonomy.test.run', [
 ````
 
 
-**2.** Creata test file.
+**2.** Create test file.
 
 ````
 <?php
@@ -701,8 +708,16 @@ so, you need to use `===` to compare it was success or error. `is_error()`, `is_
 
 
 
+# Proxy
 
-# Meta_Proxy
+
+Proxy is an unified way to manage its meta or other dependency information like post_data files
+and it is available on all model since the proxy is existing on `entity` model.
+
+
+
+## Meta_Proxy
+
 
 
 Meta Prxoy is a handy method to manage mata data of an entity. When `meta()` method of an entity is called, it creates an object of Meta_Injector with the model and model\_idx of the entity and returns the object.

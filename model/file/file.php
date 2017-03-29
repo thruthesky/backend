@@ -288,6 +288,54 @@ class File extends \model\entity\Entity
     }
 
 
+    /**
+     * Returns an array of the file records based on the params
+     *
+     * The index of 'model,model_idx,code' is not unique. So it always returns an array.
+     * @param $model
+     * @param $model_idx
+     * @param $code
+     * @return array|int
+     */
+    public function get( $model, $model_idx, $code=null ) {
+
+        if ( $code ) $and_code = " AND code='$code' ";
+        else $and_code = null;
+        return $this->getRecords( "model='$model' AND model_idx=$model_idx $and_code" );
+    }
 
 
+    /**
+     * @param $model
+     * @param $model_idx
+     * @param null $code
+     * @return array|int
+     */
+    public function getFirstImage( $model, $model_idx, $code=null ) {
+        if ( $code ) $and_code = " AND code='$code' ";
+        else $and_code = null;
+        $rows = $this->getRecords( "model='$model' AND model_idx=$model_idx $and_code AND type LIKE 'image/%' LIMIT 1" );
+        if ( $rows ) return $rows[0];
+        else return [];
+    }
+
+    public function loadFirstImage( $model, $model_idx, $code=null ) {
+        $file = self::getFirstImage( $model, $model_idx, $code );
+        return (new File())->reset($file);
+    }
+
+
+    /**
+     * Returns url of uploaded photo.
+     *
+     * @return string
+     *
+     * @code
+     *          $image = $this->post_data->file()->loadFirstImage()->url();
+     * @endcode
+     */
+    public function url() {
+        if ( $this->exist() ) return get_index_php_url() .  '?route=download&idx=' . $this->idx;
+        else return null;
+    }
 }

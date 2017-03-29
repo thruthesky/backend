@@ -11,7 +11,7 @@ class SEO {
     private $content = null;
     private $seo_config;
 
-    private $dataType = null;
+    //private $dataType = null;
 //    private $post_config = null;
 
 
@@ -24,6 +24,7 @@ class SEO {
     public function __construct()
     {
         $this->seo_config = spyc_load_file( __ROOT_DIR__ . '/etc/seo.yaml');
+        $this->seo_config['image'] = str_replace('{site_url}', get_site_url(), $this->seo_config['image']);
     }
 
 
@@ -57,15 +58,37 @@ class SEO {
     }
     public function getTitle() {
         $c = &$this->seo_config;
-        return $c['title'];
+        $title = $c['title'];
+        if ( strpos( $title, '{site_name}' ) !== false ) {
+            $title = str_replace("{site_name}", "{site_name}$c[padding_after_site_name]", $title);
+            $title = str_replace("{site_name}", $this->getSiteName(), $title);
+        }
+        if ( strpos( $title, '{post_data.title}' ) !== false ) {
+            if ( $this->post_data && $this->post_data->exist() ) {
+                $title = str_replace("{post_data.title}", $this->post_data->getSafeTitle(), $title);
+            }
+            else {
+                $title = str_replace("{post_data.title}", '', $title );
+            }
+        }
+        $title = rtrim($title, ' -');
+        return $title;
     }
     public function getDescription() {
         $c = &$this->seo_config;
-        return $c['description'];
+        $description = $c['description'];
+        if ( $this->post_data && $this->post_data->exist() ) {
+            $description = $this->post_data->getSafeContent();
+        }
+        return $description;
     }
     public function getAuthor() {
         $c = &$this->seo_config;
-        return $c['author'];
+        $author = $c['author'];
+        if ( $this->post_data && $this->post_data->exist() ) {
+            $author = $this->post_data->getUser()->getSafeName();
+        }
+        return $author;
     }
     public function getKeywords() {
         $c = &$this->seo_config;
@@ -73,12 +96,21 @@ class SEO {
     }
     public function getImage() {
         $c = &$this->seo_config;
-        return $c['image'];
+        //$image = $c['image'];
+        $image = null;
+        if ( $this->post_data && $this->post_data->exist() ) {
+            $image = $this->post_data->file()->loadFirstImage()->url();
+        }
+
+        if ( empty($image) ) $image = $c['image'];
+
+        return $image;
     }
     public function getUrl() {
         $c = &$this->seo_config;
         $url = $c['url'];
         if ( empty( $url ) ) $url = current_url();
+        if ( $this->post_data ) $url = current_url();
         return $url;
     }
 
@@ -135,7 +167,7 @@ EOP;
             if ( empty($post['title']) ) $title = $post['content'];
             else $title = $post['title'];
             $title = strip_tags( $title );
-            $title = strcut( $title, 256 );
+            $title = strcut( $title, 250 );
 
             $post_links .= "<a href=\"/$idx/$title\">$title</a>";
         }
@@ -202,7 +234,7 @@ EOP;
 
         // display forum/post links.
         // To avoid SEO robots exclude hidden links, it hides through Javascript.
-        // On app side, For the first loads, it may blanking, but no blinking on the next load or page move.
+        // On app side, For the first loads, it may blanking, but no blinking on the next load or page move. Especially if it is Single Page App, it really would not be a big matter.
         // @todo Be sure this hidden links are indexed by google robots.
 $seo = <<<EOH
 <div class="seo-links">{$this->getLinks()}</div>

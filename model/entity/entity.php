@@ -66,6 +66,7 @@ class Entity extends \model\taxonomy\Taxonomy  {
     public function meta() {
         return meta_proxy( $this->getTable(), $this->idx );
     }
+
     public function file() {
         return file_proxy( $this->getModel(), $this->idx );
     }

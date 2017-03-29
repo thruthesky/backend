@@ -17,7 +17,9 @@ $TEST_USER_ID           = 'user';           // Test User ID.
 
 
 $DIR_DATA               = __ROOT_DIR__ . '/data';
-$DIR_FILE               = __ROOT_DIR__ . '/data/file';
+
+
+
 
 $DATABASE_USER          = 'root';
 $DATABASE_PASSWORD      = '7777';
@@ -63,7 +65,11 @@ $TIME_TO_DELETED_OLD_UNHOOKED_FILE = 1440; // minutes. Unhooked files will be de
 if ( file_exists( __ROOT_DIR__ . "/etc/my_config.php") ) require __ROOT_DIR__ . "/etc/my_config.php";
 
 
+/**
+ * Minors
+ */
 
+$DIR_FILE                           = $DIR_DATA . '/file';
 
 
 ////////////////////////////////////////////////////////// DO NOT EDIT BELOW
