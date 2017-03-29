@@ -191,12 +191,17 @@ class File extends \model\entity\Entity
         if( $idx ) $this->reset($idx);
                 // entity()->load($idx)->delete();
         $file_path = $this->path( $this->idx );
-        if(!file_exists($file_path)) return ERROR_UPLOAD_FILE_EXIST;
-        @unlink( $file_path );
+        if ( file_exists($file_path) ) @unlink( $file_path );
+        else {
+            // @warning if it runs here, It is an error. it tries to delete file that does not exists.
+            // return ERROR_UPLOAD_FILE_EXIST;
+        }
         parent::delete();
         debug_log(">>> $file_path deleted");
         return OK;
     }
+
+
 
     /**
      * this method deletes the file base on model, model_idx and code
@@ -217,6 +222,8 @@ class File extends \model\entity\Entity
         if ( $code ) $and_code = "AND code='$code'";
         else $and_code = null;
         $files = db()->rows("SELECT idx FROM {$this->getTable()} WHERE model='$model' AND model_idx=$model_idx $and_code");
+
+        debug_log($files);
         if ( $files ) {
             foreach ( $files as $file ) {
                 $this->delete( $file['idx'] );

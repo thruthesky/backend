@@ -95,30 +95,29 @@ class File_Test extends \model\test\Test {
 
 
         for( $i=0; $i<3; $i ++) {
-        $_REQUEST = ['model'=>333, 'model_idx'=>444, 'code'=> "abc$i" ];
-        $_FILES['userfile']['size'] = 12345;
-        $_FILES['userfile']['type'] = 'image/jpeg';
-        $_FILES['userfile']['name'] = 'person.jpg';
+            $_REQUEST = ['model'=>333, 'model_idx'=>444, 'code'=> "abc$i" ];
+            $_FILES['userfile']['size'] = 12345;
+            $_FILES['userfile']['type'] = 'image/jpeg';
+            $_FILES['userfile']['name'] = 'person.jpg';
 
-        $_FILES['userfile']['tmp_name'] = __ROOT_DIR__ . '/tmp/person.jpg';
-        $re = f()->save( $_REQUEST, $_FILES['userfile']);
-        test( is_success( $re ), "delete_test::Upload with code $re"  .get_error_string($re));
-        $path = f()->path( $re );
-        test( file_exists( $path ), "delete_test::file path should exist : $path");
+            $_FILES['userfile']['tmp_name'] = __ROOT_DIR__ . '/tmp/person.jpg';
+            $re = f()->save( $_REQUEST, $_FILES['userfile']);
+            test( is_success( $re ), "delete_test::Upload with code $re"  .get_error_string($re));
+            $path = f()->path( $re );
+            test( file_exists( $path ), "delete_test::file path should exist : $path");
         }
         
         $re = f()->count( 333, 444);
-        test( $re == 3, '3 files are successfully uploaded' );
+        test( $re == 3, "3 files are successfully uploaded. count: $re" );
 
         f()->deleteBy( 333, 444, 'abc0');
         $re = f()->count( 333, 444);
-        test( $re == 2, '1 file deleted. there should be 2 files left.' );
-
+        test( $re == 2, '1 file deleted. there should be 2 files left: re: ' . $re );
 
 
         f()->deleteBy(333, 444 );
         $re = f()->count( 333, 444);
-        test( $re == 0, 'all model 333 and model_idx 444 should be deleted ' );
+        test( $re == 0, "all model 333 and model_idx 444 should be deleted. count: $re" );
     }
 
 

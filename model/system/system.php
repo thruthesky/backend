@@ -15,10 +15,18 @@ class System {
     public final function run() {
 
         $this->loadInit();
-        route()->loadRoutes();
 
         $route_name = in('route');
-        if ( empty( $route_name ) ) return error( ERROR_ROUTE_NOT_PROVIDED );
+
+
+        /// if NO Route ??
+        if ( empty( $route_name ) ) {
+            return backend()->seo()->patch()->render();
+
+            /// return error( ERROR_ROUTE_NOT_PROVIDED ); /// @deprecated
+        }
+
+        route()->loadRoutes();
 
         $route = route()->getRoute( $route_name );
         route()->run( $route );
