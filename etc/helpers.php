@@ -255,9 +255,30 @@ function rsearch($dir, $pattern) {
 
 
 
+function current_url() {
+    return (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+}
 
 
 
-function test( $re, $code ) {
-    \model\test\Test::test( $re, $code );
+/**
+ *
+ * Cut UTF-8 string
+ *
+ * @param $str
+ * @param $len
+ * @param string $suffix
+ * @return string
+ */
+function strcut($str, $len, $suffix="")
+{
+    $s = substr($str, 0, $len);
+    $cnt = 0;
+    for ($i=0; $i<strlen($s); $i++)
+        if (ord($s[$i]) > 127)
+            $cnt++;
+    $s = substr($s, 0, $len - ($cnt % 3));
+    if (strlen($s) >= strlen($str))
+        $suffix = "";
+    return $s . $suffix;
 }

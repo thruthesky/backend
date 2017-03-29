@@ -379,3 +379,9 @@ function hook() {
 function backend() {
     return new \model\system\System();
 }
+
+
+
+function test( $re, $code ) {
+    \model\test\Test::test( $re, $code );
+}

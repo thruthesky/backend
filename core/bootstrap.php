@@ -13,11 +13,11 @@ header('P3P: CP="NOI ADM DEV COM NAV OUR STP"'); /** cookie share on iframe */
 
 
 
-require __ROOT_DIR__ . '/core/library.php';
-require __ROOT_DIR__ . '/etc/helpers.php';
-require __ROOT_DIR__ . '/etc/defines.php';
-require __ROOT_DIR__ . '/etc/config.php';
-
+require_once __ROOT_DIR__ . '/core/library.php';
+require_once __ROOT_DIR__ . '/etc/helpers.php';
+require_once __ROOT_DIR__ . '/etc/defines.php';
+require_once __ROOT_DIR__ . '/etc/config.php';
+require_once __ROOT_DIR__ . '/etc/external/spyc.php'; // yaml parser
 
 
 

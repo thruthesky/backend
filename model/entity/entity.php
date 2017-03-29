@@ -213,6 +213,12 @@ class Entity extends \model\taxonomy\Taxonomy  {
      *
      * @param $cond
      * @return mixed
+     *
+     * @code            To load all entities of the taxonomy.
+     *
+                        $forums = config()->loadsQuery( true );
+     *
+     * @endcode
      */
     public function loadsQuery( $cond ) {
         return $this->loads( $this->idxes( $cond ) );

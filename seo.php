@@ -1,3 +1,13 @@
 <?php
+/**
+ *
+ * @file index.php
+ * @note starter script
+ *
+ */
 
-include_once 'index.php';
+define('__ROOT_DIR__', __DIR__ );
+
+include_once 'core/bootstrap.php';
+
+backend()->seo()->patch()->render();

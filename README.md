@@ -9,6 +9,13 @@ Backend Server for Restful APIs
 * @see tests to understand Backend.
 
 
+# Work Environtment
+
+## thruthesky
+
+http://localhost/www/backend/ for backend restful api access.
+http://backend.org/ for seo access.
+
 
 
 # TODO
@@ -47,6 +54,33 @@ And this is why SEO pages comes.
 * If browser understands angular code, it will bootstrap Angular or it will just show the first payload to user.
 
 
+### Customizing and Testing
+
+[Google Webmaster Tools](https://www.google.com/webmasters/tools/) is known to be the best helpful tool when it comes to 'SEO' related works.
+
+
+
+### Nginx Configuration for SEO
+
+
+Example ) How to configure Nginx for SEO
+
+````
+    server {
+        listen       80;
+        server_name  backend.org;
+        root   /Users/thruthesky/www/backend;
+        location / {
+            index  seo.php;
+            try_files $uri $uri/ /seo.php?$args;
+        }
+        location ~ \.php$ {
+            fastcgi_pass   127.0.0.1:9000;
+            fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
+            include        fastcgi_params;
+        }
+    }
+````
 
 
 

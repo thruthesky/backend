@@ -37,5 +37,14 @@ class System {
         return $this;
     }
 
+    /**
+     * @return \model\seo\SEO
+     */
+    public function seo() {
+        $this->loadInit();
+        return new \model\seo\SEO();
+    }
+
+
 }
 

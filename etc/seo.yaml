@@ -1,0 +1,45 @@
+
+# Site name
+site_name: Backend
+
+
+# Url of the site
+# If it is left in blank, then the access URL will be used.
+# Example
+#         url: http://backend.org
+url:
+
+
+# TITLE of the site
+# {post_config.name} will be replace by the actual name of the post config(forum)
+# {post_data.title} will be replace by the actual title of the post
+title: "{site_name} {post_config.name} {post_data.title}"
+
+
+
+# Default description of the site.
+# This may be replaced by the content of the post.
+description: Backed is a Restful API server for client side applications like Angular, jQueryMobile, etc.
+
+
+# keywords of the site
+keywords: Backend,API,Angular
+
+
+# Default Author of the site.
+#
+# This will be replace by the post author.
+author: JaeHo Song
+
+
+# Default site image
+# This may be replaced by post's photo
+image: /etc/res/img/backend.png
+
+
+
+# Forums to display SEO links for Robots
+# if it is left in blank(empty), then all forum links will be displayed.
+# Example)
+#           forums: [ discussion, qna, gallery ]
+# forums:
