@@ -17,13 +17,14 @@ Backend Server for Restful APIs
 
 ## SEO Friendly Fetch For Client End
 
-* Since Backend works as Restful API,
-	* there is no HTML to be indexed by search engine.
-	* and it cannot be previewed by other site like facebook.
+* Since Backend works as Restful API Server,
+	* there is no Sitemap that links posts to be indexed by search engine.
+	* and it cannot be site-previewed by other site like facebook.
 
 And this is why SEO pages comes.
 
-* By supporting IE6 ~ IE9, Human can read SEO pages. So, seo.php must prepare nice design with Machine readable SEO friendly page.
+* It is only machine readable which means there is no design but HTML and posts for SEO purpose only.
+
 
 
 
@@ -33,7 +34,7 @@ And this is why SEO pages comes.
 ### Todo
 
 
-* set web server directory index to seo.php
+* Configure web server's `directory index` to seo.php, so backend has a separate start script for its service.
 * save all client file on Backend root folder. Add .gitignore to make it easy work.
 * seo.php will read angular 'index.html'
 * seo.php will patch 'SEO' things into 'index.html' based on the URL.
