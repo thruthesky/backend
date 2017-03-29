@@ -66,3 +66,6 @@ function create_post_data_table( $_table_name ) {
         ->index( 'post_config_idx,user_idx' );
     die_if_table_not_exist( $_table_name );
 }
+
+
+config()->set('id', 'test')->create();

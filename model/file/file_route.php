@@ -33,7 +33,7 @@ add_route('file.delete',[
 ]);
 
 
-add_route('upload_test', [
+add_route('file.test', [
     'path'=> '\\model\\file\\file_test',
     'method'=>'run',
     'variable'=>[
@@ -42,3 +42,12 @@ add_route('upload_test', [
         'system'=>[]
     ]
 ]);
+//add_route('upload_test', [
+//    'path'=> '\\model\\file\\file_test',
+//    'method'=>'run',
+//    'variable'=>[
+//        'required'=>[],
+//        'optional'=>[],
+//        'system'=>[]
+//    ]
+//]);

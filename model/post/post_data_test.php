@@ -61,7 +61,7 @@ class Post_Data_Test extends Test {
 
 
         // empty password error.
-        $p = [ 'post_config_id'=>'test2', 'title'=>'hello there', 'content'=>'how are you?' ];
+        $p = [ 'post_config_id'=>'test', 'title'=>'hello there', 'content'=>'how are you?' ];
         $re = $this->route( 'post_data.create', $p);
         test( is_error($re) == ERROR_PASSWORD_EMPTY, get_error_string($re));
 
@@ -124,7 +124,7 @@ class Post_Data_Test extends Test {
 
 
         // 3. post with user.
-        $p = [ 'session_id' => $session_id, 'post_config_id'=>'test2', 'title'=>'hello there', 'content'=>'how are you?' ];
+        $p = [ 'session_id' => $session_id, 'post_config_id'=>'test', 'title'=>'hello there', 'content'=>'how are you?' ];
         $re = $this->route( 'post_data.create', $p);
         test( is_success($re), "A user creates a post: " . get_error_string($re));
 
@@ -206,7 +206,7 @@ class Post_Data_Test extends Test {
         // 4. admin edit & delete a post owned by other.
 
 
-        $p = [ 'session_id' => $session_id, 'post_config_id'=>'test2', 'title'=>'admin test', 'content'=>'content 4' ];
+        $p = [ 'session_id' => $session_id, 'post_config_id'=>'test', 'title'=>'admin test', 'content'=>'content 4' ];
         $re = $this->route( 'post_data.create', $p);
         test( is_success($re), "Admin test: A user creates a post: " . get_error_string($re));
         $post_idx = $re['data']['idx'];
@@ -253,7 +253,7 @@ class Post_Data_Test extends Test {
         $this->createPostConfig( $config_id );
 
         for( $i = 0; $i < 5; $i ++ ) {
-            $re = $this->route( 'post_data.create', [ 'session_id' => $session_id, 'post_config_id'=>'test5', 'title' => 'hello world ' . $i] );
+            $re = $this->route( 'post_data.create', [ 'session_id' => $session_id, 'post_config_id'=>'test', 'title' => 'hello world ' . $i] );
         }
 
 
@@ -270,6 +270,8 @@ class Post_Data_Test extends Test {
         ]);
 
         test( is_success($re), "post search title like hello% " . get_error_string($re));
+
+
         test( count($re['data']['posts']) == 2, "2 posts searched");
 
 
@@ -278,8 +280,9 @@ class Post_Data_Test extends Test {
 
 
 
-        $this->createPostConfig( 'test6-' . date('his') );
-        $re = $this->route( 'post_data.create', [ 'session_id' => $session_id, 'post_config_id'=>'test6', 'title' => 'hello world you. '] );
+        $two_config_test_id = 'test6-' . date('his');
+        $this->createPostConfig( $two_config_test_id );
+        $re = $this->route( 'post_data.create', [ 'session_id' => $session_id, 'post_config_id'=>$two_config_test_id, 'title' => 'hello world you. '] );
 
 
 
@@ -292,9 +295,10 @@ class Post_Data_Test extends Test {
         ]);
 
         test( count($re['data']['configs']) == 2, "Two configs" );
-        test( $re['data']['configs']['test6']['id'] == 'test6' && $re['data']['configs']['test5']['id'] == 'test5', "Two config name: test5, test6" );
+        test( $re['data']['configs'][ $two_config_test_id ]['id'] == $two_config_test_id && $re['data']['configs']['test']['id'] == 'test', "Two config name: test5, test6" );
 
 
+        $this->deletePostConfig( $two_config_test_id );
     }
 
 
