@@ -32,15 +32,9 @@ class User_Interface extends User {
             $re_upload = $this->hookUpload( $this, BACKEND_PRIMARY_PHOTO ); if ( is_error( $re_upload ) ) return error( $re_upload );
 
 
-            $res = [
-                'session_id' => $re,
-                'id' => $this->id,
-                'name' => $this->name,
-                'email' => $this->email
-            ];
             // debug_log("res");
             // debug_log($res);
-            success( $res );
+            success( $this->res() );
         }
         else {
             error( $re );
@@ -48,6 +42,23 @@ class User_Interface extends User {
 //        is_success( $re ) ? success([ 'session_id' => $re ]) : error( $re );
     }
 
+    /**
+     * @return array
+     *
+     * @code
+     *      success( $this->reset( $user )->res() );
+     * @endcode
+     *
+     */
+    public function res() {
+        return [
+            'session_id' => $this->session_id,
+            'idx' => $this->idx,
+            'id' => $this->id,
+            'name' => $this->name,
+            'email' => $this->email
+        ];
+    }
 
     public function edit() {
 
@@ -81,13 +92,12 @@ class User_Interface extends User {
         if ( is_success( $re ) ) {
             $re_upload = $this->hookUpload( $user, BACKEND_PRIMARY_PHOTO );
             if ( is_error( $re_upload ) ) return error( $re_upload );
-            $res = [
-                'id' => $this->id,
-                'name' => $this->name,
-                'email' => $this->email
-            ] ;
-            if ( ! currentUser()->isAdmin() ) $res[ 'session_id' ] = $user->getSessionId();
+            $this->reset( $user ); // The user who is being edited becomes $this.
+            $res = $this->res();
+            if ( currentUser()->isAdmin() ) unset( $res['session_id'] ); /// admin will not edit
             success( $res );
+            //if ( ! currentUser()->isAdmin() ) $res[ 'session_id' ] = $user->getSessionId();
+            //success( $res );
         }
         else error( ERROR_DATABASE_UPDATE_FAILED );
 
@@ -151,12 +161,9 @@ class User_Interface extends User {
         if ( ! $this->checkPassword( in('password'), $user->password ) ) return error(ERROR_WRONG_PASSWORD);
         $user->updateLoginInformation();
 
-        success( [
-            'session_id' => $user->getSessionId(),
-            'id' => $user->id,
-            'name' => $user->name,
-            'email' => $user->mail
-        ] );
+
+
+        success( $this->reset( $user )->res() );
     }
 
 

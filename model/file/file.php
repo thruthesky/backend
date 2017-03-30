@@ -33,6 +33,11 @@ class File extends \model\entity\Entity
      * @note If the 'file.model' is 'user', then 'file.model_idx' and 'file.user_idx' maybe the same since the model of the entity is owned by the same user whose user.idx is just the same as model_idx(but there might a change that model_idx and user_idx may differ)
      *
      *
+     * @warning Make sure to send `model_idx` when upload to 'replace' a file or when upload files on entity edit.
+     * @attention Missing `model_idx` will cause `model_idx` to be 0 Unless you hook it.
+     * @attention When anonymous user uploads a primary photo, it MUST NOT be unique because there are many anonymous. If you set unique, then backend will delete all the photos of anonymous.
+     *              - But for changing primary photo on user profile, 'UNIQUE' must be 'true' and `model_idx` MUST BE set to user.idx
+     *
      * @param $fileinfo - holds all information about saving files like model, model_idx, code, etc.
      * @param $userfile
      * @return array|int|number
@@ -87,6 +92,17 @@ class File extends \model\entity\Entity
          */
         if ( $unique == 'Y' ) {
             debug_log("File::save() Going to delete unique of : $model, $model_idx, $code");
+
+
+            /**
+             * @fix for SQLite, last ROWID on autoincrement wll be reused if last has been deleted.
+             *      When a user uploads a unique file, then the newly created ROWID(file.idx) may remain the same as last ROWID deleted and newly created ROWID will have the deleted ROWID. and it would cause error on file uploads since file uploads and its URL/SRC is based on file.idx
+             *      so, it created temporary idx and this will be deleted on garbage collection.
+             *
+             */
+
+            $temp_idx = $this->reset( ['finish' => 'N' ] )->create();
+
             $re = $this->deleteBy( $model, $model_idx, $code );
             if ( is_error($re) ) {
                 debug_log("File::deleteBy($model, $model_idx, $code) error: $re : " . get_error_string($re));
@@ -97,7 +113,6 @@ class File extends \model\entity\Entity
 
         //
 
-        
         $idx = $this->reset( [] )
             ->set('name',$userfile['name'])
             ->set('size', $userfile['size'])
@@ -199,22 +214,41 @@ class File extends \model\entity\Entity
      */
     public function delete( $idx = null ) {
 
-        if ( empty($idx) ) return ERROR_IDX_EMPTY_ON_FILE_DELETE;;
-        if( $idx ) $this->reset($idx);
+        if ( $idx !== null && empty( $idx ) ) {
+            return ERROR_IDX_EMPTY_ON_FILE_DELETE;
+        }
+
+        if( $idx ) $this->reset($idx);  // if a file idx pass over argument.
 
         if ( ! $this->exist() ) return ERROR_FILE_NOT_EXIST;
+
+        debug_log("Going to File::delete() : " . $this->idx);
+        debug_log("file: {$this->idx} exists in database.");
+
+
         $this->debug_log();
                 // entity()->load($idx)->delete();
         $file_path = $this->path( $this->idx );
-        if ( file_exists($file_path) ) @unlink( $file_path );
+        if ( file_exists($file_path) ) {
+            debug_log("file: {$this->idx} exists in hdd.");
+            @unlink( $file_path );
+            if ( file_exists( $file_path ) ) {
+                debug_log("ERROR: file: {$this->idx} still exists after unlink().");
+                return ERROR_FILE_UNLINK_FAILED;
+            }
+            else debug_log("Unlink() success : file: {$this->idx} unlink() success. The file has been deleted fron HDD.");
+        }
         else {
             // @warning if it runs here, It is an error. it tries to delete file that does not exists.
             // return ERROR_UPLOAD_FILE_EXIST;
             debug_log("file NOT exist for delete: $file_path");
         }
-        parent::delete();
-        debug_log(">>> $file_path deleted");
+        $re = parent::delete();
+        if ( is_error($re) ) return $re;
+
+        debug_log("Success on File::delete(). file: $file_path deleted from DB and HDD.");
         return OK;
+
     }
 
 
@@ -238,17 +272,17 @@ class File extends \model\entity\Entity
      *
      */
     public function deleteBy( $model, $model_idx, $code=null ) {
-        debug_log("file::deleteBy( $model, $model_idx, $code )");
+        debug_log("Going to delete: file::deleteBy( $model, $model_idx, $code )");
         if ( $code ) $and_code = "AND code='$code'";
         else $and_code = null;
         $files = db()->rows("SELECT idx FROM {$this->getTable()} WHERE model='$model' AND model_idx=$model_idx $and_code");
 
-        debug_log($files);
+        debug_log("Found " . count($files) . " files to delete.");
         if ( $files ) {
             foreach ( $files as $file ) {
                 $re = self::delete( $file['idx'] );
                 if ( is_error($re) ) {
-                    debug_log("File::deleteBy() deleting $file[idx] failed");
+                    debug_log("ERROR: File::deleteBy() deleting $file[idx] : " . get_error_string($re));
                     return $re;
                 }
             }

@@ -155,3 +155,4 @@ define('ERROR_UPLOAD_ERR_NO_TMP_DIR', -43206);
 define('ERROR_UPLOAD_ERR_CANT_WRITE', -43207);
 define('ERROR_UPLOAD_ERR_EXTENSION', -43208);
 define('ERROR_IDX_EMPTY_ON_FILE_DELETE', -43209);           $em[ERROR_IDX_EMPTY_ON_FILE_DELETE] = 'file-idx-empty-on-file::delete';
+define('ERROR_FILE_UNLINK_FAILED', -43220);                 $em[ERROR_FILE_UNLINK_FAILED] = 'file-unlink-failed';

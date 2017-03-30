@@ -4,6 +4,8 @@
  */
 
 namespace model\user;
+use model\file\File;
+
 class User extends \model\entity\Entity {
 
     const PUBLIC_FIELDS = [ 'id', 'name', 'middle_name', 'last_name', 'nickname', 'gender', 'birth_year', 'birth_month', 'birth_day', 'country', 'province', 'city' ];
@@ -345,8 +347,10 @@ class User extends \model\entity\Entity {
     }
 
     public function primaryPhoto() {
-        return ( new \model\file\File() )->loadQuery("user_idx={$this->idx} AND code='". BACKEND_PRIMARY_PHOTO ."'");
+        $q = "model='" . $this->getModel() . "' AND model_idx={$this->idx} AND code='". BACKEND_PRIMARY_PHOTO ."' AND finish='Y' ";
+        return ( new File() )->loadQuery($q);
     }
+
 
     /**
      *

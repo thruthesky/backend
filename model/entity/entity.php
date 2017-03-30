@@ -159,6 +159,9 @@ class Entity extends \model\taxonomy\Taxonomy  {
         $this->record = db()->row("SELECT * FROM $table WHERE $cond");
 
 
+        // return static $this;
+
+        //return new static( clone $this );
         return $this;
     }
 

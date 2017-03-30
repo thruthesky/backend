@@ -65,8 +65,12 @@ class File_Test extends \model\test\Test {
         $path = f()->path( $re );
         test( file_exists( $path ), "file existence check : $path");
 
-        $file->delete();
-        test( f($re)->exist() == false,"file delete test ($re)");
+        //di($file);
+        $del = $file->delete();
+        test( is_success($del), "deleted: " . get_error_string($del));
+        //di($file);
+        //di(f($re));
+        test( f($re)->exist() == false,"file delete test ($re) : " . get_error_string($re));
         test( ! file_exists( $path ), "file should be deleted : $path");
 //        $re = $this->route('upload',$params);
     }
