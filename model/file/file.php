@@ -86,7 +86,12 @@ class File extends \model\entity\Entity
          * If unique option is set, delete previously uploaded files.
          */
         if ( $unique == 'Y' ) {
-            $this->deleteBy( $model, $model_idx, $code );
+            debug_log("File::save() Going to delete unique of : $model, $model_idx, $code");
+            $re = $this->deleteBy( $model, $model_idx, $code );
+            if ( is_error($re) ) {
+                debug_log("File::deleteBy($model, $model_idx, $code) error: $re : " . get_error_string($re));
+                return $re;
+            }
         }
 
 
@@ -109,7 +114,7 @@ class File extends \model\entity\Entity
 
 
         $dst = DIR_UPLOAD . "/$idx";
-        // debug_log("move_uploaded_file($src, $dst)");
+        debug_log("move_uploaded_file($src, $dst)");
 
         if ( file_exists( $dst ) ) return ERROR_UPLOAD_FILE_EXIST;
         if ( is_test() ) $re = @copy( $src, $dst );
@@ -120,6 +125,8 @@ class File extends \model\entity\Entity
             $this->load($idx)->delete();
             return [ 'code' => ERROR_MOVE_UPLOADED_FILE, 'message' => $error['message'] ];
         }
+
+        debug_log("file uploaded: idx: $idx");
 
         return $idx;
     }
@@ -169,6 +176,7 @@ class File extends \model\entity\Entity
 
         $files = $this->getOldUnhookedList();
         if ( $files ) {
+            debug_log(" ------------ Going to delete OLD files -----------");
             foreach ( $files as $file ) {
                 $this->delete( $file['idx'] );
             }
@@ -182,25 +190,32 @@ class File extends \model\entity\Entity
      * @attention it overrides entity()->delete().
      * @param null $idx - file.idx to delete
      * @return number
-     *          OK on success.
-     *          ERROR_CODE otherwise.
+     *
+     *          OK - on success.
+     *          ERROR_CODE - on error
+     *
+     *
      * @attentions it doesn't return anything so you will not know if the deletion is success or not
      */
     public function delete( $idx = null ) {
 
+        if ( empty($idx) ) return ERROR_IDX_EMPTY_ON_FILE_DELETE;;
         if( $idx ) $this->reset($idx);
+
+        if ( ! $this->exist() ) return ERROR_FILE_NOT_EXIST;
+        $this->debug_log();
                 // entity()->load($idx)->delete();
         $file_path = $this->path( $this->idx );
         if ( file_exists($file_path) ) @unlink( $file_path );
         else {
             // @warning if it runs here, It is an error. it tries to delete file that does not exists.
             // return ERROR_UPLOAD_FILE_EXIST;
+            debug_log("file NOT exist for delete: $file_path");
         }
         parent::delete();
         debug_log(">>> $file_path deleted");
         return OK;
     }
-
 
 
     /**
@@ -216,6 +231,11 @@ class File extends \model\entity\Entity
      * @note model, model_idx, code are not unique which means that might be more than one file which has same model, model_idx and code.
      *      This method will delete all the files that matches on input $model, $model_idx and $code.
      *
+     * @return number
+     *
+     *      OK - on success
+     *      ERROR CODE - on error. Returns error if any of the multi-files to delete case an error.
+     *
      */
     public function deleteBy( $model, $model_idx, $code=null ) {
         debug_log("file::deleteBy( $model, $model_idx, $code )");
@@ -226,9 +246,15 @@ class File extends \model\entity\Entity
         debug_log($files);
         if ( $files ) {
             foreach ( $files as $file ) {
-                $this->delete( $file['idx'] );
+                $re = self::delete( $file['idx'] );
+                if ( is_error($re) ) {
+                    debug_log("File::deleteBy() deleting $file[idx] failed");
+                    return $re;
+                }
             }
         }
+
+        return OK;
     }
 
     public function path( $idx ) {

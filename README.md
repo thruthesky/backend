@@ -17,66 +17,29 @@ http://localhost/www/backend/ for backend restful api access.
 http://backend.org/ for seo access.
 
 
+## SEO
 
-# TODO
+* Since Backend needs client app's assets in its root folder, the root folder becomes dirty.
+* So, it needs a another 'github clone' to maintain its root folder clean.
 
-* Check if file upload responses with right error message. for instance, too big file upload should response 'max-file-upload-size-limit-excedded' or sonmething but the error responseded is like 'cannot create idx'
-
-## SEO Friendly Fetch For Client End
-
-* Since Backend works as Restful API Server,
-	* there is no Sitemap that links posts to be indexed by search engine.
-	* and it cannot be site-previewed by other site like facebook.
-
-And this is why SEO pages comes.
-
-* It is only machine readable which means there is no design but HTML and posts for SEO purpose only.
-
-
-
-* @see http://luisfbmelo.com/blog/2015/12/04/angularjs-seo-with-php/
-
-
-### Todo
-
-
-* Configure web server's `directory index` to seo.php, so backend has a separate start script for its service.
-* save all client file on Backend root folder. Add .gitignore to make it easy work.
-* seo.php will read angular 'index.html'
-* seo.php will patch 'SEO' things into 'index.html' based on the URL.
-	* Metas
-	* Open Grahps
-	* Titter codes
-	* Sitemaps
-	* Links to posts.
-* seo.php will deliver the payload to browser.
-* If browser understands angular code, it will bootstrap Angular or it will just show the first payload to user.
-
-
-### Flowchart of SEO
-
-* On front page, it displays links of latest 40 posts including comments.
-* On post/comment page, it displays content of the post/comment and displays previous 40 posts including comments.
-
-### Customizing and Testing
-
-[Google Webmaster Tools](https://www.google.com/webmasters/tools/) is known to be the best helpful tool when it comes to 'SEO' related works.
-
-
-
-### Nginx Configuration for SEO
-
-
-Example ) How to configure Nginx for SEO
+Example) How to do anoter git clone
 
 ````
+$ git clone https://github.com/thruthesky/backend backend-seo
+$ cd backend-seo/
+$ cp -r ~/apps/community-app/dist/* .   ;;; get all the client app assets.
+$ su -
+Password:
+ # vi /etc/hosts
+ 	;;; ... Add "127.0.0.1 backend-seo.org" to hosts file.
+ # vi /etc/nginx/nginx.conf
     server {
         listen       80;
-        server_name  backend.org;
-        root   /Users/thruthesky/www/backend;
+        server_name  backend-seo.org;
+        root   /Users/thruthesky/www/backend-seo;
         location / {
-            index  seo.php;
-            try_files $uri $uri/ /seo.php?$args;
+            index  index.php;
+            try_files $uri $uri/ /index.php?$args;
         }
         location ~ \.php$ {
             fastcgi_pass   127.0.0.1:9000;
@@ -84,9 +47,23 @@ Example ) How to configure Nginx for SEO
             include        fastcgi_params;
         }
     }
+
+
+ # nginx -s reload
+
+
 ````
+And access https://backend-seo.org with browser
 
 
+
+
+# TODO
+
+* Check if file upload responses with right error message. for instance, too big file upload should response 'max-file-upload-size-limit-excedded' or sonmething but the error responseded is like 'cannot create idx'
+
+* Support IE6 ~ IE9 by rendering nice HTML design.
+	* Backend checks if the user uses IE6~9, then it only send HTML to browser, NOT angular or jQueryMobile things.
 
 
 
@@ -293,12 +270,30 @@ Any methods that are not 'route' should return a value.
 
 # Installation
 
-## How to install
 
+## How to install
 
 ````
 http://localhost/www/backend-0.2/?route=install
 ````
+
+
+## How to do SEO
+
+To do SEO, the home page(hosting site) of client app must be in the same place of Backend root folder. So, Backend can patch client app's index.html with SEO codes and delivers to users.
+
+
+1. Just copy all the assets of Client app into the root folder.
+	* Client app must have `index.html` as its entry.
+2. Configure the server.
+
+	See examples of nginx server configuration in `Nginx Configuration for SEO` section of this document.
+	* Domain
+	* Set the directory index to `index.php`
+	* Rewrite to `index.php`
+3. Edit ./etc/seo.yaml for detail configuration of SEO
+
+
 
 
 ## What would be installed
@@ -317,12 +312,21 @@ http://localhost/www/backend-0.2/?route=install
 All these accounts can be changed on config.php
 
 
+### Test forum
 
-## How to code on installation
+* A forum with `test` id will be created for a test purpose.
+* This forum is heavily used while testing.
+
+
+
+
+## For developer, How to code for installation
 
 You can put any php script ending "_install.php" under a module folder.
 
 Those files will be run in installation process.
+
+
 
 
 
@@ -1038,6 +1042,77 @@ hook()->add( 'after_route', function () {
     test( true, "Do something for hook.test route");
 });
 ````
+
+
+# SEO
+
+
+Since Backend works as Restful API Server,
+
+* there is no sitemap that links posts to be indexed by search engine.
+* and it cannot be site-previewed by other site like facebook.
+
+And this is the reason why SEO functionality comes in Backend.
+
+SEO pages can only be readable by machine or robots for now. It does not support IE6 ~ IE9.
+
+For installation of SEO, see Installaction section.
+
+
+
+## How it works
+
+
+* By configuring web server's `directory index` to seo.php, Backend has a separate start script for seo service.
+	* XHR/Ajax/Resful Reqeust will access 'index.php'
+	* While robots and web browsers will access 'seo.php'
+
+* Save all client files on Backend root folder. ( Add .gitignore to make it easy work. )
+* When browsers, robots access, `seo.php` starts and reads 'index.html'
+	* it will patch 'SEO' things into 'index.html' based on the request URI.
+		* Metas
+		* Open Grahps
+		* Links to posts.
+		* etc ...
+* Then, `seo.php` will deliver the payload(HTML) to browser or robots.
+	* If browser understands the first payload( it may be angular code ), it will begin to run the Javascript for Single Page App or Client App.
+	* If the robot does not understand Javascript in the payload, that's fine. Just index the SEO code inside it.
+
+
+### Flowchart of SEO
+
+* On front page, it displays links of latest 40 posts including comments.
+* On post/comment page, it displays content of the post/comment and displays previous 40 posts including comments.
+
+### Customizing and Testing
+
+[Google Webmaster Tools](https://www.google.com/webmasters/tools/) is known to be the best helpful tool when it comes to 'SEO' related works.
+
+
+
+### Nginx Configuration for SEO
+
+
+Example ) How to configure Nginx for SEO
+
+````
+    server {
+        listen       80;
+        server_name  backend.org;
+        root   /Users/thruthesky/www/backend;
+        location / {
+            index  index.php;
+            try_files $uri $uri/ /index.php?$args;
+        }
+        location ~ \.php$ {
+            fastcgi_pass   127.0.0.1:9000;
+            fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
+            include        fastcgi_params;
+        }
+    }
+````
+
+
 
 
 
