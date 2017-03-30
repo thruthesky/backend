@@ -37,12 +37,18 @@ class File_Interface extends File {
 
     }
 
-    
-    
+
+    /**
+     *
+     * @change: Don't do 'file not exist check' here.
+     *
+     * @param null $_
+     * @return mixed
+     */
     public function delete( $_ = null ) {
         $this->load( in('idx') );
 
-        if ( ! $this->exist() ) return error( ERROR_FILE_NOT_EXIST );
+
         $re = parent::delete();
 
         if ( is_success( $re ) ) success( ['idx'=>in('idx')] );
