@@ -6,7 +6,6 @@
 namespace model\route;
 class Route {
 
-
     static $routes = [];
     static $_current_route = null;
 
