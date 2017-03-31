@@ -44,7 +44,6 @@ class Post_Data_Test extends Test {
 
 
         // prepare
-        user('user4')->delete();
         $session_id = $this->createUser( ['id' => 'user4', 'password' => 'pass4']);
         $session_id_back = $this->createUser( ['id' => 'user4back', 'password' => 'pass4']);
 

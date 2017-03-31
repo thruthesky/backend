@@ -118,6 +118,8 @@ class Post_Data_Interface extends Post_Data {
             'order' => in('order')
         ];
 
+
+
         /**
          * post search by 'id'
          */
@@ -126,12 +128,14 @@ class Post_Data_Interface extends Post_Data {
             if ( $config->exist() ) {
                 debug_log($option);
                 $option['where'] = "post_config_idx = ? " . ( $option['where']  ?  "AND ($option[where])" : '' );
-                $option['bind'] = $config->idx . ( $option['bind'] ? ",$option[bind]" : '' );
+                $option['bind'] = $config->idx . ( isset($option['bind']) ? ",$option[bind]" : '' );
             }
             else {
                 return error( ERROR_FORUM_NOT_EXIST );
             }
         }
+
+
         $posts = parent::search( $option );
 
 

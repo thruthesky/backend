@@ -174,11 +174,14 @@ class Entity extends \model\taxonomy\Taxonomy  {
      *
      * @param $idxes
      *
+     * @return array|Entity
+     *
+     * if there is error, error code will be returned.
+     *
+     * if there is error, error code will be returned.
      * @see Entity_Test::multi_load()
      *
      *
-     * @return mixed
-     *      if there is error, error code will be returned.
      */
     public function loads( $idxes ) {
         $rets = [];

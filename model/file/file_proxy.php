@@ -29,7 +29,8 @@ class File_Proxy extends File {
      */
     public function get( $code = null, $__=null, $___=null ) {
         //return f()->getRecords( " model='$this->model' AND model_idx=$this->model_idx " );
-        return parent::get( $this->model, $this->model_idx, $code );
+        $files = parent::get( $this->model, $this->model_idx, $code );
+        return $this->pres( $files );
     }
 
 

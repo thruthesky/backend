@@ -174,7 +174,7 @@ class Taxonomy extends \model\base\Base  {
         if ( ! isset( $option['select'] ) && empty( $option['select']) ) $option['select'] = '*';
 
         //
-        if ( isset( $option['order'] ) ) {
+        if ( isset( $option['order'] ) && $option['order'] ) {
             if ( ! db()->secure_cond( in('order') ) ) return ERROR_INSCURE_SQL_CONDITION;
             $order = 'ORDER BY ' . in('order');
         }
@@ -212,7 +212,11 @@ class Taxonomy extends \model\base\Base  {
                 debug_log( $option );
                 return ERROR_MISSING_BINDING_MARK;
             }
-            if ( ! isset( $option['bind'] ) || empty( $option['bind'] ) ) return ERROR_SQL_BIND_NOT_SET;
+
+            /**
+             * Bind can have '0' value. Meaning it can be empty.
+             */
+            if ( ! isset( $option['bind'] ) ) return ERROR_SQL_BIND_NOT_SET;
 
             $count_marks = substr_count($option['where'], '?');
             $count_binds = count( explode(',', $option['bind']) );

@@ -346,6 +346,26 @@ class User extends \model\entity\Entity {
         return 0;
     }
 
+    /**
+     * Returns URL of user's primary photo.
+     * @return string
+     */
+    public function getPrimaryPhotoUrl() {
+        $idx = $this->getPrimaryPhotoIdx();
+        if ( $idx ) {
+            $file = (new File())->load( $idx );
+            if ( is_error($file) ) {
+                // error on loading file.
+                return null;
+            }
+            //debug_log("file idx: $idx, getPrimaryPhotoUrl()");
+            //debug_log( $file );
+            return $file->url();
+        }
+        return null;
+
+    }
+
     public function primaryPhoto() {
         $q = "model='" . $this->getModel() . "' AND model_idx={$this->idx} AND code='". BACKEND_PRIMARY_PHOTO ."' AND finish='Y' ";
         return ( new File() )->loadQuery($q);

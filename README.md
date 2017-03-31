@@ -675,6 +675,7 @@ Comments are saved in `post_data` table together with post for easy managibility
 
 * `post_data.root_idx` and `post_data.parent_idx` are 0 if it is a post ( not a comment. )
 
+* `depth` begins with 0 that means, first children has 0 of depth.
 
 ### Utility properties.
 
@@ -805,7 +806,7 @@ Example of list request with `extra` )
 * Properties of extra can have one of "true, 1, 'Y'" indicating as positive inquery to get the data.
 * You can set falsy values like 'false', '0', '' If you don't want the data of the property. Be careful that 'N' is truthy value.
 * If `extra` is omitted, Backend will reponse with all the extra information by default.
-* @see `post_list` API section to know more about `post_data.extra`.
+* @see `post_list` API section to know more about `post_data` search with `extra` property.
 
 
 
@@ -978,6 +979,10 @@ Refer [API explanation page](https://eventviva.github.io/php-image-resize/class-
 
 * If extra.file of request is set to true, you will get uploaded file information.
 * If extra.meta of request is set to true, you will get meta data of the post.
+* If extra.comment of request is set to true, you will get comments
+* If extra.user of request is set to true, you will get user information.
+
+
 
 
 

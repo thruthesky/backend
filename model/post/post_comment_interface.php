@@ -75,7 +75,7 @@ class Post_Comment_Interface extends Post_Comment
         $re_upload = $comment->hookUpload( $comment ); if ( is_error( $re_upload ) ) return error( $re_upload );
 
 
-        return success( [ 'idx' => $comment_idx ] );
+        return success( $comment->pre(['file'=>true]) );
 
     }
 

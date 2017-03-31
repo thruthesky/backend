@@ -31,17 +31,50 @@ class Post_Data extends Post {
         unset( $record['password'], $record['user_agent'] );
 
 
-
-
         //
         if ( $option && isset($option['extra']) && $option['extra'] ) {
             if ( isset($option['extra']['meta']) && $option['extra']['meta'] ) $record['meta'] = $this->meta()->get();
             if ( isset($option['extra']['file']) && $option['extra']['file'] ) $record['files'] = $this->file()->get();
+            if ( isset($option['extra']['comment']) && $option['extra']['comment'] ) {
+                $record['comments'] = $this->getComments();
+            }
+            if ( isset($option['extra']['user']) && $option['extra']['user'] ) {
+                $user = user( $record['user_idx'] );
+                $u = [];
+                if ( $user->exist() ) {
+                    $u['idx'] = $user->idx;
+                    $u['id'] = $user->id;
+                    $u['name'] = $user->name;
+                    $u['url_primary_photo'] = $user->getPrimaryPhotoUrl();
+                }
+                $record['user'] = $u;
+            }
+
         }
         
 
         // debug_log($record);
         return $record;
+    }
+
+    /**
+     * It does 'pre()' here.
+     *
+     * @return array
+     */
+    public function getComments( )
+    {
+        $ret = [];
+        $idxes = parent::getChildren();
+        if ( $idxes ) {
+            $comments = comment()->loads( $idxes );
+            foreach( $comments as $comment ) {
+                //$pre = [];
+                //$pre['content'] = $comment->content;
+                $ret[] = $comment->pre();
+            }
+        }
+        return $ret;
     }
 
     /**

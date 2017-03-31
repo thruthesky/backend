@@ -18,10 +18,11 @@ class File_Interface extends File {
     public function upload() {
         debug_log($_FILES);
         if(!isset($_FILES['userfile'])) return error(ERROR_USERFILE_EMPTY);
-        $re = $this->save( $_REQUEST, $_FILES['userfile'] );
-//        echo $re;
-        if( is_error($re) ) error($re);
-        else success( ['idx'=>$re] );
+        $idx = $this->save( $_REQUEST, $_FILES['userfile'] );
+        if( is_error($idx) ) error( $idx );
+        else {
+            success( $this->reset( $idx )->pre() );
+        }
     }
 
     public function download() {

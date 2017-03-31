@@ -415,4 +415,40 @@ class File extends \model\entity\Entity
         if ( $this->exist() ) return get_index_php_url() .  '?route=download&idx=' . $this->idx;
         else return null;
     }
+
+
+    public function pres($files, $option=[])
+    {
+        $ret = [];
+        if ( empty( $files ) ) return $ret;
+        foreach( $files as $file ) {
+            $ret[] = $this->pre( $file, $option );
+        }
+        return $ret;
+    }
+
+    /**
+     * Returns ready-to-send-to-browser file (record) data
+     *
+     * @param $file - file record.
+     * @param array $option
+     * @return array
+     */
+    public function pre( $file=null, $option=[] ) {
+        if ( $file === null ) $file = $this->getRecord();
+        $obj = (new File())->load( $file['idx'] );
+        return [
+            'idx' => $file['idx'],
+            'model' => $file['model'],
+            'model_idx' => $file['model_idx'],
+            'code' => $file['code'],
+            'name' => $file['name'],
+            'type' => $file['type'],
+            'size' => $file['size'],
+            'no_of_download' => $file['no_of_download'],
+            'url' => $obj->url()
+        ];
+    }
+
+
 }
