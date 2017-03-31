@@ -270,7 +270,10 @@ EOH;
 
     public function loadIndexHTML() {
 
-        $this->content = file_get_contents('index.html');
+        $this->content = @file_get_contents('index.html');
+        if ( $this->content == false ) {
+            echo "No index.html";
+        }
 
     }
 }

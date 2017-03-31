@@ -12,7 +12,8 @@ route()->add( 'post_comment.create', [
     'method' => 'create',
     'variables' => [
         'required' => [ 'parent_idx' ],
-        'optional' => $_optional
+        'optional' => $_optional,
+        'system' => [ 'file_hooks' ]
     ],
     'validator' => function() {
         if ( currentUser()->isAnonymous() && empty( in('password') ) ) return [ 'code' => ERROR_PASSWORD_EMPTY, 'message' => "Anonymous must input a password to create a comment." ];
@@ -31,7 +32,8 @@ route()->add( 'post_comment.edit', [
     'method' => 'edit',
     'variables' => [
         'required' => [ 'idx' ],
-        'optional' => $_optional
+        'optional' => $_optional,
+        'system' => [ 'file_hooks' ]
     ],
     'validator' => function() {
         $comment = comment( in('idx') );
