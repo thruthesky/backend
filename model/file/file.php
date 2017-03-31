@@ -412,7 +412,7 @@ class File extends \model\entity\Entity
      * @endcode
      */
     public function url() {
-        if ( $this->exist() ) return get_index_php_url() .  '?route=download&idx=' . $this->idx;
+        if ( $this->exist() ) return get_index_php_url() .  '?route=download&idx=' . $this->idx . '&name=/' . $this->name;
         else return null;
     }
 

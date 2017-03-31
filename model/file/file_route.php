@@ -18,7 +18,7 @@ add_route('download',[
     'variables'=>[
         'required'=>[ 'idx' ],
         'optional'=>[ 'width', 'height', 'quality', 'resize' ],
-        'system'=>[ ]
+        'system'=>[ 'name' ]
     ]
 ]);
 
