@@ -169,7 +169,7 @@ EOP;
             $title = strip_tags( $title );
             $title = strcut( $title, 250 );
 
-            $post_links .= "<a href=\"/$idx/$title\">$title</a>";
+            $post_links .= "<a href=\"/p/$idx/$title\">$title</a>";
         }
 
 

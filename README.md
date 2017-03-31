@@ -270,12 +270,21 @@ Any methods that are not 'route' should return a value.
 
 # Installation
 
+## Requirement
 
-## How to install
+* php 7.x
+* GD
+	* GD is used by etc/external/ImageResize.php
+
+
+
+
+## How to install Backend
 
 ````
 http://localhost/www/backend-0.2/?route=install
 ````
+
 
 
 ## How to do SEO
