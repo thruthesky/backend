@@ -193,7 +193,8 @@ class File extends \model\entity\Entity
         if ( $files ) {
             debug_log(" ------------ Going to delete OLD files -----------");
             foreach ( $files as $file ) {
-                $this->delete( $file['idx'] );
+                debug_log("old file: $file[idx]");
+                self::delete( $file['idx'] );
             }
         }
 
@@ -210,17 +211,26 @@ class File extends \model\entity\Entity
      *          ERROR_CODE - on error
      *
      *
-     * @attentions it doesn't return anything so you will not know if the deletion is success or not
+     *
+     *
      */
     public function delete( $idx = null ) {
 
-        if ( $idx !== null && empty( $idx ) ) {
-            return ERROR_IDX_EMPTY_ON_FILE_DELETE;
+        if ( $idx !== null ) {
+            if ( empty( $idx ) ) {     // $idx was passed but no value.
+                return ERROR_IDX_EMPTY_ON_FILE_DELETE;
+            }
+            else {
+                if( $idx ) $this->reset($idx);  // if a file idx passed over argument.
+            }
         }
 
-        if( $idx ) $this->reset($idx);  // if a file idx pass over argument.
 
-        if ( ! $this->exist() ) return ERROR_FILE_NOT_EXIST;
+
+        if ( ! $this->exist() ) {
+            debug_log("File::delete( $idx ) with this->idx={$this->idx} is NOT Exists");
+            return ERROR_FILE_NOT_EXIST;
+        }
 
         debug_log("Going to File::delete() : " . $this->idx);
         debug_log("file: {$this->idx} exists in database.");

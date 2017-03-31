@@ -52,7 +52,7 @@ class User_Interface extends User {
      */
     public function res() {
         return [
-            'session_id' => $this->session_id,
+            'session_id' => $this->getSessionId(),
             'idx' => $this->idx,
             'id' => $this->id,
             'name' => $this->name,
