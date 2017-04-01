@@ -74,7 +74,7 @@ class File_Interface extends File {
             else if ( $resize == 'crop' ) $image->crop( $width, $height );
             else if ( $resize == 'freecrop' ) $image->freecrop( $width, $height, $x, $y );
         }
-        
+
 
 
 

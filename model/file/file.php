@@ -410,9 +410,13 @@ class File extends \model\entity\Entity
      * @code
      *          $image = $this->post_data->file()->loadFirstImage()->url();
      * @endcode
+     *
+     * @change it does not return file name.
+     * @change it simply return with idx.
+     *
      */
     public function url() {
-        if ( $this->exist() ) return get_index_php_url() .  '?route=download&idx=' . $this->idx . '&name=/' . $this->name;
+        if ( $this->exist() ) return get_index_php_url() .  '?route=download&idx=' . $this->idx;// . '&name=/' . $this->name;
         else return null;
     }
 
