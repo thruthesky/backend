@@ -34,6 +34,9 @@ class File_Interface extends File {
 
         $image = new ImageResize( DIR_UPLOAD . '/' . $this->idx );
 
+
+        $image->save('image.png', IMAGETYPE_PNG);
+
         $image->output();
 
 
@@ -44,14 +47,16 @@ class File_Interface extends File {
      *
      * @change: Don't do 'file not exist check' here.
      *
-     * @param null $_
+     * @param File $file
      * @return mixed
      */
-    public function delete( $_ = null ) {
-        $this->load( in('idx') );
+    public function delete( $file = null ) {
+        //$this->load( in('idx') );
 
 
-        $re = parent::delete();
+        //$re = parent::delete();
+
+        $re = $file->delete();
 
         if ( is_success( $re ) ) success( ['idx'=>in('idx')] );
         else error( $re );

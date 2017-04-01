@@ -43,7 +43,8 @@ class Post_Data_Interface extends Post_Data {
         $re_upload = $this->hookUpload( post( $post_idx ) ); if ( is_error( $re_upload ) ) return error( $re_upload );
 
 
-        return success( ['idx'=>$post_idx] );
+        $post = post( $post_idx );
+        return success( $post->pre( [ 'extra' => [ 'user' => true, 'file' => true, 'comment' => true, 'meta' => true ] ] ) );
 
     }
 
@@ -95,7 +96,7 @@ class Post_Data_Interface extends Post_Data {
 
         $post = $this->load( in('idx') );
         if ( ! $post->exist() ) return error( ERROR_POST_DATA_NOT_EXIST );
-        success( ['post'=> $post->pre() ] );
+        success( ['post'=> $post->pre( $_REQUEST ) ] );
 
     }
 
