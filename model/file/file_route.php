@@ -17,9 +17,14 @@ add_route('download',[
     'method'=> 'download',
     'variables'=>[
         'required'=>[ 'idx' ],
-        'optional'=>[ 'type', 'width', 'height', 'quality', 'resize' ],
+        'optional'=>[ 'type', 'width', 'height', 'quality', 'resize', 'x', 'y', 'enlarge' ],
         'system'=>[ 'name' ]
-    ]
+    ],
+    'validator' => function () {
+        $file = ( new \model\file\File() )->load( in('idx') );
+        if ( ! $file->exist() ) return ERROR_FILE_NOT_EXIST;
+        return [ $file ];
+    }
 ]);
 
 add_route('file.delete',[

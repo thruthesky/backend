@@ -711,7 +711,7 @@ Refer [API explanation page](https://eventviva.github.io/php-image-resize/class-
 
 ### options
 
-`type` can be 'jpg', 'png'.
+`type` can be 'jpg', 'png'. @note 'jpg' works better. so try to use 'jpg' instead of 'png'.
 
 `width` is the number of width in px.
 
@@ -722,7 +722,7 @@ Refer [API explanation page](https://eventviva.github.io/php-image-resize/class-
 @attention `quality` with `type` png is not working property.
 
 
-`resize` can be 'scale', 'best-fit', 'one-iemension', 'resize', 'crop', 'freecrop'
+`resize` can be 'best-fit', 'one-iemension', 'resize', 'crop', 'freecrop'.
 
 
 `demension` can be 'width', 'height'. `dimension` is only used when `resize` is set to 'one-dimension'.
@@ -731,22 +731,31 @@ Refer [API explanation page](https://eventviva.github.io/php-image-resize/class-
 
 
 
-* 'resize' just resizes the size by width and height. This is default. but the result will be in SKEW.
-* 'scale' scales down/up the image. 'scale' is acually NOT implemented/working this isn't needed in realy world. Each image has diffent sizes and scaling does not have any point.
-* 'best-fit' makes the best fit for the dimensions.
-* 'one-demension' wil fit to one demonsion only.
+* 'resize' just resizes the size by width and height. This is default. The result will be in SKEW. `width` and `height` are mendatory or else error.
+	* http://backend.org/index.php?route=download&idx=572&type=jpg&width=200&height=200&
+* 'best-fit' makes the best fit for the max `width` and max `height`. One of dimension will become max size, but the other may be less than the size. For instance, image is 400px, 800px and 'best-fit' of *200px x 200px* may lead *100px x 200px*
+	* ?route=download&idx=572&type=jpg&width=200&height=200&resize=best-fit
+* 'one-dimension' wil fit to one demonsion only. one of `width` or `height` is needed. if both specified, `width` will take in place.
+	* ?route=download&idx=572&type=jpg&width=200&resize=one-dimension
 * 'crop' - If an original image is *400px x 600px* and *width, height is 200px x 200px*, 
 	* then it first scales down to fit minimum of *200px x 300px* because 'width' is set to 200px and the best fit is *200px 300px'
 	* and it crop off top 50px and bottom 50px to make it look good.
+	* ?route=download&idx=572&type=jpg&width=200&height=200&resize=crop
 
 * 'freecrop' - 'crop' only crop off based on center. you can set x,y position of 'crop' starting pont.
+	* ?route=download&idx=572&width=200&height=200&resize=freecrop&x=100&y=100&type=jpg
 
 
 
-`enlarge` is an optional parameta that affects on resizing.
+`enlarge` is an optional parameta that affects on resizing 'resize', 'best-fit', 'one-dimemsion'. if set to 'Y', then it enlarges. It does not work on 'crop'.
+
+
 
 
 @note if any of `type`, `width` and `height` is not specified, it just gets original sizes.
+
+@note 'scale' is NOT supported since it isn't needed in realy world. Each image has diffent sizes and scaling does not have any point.
+
 
 
 
