@@ -46,11 +46,28 @@ class File_Interface extends File {
         $x = in('x');
         $y = in('y');
 
+        if ( in('crop') ) {
+            $resize = 'crop';
+            $arr = explode('x', in('crop') );
+            $width = $arr[0];
+            $height = $arr[1];
+            if ( isset( $arr[2] ) ) {
+                $type = 'jpg';
+                $quality = $arr[2];
+            }
+            // free crop is not for shortcode.
+//            if ( in('xy') ) {
+//                $resize = 'freecrop';
+//                list ( $x, $y ) = explode( 'x', in('xy') );
+//            }
+        }
 
 
         if ( !$type && !$width && !$height ) return $this->send( $file_path );
 
         if ( empty($resize) ) $resize = 'resize';
+
+
 
 
         $cache_file_path = DIR_CACHE . "/$idx-$resize-$x-$y-{$width}x{$height}-$quality.$type";
@@ -78,7 +95,7 @@ class File_Interface extends File {
 
 
 
-        // quality.
+        // quality. quality only works when type is specified.
         if ( $type && $quality ) {
             if ( $type == 'jpg' ) $image->quality_jpg = $quality;
             else if ( $type == 'png' ) $image->quality_png = $quality;

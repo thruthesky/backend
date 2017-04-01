@@ -29,6 +29,21 @@ Backend Server for Restful APIs
 
 # TODO
 
+
+
+- check/select primary photo among others in forum post.
+
+- admin file management.
+    show how many unhooked, show many old unhooked.
+    show satistics.
+       
+- upload file with angular http formdata without file transfer of cordova.
+
+
+
+
+
+
 * Check if file upload responses with right error message. for instance, too big file upload should response 'max-file-upload-size-limit-excedded' or sonmething but the error responseded is like 'cannot create idx'
 
 * Support IE6 ~ IE9 by rendering nice HTML design.
@@ -717,9 +732,13 @@ Refer [API explanation page](https://eventviva.github.io/php-image-resize/class-
 
 `height` is the number of height in px.
 
-`quality` is the number of quality of image. for jpeg, it is between 1~100, for png, it is between 1-10. `quality` is working only if `type` is set to 'jpg' or 'png'.
+`quality` is the number of quality of image. for jpeg, it is between 1~100, for png, it is between 1-10. `quality` is working only if `type` is set to 'jpg' or 'png'. 
 
 @attention `quality` with `type` png is not working property.
+
+@attention `quality` works only when `type` is specified. so, use `quality` with `type=jpg`.
+
+
 
 
 `resize` can be 'best-fit', 'one-iemension', 'resize', 'crop', 'freecrop'.
@@ -757,40 +776,15 @@ Refer [API explanation page](https://eventviva.github.io/php-image-resize/class-
 @note 'scale' is NOT supported since it isn't needed in realy world. Each image has diffent sizes and scaling does not have any point.
 
 
+@note You will mostly resize with 'crop' simply becase this is the easist way to resize images. so, it has a special parameter `crop`. it takes width and height in "000x000" format. for instance `crop=100x200` means, Backend will crop images in width 100px and height 200px. You can set `quality` on the third number on `crop` like "`width`x`height`x`quality`". If you set `quality`, then the `type` becomes `jpg` automatically.
+
+* Use `crop=11x22x33` as much as you can.
+	* Example ) ?route=download&idx=575&crop=500x400x100
 
 
-**for jpeg**
-````
-?route=download&type=jpeg&width=80&hegiht=120&quality=100&resize=crop
-````
 
-**for png**
-````
-?route=download&type=png&width=100&height=120&resize=center
-````
 
-- when you get posts, give option of photo size, and other photo options.
 
-@done count download
-
-- check/select primary photo among others in forum post.
-
-- admin file management.
-    show how many unhooked, show many old unhooked.
-    show satistics.
-       
-- upload file with angular http formdata without file transfer of cordova.
-
-* `file` table will holds the uploaded file information.
-* `file.finish` will be 0 until the file is really related to its object(parent).
-	* files with `file.finish=0` becomes 24 hours old, then it will be deleted.
-
-* when a file uploaded, it will return `file.idx`, any of file upload form and its related form should keep the `file.idx` and pass it over the parents' form submission. So, 
-* You will upload a file without resizing.
-* When you download image, you can customize.
-* Create thumbnail(optimized image) only on first download or with an option.
-* You can choose image type, width, height, quality, resize type.
-	* This will help on image optimization.
 
 
 

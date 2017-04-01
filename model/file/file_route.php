@@ -17,7 +17,7 @@ add_route('download',[
     'method'=> 'download',
     'variables'=>[
         'required'=>[ 'idx' ],
-        'optional'=>[ 'type', 'width', 'height', 'quality', 'resize', 'x', 'y', 'enlarge' ],
+        'optional'=>[ 'type', 'width', 'height', 'quality', 'resize', 'x', 'y', 'enlarge', 'crop', 'xy' ],
         'system'=>[ 'name' ]
     ],
     'validator' => function () {
