@@ -35,6 +35,9 @@ Backend Server for Restful APIs
 	* Backend checks if the user uses IE6~9, then it only send HTML to browser, NOT angular or jQueryMobile things.
 
 
+* max images sizes.
+	* limit uploaded photo's width, height and size since user may upload too big file.
+
 
 ## Transaction
 * prove pdo transaction is working with race condition. It is very important with playing point, user level system.
@@ -714,7 +717,10 @@ Refer [API explanation page](https://eventviva.github.io/php-image-resize/class-
 
 `height` is the number of height in px.
 
-`quality` is the number of quality of image. for jpeg, it is between 1~100, for png, it is between 1-10.
+`quality` is the number of quality of image. for jpeg, it is between 1~100, for png, it is between 1-10. `quality` is working only if `type` is set to 'jpg' or 'png'.
+
+@attention `quality` with `type` png is not working property.
+
 
 `resize` can be 'scale', 'best-fit', 'one-iemension', 'resize', 'crop', 'freecrop'
 
@@ -726,7 +732,7 @@ Refer [API explanation page](https://eventviva.github.io/php-image-resize/class-
 
 
 * 'resize' just resizes the size by width and height. This is default. but the result will be in SKEW.
-* 'scale' scales down/up the image.
+* 'scale' scales down/up the image. 'scale' is acually NOT implemented/working this isn't needed in realy world. Each image has diffent sizes and scaling does not have any point.
 * 'best-fit' makes the best fit for the dimensions.
 * 'one-demension' wil fit to one demonsion only.
 * 'crop' - If an original image is *400px x 600px* and *width, height is 200px x 200px*, 
@@ -740,6 +746,7 @@ Refer [API explanation page](https://eventviva.github.io/php-image-resize/class-
 `enlarge` is an optional parameta that affects on resizing.
 
 
+@note if any of `type`, `width` and `height` is not specified, it just gets original sizes.
 
 
 
@@ -1101,6 +1108,9 @@ So, SEO functionality comes with Backend.
 SEO pages can only be readable by machine(robots) for now. It does not support IE6 ~ IE9.
 
 For installation of SEO, see Installaction section.
+
+
+@note SEO works if index.html exists and it only work on route of 'index' and '/p/....'. It does not work on other routes.
 
 
 
