@@ -68,7 +68,11 @@ class Post_Data_Interface extends Post_Data {
 
         if ( is_success( $re ) ) {
             $re_upload = $post->hookUpload( post( in('idx') ) ); if ( is_error( $re_upload ) ) return error( $re_upload );
-            success( ['idx'=> $this->idx] );
+
+            $post = post( $post->idx );
+            return success( $post->pre( [ 'extra' => [ 'user' => true, 'file' => true, 'comment' => true, 'meta' => true ] ] ) );
+
+            //success( ['idx'=> $this->idx] );
         }
         else error( ERROR_DATABASE_UPDATE_FAILED ); // should not happened.
 

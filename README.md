@@ -782,6 +782,11 @@ Refer [API explanation page](https://eventviva.github.io/php-image-resize/class-
 	* Example ) ?route=download&idx=575&crop=500x400x100
 
 
+* Example) how to use it in Angular Template
+
+````
+<img [src]=" file.url + '&crop=100x100x50'  " style="width: 100%;">
+````
 
 
 
