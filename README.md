@@ -5,8 +5,10 @@ Backend Server for Restful APIs
 
 # Changes
 
-* post_data.create interface returns the full post data
-* post_data.data interface accepts extra property
+* post_data.create/edit interface response with the full post data.
+* post_comment create/edit interface response with the full comment data.
+* post_data.data interface accepts `extra` property.
+
 
 
 

@@ -75,7 +75,7 @@ class Post_Comment_Interface extends Post_Comment
         $re_upload = $comment->hookUpload( $comment ); if ( is_error( $re_upload ) ) return error( $re_upload );
 
 
-        return success( $comment->pre(['file'=>true]) );
+        return success( $comment->pre() );
 
     }
 
@@ -94,7 +94,10 @@ class Post_Comment_Interface extends Post_Comment
 
         if ( is_success( $re ) ) {
             $re_upload = $comment->hookUpload( $comment ); if ( is_error( $re_upload ) ) return error( $re_upload );
-            success( ['idx'=> $this->idx] );
+
+            $comment = comment( $comment->idx );
+            return success( $comment->pre() );
+            //success( ['idx'=> $this->idx] );
         }
         else error( ERROR_DATABASE_UPDATE_FAILED ); // should not happened.
 
