@@ -20,7 +20,7 @@ class SEO {
      */
     private $post_data = null;
 
-    private $segments;
+    private $segments = [];
 
     private $index = false;
 
@@ -33,7 +33,11 @@ class SEO {
 
         $uri = substr($_SERVER['REQUEST_URI'], 1);
 
-        if ( empty( $uri ) ) return;
+        if ( empty( $uri ) ) {
+		$this->index = true;
+		return;
+	}
+
         $this->segments = explode('/', $uri);
 
         if ( strpos($uri, 'index.php') !== false ) $this->index = true;
@@ -43,7 +47,7 @@ class SEO {
     public function loadData() {
 
 
-        if ( is_numeric( $this->segments[1] ) ) {
+        if ( $this->segments && $this->segments[0] == 'p' && is_numeric( $this->segments[1] ) ) {
 //            $this->dataType = 'post_data';
             $this->post_data = post( $this->segments[1] );
 //            if ( $this->post_data->exist() ) {
@@ -187,7 +191,7 @@ EOP;
     public function patch() {
 
         // route check
-        if ( $this->segments[0] == 'p' ) {
+        if ( $this->segments && $this->segments[0] == 'p' ) {
             debug_log("seo: post");
         }
 
