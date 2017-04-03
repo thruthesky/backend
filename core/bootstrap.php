@@ -2,7 +2,7 @@
 
 $system = []; // system variable used for holding system data.
 
-if ( ! isset( $_SERVER['HTTP_ORIGIN'] ) ) $origin = $_SERVER['HTTP_ORIGIN'];
+if ( isset( $_SERVER['HTTP_ORIGIN'] ) ) $origin = $_SERVER['HTTP_ORIGIN'];
 else $origin = '*';
 
 if ($_SERVER['REQUEST_METHOD']=='OPTIONS') {

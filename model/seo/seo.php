@@ -39,7 +39,6 @@ class SEO {
 	}
 
         $this->segments = explode('/', $uri);
-
         if ( strpos($uri, 'index.php') !== false ) $this->index = true;
     }
 
@@ -48,16 +47,8 @@ class SEO {
 
 
         if ( $this->segments && $this->segments[0] == 'p' && is_numeric( $this->segments[1] ) ) {
-//            $this->dataType = 'post_data';
             $this->post_data = post( $this->segments[1] );
-//            if ( $this->post_data->exist() ) {
-//                $this->post_config = config( $this->post_data->idx );
-//            }
         }
-//        else {
-//            $this->dataType = 'post_config';
-//            $this->post_config = config( $uri );
-//        }
 
     }
 
