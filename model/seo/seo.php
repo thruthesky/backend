@@ -20,27 +20,32 @@ class SEO {
      */
     private $post_data = null;
 
+    private $segments;
+
+    private $index = false;
+
 
     public function __construct()
     {
         $this->seo_config = spyc_load_file( __ROOT_DIR__ . '/etc/seo.yaml');
         $this->seo_config['image'] = str_replace('{site_url}', get_site_url(), $this->seo_config['image']);
+
+
+        $uri = substr($_SERVER['REQUEST_URI'], 1);
+
+        if ( empty( $uri ) ) return;
+        $this->segments = explode('/', $uri);
+
+        if ( strpos($uri, 'index.php') !== false ) $this->index = true;
     }
 
 
     public function loadData() {
 
 
-
-        $uri = substr($_SERVER['REQUEST_URI'], 1);
-
-        if ( empty( $uri ) ) return;
-        $segments = explode('/', $uri);
-
-
-        if ( is_numeric( $segments[0] ) ) {
+        if ( is_numeric( $this->segments[1] ) ) {
 //            $this->dataType = 'post_data';
-            $this->post_data = post( $segments[0] );
+            $this->post_data = post( $this->segments[1] );
 //            if ( $this->post_data->exist() ) {
 //                $this->post_config = config( $this->post_data->idx );
 //            }
@@ -169,7 +174,7 @@ EOP;
             $title = strip_tags( $title );
             $title = strcut( $title, 250 );
 
-            $post_links .= "<a href=\"/$idx/$title\">$title</a>";
+            $post_links .= "<a href=\"/p/$idx/$title\">$title</a>";
         }
 
 
@@ -181,7 +186,29 @@ EOP;
      */
     public function patch() {
 
-        $this->loadIndexHTML();
+        // route check
+        if ( $this->segments[0] == 'p' ) {
+            debug_log("seo: post");
+        }
+
+        // is it index.php?
+        else if ( $this->index ) {
+            debug_log("seo: index");
+        }
+
+        else {
+            debug_log("seo: it is not index nor /p/, so it does nothing");
+            return $this;
+        }
+
+
+        if ( $this->loadIndexHTML() ) {
+            debug_log("seo: no html?");
+            return $this;
+        }
+
+
+
         $this->loadData();
 
         $c = &$this->seo_config;
@@ -268,11 +295,15 @@ EOH;
     }
 
 
+    /**
+     * @return int - -1 on error.
+     */
     public function loadIndexHTML() {
 
         $this->content = @file_get_contents('index.html');
         if ( $this->content == false ) {
             echo "No index.html";
+            return -1;
         }
 
     }

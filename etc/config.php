@@ -96,6 +96,7 @@ define('DATABASE_TYPE',             $DATABASE_TYPE);
 define('DIR_DATA',                  $DIR_DATA);
 define('DIR_FILE',                  $DIR_FILE);
 define('DIR_UPLOAD',                $DIR_FILE . '/upload');
+define('DIR_CACHE',                $DIR_FILE . '/cache');
 
 define('__MODEL_DIR__',     __ROOT_DIR__ . '/model');
 

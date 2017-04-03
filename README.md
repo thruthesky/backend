@@ -3,6 +3,14 @@
 Backend Server for Restful APIs
 
 
+# Changes
+
+* post_data.create/edit interface response with the full post data.
+* post_comment create/edit interface response with the full comment data.
+* post_data.data interface accepts `extra` property.
+
+
+
 
 # Resources
 
@@ -11,60 +19,41 @@ Backend Server for Restful APIs
 
 # Work Environment
 
-## thruthesky
+## Work environment of thruthesky
 
-http://localhost/www/backend/ for backend restful api access.
-http://backend.org/ for seo access.
+* http://localhost/www/backend/ for backend restful api access.
+* http://backend.org/ is same folder of http://localhost/www/backend
+* http://backend-seo.org/ for seo test. ( in this cone, Backend has many of client app files, so it looks a bit dirty )
 
-
-## SEO
-
-* Since Backend needs client app's assets in its root folder, the root folder becomes dirty.
-* So, it needs a another 'github clone' to maintain its root folder clean.
-
-Example) How to do anoter git clone
-
-````
-$ git clone https://github.com/thruthesky/backend backend-seo
-$ cd backend-seo/
-$ cp -r ~/apps/community-app/dist/* .   ;;; get all the client app assets.
-$ su -
-Password:
- # vi /etc/hosts
- 	;;; ... Add "127.0.0.1 backend-seo.org" to hosts file.
- # vi /etc/nginx/nginx.conf
-    server {
-        listen       80;
-        server_name  backend-seo.org;
-        root   /Users/thruthesky/www/backend-seo;
-        location / {
-            index  index.php;
-            try_files $uri $uri/ /index.php?$args;
-        }
-        location ~ \.php$ {
-            fastcgi_pass   127.0.0.1:9000;
-            fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
-            include        fastcgi_params;
-        }
-    }
-
-
- # nginx -s reload
-
-
-````
-And access https://backend-seo.org with browser
 
 
 
 
 # TODO
 
+
+
+- check/select primary photo among others in forum post.
+
+- admin file management.
+    show how many unhooked, show many old unhooked.
+    show satistics.
+       
+- upload file with angular http formdata without file transfer of cordova.
+
+
+
+
+
+
 * Check if file upload responses with right error message. for instance, too big file upload should response 'max-file-upload-size-limit-excedded' or sonmething but the error responseded is like 'cannot create idx'
 
 * Support IE6 ~ IE9 by rendering nice HTML design.
 	* Backend checks if the user uses IE6~9, then it only send HTML to browser, NOT angular or jQueryMobile things.
 
+
+* max images sizes.
+	* limit uploaded photo's width, height and size since user may upload too big file.
 
 
 ## Transaction
@@ -165,60 +154,6 @@ To reduce the money, SMS shouldn't send more than 1 or 2 times a day to a user.
 
 
 
-
-## File upload with customizalbe download
-
-
-@ done use file index to get file name.
-@ done if fail to upload, delete it from db.
-@ done delete old files that were not successfully hooked.
-        
-@done delete model + model_idx, idx, model + model_idx + code
-
-@done hook
-
-- file delete.
-
-- download with filename.
-
-    ?route=download&idx=1234&size=100x200&quality=100&resize=crop&name=/abcdef.jpg
-
-**for jpeg**
-````
-?route=download&type=jpeg&width=80&hegiht=120&quality=100&resize=crop
-````
-
-**for png**
-````
-?route=download&type=png&width=100&height=120&resize=center
-````
-
-- when you get posts, give option of photo size, and other photo options.
-
-@done count download
-
-- check/select primary photo among others in forum post.
-
-- admin file management.
-    show how many unhooked, show many old unhooked.
-    show satistics.
-       
-- upload file with angular http formdata without file transfer of cordova.
-
-* `file` table will holds the uploaded file information.
-* `file.finish` will be 0 until the file is really related to its object(parent).
-	* files with `file.finish=0` becomes 24 hours old, then it will be deleted.
-
-* when a file uploaded, it will return `file.idx`, any of file upload form and its related form should keep the `file.idx` and pass it over the parents' form submission. So, 
-* You will upload a file without resizing.
-* When you download image, you can customize.
-* Create thumbnail(optimized image) only on first download or with an option.
-* You can choose image type, width, height, quality, resize type.
-	* This will help on image optimization.
-
-## delete old files that were not successfully finished
-
-
 ## Real Message System
 
 To communicate between users.
@@ -241,57 +176,53 @@ This section describes what to do in next version.
 
 * move core module in core folder.
 
-# Interface
-
-Is more likey a router.
 
 
 
-# Permission
-
-When read/write/delete data, it needs security level to limit/allow who can do 'CRUD' of data.
-
-It is stated in interface.
-
-
-guest = anonymous, not logged in user, visitor.
-anyone = anyone where logged in or not logged in.
-owner = who owns the data.
-admin = admin level user.
-
-
-# REST API
-
-Only 'route' method can use 'success()' or 'error()'.
-
-Any methods that are not 'route' should return a value.
 
 
 
 # Installation
 
+## Requirement
 
-## How to install
+* php 7.x
+* GD
+	* GD is used by etc/external/ImageResize.php
+
+
+
+
+## How to install Backend
 
 ````
 http://localhost/www/backend-0.2/?route=install
 ````
 
 
-## How to do SEO
+
+## How to install SEO functionality
 
 To do SEO, the home page(hosting site) of client app must be in the same place of Backend root folder. So, Backend can patch client app's index.html with SEO codes and delivers to users.
 
 
-1. Just copy all the assets of Client app into the root folder.
+1. Just copy all the resources(all files) of Client app into the Backend root folder.
 	* Client app must have `index.html` as its entry.
+	Example) How to copy client app files into Backend root folder.
+	````
+	cp -r ~/apps/community-app/dist/* /Backend-root-foler/
+	````
+	
 2. Configure the server.
 
 	See examples of nginx server configuration in `Nginx Configuration for SEO` section of this document.
+	
 	* Domain
 	* Set the directory index to `index.php`
 	* Rewrite to `index.php`
+
 3. Edit ./etc/seo.yaml for detail configuration of SEO
+
 
 
 
@@ -325,6 +256,36 @@ All these accounts can be changed on config.php
 You can put any php script ending "_install.php" under a module folder.
 
 Those files will be run in installation process.
+
+
+
+
+
+# Interface
+
+Is more likey a router.
+
+
+
+# Permission
+
+When read/write/delete data, it needs security level to limit/allow who can do 'CRUD' of data.
+
+It is stated in interface.
+
+
+guest = anonymous, not logged in user, visitor.
+anyone = anyone where logged in or not logged in.
+owner = who owns the data.
+admin = admin level user.
+
+
+# REST API
+
+Only 'route' method can use 'success()' or 'error()'.
+
+Any methods that are not 'route' should return a value.
+
 
 
 
@@ -738,6 +699,104 @@ user( 'def' )->meta()->delete( 'birthday' ); // delete birthday meta of user 'de
 ````
 
 
+# Image Optimization
+
+
+Speed of Web/WebApp depends on the size of contents that it needs to download to display it in browser.
+
+There are many ways of image optimation.
+
+Mainly there are two ways
+
+1. Resize images. so extra bits will not be downloaded. This is the easiest way to customize. 
+2. Compress images.
+
+
+
+There are many image libraries and we could even develop one by by ourselves. But we use [php-image-resize](https://github.com/eventviva/php-image-resize). This is very simple and easy to use.
+
+Refer [examples of its github repository](https://github.com/eventviva/php-image-resize/blob/master/test/Test.php).
+
+Refer [API explanation page](https://eventviva.github.io/php-image-resize/class-Eventviva.ImageResize.html)
+
+
+
+
+
+
+## Image download option as optimization
+
+### options
+
+`type` can be 'jpg', 'png'. @note 'jpg' works better. so try to use 'jpg' instead of 'png'.
+
+`width` is the number of width in px.
+
+`height` is the number of height in px.
+
+`quality` is the number of quality of image. for jpeg, it is between 1~100, for png, it is between 1-10. `quality` is working only if `type` is set to 'jpg' or 'png'. 
+
+@attention `quality` with `type` png is not working property.
+
+@attention `quality` works only when `type` is specified. so, use `quality` with `type=jpg`.
+
+
+
+
+`resize` can be 'best-fit', 'one-iemension', 'resize', 'crop', 'freecrop'.
+
+
+`demension` can be 'width', 'height'. `dimension` is only used when `resize` is set to 'one-dimension'.
+
+`x`,`y` is only used when `resize` is set to 'freecrop'
+
+
+
+* 'resize' just resizes the size by width and height. This is default. The result will be in SKEW. `width` and `height` are mendatory or else error.
+	* http://backend.org/index.php?route=download&idx=572&type=jpg&width=200&height=200&
+* 'best-fit' makes the best fit for the max `width` and max `height`. One of dimension will become max size, but the other may be less than the size. For instance, image is 400px, 800px and 'best-fit' of *200px x 200px* may lead *100px x 200px*
+	* ?route=download&idx=572&type=jpg&width=200&height=200&resize=best-fit
+* 'one-dimension' wil fit to one demonsion only. one of `width` or `height` is needed. if both specified, `width` will take in place.
+	* ?route=download&idx=572&type=jpg&width=200&resize=one-dimension
+* 'crop' - If an original image is *400px x 600px* and *width, height is 200px x 200px*, 
+	* then it first scales down to fit minimum of *200px x 300px* because 'width' is set to 200px and the best fit is *200px 300px'
+	* and it crop off top 50px and bottom 50px to make it look good.
+	* ?route=download&idx=572&type=jpg&width=200&height=200&resize=crop
+
+* 'freecrop' - 'crop' only crop off based on center. you can set x,y position of 'crop' starting pont.
+	* ?route=download&idx=572&width=200&height=200&resize=freecrop&x=100&y=100&type=jpg
+
+
+
+`enlarge` is an optional parameta that affects on resizing 'resize', 'best-fit', 'one-dimemsion'. if set to 'Y', then it enlarges. It does not work on 'crop'.
+
+
+
+
+@note if any of `type`, `width` and `height` is not specified, it just gets original sizes.
+
+@note 'scale' is NOT supported since it isn't needed in realy world. Each image has diffent sizes and scaling does not have any point.
+
+
+@note You will mostly resize with 'crop' simply becase this is the easist way to resize images. so, it has a special parameter `crop`. it takes width and height in "000x000" format. for instance `crop=100x200` means, Backend will crop images in width 100px and height 200px. You can set `quality` on the third number on `crop` like "`width`x`height`x`quality`". If you set `quality`, then the `type` becomes `jpg` automatically.
+
+* Use `crop=11x22x33` as much as you can.
+	* Example ) ?route=download&idx=575&crop=500x400x100
+
+
+* Example) how to use it in Angular Template
+
+````
+<img [src]=" file.url + '&crop=100x100x50'  " style="width: 100%;">
+````
+
+
+
+
+
+
+
+
 
 
 # Admin
@@ -963,13 +1022,10 @@ To hook image(s) you uploaded to an entity, you just send the file idx(es) in `f
 
 
 
-### Image Optimization
+### Image Download
 
-There are many image libraries and we could even develop one by by ourselves. But we chose [php-image-resize](https://github.com/eventviva/php-image-resize). This is very simple and clear library to use.
+@see Image Optimization
 
-Refer [examples of its github repository](https://github.com/eventviva/php-image-resize/blob/master/test/Test.php).
-
-Refer [API explanation page](https://eventviva.github.io/php-image-resize/class-Eventviva.ImageResize.html)
 
 
 
@@ -1057,11 +1113,14 @@ Since Backend works as Restful API Server,
 * there is no sitemap that links posts to be indexed by search engine.
 * and it cannot be site-previewed by other site like facebook.
 
-And this is the reason why SEO functionality comes in Backend.
+So, SEO functionality comes with Backend.
 
-SEO pages can only be readable by machine or robots for now. It does not support IE6 ~ IE9.
+SEO pages can only be readable by machine(robots) for now. It does not support IE6 ~ IE9.
 
 For installation of SEO, see Installaction section.
+
+
+@note SEO works if index.html exists and it only work on route of 'index' and '/p/....'. It does not work on other routes.
 
 
 

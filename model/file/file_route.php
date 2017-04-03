@@ -17,9 +17,14 @@ add_route('download',[
     'method'=> 'download',
     'variables'=>[
         'required'=>[ 'idx' ],
-        'optional'=>[ 'width', 'height', 'quality', 'resize' ],
-        'system'=>[ ]
-    ]
+        'optional'=>[ 'type', 'width', 'height', 'quality', 'resize', 'x', 'y', 'enlarge', 'crop', 'xy' ],
+        'system'=>[ 'name' ]
+    ],
+    'validator' => function () {
+        $file = ( new \model\file\File() )->load( in('idx') );
+        if ( ! $file->exist() ) return ERROR_FILE_NOT_EXIST;
+        return [ $file ];
+    }
 ]);
 
 add_route('file.delete',[
@@ -29,7 +34,18 @@ add_route('file.delete',[
         'required'=>[ 'idx' ],
         'optional'=>[ ],
         'system'=>[ ]
-    ]
+    ],
+    'validator' => function() {
+        $file = ( new model\file\File() )->load( in('idx' ) );
+        if ( $file->user_idx == currentUser() ) {
+
+        }
+        else if ( currentUser()->isAdmin() ) {
+
+        }
+        else return ERROR_NOT_YOUR_FILE;
+        return [ $file ];
+    }
 ]);
 
 

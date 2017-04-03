@@ -43,7 +43,8 @@ class Post_Data_Interface extends Post_Data {
         $re_upload = $this->hookUpload( post( $post_idx ) ); if ( is_error( $re_upload ) ) return error( $re_upload );
 
 
-        return success( ['idx'=>$post_idx] );
+        $post = post( $post_idx );
+        return success( $post->pre( [ 'extra' => [ 'user' => true, 'file' => true, 'comment' => true, 'meta' => true ] ] ) );
 
     }
 
@@ -67,7 +68,11 @@ class Post_Data_Interface extends Post_Data {
 
         if ( is_success( $re ) ) {
             $re_upload = $post->hookUpload( post( in('idx') ) ); if ( is_error( $re_upload ) ) return error( $re_upload );
-            success( ['idx'=> $this->idx] );
+
+            $post = post( $post->idx );
+            return success( $post->pre( [ 'extra' => [ 'user' => true, 'file' => true, 'comment' => true, 'meta' => true ] ] ) );
+
+            //success( ['idx'=> $this->idx] );
         }
         else error( ERROR_DATABASE_UPDATE_FAILED ); // should not happened.
 
@@ -95,7 +100,7 @@ class Post_Data_Interface extends Post_Data {
 
         $post = $this->load( in('idx') );
         if ( ! $post->exist() ) return error( ERROR_POST_DATA_NOT_EXIST );
-        success( ['post'=> $post->pre() ] );
+        success( ['post'=> $post->pre( $_REQUEST ) ] );
 
     }
 

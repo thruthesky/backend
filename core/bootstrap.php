@@ -23,7 +23,7 @@ require_once __ROOT_DIR__ . '/etc/external/spyc.php'; // yaml parser
 
 
 
-debug_log(">>>>>>>> Backend begins : " . date('r') );
+debug_log(">>>>>>>> Backend begins : $_SERVER[PHP_SELF] $_SERVER[REQUEST_URI] " . date('r') );
 debug_log( $_REQUEST );
 
 
