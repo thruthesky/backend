@@ -192,8 +192,7 @@ EOP;
         }
 
         else {
-            debug_log("seo: it is not index nor /p/, so it does nothing");
-            return $this;
+            debug_log("seo: it is not index nor /p/, so it does nothing. maybe /login or /register");
         }
 
 
