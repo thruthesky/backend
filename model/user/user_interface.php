@@ -51,13 +51,16 @@ class User_Interface extends User {
      *
      */
     public function res() {
-        return [
+
+        $res = [
             'session_id' => $this->getSessionId(),
             'idx' => $this->idx,
             'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email
         ];
+        if ( $this->isAdmin() ) $res['admin'] = '1';
+        return $res;
     }
 
     public function edit() {

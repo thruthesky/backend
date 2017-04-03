@@ -8,6 +8,7 @@ Backend Server for Restful APIs
 * post_data.create/edit interface response with the full post data.
 * post_comment create/edit interface response with the full comment data.
 * post_data.data interface accepts `extra` property.
+* when user logs in, if the user is admin, "admin=1" will be set in response.
 
 
 
