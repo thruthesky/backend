@@ -2,14 +2,17 @@
 
 $system = []; // system variable used for holding system data.
 
+if ( isset( $_SERVER['HTTP_ORIGIN'] ) ) $origin = $_SERVER['HTTP_ORIGIN'];
+else $origin = '*';
+
 if ($_SERVER['REQUEST_METHOD']=='OPTIONS') {
 
-    header("Access-Control-Allow-Origin : $_SERVER[HTTP_ORIGIN]");
+    header("Access-Control-Allow-Origin : $origin");
     header('Access-Control-Allow-Methods : POST, GET, OPTIONS, PUT, DELETE');
     header('Access-Control-Allow-Headers : X-Requested-With, content-type');
     exit;
 }
-header('Access-Control-Allow-Origin: *');	/** For ajax json calling from outside */
+header("Access-Control-Allow-Origin: $origin");	/** For ajax json calling from outside */
 header('P3P: CP="NOI ADM DEV COM NAV OUR STP"'); /** cookie share on iframe */
 
 

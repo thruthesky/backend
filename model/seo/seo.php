@@ -20,7 +20,7 @@ class SEO {
      */
     private $post_data = null;
 
-    private $segments;
+    private $segments = [];
 
     private $index = false;
 
@@ -33,9 +33,12 @@ class SEO {
 
         $uri = substr($_SERVER['REQUEST_URI'], 1);
 
-        if ( empty( $uri ) ) return;
-        $this->segments = explode('/', $uri);
+        if ( empty( $uri ) ) {
+		$this->index = true;
+		return;
+	}
 
+        $this->segments = explode('/', $uri);
         if ( strpos($uri, 'index.php') !== false ) $this->index = true;
     }
 
@@ -43,17 +46,9 @@ class SEO {
     public function loadData() {
 
 
-        if ( is_numeric( $this->segments[1] ) ) {
-//            $this->dataType = 'post_data';
+        if ( $this->segments && $this->segments[0] == 'p' && is_numeric( $this->segments[1] ) ) {
             $this->post_data = post( $this->segments[1] );
-//            if ( $this->post_data->exist() ) {
-//                $this->post_config = config( $this->post_data->idx );
-//            }
         }
-//        else {
-//            $this->dataType = 'post_config';
-//            $this->post_config = config( $uri );
-//        }
 
     }
 
@@ -187,7 +182,7 @@ EOP;
     public function patch() {
 
         // route check
-        if ( $this->segments[0] == 'p' ) {
+        if ( $this->segments && $this->segments[0] == 'p' ) {
             debug_log("seo: post");
         }
 
@@ -197,8 +192,7 @@ EOP;
         }
 
         else {
-            debug_log("seo: it is not index nor /p/, so it does nothing");
-            return $this;
+            debug_log("seo: it is not index nor /p/, so it does nothing. maybe /login or /register");
         }
 
 

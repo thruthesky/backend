@@ -1,5 +1,6 @@
 <?php
 
+
 //   git update-index --assume-unchanged etc/my_config.php
 //   git update-index --no-assume-unchanged etc/my_config.php
 
@@ -12,8 +13,10 @@
 
 $DATABASE_USER          = 'roots';
 $DATABASE_PASSWORD      = '7777';
-//$DATABASE_NAME          = 'backend';
-//$DATABASE_PREFIX        = "be_";
-//$DATABASE_HOST          = 'localhost';
+$DATABASE_NAME          = 'backend';
+$DATABASE_PREFIX        = "be04_";
+$DATABASE_HOST          = 'localhost';
 $DATABASE_TYPE          = 'mysql';         // 'mysql' | 'sqlite'
+
+
 
