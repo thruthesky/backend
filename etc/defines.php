@@ -64,6 +64,8 @@ define('ERROR_WRONG_SESSION_ID', -40105);               $em[ERROR_WRONG_SESSION_
 define('ERROR_USER_ID_EMPTY', -40106 );                 $em[ERROR_USER_ID_EMPTY] = 'user-id-empty';
 define('ERROR_PASSWORD_EMPTY', -40107 );                $em[ERROR_PASSWORD_EMPTY] = 'password-empty';
 define('ERROR_USER_NOT_FOUND',-40108 );                 $em[ERROR_USER_NOT_FOUND] = 'user-not-found';
+define('ERROR_WRONG_SESSION_ID_NO_USER_DATA_BY_THAT_SESSION_ID', -401081);   $em[ERROR_NO_USER_DATA_BY_THAT_SESSION_ID] = "wrong-session-id--user-cannot-get-user-data-since-session-id-is-NOT-valid";
+define('ERROR_WRONG_USER_ID_FOR_DATA', -40182);             $em[ERROR_WRONG_USER_ID_FOR_DATA] = "admin-cannot-get-user-data-by-that-id";
 define('ERROR_WRONG_PASSWORD', -40109 );                $em[ERROR_WRONG_PASSWORD] = 'wrong-password';
 define('ERROR_USER_NOT_SET', -40100);                   $em[ERROR_USER_NOT_SET] = 'user-not-set-in-user-class-call-reset-method';
 define('ERROR_RECORD_NOT_SET', -40122);                 $em[ERROR_RECORD_NOT_SET] = 'record-not-set';

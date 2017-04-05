@@ -152,11 +152,17 @@ class User_Interface extends User {
         if ( ! $this->isSessionId( $session_id ) ) return error( ERROR_MALFORMED_SESSION_ID );
 
         $user = $this->load( $session_id );
-        if ( ! $user->exist() ) return error( ERROR_USER_NOT_FOUND, "user-not-found-by-session-id: $session_id" );
+
+
+        if ( ! $user->exist() ) {
+            return error( ERROR_WRONG_SESSION_ID_NO_USER_DATA_BY_THAT_SESSION_ID );
+        }
 
         if ( $this->isAdmin() && in('id') ) { // if admin,
             $user = $this->load( in('id') ); // load other user.
-            if ( ! $user->exist() ) return error( ERROR_USER_NOT_FOUND, 'user-not-found-by-admin--id:' . in('id') );
+            if ( ! $user->exist() ) {
+                return error( ERROR_WRONG_USER_ID_FOR_DATA );
+            }
             $this->forceLogin( in('id') );
         }
 
