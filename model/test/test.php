@@ -46,7 +46,7 @@ class Test {
         echo "<div class='success'>" . self::$count . " - SUCCESS: $code</div>";
     }
 
-    function test_error( $re, $code ) {
+    static function test_error( $re, $code ) {
         self::$count_error ++;
         echo "<div class='error'><span style='color:red; font-weight: bold;'>" . self::$count . "- ERROR</span> $code</div>";
         echo "<pre>";
