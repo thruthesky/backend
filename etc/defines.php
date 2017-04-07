@@ -31,6 +31,8 @@ define('ERROR_JSON_PARSE', -40050);                    $em[ERROR_JSON_PARSE] = "
 
 define('ERROR_ALREADY_DELETED', -40051);                $em[ERROR_ALREADY_DELETED] = 'already-deleted';
 define('ERROR_ALREADY_INSTALLED', -40052);              $em[ERROR_ALREADY_INSTALLED] = 'already-installed';
+define('ERROR_BACKEND_NOT_INSTALLED', -40052);              $em[ERROR_BACKEND_NOT_INSTALLED] = 'backend-is-not-installed';
+
 define('ERROR_KEY_EXISTS', -40080);                     $em[ERROR_KEY_EXISTS] = 'key-exists';
 define('ERROR_DATABASE_INSERT_FAILED', -40081);         $em[ERROR_DATABASE_INSERT_FAILED] = 'database-insert-failed';
 define('ERROR_DATABASE_UPDATE_FAILED', -40082);         $em[ERROR_DATABASE_UPDATE_FAILED] = 'database-update-failed';

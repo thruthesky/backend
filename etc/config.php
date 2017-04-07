@@ -24,7 +24,7 @@ $DIR_DATA               = __ROOT_DIR__ . '/data';
 $DATABASE_USER          = 'root';
 $DATABASE_PASSWORD      = '7777';
 $DATABASE_NAME          = 'backend';
-$DATABASE_PREFIX        = "be044_";
+$DATABASE_PREFIX        = "be046_";
 $DATABASE_HOST          = 'localhost';
 $DATABASE_TYPE          = 'mysql';         // 'mysql' | 'sqlite'
 

@@ -22,6 +22,11 @@ class Test {
         $this->test_end();
     }
 
+
+    /**
+     * @param $re
+     * @param $code
+     */
     public static function test($re, $code)
     {
         self::$count ++;
