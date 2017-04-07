@@ -69,6 +69,7 @@ function is_success( $re ) {
             }
             else return FALSE;              // if code is NOT 0.
         }
+        else return TRUE;
     }
 
     if ( is_numeric( $re ) && $re < 0 ) return FALSE;

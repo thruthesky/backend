@@ -119,4 +119,8 @@ class Post_Comment_Interface extends Post_Comment
 
     }
 
+    public function like( $comment, $config ) {
+        return $this->like_interface( $comment, $config );
+    }
+
 }

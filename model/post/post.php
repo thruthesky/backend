@@ -85,7 +85,23 @@ class Post extends \model\entity\Entity
     }
 
 
+    /**
+     * @param Post_Data|Post_Comment $post
+     * @param $config
+     */
+    public function like_interface( $post, Post_Config $config ) {
 
+        $vote_good = $post->vote_good + 1;
+        $post->update([
+            'vote_good' => $vote_good
+        ]);
+        $reloaded = post( $post->idx );
+        return success( [
+            'idx' => $reloaded->idx,
+            'vote_good' => $reloaded->vote_good,
+            'vote_bad' => $reloaded->vote_bad
+        ] );
+    }
 
 
 

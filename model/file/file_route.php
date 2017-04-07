@@ -18,11 +18,19 @@ add_route('download',[
     'variables'=>[
         'required'=>[ 'idx' ],
         'optional'=>[ 'type', 'width', 'height', 'quality', 'resize', 'x', 'y', 'enlarge', 'crop', 'xy' ],
-        'system'=>[ 'name' ]
+        'system'=>[ 'name', 'created' ]
     ],
     'validator' => function () {
         $file = ( new \model\file\File() )->load( in('idx') );
-        if ( ! $file->exist() ) return ERROR_FILE_NOT_EXIST;
+        if ( ! $file->exist() ) {
+            debug_log("download::validator, file not exists in Database");
+            return ERROR_FILE_NOT_EXIST;
+        }
+        if ( ! file_exists( $file->path() ) ) {
+            debug_log("download::validator, file not exists on HDD");
+            return ERROR_FILE_NOT_EXIST_ON_HDD;
+        }
+        // debug_log($file);
         return [ $file ];
     }
 ]);
@@ -37,13 +45,14 @@ add_route('file.delete',[
     ],
     'validator' => function() {
         $file = ( new model\file\File() )->load( in('idx' ) );
-        if ( $file->user_idx == currentUser() ) {
-
+        if ( $file->user_idx == currentUser()->idx ) {
         }
         else if ( currentUser()->isAdmin() ) {
-
         }
-        else return ERROR_NOT_YOUR_FILE;
+        else {
+            debug_log( $file );
+            return ERROR_NOT_YOUR_FILE;
+        }
         return [ $file ];
     }
 ]);

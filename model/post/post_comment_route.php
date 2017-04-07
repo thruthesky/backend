@@ -70,6 +70,27 @@ route()->add( 'post_comment.delete', [
     }
 ]);
 
+route()->add( 'post_comment.like', [
+    'path' => "\\model\\post\\post_comment_interface",
+    'method' => 'like',
+    "variables" => [
+        'required' => [ 'idx', 'session_id' ],
+        'optional' => [],
+        'system' => []
+    ],
+    'validator' => function() {
+        $comment = comment( in('idx') );
+        if ( is_error( $comment ) ) return $comment;
+        if ( ! $comment->exist() ) return ERROR_COMMENT_NOT_EXIST;
+
+        $config = config()->load( $comment->post_config_idx );
+        if ( ! $config->exist() ) return ERROR_POST_CONFIG_NOT_EXIST;
+
+        return [ $comment, $config ];
+    }
+]);
+
+
 route()->add( 'comment.test', [
     'path' => "\\model\\post\\post_comment_test",
     'method' => 'single_test'

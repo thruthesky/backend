@@ -38,6 +38,13 @@ function create_post_data_table( $_table_name ) {
         ->add('depth', 'INT UNSIGNED DEFAULT 0')
         ->add('user_idx', 'INT UNSIGNED DEFAULT 0')
         ->add('post_config_idx', 'INT UNSIGNED DEFAULT 0')
+
+
+
+        ->add('vote_good', 'INT UNSIGNED DEFAULT 0')
+        ->add('vote_bad', 'INT UNSIGNED DEFAULT 0')
+        ->add('report', 'INT UNSIGNED DEFAULT 0')
+
         ->add('content', 'LONGTEXT')
         ->add('password', 'varchar')
         ->add('secret', 'char', 1)

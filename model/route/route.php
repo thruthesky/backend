@@ -366,8 +366,15 @@ class Route {
                     // do route validation
                     if ( isset($route['validator']) ) {
                         $re = $route['validator']();
-                        if ( is_error( $re ) ) return error( $re );
-                        else call_user_func_array([ $obj, $method ], $re ? $re : [] );          //
+                        if ( is_error( $re ) ) {
+                            return error( $re );
+                        }
+                        else {
+                            //debug_log("route validator success: method: $method");
+                            //debug_log($route);
+                            //debug_log($re);
+                            call_user_func_array([ $obj, $method ], $re ? $re : [] );
+                        }          //
                                                                             //                        if ( is_array($re) ) {
                                                                             //                            switch ( count($re) ) {
                                                                             //                                case 1: $obj->$method( $re[0] ); break;

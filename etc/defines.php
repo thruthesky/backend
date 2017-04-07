@@ -64,7 +64,7 @@ define('ERROR_WRONG_SESSION_ID', -40105);               $em[ERROR_WRONG_SESSION_
 define('ERROR_USER_ID_EMPTY', -40106 );                 $em[ERROR_USER_ID_EMPTY] = 'user-id-empty';
 define('ERROR_PASSWORD_EMPTY', -40107 );                $em[ERROR_PASSWORD_EMPTY] = 'password-empty';
 define('ERROR_USER_NOT_FOUND',-40108 );                 $em[ERROR_USER_NOT_FOUND] = 'user-not-found';
-define('ERROR_WRONG_SESSION_ID_NO_USER_DATA_BY_THAT_SESSION_ID', -401081);   $em[ERROR_NO_USER_DATA_BY_THAT_SESSION_ID] = "wrong-session-id--user-cannot-get-user-data-since-session-id-is-NOT-valid";
+define('ERROR_WRONG_SESSION_ID_NO_USER_DATA_BY_THAT_SESSION_ID', -401081);   $em[ERROR_WRONG_SESSION_ID_NO_USER_DATA_BY_THAT_SESSION_ID] = "wrong-session-id--user-cannot-get-user-data-since-session-id-is-NOT-valid";
 define('ERROR_WRONG_USER_ID_FOR_DATA', -40182);             $em[ERROR_WRONG_USER_ID_FOR_DATA] = "admin-cannot-get-user-data-by-that-id";
 define('ERROR_WRONG_PASSWORD', -40109 );                $em[ERROR_WRONG_PASSWORD] = 'wrong-password';
 define('ERROR_USER_NOT_SET', -40100);                   $em[ERROR_USER_NOT_SET] = 'user-not-set-in-user-class-call-reset-method';
@@ -143,7 +143,7 @@ define('ERROR_UPLOAD_FILE_EXIST', -43102);               $em[ERROR_UPLOAD_FILE_E
 define('ERROR_UPLOAD_ERROR_NOT_SET', -43103);               $em[ERROR_UPLOAD_ERROR_NOT_SET] = 'file-upload-error-must-be-set';
 define('ERROR_FILE_UPLOAD_CREATE_IDX_FAILED', -43104);      $em[ERROR_FILE_UPLOAD_CREATE_IDX_FAILED] = 'file-upload-create-file-record-failed';
 define('ERROR_FILE_NOT_EXIST', -43105);                     $em[ERROR_FILE_NOT_EXIST] = 'file-not-exist';
-
+define('ERROR_FILE_NOT_EXIST_ON_HDD', -431051 );             $em[ERROR_FILE_NOT_EXIST_ON_HDD] = 'file-not-exist-on-hdd';
 
 define('ERROR_HOOK_FILE_IDX_IS_NOT_IN_ARRAY', -43106);      $em[ERROR_HOOK_FILE_IDX_IS_NOT_IN_ARRAY] = 'file-idx-must-be-in-array';
 define('ERROR_HOOK_FILE_IDX_IS_WRONG', -43108);             $em[ERROR_HOOK_FILE_IDX_IS_WRONG] = 'wrong-file-idx--maybe-empty--maybe-not-exist--may-be-wrong-input-value-like-undefined';

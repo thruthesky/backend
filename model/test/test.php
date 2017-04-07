@@ -7,7 +7,7 @@ class Test {
     static $done_test_info = false;
     static $time_start = 0;
     static $reload = 100;
-    public function __construct( $reload = 15 )
+    public function __construct( $reload = 115 )
     {
         self::$reload = $reload;
         if ( ! self::$time_start ) self::$time_start = microtime(true);

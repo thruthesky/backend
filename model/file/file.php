@@ -131,8 +131,8 @@ class File extends \model\entity\Entity
         $dst = DIR_UPLOAD . "/$idx";
         debug_log("move_uploaded_file($src, $dst)");
 
-        if ( file_exists( $dst ) ) return ERROR_UPLOAD_FILE_EXIST;
-        if ( is_test() ) $re = @copy( $src, $dst );
+        if ( file_exists( $dst ) ) return [ 'code' => ERROR_UPLOAD_FILE_EXIST, 'message' => "the file.idx ($idx) of uploaded-file already exists. This error often causes when the database reset, but the files were not removed. so, when a file is uploaded, idx begins with 1. but the file of idx 1 is already exists." ];
+        if ( is_test() ) $re = @copy( $src, $dst );     // This is only used when unit testing.
         else $re = @move_uploaded_file( $src, $dst );
 
         if( ! $re ) {
@@ -301,8 +301,8 @@ class File extends \model\entity\Entity
         return OK;
     }
 
-    public function path( $idx ) {
-
+    public function path( $idx = null ) {
+        if ( $idx === null ) $idx = $this->idx;
         return DIR_UPLOAD . "/$idx";
 
     }
@@ -416,7 +416,7 @@ class File extends \model\entity\Entity
      *
      */
     public function url() {
-        if ( $this->exist() ) return get_index_php_url() .  '?route=download&idx=' . $this->idx;// . '&name=/' . $this->name;
+        if ( $this->exist() ) return get_index_php_url() .  '?route=download&idx=' . $this->idx . '&created=' . $this->created;// . '&name=/' . $this->name;
         else return null;
     }
 
@@ -440,7 +440,9 @@ class File extends \model\entity\Entity
      */
     public function pre( $file=null, $option=[] ) {
         if ( $file === null ) $file = $this->getRecord();
+        if ( empty($file) ) return [];
         $obj = (new File())->load( $file['idx'] );
+        if ( ! $obj->exist() ) return [];
         return [
             'idx' => $file['idx'],
             'model' => $file['model'],
