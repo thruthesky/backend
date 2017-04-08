@@ -313,7 +313,7 @@ EOH;
         $_FILES['userfile']['error'] = 0;
         $re = f()->save( $_REQUEST, $_FILES['userfile']);
         if ( is_error($re) ) {
-            test(is_success($re), "Create/upload failed: $re"  .get_error_string($re));
+            test(is_success($re), "Create/upload failed: "  .get_error_string($re));
         }
         return $re;
 

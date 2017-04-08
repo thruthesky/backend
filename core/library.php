@@ -253,8 +253,6 @@ function currentUser()
             setCurrentUser( $user );     // set current user.
         }
         else {
-
-
             user()->forceLogin( ANONYMOUS_ID );
         }
     }
@@ -345,6 +343,25 @@ function comment( $what = null ) {
     }
     return $obj;
 }
+
+/**
+ * @param $post_idx
+ * @param $user_idx
+ * @return \model\post\Post_Report
+ */
+function post_report( $post_idx=null, $user_idx=null ) {
+    $report = new \model\post\Post_Report();
+    if ( $user_idx ) $report->loadQuery( " post_idx=$post_idx AND user_idx=$user_idx " );
+    return $report;
+}
+
+function post_vote( $post_idx=null, $user_idx=null ) {
+    $vote = new \model\post\Post_Vote();
+    if ( $user_idx ) $vote->loadQuery( " post_idx=$post_idx AND user_idx=$user_idx " );
+    return $vote;
+}
+
+
 
 
 function f( $what = null ){

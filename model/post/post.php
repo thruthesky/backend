@@ -86,20 +86,69 @@ class Post extends \model\entity\Entity
 
 
     /**
+     *
+     *
+     *
      * @param Post_Data|Post_Comment $post
      * @param $config
+     *
+     * @return mixed
      */
-    public function like_interface( $post, Post_Config $config ) {
+    public function vote_interface( $post, Post_Config $config ) {
 
-        $vote_good = $post->vote_good + 1;
-        $post->update([
-            'vote_good' => $vote_good
-        ]);
+        if ( $post->user_idx == currentUser()->idx ) return error( ERROR_CANNOT_VOTE_YOUR_OWN_POST );
+
+        $vote = post_vote( $post->idx, currentUser()->idx );
+        if ( $vote->exist() ) return error( ERROR_ALREADY_VOTE );
+
+
+        post_vote()
+            ->set('post_idx', $post->idx)
+            ->set('user_idx', currentUser()->idx)
+            ->create();
+
+
+        if ( in('choice') == 'G' ) $post->update([ 'vote_good' => $post->vote_good + 1 ]);
+        else if ( in('choice') == 'B' ) $post->update([ 'vote_bad' => $post->vote_bad + 1 ]);
+
         $reloaded = post( $post->idx );
+
         return success( [
             'idx' => $reloaded->idx,
             'vote_good' => $reloaded->vote_good,
             'vote_bad' => $reloaded->vote_bad
+        ] );
+
+    }
+
+
+
+
+    /**
+     * @param Post_Data|Post_Comment $post
+     * @param $config
+     * @return mixed
+     */
+    public function report_interface( $post, Post_Config $config ) {
+
+        $report = post_report( $post->idx, currentUser()->idx );
+        if ( $report->exist() ) return error( ERROR_ALREADY_REPORT );
+
+        post_report()
+            ->set('post_idx', $post->idx)
+            ->set('user_idx', currentUser()->idx)
+            ->create();
+
+        $post->update([
+            'report' => $post->report + 1
+        ]);
+        $reloaded = post( $post->idx );
+
+
+
+        return success( [
+            'idx' => $reloaded->idx,
+            'report' => $reloaded->report
         ] );
     }
 

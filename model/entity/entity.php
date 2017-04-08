@@ -196,13 +196,19 @@ class Entity extends \model\taxonomy\Taxonomy  {
 
     /**
      *
-     * Loads entity data into $this->record.
+     * Loads an Entity( of a record ) and return $this.
+     *
+     * @note This sets Entity record into $this->record.
      *
      * @param $cond - SQL Condition
      * @warning this method must be called only internally for security reason. This should not accept user made query condition.
      *
      * @return $this
      *
+     * @code
+     *          $user = $this->loadQuery( "session_id='$session_id'");
+     *          $meta = $this->loadQuery("model = '$model' AND model_idx=$model_idx AND code='$code'");
+     * @endcode
      */
     public function loadQuery( $cond ) {
         $table = $this->getTable();

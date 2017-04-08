@@ -111,6 +111,9 @@ define('ERROR_POST_IDX_EMPTY', -40230);                    $em[ERROR_POST_IDX_EM
 define('ERROR_POST_CONFIG_EDIT_FAILED', -40231);                    $em[ERROR_POST_CONFIG_EDIT_FAILED] = 'post-config-edit-failed';
 define('ERROR_FORUM_NOT_EXIST', -40232);                    $em[ERROR_FORUM_NOT_EXIST] = "forum-not-exist";
 
+define('ERROR_ALREADY_REPORT', -40233);                     $em[ERROR_ALREADY_REPORT] = "already-reported";
+define('ERROR_ALREADY_VOTE', -40234);                     $em[ERROR_ALREADY_VOTE] = "already-voted";
+define('ERROR_CANNOT_VOTE_YOUR_OWN_POST', -40235);          $em[ERROR_CANNOT_VOTE_YOUR_OWN_POST] = "you-can-not-vote-your-own-post";
 
 // permis error
 define('ERROR_PERMISSION_ADMIN', -40800 );                  $em[ERROR_PERMISSION_ADMIN] = 'admin-permission-required';

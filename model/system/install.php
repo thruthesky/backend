@@ -9,11 +9,14 @@ class Install {
     public function __construct()
     {
 
-
-
-
-        if ( db()->tableExists( db()->tableName( 'user' ) ) ) {
-            return error( ERROR_ALREADY_INSTALLED, "Backend is already installed. If you want to install again, delete the tables or change database prefix." );
+        if ( DEBUG ) {
+            // if debug, then just overwrite the databases.
+        }
+        else {
+            // if it's debug, it cannot overwrite old database tables.
+            if ( db()->tableExists( db()->tableName( 'user' ) ) ) {
+                return error( ERROR_ALREADY_INSTALLED, "Backend is already installed. If you want to install again, delete the tables or change database prefix." );
+            }
         }
 
 

@@ -116,11 +116,7 @@ class Post_Comment_Interface extends Post_Comment
         $re = $comment->delete();
         if ( is_success($re) ) success( ['idx' => in('idx') ]);
         else error( $re );
-
     }
 
-    public function like( $comment, $config ) {
-        return $this->like_interface( $comment, $config );
-    }
 
 }

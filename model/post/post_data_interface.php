@@ -159,10 +159,6 @@ class Post_Data_Interface extends Post_Data {
     }
 
 
-    public function like( $post, $config ) {
-        return $this->like_interface( $post, $config );
-    }
-
 
 
 

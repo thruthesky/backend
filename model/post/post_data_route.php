@@ -92,9 +92,30 @@ add_route( 'post_data.list', [
 
 
 
-route()->add( 'post_data.like', [
-    'path' => "\\model\\post\\post_data_interface",
-    'method' => 'like',
+route()->add( 'post_data.vote', [
+    'path' => "\\model\\post\\post",
+    'method' => 'vote_interface',
+    "variables" => [
+        'required' => [ 'idx', 'session_id' ],
+        'optional' => [ 'choice' ],
+        'system' => []
+    ],
+    'validator' => function() {
+        $post = post( in('idx') );
+        if ( is_error( $post ) ) return $post;
+        if ( ! $post->exist() ) return ERROR_POST_NOT_EXIST;
+
+        $config = config()->load( $post->post_config_idx );
+        if ( ! $config->exist() ) return ERROR_POST_CONFIG_NOT_EXIST;
+
+        return [ $post, $config ];
+    }
+]);
+
+
+route()->add( 'post_data.report', [
+    'path' => "\\model\\post\\post",
+    'method' => 'report_interface',
     "variables" => [
         'required' => [ 'idx', 'session_id' ],
         'optional' => [],
@@ -111,6 +132,7 @@ route()->add( 'post_data.like', [
         return [ $post, $config ];
     }
 ]);
+
 
 
 
