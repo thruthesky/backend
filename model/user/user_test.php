@@ -272,8 +272,8 @@ class User_Test extends \model\test\Test {
 
         $re = $this->route('register', $record);
         test( is_success($re), "User registration for meta: $id " . get_error_string( $re ));
-
-        $session_id = $re['data']['session_id'];
+        if ( is_success($re)) $session_id = $re['data']['session_id'];
+        else $session_id = null;
 
 
         // get user data.

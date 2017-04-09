@@ -262,8 +262,11 @@ class Taxonomy extends \model\base\Base  {
         $idxes = [];
         $table = $this->getTable();
         $rows = db()->rows("SELECT idx FROM $table WHERE $cond");
-        foreach( $rows as $row ) {
-            $idxes[] = $row['idx'];
+        if ( is_error($rows) ) return []; // error @todo Do the proper error process.
+        if ( $rows ) {
+            foreach( $rows as $row ) {
+                $idxes[] = $row['idx'];
+            }
         }
         return $idxes;
     }

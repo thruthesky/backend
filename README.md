@@ -426,6 +426,27 @@ Base => Taxonomy => Entity => File
 
 # Security
 
+
+
+
+# Security is important.
+
+## ./etc/config.php settings.
+
+you can set $MAX_REQUEST_LENGTH to limit max size of user input.
+
+
+## php.ini settings
+
+Limit max request size and other options.
+
+## database settings.
+
+Limit max packet size.
+
+
+
+
 ## HTTP Input Variable Check
 
 The "run_route()" will check the input of the HTTP as stated in the route.

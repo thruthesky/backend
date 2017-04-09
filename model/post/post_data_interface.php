@@ -99,6 +99,7 @@ class Post_Data_Interface extends Post_Data {
     public function data() {
 
         $post = $this->load( in('idx') );
+        if ( is_error( $post ) ) return error( $post );
         if ( ! $post->exist() ) return error( ERROR_POST_DATA_NOT_EXIST );
         success( ['post'=> $post->pre( $_REQUEST ) ] );
 

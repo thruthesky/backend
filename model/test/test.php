@@ -370,7 +370,8 @@ EOH;
         if ( $replace ) category( $record['id'] )->delete();
         $re = $this->route('category.create', $record);
         if ( is_error($re) ) test(false, "createCategory: " . get_error_string($re));
-        return $re['data']['idx'];
+        if ( isset($re['data']) && isset($re['data']['idx']) ) return $re['data']['idx'];
+        else return false;
 
     }
 

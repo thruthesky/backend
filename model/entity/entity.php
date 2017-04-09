@@ -515,14 +515,19 @@ class Entity extends \model\taxonomy\Taxonomy  {
      * @param null $self_idx
      * @param bool $self_include
      * @param bool $reload
-     * @return array
+     * @return array|boolean
+     *
+     *
+     * @edit 2017-04-09 if there is any error, it return false.
      */
     public function loadParents( $self_idx=null, $self_include = false, $reload = true ) {
         if ( $self_idx === null ) $self_idx = $this->idx;
         $idxes = $this->getParents( $self_idx, $self_include );
         $ret = [];
         foreach ( $idxes as $idx ) {
-            $ret[] = clone $this->load( $idx, $reload );
+            $re = $this->load( $idx, $reload );
+            if ( is_error($re) ) return false;
+            $ret[] = clone $this;
         }
         return $ret;
     }

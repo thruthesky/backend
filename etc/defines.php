@@ -164,3 +164,9 @@ define('ERROR_UPLOAD_ERR_EXTENSION', -43208);
 define('ERROR_IDX_EMPTY_ON_FILE_DELETE', -43209);           $em[ERROR_IDX_EMPTY_ON_FILE_DELETE] = 'file-idx-empty-on-file::delete';
 define('ERROR_FILE_UNLINK_FAILED', -43220);                 $em[ERROR_FILE_UNLINK_FAILED] = 'file-unlink-failed';
 define('ERROR_NOT_YOUR_FILE', -43300);                      $em[ERROR_NOT_YOUR_FILE] = 'not-your-file';
+
+
+
+
+// security
+define('ERROR_MAX_REQUEST_LENGTH', 60004);                  $em[ERROR_MAX_REQUEST_LENGTH] = "request-too-long";
