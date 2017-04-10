@@ -13,6 +13,8 @@ Backend Server for Restful APIs
 * When user has no primary photo, the responded empty value is Array.
 * When user has primary photo, the responded value is Object. NOT Array.
 * 'created' URL parameter is added on File URL for cache. Since a user deletes a file and upload a new file, then, it has same file.idx so, the browser cached image will be showed again to user..
+* default 'no. of items' of a page(list/search page) is '$DEFAULT_NO_OF_PAGE_ITEMS' which is in etc/config.
+* search/list api call now accepts 'page' and works as exptected.
 
 
 

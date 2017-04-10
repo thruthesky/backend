@@ -85,7 +85,7 @@ add_route( 'post_data.list', [
     "method" => "search",
     'variables' => [
         'required' => [],
-        'optional' => [ 'from', 'limit', 'where', 'bind', 'order', 'select', 'extra' ],
+        'optional' => [ 'from', 'limit', 'where', 'bind', 'order', 'select', 'extra', 'page' ],
         'system' => [ 'session_id' ]
     ]
 ]);

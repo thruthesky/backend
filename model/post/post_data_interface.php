@@ -121,7 +121,8 @@ class Post_Data_Interface extends Post_Data {
             'limit' => in('limit'),
             'where' => in('where'),
             'bind' => in('bind'),
-            'order' => in('order')
+            'order' => in('order'),
+            'page' => in('page')
         ];
 
 
@@ -154,7 +155,8 @@ class Post_Data_Interface extends Post_Data {
         success( [
             'total' => parent::countSearch( $option ),
             'configs' => post()->getConfigs( $posts ),
-            'posts' => post()->pres( $posts, $pre_option )
+            'posts' => post()->pres( $posts, $pre_option ),
+            'page' => in('page')
         ] );
 
     }

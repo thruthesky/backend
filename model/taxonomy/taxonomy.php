@@ -152,20 +152,36 @@ class Taxonomy extends \model\base\Base  {
 
 
         /**
-         *
+         * limit
          */
-        if ( isset( $option['from'] ) ) {
-            if ( is_numeric( $option['from'] ) ) $from = $option['from'];
-            else return ERROR_FROM_IS_NOT_NUMERIC;
-        }
-        else $from = 0;
-
-        if ( isset( $option['limit'] ) ) {
+        if ( isset( $option['limit'] ) && $option['limit'] ) {
             if ( is_numeric( $option['limit'] ) ) $limit = $option['limit'];
             else return ERROR_LIMIT_IS_NOT_NUMERIC;
         }
         else $limit = DEFAULT_NO_OF_PAGE_ITEMS;
 
+        /**
+         * from
+         *
+         */
+        $from = 0;
+        if ( ! is_numeric( $option['page'] ) ) return ERROR_FROM_IS_NOT_NUMERIC;
+
+        if ( isset( $option['page'] ) && $option['page'] ) {
+            // if ( req['page'] ) {
+            //     let page = req['page'] > 0 ? req['page'] : 1;
+            //     let limit = req.limit;
+            //     req.from =  ( page - 1 ) * limit;
+            //     delete( req.page );
+            // }
+            if ( is_numeric( $option['page'] ) && $option['page'] > 0 ) $page = $option['page'];
+            else $page = 1;
+            $from = ( $page - 1 ) * $limit;
+        }
+        else if ( isset( $option['from'] ) && $option['from'] > 0 ) $from = $option['from'];
+
+
+        //
         $limit = "LIMIT $from, $limit";
 
         //
@@ -188,7 +204,7 @@ class Taxonomy extends \model\base\Base  {
 
         $q = "SELECT $option[select] FROM {$this->getTable()} $where $order $limit";
 
-        debug_log("taxonomy_query:");
+        debug_log("taxonomy_query: $q");
 
         return db()->rows( $q );
 
