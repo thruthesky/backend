@@ -123,7 +123,9 @@ class Post_Data_Interface extends Post_Data {
          */
 
         $extra = in('extra');
+	$post_config_id = '';
         if ( isset($extra['post_config_id']) ) {
+		$post_config_id = $extra['post_config_id'];
             $config = config( $extra['post_config_id'] );
             if ( $config->exist() ) {
                 debug_log($option);
@@ -147,7 +149,8 @@ class Post_Data_Interface extends Post_Data {
             'configs' => post()->getConfigs( $posts ),
             'posts' => post()->pres( $posts, $pre_option ),
             'page' => $option['page'],
-            'limit' => $option['limit']
+            'limit' => $option['limit'],
+		'post_config_id' => $post_config_id
         ] );
 
     }
