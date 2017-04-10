@@ -113,23 +113,14 @@ class Post_Data_Interface extends Post_Data {
     public function search( $_=null ) {
 
 
-        $extra = in('extra');
-
-        $option = [
-            'select' => in('select'),
-            'from' => in('from'),
-            'limit' => in('limit'),
-            'where' => in('where'),
-            'bind' => in('bind'),
-            'order' => in('order'),
-            'page' => in('page')
-        ];
-
+        $option = $this->getSearchVariables();
 
 
         /**
          * post search by 'id'
          */
+
+        $extra = in('extra');
         if ( isset($extra['post_config_id']) ) {
             $config = config( $extra['post_config_id'] );
             if ( $config->exist() ) {

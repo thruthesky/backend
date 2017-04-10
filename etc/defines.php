@@ -48,8 +48,9 @@ define('ERROR_SEARCH_BIND_LACK', -40092);        $em[ERROR_SEARCH_BIND_LACK] = '
 define('ERROR_MALFORMED_RESPONSE', -40093);             $em[ERROR_MALFORMED_RESPONSE] = 'malformed-response.return-data-is-not-array';
 
 define('ERROR_ENTITY_NOT_SET', -40094);                   $em[ERROR_ENTITY_NOT_SET] = 'entity-record-not-set';
-define('ERROR_FROM_IS_NOT_NUMERIC', -40095);            $em[ERROR_FROM_IS_NOT_NUMERIC] = 'from-is-not-number';
+//define('ERROR_FROM_IS_NOT_NUMERIC', -40095);            $em[ERROR_FROM_IS_NOT_NUMERIC] = 'from-is-not-number';
 define('ERROR_LIMIT_IS_NOT_NUMERIC', -40096);           $em[ERROR_LIMIT_IS_NOT_NUMERIC] = 'limit-is-not-number';
+
 
 define('ERROR_DATABASE_ROWS_QUERY_ERROR', -40097);      $em[ERROR_DATABASE_ROWS_QUERY_ERROR] = 'database-rows-query-failed';
 define('ERROR_TABLE_NOT_SET', -40098);                  $em[ERROR_TABLE_NOT_SET] = 'database-table-is-not-set-to-query'; // entity table is empty.
@@ -115,9 +116,11 @@ define('ERROR_ALREADY_REPORT', -40233);                     $em[ERROR_ALREADY_RE
 define('ERROR_ALREADY_VOTE', -40234);                     $em[ERROR_ALREADY_VOTE] = "already-voted";
 define('ERROR_CANNOT_VOTE_YOUR_OWN_POST', -40235);          $em[ERROR_CANNOT_VOTE_YOUR_OWN_POST] = "you-can-not-vote-your-own-post";
 
-// permis error
+// permission error
 define('ERROR_PERMISSION_ADMIN', -40800 );                  $em[ERROR_PERMISSION_ADMIN] = 'admin-permission-required';
 
+
+define('ERROR_MAX_NO_OF_ITEMS', -40405);                     $em[ERROR_MAX_NO_OF_ITEMS] = 'no-of-items-too-long--too-much-request-of-items-in-one-page';
 
 // meta errors
 

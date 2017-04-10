@@ -94,13 +94,14 @@ class Post_Config_Interface extends Post_Config {
      */
     public function search( $_=null ) {
 
-        $option = [
-            'from' => in('from'),
-            'limit' => in('limit'),
-            'where' => in('where'),
-            'bind' => in('bind'),
-            'order' => in('order')
-        ];
+//        $option = [
+//            'from' => in('from'),
+//            'limit' => in('limit'),
+//            'where' => in('where'),
+//            'bind' => in('bind'),
+//            'order' => in('order')
+//        ];
+        $option = $this->getSearchVariables();
         $post_configs = parent::search( $option );
         if ( is_error( $post_configs ) ) return error( $post_configs );
         success( [

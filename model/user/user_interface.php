@@ -219,13 +219,14 @@ class User_Interface extends User {
      */
     public function search( $_=null ) {
 
-        $option = [
-            'from' => in('from'),
-            'limit' => in('limit'),
-            'where' => in('where'),
-            'bind' => in('bind'),
-            'order' => in('order')
-        ];
+//        $option = [
+//            'from' => in('from'),
+//            'limit' => in('limit'),
+//            'where' => in('where'),
+//            'bind' => in('bind'),
+//            'order' => in('order')
+        //];
+        $option = $this->getSearchVariables();
         $users = parent::search( $option );
         if ( is_error( $users ) ) return error( $users );
         success( [

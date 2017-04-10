@@ -37,6 +37,14 @@ $DEFAULT_NO_OF_PAGE_ITEMS   = 10;           // number
 
 
 /**
+ *
+ * Limit the maximum number of items in one page(list/search)
+ * If you set it 50, then client cannot get more than 50 items per one search(page). it will response error if it happens.
+ */
+$MAX_NO_OF_ITEMS           = 100;          // number
+
+
+/**
  * If true, debug mode enabled.
  *
  * If false, All the debug related code will not run.
@@ -127,6 +135,7 @@ define('__MODEL_DIR__',     __ROOT_DIR__ . '/model');
 
 
 define('DEFAULT_NO_OF_PAGE_ITEMS',  $DEFAULT_NO_OF_PAGE_ITEMS);
+define('MAX_NO_OF_ITEMS',          $MAX_NO_OF_ITEMS);
 
 define('TIME_TO_DELETED_OLD_UNHOOKED_FILE', $TIME_TO_DELETED_OLD_UNHOOKED_FILE * 60);
 

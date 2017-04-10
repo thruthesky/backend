@@ -160,12 +160,14 @@ class Taxonomy extends \model\base\Base  {
         }
         else $limit = DEFAULT_NO_OF_PAGE_ITEMS;
 
+        if ( $limit > MAX_NO_OF_ITEMS ) return ERROR_MAX_NO_OF_ITEMS;
+
         /**
          * from
          *
          */
         $from = 0;
-        if ( ! is_numeric( $option['page'] ) ) return ERROR_FROM_IS_NOT_NUMERIC;
+        // if ( ! is_numeric( $option['page'] ) ) return ERROR_FROM_IS_NOT_NUMERIC;
 
         if ( isset( $option['page'] ) && $option['page'] ) {
             // if ( req['page'] ) {
@@ -178,7 +180,7 @@ class Taxonomy extends \model\base\Base  {
             else $page = 1;
             $from = ( $page - 1 ) * $limit;
         }
-        else if ( isset( $option['from'] ) && $option['from'] > 0 ) $from = $option['from'];
+        else if ( isset( $option['from'] ) && is_numeric($option['from'] ) && $option['from'] > 0 ) $from = $option['from'];
 
 
         //
@@ -388,5 +390,20 @@ class Taxonomy extends \model\base\Base  {
         return $this->idxes( "parent_idx=$parent_idx ");
     }
 
+
+    public function getSearchVariables() {
+
+        $option = [
+            'select' => in('select'),
+            'from' => in('from'),
+            'limit' => in('limit'),
+            'where' => in('where'),
+            'bind' => in('bind'),
+            'order' => in('order'),
+            'page' => in('page')
+        ];
+
+        return $option;
+    }
 
 }
