@@ -113,7 +113,9 @@ class Post_Data_Interface extends Post_Data {
     public function search( $_=null ) {
 
 
+
         $option = $this->getSearchVariables();
+                            if ( is_error( $option ) ) return error( $option );
 
 
         /**
@@ -134,20 +136,18 @@ class Post_Data_Interface extends Post_Data {
         }
 
 
-        $posts = parent::search( $option );
-
-
-        if ( is_error( $posts ) ) return error( $posts );
-
+        $re = parent::search(); if ( is_error( $re ) ) return error( $re );
+        $posts = $re[0];
 
         $pre_option = [];
         if ( isset($_REQUEST['extra']) ) $pre_option['extra'] = $_REQUEST['extra'];
 
         success( [
-            'total' => parent::countSearch( $option ),
+            'total' => parent::countSearch(),
             'configs' => post()->getConfigs( $posts ),
             'posts' => post()->pres( $posts, $pre_option ),
-            'page' => in('page')
+            'page' => $option['page'],
+            'limit' => $option['limit']
         ] );
 
     }

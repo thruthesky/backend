@@ -119,11 +119,14 @@ class Taxonomy extends \model\base\Base  {
      *
      *
      * @note if you need to get total number of record, use countSearch()
+     *
      * @return mixed
      *
      *      - use is_error() to check if it was successful.
      *      - ERROR CODE ( number less than 0 ) will be returned on error.
      *      - array ( including empty array ) will be return on success.
+     *          - 1st element of the return array is the rows of searched
+     *          - 2nd element of the return array is the option used for search.
      *
      *
      *
@@ -143,76 +146,32 @@ class Taxonomy extends \model\base\Base  {
      *
      * @endcode
      */
-    public function search( $option ) {
+    public function search( $option = [] ) {
 
         if ( empty($this->getTable()) ) return ERROR_TABLE_NOT_SET;
 
 
-//        debug_log($option);
-
-
-        /**
-         * limit
-         */
-        if ( isset( $option['limit'] ) && $option['limit'] ) {
-            if ( is_numeric( $option['limit'] ) ) $limit = $option['limit'];
-            else return ERROR_LIMIT_IS_NOT_NUMERIC;
-        }
-        else $limit = DEFAULT_NO_OF_PAGE_ITEMS;
-
-        if ( $limit > MAX_NO_OF_ITEMS ) return ERROR_MAX_NO_OF_ITEMS;
-
-        /**
-         * from
-         *
-         */
-        $from = 0;
-        // if ( ! is_numeric( $option['page'] ) ) return ERROR_FROM_IS_NOT_NUMERIC;
-
-        if ( isset( $option['page'] ) && $option['page'] ) {
-            // if ( req['page'] ) {
-            //     let page = req['page'] > 0 ? req['page'] : 1;
-            //     let limit = req.limit;
-            //     req.from =  ( page - 1 ) * limit;
-            //     delete( req.page );
-            // }
-            if ( is_numeric( $option['page'] ) && $option['page'] > 0 ) $page = $option['page'];
-            else $page = 1;
-            $from = ( $page - 1 ) * $limit;
-        }
-        else if ( isset( $option['from'] ) && is_numeric($option['from'] ) && $option['from'] > 0 ) $from = $option['from'];
-
-
-        //
-        $limit = "LIMIT $from, $limit";
-
-        //
-
-
-        if ( ! isset( $option['select'] ) && empty( $option['select']) ) $option['select'] = '*';
-
-        //
-        if ( isset( $option['order'] ) && $option['order'] ) {
-            if ( ! db()->secure_cond( in('order') ) ) return ERROR_INSCURE_SQL_CONDITION;
-            $order = 'ORDER BY ' . in('order');
-        }
-        else $order = null;
-
+        $option = $this->getSearchVariables( $option );
+                    if ( is_error( $option ) ) return error( $option );
 
 
         //
         $where = $this->getSearchCondition( $option );
         if ( is_error( $where ) ) return $where;
-
-        $q = "SELECT $option[select] FROM {$this->getTable()} $where $order $limit";
+        $q = "SELECT $option[select] FROM {$this->getTable()} $where $option[order] $option[limit]";
 
         debug_log("taxonomy_query: $q");
 
-        return db()->rows( $q );
+        $rows = db()->rows( $q );
+
+        return [ $rows, $option ];
 
     }
 
-    public function countSearch( $option ) {
+    public function countSearch( $option = [] ) {
+        $option = $this->getSearchVariables( $option );
+                    if ( is_error( $option ) ) return error( $option );
+
         $where = $this->getSearchCondition( $option );
         if ( is_error( $where ) ) return $where;
         $row = db()->row("SELECT COUNT(*) as cnt FROM {$this->getTable()} $where");
@@ -391,19 +350,5 @@ class Taxonomy extends \model\base\Base  {
     }
 
 
-    public function getSearchVariables() {
-
-        $option = [
-            'select' => in('select'),
-            'from' => in('from'),
-            'limit' => in('limit'),
-            'where' => in('where'),
-            'bind' => in('bind'),
-            'order' => in('order'),
-            'page' => in('page')
-        ];
-
-        return $option;
-    }
 
 }
