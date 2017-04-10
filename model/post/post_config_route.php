@@ -70,7 +70,7 @@ add_route( 'post_config.list', [
     "method" => "search",
     'variables' => [
         'required' => [],
-        'optional' => [ 'from', 'limit', 'where', 'bind', 'order' ],
+        'optional' => [ 'from', 'limit', 'where', 'bind', 'order', 'page' ],
         'system' => [ 'session_id' ]
     ]
 ]);

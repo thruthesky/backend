@@ -30,10 +30,16 @@ class File_Interface extends File {
      */
     public function download( $file ) {
 
-        $file->increaseNoOfDownload();
-        $idx = $file->idx;
 
-        $file_path = DIR_UPLOAD . '/' . $idx;
+        $idx = $file->idx;
+        $name = md5($file->name);
+        $file_path = $file->path();
+        //di("file path: $file_path");
+        //if ( ! file_exists( $file_path ) ) return "";
+
+
+        $file->increaseNoOfDownload();
+
 
 
         $type = in('type');
@@ -70,7 +76,7 @@ class File_Interface extends File {
 
 
 
-        $cache_file_path = DIR_CACHE . "/$idx-$resize-$x-$y-{$width}x{$height}-$quality.$type";
+        $cache_file_path = DIR_CACHE . "/$idx-$resize-$x-$y-{$width}x{$height}-$quality-$name.$type";
 
         if ( file_exists( $cache_file_path ) ) {
             debug_log("cache file path exists: $cache_file_path, so it just return cache file.");

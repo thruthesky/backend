@@ -9,7 +9,22 @@ Backend Server for Restful APIs
 * post_comment create/edit interface response with the full comment data.
 * post_data.data interface accepts `extra` property.
 * when user logs in, if the user is admin, "admin=1" will be set in response.
+* when user related information is responded, at least it has empty array if it has no photos.
+* When user has no primary photo, the responded empty value is Array.
+* When user has primary photo, the responded value is Object. NOT Array.
+* 'created' URL parameter is added on File URL for cache. Since a user deletes a file and upload a new file, then, it has same file.idx so, the browser cached image will be showed again to user..
+* default 'no. of items' of a page(list/search page) is '$DEFAULT_NO_OF_PAGE_ITEMS' which is in etc/config.
+* search/list api call now accepts 'page' and works as exptected.
 
+
+
+# Bugs
+
+* On macOS Sierra 10.12.3 with SQLite,
+    when a user upload primary photo and delete immediately, the file is deleted but after 0.3 seconds it becomes alive with Zero Bytes.
+    And it produces an server error since SQLite will use the same file.idx for next photo upload.
+    ( delete immediately means, right after, ... like 0.1 second after upload )
+    If you give some time delay like 3 seconds, there is no error.
 
 
 
@@ -264,7 +279,7 @@ Those files will be run in installation process.
 
 # Interface
 
-Is more likey a router.
+Is more likely a router.
 
 
 
@@ -413,6 +428,27 @@ Base => Taxonomy => Entity => File
 
 # Security
 
+
+
+
+# Security is important.
+
+## ./etc/config.php settings.
+
+you can set $MAX_REQUEST_LENGTH to limit max size of user input.
+
+
+## php.ini settings
+
+Limit max request size and other options.
+
+## database settings.
+
+Limit max packet size.
+
+
+
+
 ## HTTP Input Variable Check
 
 The "run_route()" will check the input of the HTTP as stated in the route.
@@ -541,11 +577,11 @@ Example of Interface) See how it gets variable passed from validator.
 
 
 
-# Interface
+# Interfaces
 
-Interfaces are the methods that are directly called by API call.
+Interfaces are the methods that are directly called by router/API call.
 
-All interfaces must be recorded in `{module_name}_interface.php`
+All interfaces must be recorded in `{module_name}_interface.php` except common interfaces.
 
 For instance
 
@@ -553,6 +589,20 @@ For instance
 model/user/user_interface.php
 ````
 
+
+## Common Interfaces
+
+Some interfaces could have same functionality and same routine.
+
+You can create a common interfaces in a parent class ( or parent model ) to share parent's interfaces with its children.
+
+Be sure to name it with ending '_interface'.
+
+for instance
+
+````
+public function like_interface( ... ) { }
+````
 
 
 

@@ -24,6 +24,9 @@ class Post_Comment extends Post_Data
         $ret['depth'] = $this->depth;
         $ret['content'] = $this->content;
         $ret['files'] = $this->file()->get();
+        $ret['vote_good'] = $this->vote_good;
+        $ret['vote_bad'] = $this->vote_bad;
+        $ret['vote_report'] = $this->vote_report;
         $user = user( $this->user_idx );
         //debug_log('user: ');
         //debug_log($user);

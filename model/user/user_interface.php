@@ -79,13 +79,18 @@ class User_Interface extends User {
 
 
         if ( currentUser()->isAdmin() ) {
-            $user = user( in('id') );
+            if ( in('id') ) { // admin has user id to edit?
+                $user = user( in('id') );
+                if ( ! $user->exist() ) return error( ERROR_USER_NOT_FOUND, "user-not-found--user-id-not-found-by-admin" );
+            }
+            else $user = currentUser(); // admin edits himself.
         }
         else {
             $user = user( in('session_id') );
+            if ( ! $user->exist() ) return error( ERROR_USER_NOT_FOUND, "user-not-found--user-session-id-may-be-wrong" );
         }
 
-        if ( ! $user->exist() ) return error( ERROR_USER_NOT_FOUND );
+
         $re = $user->update( $record );
 
 
@@ -97,7 +102,10 @@ class User_Interface extends User {
             if ( is_error( $re_upload ) ) return error( $re_upload );
             $this->reset( $user ); // The user who is being edited becomes $this.
             $res = $this->res();
-            if ( currentUser()->isAdmin() ) unset( $res['session_id'] ); /// admin will not edit
+
+            /// when admin edits user info(including himself), session id will not be returned
+            /// But the session id has changed. all users (including admin) must re-login.
+            if ( currentUser()->isAdmin() ) unset( $res['session_id'] );
             success( $res );
             //if ( ! currentUser()->isAdmin() ) $res[ 'session_id' ] = $user->getSessionId();
             //success( $res );
@@ -144,11 +152,17 @@ class User_Interface extends User {
         if ( ! $this->isSessionId( $session_id ) ) return error( ERROR_MALFORMED_SESSION_ID );
 
         $user = $this->load( $session_id );
-        if ( ! $user->exist() ) return error( ERROR_USER_NOT_FOUND, "user-not-found-by-session-id: $session_id" );
+
+
+        if ( ! $user->exist() ) {
+            return error( ERROR_WRONG_SESSION_ID_NO_USER_DATA_BY_THAT_SESSION_ID );
+        }
 
         if ( $this->isAdmin() && in('id') ) { // if admin,
             $user = $this->load( in('id') ); // load other user.
-            if ( ! $user->exist() ) return error( ERROR_USER_NOT_FOUND );
+            if ( ! $user->exist() ) {
+                return error( ERROR_WRONG_USER_ID_FOR_DATA );
+            }
             $this->forceLogin( in('id') );
         }
 
@@ -175,7 +189,7 @@ class User_Interface extends User {
 
         $session_id = in('session_id');
         $user = $this->load( $session_id );
-        if ( ! $user->exist() ) return error( ERROR_USER_NOT_FOUND );
+        if ( ! $user->exist() ) return error( ERROR_USER_NOT_FOUND, 'user-not-found-while-logout' );
 
         $user->update( [ 'session_id' => '' ]);
         success();
@@ -205,13 +219,14 @@ class User_Interface extends User {
      */
     public function search( $_=null ) {
 
-        $option = [
-            'from' => in('from'),
-            'limit' => in('limit'),
-            'where' => in('where'),
-            'bind' => in('bind'),
-            'order' => in('order')
-        ];
+//        $option = [
+//            'from' => in('from'),
+//            'limit' => in('limit'),
+//            'where' => in('where'),
+//            'bind' => in('bind'),
+//            'order' => in('order')
+        //];
+        $option = $this->getSearchVariables();
         $users = parent::search( $option );
         if ( is_error( $users ) ) return error( $users );
         success( [

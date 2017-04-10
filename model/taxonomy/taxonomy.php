@@ -152,20 +152,38 @@ class Taxonomy extends \model\base\Base  {
 
 
         /**
-         *
+         * limit
          */
-        if ( isset( $option['from'] ) ) {
-            if ( is_numeric( $option['from'] ) ) $from = $option['from'];
-            else return ERROR_FROM_IS_NOT_NUMERIC;
-        }
-        else $from = 0;
-
-        if ( isset( $option['limit'] ) ) {
+        if ( isset( $option['limit'] ) && $option['limit'] ) {
             if ( is_numeric( $option['limit'] ) ) $limit = $option['limit'];
             else return ERROR_LIMIT_IS_NOT_NUMERIC;
         }
         else $limit = DEFAULT_NO_OF_PAGE_ITEMS;
 
+        if ( $limit > MAX_NO_OF_ITEMS ) return ERROR_MAX_NO_OF_ITEMS;
+
+        /**
+         * from
+         *
+         */
+        $from = 0;
+        // if ( ! is_numeric( $option['page'] ) ) return ERROR_FROM_IS_NOT_NUMERIC;
+
+        if ( isset( $option['page'] ) && $option['page'] ) {
+            // if ( req['page'] ) {
+            //     let page = req['page'] > 0 ? req['page'] : 1;
+            //     let limit = req.limit;
+            //     req.from =  ( page - 1 ) * limit;
+            //     delete( req.page );
+            // }
+            if ( is_numeric( $option['page'] ) && $option['page'] > 0 ) $page = $option['page'];
+            else $page = 1;
+            $from = ( $page - 1 ) * $limit;
+        }
+        else if ( isset( $option['from'] ) && is_numeric($option['from'] ) && $option['from'] > 0 ) $from = $option['from'];
+
+
+        //
         $limit = "LIMIT $from, $limit";
 
         //
@@ -188,7 +206,7 @@ class Taxonomy extends \model\base\Base  {
 
         $q = "SELECT $option[select] FROM {$this->getTable()} $where $order $limit";
 
-        debug_log("taxonomy_query:");
+        debug_log("taxonomy_query: $q");
 
         return db()->rows( $q );
 
@@ -262,8 +280,11 @@ class Taxonomy extends \model\base\Base  {
         $idxes = [];
         $table = $this->getTable();
         $rows = db()->rows("SELECT idx FROM $table WHERE $cond");
-        foreach( $rows as $row ) {
-            $idxes[] = $row['idx'];
+        if ( is_error($rows) ) return []; // error @todo Do the proper error process.
+        if ( $rows ) {
+            foreach( $rows as $row ) {
+                $idxes[] = $row['idx'];
+            }
         }
         return $idxes;
     }
@@ -369,5 +390,20 @@ class Taxonomy extends \model\base\Base  {
         return $this->idxes( "parent_idx=$parent_idx ");
     }
 
+
+    public function getSearchVariables() {
+
+        $option = [
+            'select' => in('select'),
+            'from' => in('from'),
+            'limit' => in('limit'),
+            'where' => in('where'),
+            'bind' => in('bind'),
+            'order' => in('order'),
+            'page' => in('page')
+        ];
+
+        return $option;
+    }
 
 }

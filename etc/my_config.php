@@ -17,6 +17,3 @@ $DATABASE_NAME          = 'backend';
 $DATABASE_PREFIX        = "be04_";
 $DATABASE_HOST          = 'localhost';
 $DATABASE_TYPE          = 'mysql';         // 'mysql' | 'sqlite'
-
-
-

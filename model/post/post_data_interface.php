@@ -99,6 +99,7 @@ class Post_Data_Interface extends Post_Data {
     public function data() {
 
         $post = $this->load( in('idx') );
+        if ( is_error( $post ) ) return error( $post );
         if ( ! $post->exist() ) return error( ERROR_POST_DATA_NOT_EXIST );
         success( ['post'=> $post->pre( $_REQUEST ) ] );
 
@@ -112,22 +113,14 @@ class Post_Data_Interface extends Post_Data {
     public function search( $_=null ) {
 
 
-        $extra = in('extra');
-
-        $option = [
-            'select' => in('select'),
-            'from' => in('from'),
-            'limit' => in('limit'),
-            'where' => in('where'),
-            'bind' => in('bind'),
-            'order' => in('order')
-        ];
-
+        $option = $this->getSearchVariables();
 
 
         /**
          * post search by 'id'
          */
+
+        $extra = in('extra');
         if ( isset($extra['post_config_id']) ) {
             $config = config( $extra['post_config_id'] );
             if ( $config->exist() ) {
@@ -153,10 +146,13 @@ class Post_Data_Interface extends Post_Data {
         success( [
             'total' => parent::countSearch( $option ),
             'configs' => post()->getConfigs( $posts ),
-            'posts' => post()->pres( $posts, $pre_option )
+            'posts' => post()->pres( $posts, $pre_option ),
+            'page' => in('page')
         ] );
 
     }
+
+
 
 
 

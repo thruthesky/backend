@@ -106,7 +106,7 @@ class File_Test extends \model\test\Test {
 
             $_FILES['userfile']['tmp_name'] = __ROOT_DIR__ . '/tmp/person.jpg';
             $re = f()->save( $_REQUEST, $_FILES['userfile']);
-            test( is_success( $re ), "delete_test::Upload with code $re"  .get_error_string($re));
+            test( is_success( $re ), "delete_test::Upload with code : "  . get_error_string($re));
             $path = f()->path( $re );
             test( file_exists( $path ), "delete_test::file path should exist : $path");
         }

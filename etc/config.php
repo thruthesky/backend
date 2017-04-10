@@ -10,6 +10,17 @@
 
 
 
+
+$DATABASE_USER          = 'root';
+$DATABASE_PASSWORD      = '7777';
+$DATABASE_NAME          = 'backend';
+$DATABASE_PREFIX        = "be046_";
+$DATABASE_HOST          = 'localhost';
+$DATABASE_TYPE          = 'mysql';         // 'mysql' | 'sqlite'
+
+
+
+
 $ADMIN_ID               = 'admin';          // This is admin id.
 $ANONYMOUS_ID           = 'anonymous';      // Anonymous ID.
 $TEST_USER_ID           = 'user';           // Test User ID.
@@ -19,20 +30,18 @@ $TEST_USER_ID           = 'user';           // Test User ID.
 $DIR_DATA               = __ROOT_DIR__ . '/data';
 
 
-
-
-$DATABASE_USER          = 'root';
-$DATABASE_PASSWORD      = '7777';
-$DATABASE_NAME          = 'backend';
-$DATABASE_PREFIX        = "be04_";
-$DATABASE_HOST          = 'localhost';
-$DATABASE_TYPE          = 'mysql';         // 'mysql' | 'sqlite'
-
-
 /**
  * Default number of items in one page list.
  */
 $DEFAULT_NO_OF_PAGE_ITEMS   = 10;           // number
+
+
+/**
+ *
+ * Limit the maximum number of items in one page(list/search)
+ * If you set it 50, then client cannot get more than 50 items per one search(page). it will response error if it happens.
+ */
+$MAX_NO_OF_ITEMS           = 100;          // number
 
 
 /**
@@ -72,6 +81,29 @@ if ( file_exists( __ROOT_DIR__ . "/etc/my_config.php") ) require __ROOT_DIR__ . 
 $DIR_FILE                           = $DIR_DATA . '/file';
 
 
+/**
+ *
+ *
+ * Security
+ *
+ *
+ */
+
+/**
+ * MAX_REQUEST_LENGTH is to limit the content of request(user input).
+ * If the request of all URL params are bigger than MAX_REQUEST_LENGTH, error will be responded.
+ * If it is set to 0, then it does not check the MAX_REQUEST_LENGTH.
+ *
+ * @example
+ *      $MAX_REQUEST_LENGTH = 0;
+ *      $MAX_REQUEST_LENGTH = 10000;
+ *
+ */
+$MAX_REQUEST_LENGTH = 10240;
+
+
+
+
 ////////////////////////////////////////////////////////// DO NOT EDIT BELOW
 /**
  * ---------    D O    N O T     E D I T     B E L O W     ----------
@@ -103,5 +135,9 @@ define('__MODEL_DIR__',     __ROOT_DIR__ . '/model');
 
 
 define('DEFAULT_NO_OF_PAGE_ITEMS',  $DEFAULT_NO_OF_PAGE_ITEMS);
+define('MAX_NO_OF_ITEMS',          $MAX_NO_OF_ITEMS);
 
 define('TIME_TO_DELETED_OLD_UNHOOKED_FILE', $TIME_TO_DELETED_OLD_UNHOOKED_FILE * 60);
+
+
+define('MAX_REQUEST_LENGTH',        $MAX_REQUEST_LENGTH);

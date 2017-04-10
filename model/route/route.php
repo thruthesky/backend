@@ -231,6 +231,7 @@ class Route {
 
         //$keys = get_route_variables();
 
+
         foreach( $_REQUEST as $k => $v ) {
 
             foreach ( $number_if_contain as $contain ) {
@@ -258,9 +259,14 @@ class Route {
             if ( $k == 'session_id' ) {
                 if ( ! user()->isSessionId( $v ) ) return [ 'code'=> ERROR_MALFORMED_SESSION_ID, 'message' => 'session-is-malformed' ];
             }
+
+
         }
 
-
+        if ( MAX_REQUEST_LENGTH ) {
+            $len = strlen(http_build_query( $_REQUEST ));
+            if ( $len > MAX_REQUEST_LENGTH ) return ERROR_MAX_REQUEST_LENGTH;
+        }
 
 
         return OK;
@@ -358,7 +364,7 @@ class Route {
                     if ( $re = $this->check_route_variables_existency() ) return error( $re['code'], $re['message'] );
 
                     // check http (route) variables type for security
-                    if ( $re = $this->validate_route_variables() ) return error( $re['code'], $re['message'] );
+                    if ( $re = $this->validate_route_variables() ) return error( $re );
 
 
                     $method = $route['method'];
@@ -366,8 +372,15 @@ class Route {
                     // do route validation
                     if ( isset($route['validator']) ) {
                         $re = $route['validator']();
-                        if ( is_error( $re ) ) return error( $re );
-                        else call_user_func_array([ $obj, $method ], $re ? $re : [] );          //
+                        if ( is_error( $re ) ) {
+                            return error( $re );
+                        }
+                        else {
+                            //debug_log("route validator success: method: $method");
+                            //debug_log($route);
+                            //debug_log($re);
+                            call_user_func_array([ $obj, $method ], $re ? $re : [] );
+                        }          //
                                                                             //                        if ( is_array($re) ) {
                                                                             //                            switch ( count($re) ) {
                                                                             //                                case 1: $obj->$method( $re[0] ); break;

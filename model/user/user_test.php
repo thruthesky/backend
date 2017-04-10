@@ -226,7 +226,7 @@ class User_Test extends \model\test\Test {
 
         // get user data with wrong session id
         $re = $this->route('user.data', [ 'session_id'=>'123-' . str_repeat( 'a', 32 ) ] );
-        test( is_error($re) == ERROR_USER_NOT_FOUND, "user data with wrong session_id: " . get_error_string($re));
+        test( is_error($re) == ERROR_WRONG_SESSION_ID_NO_USER_DATA_BY_THAT_SESSION_ID, "user data with wrong session_id: " . get_error_string($re));
 
         // admin can get data of other user.
         $re = $this->route('user.data', [ 'session_id' => $admin_session_id, 'id' => $id ] );
@@ -272,8 +272,8 @@ class User_Test extends \model\test\Test {
 
         $re = $this->route('register', $record);
         test( is_success($re), "User registration for meta: $id " . get_error_string( $re ));
-
-        $session_id = $re['data']['session_id'];
+        if ( is_success($re)) $session_id = $re['data']['session_id'];
+        else $session_id = null;
 
 
         // get user data.

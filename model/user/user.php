@@ -333,10 +333,31 @@ class User extends \model\entity\Entity {
 
         $record = $this->getAvailableData( $record );
 
-        $record['primary_photo_idx'] = $this->getPrimaryPhotoIdx();
+        //$record['primary_photo_idx'] = $this->getPrimaryPhotoIdx();
+        $record['primary_photo'] = $this->primaryPhoto()->pre();
 
         return $record;
     }
+
+
+    /**
+     *
+     * Returns an array of users after sanitizing.
+     *
+     * @param $users - array of user records.
+     *
+     * @return array
+     *
+     */
+    public function pres( $users ) {
+        $new_users = [];
+        if ( empty($users) ) return $new_users;
+        foreach( $users as $user ) {
+            $new_users[] = user()->reset( $user )->pre();
+        }
+        return $new_users;
+    }
+
 
     public function getPrimaryPhotoIdx() {
         //debug_log("user::getPrimaryPhotoIdx()");
@@ -371,24 +392,6 @@ class User extends \model\entity\Entity {
         return ( new File() )->loadQuery($q);
     }
 
-
-    /**
-     *
-     * Returns an array of users after sanitizing.
-     *
-     * @param $users - array of user records.
-     *
-     * @return array
-     *
-     */
-    public function pres( $users ) {
-        $new_users = [];
-        if ( empty($users) ) return $new_users;
-        foreach( $users as $user ) {
-            $new_users[] = user()->reset( $user )->pre();
-        }
-        return $new_users;
-    }
 
     /**
      * It returns (safe) user name. Meaning it will return something meaningful if there is no name for the user.

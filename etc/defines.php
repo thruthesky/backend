@@ -31,6 +31,8 @@ define('ERROR_JSON_PARSE', -40050);                    $em[ERROR_JSON_PARSE] = "
 
 define('ERROR_ALREADY_DELETED', -40051);                $em[ERROR_ALREADY_DELETED] = 'already-deleted';
 define('ERROR_ALREADY_INSTALLED', -40052);              $em[ERROR_ALREADY_INSTALLED] = 'already-installed';
+define('ERROR_BACKEND_NOT_INSTALLED', -40052);              $em[ERROR_BACKEND_NOT_INSTALLED] = 'backend-is-not-installed';
+
 define('ERROR_KEY_EXISTS', -40080);                     $em[ERROR_KEY_EXISTS] = 'key-exists';
 define('ERROR_DATABASE_INSERT_FAILED', -40081);         $em[ERROR_DATABASE_INSERT_FAILED] = 'database-insert-failed';
 define('ERROR_DATABASE_UPDATE_FAILED', -40082);         $em[ERROR_DATABASE_UPDATE_FAILED] = 'database-update-failed';
@@ -46,8 +48,9 @@ define('ERROR_SEARCH_BIND_LACK', -40092);        $em[ERROR_SEARCH_BIND_LACK] = '
 define('ERROR_MALFORMED_RESPONSE', -40093);             $em[ERROR_MALFORMED_RESPONSE] = 'malformed-response.return-data-is-not-array';
 
 define('ERROR_ENTITY_NOT_SET', -40094);                   $em[ERROR_ENTITY_NOT_SET] = 'entity-record-not-set';
-define('ERROR_FROM_IS_NOT_NUMERIC', -40095);            $em[ERROR_FROM_IS_NOT_NUMERIC] = 'from-is-not-number';
+//define('ERROR_FROM_IS_NOT_NUMERIC', -40095);            $em[ERROR_FROM_IS_NOT_NUMERIC] = 'from-is-not-number';
 define('ERROR_LIMIT_IS_NOT_NUMERIC', -40096);           $em[ERROR_LIMIT_IS_NOT_NUMERIC] = 'limit-is-not-number';
+
 
 define('ERROR_DATABASE_ROWS_QUERY_ERROR', -40097);      $em[ERROR_DATABASE_ROWS_QUERY_ERROR] = 'database-rows-query-failed';
 define('ERROR_TABLE_NOT_SET', -40098);                  $em[ERROR_TABLE_NOT_SET] = 'database-table-is-not-set-to-query'; // entity table is empty.
@@ -64,6 +67,8 @@ define('ERROR_WRONG_SESSION_ID', -40105);               $em[ERROR_WRONG_SESSION_
 define('ERROR_USER_ID_EMPTY', -40106 );                 $em[ERROR_USER_ID_EMPTY] = 'user-id-empty';
 define('ERROR_PASSWORD_EMPTY', -40107 );                $em[ERROR_PASSWORD_EMPTY] = 'password-empty';
 define('ERROR_USER_NOT_FOUND',-40108 );                 $em[ERROR_USER_NOT_FOUND] = 'user-not-found';
+define('ERROR_WRONG_SESSION_ID_NO_USER_DATA_BY_THAT_SESSION_ID', -401081);   $em[ERROR_WRONG_SESSION_ID_NO_USER_DATA_BY_THAT_SESSION_ID] = "wrong-session-id--user-cannot-get-user-data-since-session-id-is-NOT-valid";
+define('ERROR_WRONG_USER_ID_FOR_DATA', -40182);             $em[ERROR_WRONG_USER_ID_FOR_DATA] = "admin-cannot-get-user-data-by-that-id";
 define('ERROR_WRONG_PASSWORD', -40109 );                $em[ERROR_WRONG_PASSWORD] = 'wrong-password';
 define('ERROR_USER_NOT_SET', -40100);                   $em[ERROR_USER_NOT_SET] = 'user-not-set-in-user-class-call-reset-method';
 define('ERROR_RECORD_NOT_SET', -40122);                 $em[ERROR_RECORD_NOT_SET] = 'record-not-set';
@@ -107,10 +112,15 @@ define('ERROR_POST_IDX_EMPTY', -40230);                    $em[ERROR_POST_IDX_EM
 define('ERROR_POST_CONFIG_EDIT_FAILED', -40231);                    $em[ERROR_POST_CONFIG_EDIT_FAILED] = 'post-config-edit-failed';
 define('ERROR_FORUM_NOT_EXIST', -40232);                    $em[ERROR_FORUM_NOT_EXIST] = "forum-not-exist";
 
+define('ERROR_ALREADY_REPORT', -40233);                     $em[ERROR_ALREADY_REPORT] = "already-reported";
+define('ERROR_ALREADY_VOTE', -40234);                     $em[ERROR_ALREADY_VOTE] = "already-voted";
+define('ERROR_CANNOT_VOTE_YOUR_OWN_POST', -40235);          $em[ERROR_CANNOT_VOTE_YOUR_OWN_POST] = "you-can-not-vote-your-own-post";
 
-// permis error
+// permission error
 define('ERROR_PERMISSION_ADMIN', -40800 );                  $em[ERROR_PERMISSION_ADMIN] = 'admin-permission-required';
 
+
+define('ERROR_MAX_NO_OF_ITEMS', -40405);                     $em[ERROR_MAX_NO_OF_ITEMS] = 'no-of-items-too-long--too-much-request-of-items-in-one-page';
 
 // meta errors
 
@@ -141,7 +151,7 @@ define('ERROR_UPLOAD_FILE_EXIST', -43102);               $em[ERROR_UPLOAD_FILE_E
 define('ERROR_UPLOAD_ERROR_NOT_SET', -43103);               $em[ERROR_UPLOAD_ERROR_NOT_SET] = 'file-upload-error-must-be-set';
 define('ERROR_FILE_UPLOAD_CREATE_IDX_FAILED', -43104);      $em[ERROR_FILE_UPLOAD_CREATE_IDX_FAILED] = 'file-upload-create-file-record-failed';
 define('ERROR_FILE_NOT_EXIST', -43105);                     $em[ERROR_FILE_NOT_EXIST] = 'file-not-exist';
-
+define('ERROR_FILE_NOT_EXIST_ON_HDD', -431051 );             $em[ERROR_FILE_NOT_EXIST_ON_HDD] = 'file-not-exist-on-hdd';
 
 define('ERROR_HOOK_FILE_IDX_IS_NOT_IN_ARRAY', -43106);      $em[ERROR_HOOK_FILE_IDX_IS_NOT_IN_ARRAY] = 'file-idx-must-be-in-array';
 define('ERROR_HOOK_FILE_IDX_IS_WRONG', -43108);             $em[ERROR_HOOK_FILE_IDX_IS_WRONG] = 'wrong-file-idx--maybe-empty--maybe-not-exist--may-be-wrong-input-value-like-undefined';
@@ -157,3 +167,9 @@ define('ERROR_UPLOAD_ERR_EXTENSION', -43208);
 define('ERROR_IDX_EMPTY_ON_FILE_DELETE', -43209);           $em[ERROR_IDX_EMPTY_ON_FILE_DELETE] = 'file-idx-empty-on-file::delete';
 define('ERROR_FILE_UNLINK_FAILED', -43220);                 $em[ERROR_FILE_UNLINK_FAILED] = 'file-unlink-failed';
 define('ERROR_NOT_YOUR_FILE', -43300);                      $em[ERROR_NOT_YOUR_FILE] = 'not-your-file';
+
+
+
+
+// security
+define('ERROR_MAX_REQUEST_LENGTH', 60004);                  $em[ERROR_MAX_REQUEST_LENGTH] = "request-too-long";

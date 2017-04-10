@@ -7,7 +7,7 @@ class Test {
     static $done_test_info = false;
     static $time_start = 0;
     static $reload = 100;
-    public function __construct( $reload = 15 )
+    public function __construct( $reload = 115 )
     {
         self::$reload = $reload;
         if ( ! self::$time_start ) self::$time_start = microtime(true);
@@ -22,6 +22,11 @@ class Test {
         $this->test_end();
     }
 
+
+    /**
+     * @param $re
+     * @param $code
+     */
     public static function test($re, $code)
     {
         self::$count ++;
@@ -46,7 +51,7 @@ class Test {
         echo "<div class='success'>" . self::$count . " - SUCCESS: $code</div>";
     }
 
-    function test_error( $re, $code ) {
+    static function test_error( $re, $code ) {
         self::$count_error ++;
         echo "<div class='error'><span style='color:red; font-weight: bold;'>" . self::$count . "- ERROR</span> $code</div>";
         echo "<pre>";
@@ -308,7 +313,7 @@ EOH;
         $_FILES['userfile']['error'] = 0;
         $re = f()->save( $_REQUEST, $_FILES['userfile']);
         if ( is_error($re) ) {
-            test(is_success($re), "Create/upload failed: $re"  .get_error_string($re));
+            test(is_success($re), "Create/upload failed: "  .get_error_string($re));
         }
         return $re;
 
@@ -365,7 +370,8 @@ EOH;
         if ( $replace ) category( $record['id'] )->delete();
         $re = $this->route('category.create', $record);
         if ( is_error($re) ) test(false, "createCategory: " . get_error_string($re));
-        return $re['data']['idx'];
+        if ( isset($re['data']) && isset($re['data']['idx']) ) return $re['data']['idx'];
+        else return false;
 
     }
 

@@ -2,6 +2,19 @@
 
 create_post_config_table( DATABASE_PREFIX . 'post_config' );
 
+
+create_post_data_table( DATABASE_PREFIX . 'post_data' );
+create_post_data_table( DATABASE_PREFIX . 'post_data_deleted' );
+
+create_post_vote_table( DATABASE_PREFIX . 'post_vote' );
+create_post_report_table( DATABASE_PREFIX . 'post_report' );
+
+
+config()->set('id', 'test')->create();
+
+
+
+
 function create_post_config_table( $_table_name ) {
 
     db()
@@ -24,9 +37,6 @@ function create_post_config_table( $_table_name ) {
 
 
 
-create_post_data_table( DATABASE_PREFIX . 'post_data' );
-create_post_data_table( DATABASE_PREFIX . 'post_data_deleted' );
-
 
 function create_post_data_table( $_table_name ) {
     db()
@@ -38,6 +48,13 @@ function create_post_data_table( $_table_name ) {
         ->add('depth', 'INT UNSIGNED DEFAULT 0')
         ->add('user_idx', 'INT UNSIGNED DEFAULT 0')
         ->add('post_config_idx', 'INT UNSIGNED DEFAULT 0')
+
+
+
+        ->add('vote_good', 'INT UNSIGNED DEFAULT 0')
+        ->add('vote_bad', 'INT UNSIGNED DEFAULT 0')
+        ->add('report', 'INT UNSIGNED DEFAULT 0')
+
         ->add('content', 'LONGTEXT')
         ->add('password', 'varchar')
         ->add('secret', 'char', 1)
@@ -68,4 +85,33 @@ function create_post_data_table( $_table_name ) {
 }
 
 
-config()->set('id', 'test')->create();
+
+
+function create_post_vote_table( $_table_name ) {
+
+    db()
+        ->dropTable( $_table_name )
+        ->createTable( $_table_name )
+        ->add('post_idx', "INT UNSIGNED DEFAULT 0")
+        ->add('user_idx', "INT UNSIGNED DEFAULT 0")
+        ->add('choice', 'char', 1)
+        ->unique( 'post_idx,user_idx');
+    die_if_table_not_exist( $_table_name );
+
+}
+
+
+
+function create_post_report_table( $_table_name ) {
+
+    db()
+        ->dropTable( $_table_name )
+        ->createTable( $_table_name )
+        ->add('post_idx', "INT UNSIGNED DEFAULT 0")
+        ->add('user_idx', "INT UNSIGNED DEFAULT 0")
+        ->unique( 'post_idx,user_idx');
+    die_if_table_not_exist( $_table_name );
+
+}
+
+
