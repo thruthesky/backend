@@ -11,10 +11,12 @@
 
 //$DIR_DATA               = './data';
 
-
-// $DATABASE_USER          = 'root';
-// $DATABASE_PASSWORD      = '7777';
+$DATABASE_USER          = 'roots';
+$DATABASE_PASSWORD      = '7777';
 $DATABASE_NAME          = 'backend';
-// $DATABASE_HOST          = 'localhost';
+$DATABASE_PREFIX        = "be04_";
+$DATABASE_HOST          = 'localhost';
+$DATABASE_TYPE          = 'mysql';         // 'mysql' | 'sqlite'
 
-$DATABASE_TYPE          = 'sqlite';
+
+
