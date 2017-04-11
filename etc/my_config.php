@@ -6,9 +6,6 @@
 
 //$ADMIN_ID               = 'admin';          // this is admin id.
 //$ANONYMOUS_ID          = 'anonymous';      // Anonymous ID.
-
-
-
 //$DIR_DATA               = './data';
 
 $DATABASE_USER          = 'roots';

@@ -219,19 +219,14 @@ class User_Interface extends User {
      */
     public function search( $_=null ) {
 
-//        $option = [
-//            'from' => in('from'),
-//            'limit' => in('limit'),
-//            'where' => in('where'),
-//            'bind' => in('bind'),
-//            'order' => in('order')
-        //];
-        $option = $this->getSearchVariables();
-        $users = parent::search( $option );
-        if ( is_error( $users ) ) return error( $users );
+
+        $re = parent::search(); if ( is_error( $re ) ) return error( $re );
+
         success( [
-            'total' => parent::countSearch( $option ),
-            'users' => user()->pres( $users )
+            'total' => parent::countSearch(),
+            'users' => user()->pres( $re[0] ),
+            'page' => in('page'),
+            'limit' => in('limit')
         ] );
 
     }

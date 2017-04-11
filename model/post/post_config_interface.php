@@ -101,12 +101,20 @@ class Post_Config_Interface extends Post_Config {
 //            'bind' => in('bind'),
 //            'order' => in('order')
 //        ];
-        $option = $this->getSearchVariables();
-        $post_configs = parent::search( $option );
-        if ( is_error( $post_configs ) ) return error( $post_configs );
+//
+//        $option = $this->getSearchVariables();
+//                                        if ( is_error( $option ) ) return error( $option );
+//        $post_configs = parent::search();
+//                                        if ( is_error( $post_configs ) ) return error( $post_configs );
+
+        $re = parent::search(); if ( is_error( $re ) ) return error( $re );
+        $post_configs = $re[0];
+        $option = $re[1];
         success( [
-            'total' => parent::countSearch( $option ),
-            'configs' => $post_configs
+            'total' => parent::countSearch(),
+            'configs' => $post_configs,
+            'page' => $option['page'],
+            'limit' => $option['limit']
         ] );
 
     }
