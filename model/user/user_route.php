@@ -11,7 +11,7 @@ add_route('register', [
             'mobile', 'address', 'country', 'province', 'city', 'zipcode',
             'meta'
         ],
-        'system' => [ 'route', 'file_hooks' ]
+        'system' => [ 'route', 'file_hooks', 'birthday' ]
     ],
     'validator' => function() {
         if ( currentUser()->logged() ) return ERROR_USER_LOGGED_IN;
@@ -30,8 +30,10 @@ add_route('user.edit', [
             'mobile', 'address', 'country', 'province', 'city', 'zipcode',
             'meta'
         ],
-        'system' => [ 'id' ]
-    ]
+        'system' => [ 'id', 'birthday' ]
+    ],
+    'validator' => function() {
+    }
 ]);
 
 

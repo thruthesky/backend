@@ -114,6 +114,19 @@ class File_Test extends \model\test\Test {
         $re = f()->count( 333, 444);
         test( $re == 3, "3 files are successfully uploaded. count: $re" );
 
+
+        //
+        $re = $this->route("file.list", []);
+        test( is_error($re) == ERROR_REQUIRED_INPUT_IS_MISSING, "session id is required: " . get_error_string($re));
+
+        $re = $this->route("file.list", [ 'session_id' => thruthesky()->getSessionId() ]);
+        test( is_error($re) == ERROR_PERMISSION_ADMIN, ": " . get_error_string($re));
+
+        $re = $this->route("file.list", [ 'session_id' => $this->getAdminSessionId() ]);
+        test( $re, "file.list() is working: " . get_error_string($re) );
+
+
+
         f()->deleteBy( 333, 444, 'abc0');
         $re = f()->count( 333, 444);
         test( $re == 2, '1 file deleted. there should be 2 files left: re: ' . $re );

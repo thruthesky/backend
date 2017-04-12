@@ -152,4 +152,25 @@ class File_Interface extends File {
 
 
     }
+
+
+    /**
+     * Returns rows of user information.
+     *
+     * @attention this is HTTP interface.
+     * @param null $_
+     * @return int|mixed
+     */
+    public function search( $_=null ) {
+        $re = parent::search(); if ( is_error( $re ) ) return error( $re );
+        success( [
+            'total' => parent::countSearch(),
+            'files' => f()->pres( $re[0] ),
+            'page' => in('page'),
+            'limit' => in('limit')
+        ] );
+
+    }
+
+
 }

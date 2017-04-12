@@ -57,7 +57,21 @@ class Base {
     }
 
 
-    public function getSearchVariables( $option = [] ) {
+    /**
+     * Gets and Pre-process the search conditoin based on input parameter or http variables.
+     *
+     * @param array $option
+     * @return array|int
+     *
+     *
+     *      - $option['org_limit']      will have a number of 'no_of_items_in_one_page'
+     *      - $option['limit']          will have a SQL limit clause like "LIMIT 30,10"
+     *
+     */
+    public function processSearchVariables( $option = [] ) {
+
+        if ( isset( $option['done'] ) ) return $option;     // once process, it does not process again.
+
         if ( empty($option) ) {
             $option = [
                 'select' => in('select'),
@@ -77,10 +91,14 @@ class Base {
          */
         if ( isset($option['limit']) && $option['limit'] ) {
             if ( ! is_numeric( $option['limit'] ) ) return ERROR_LIMIT_IS_NOT_NUMERIC;
+            if ( $option['limit'] < 0 ) $option['limit'] = DEFAULT_NO_OF_PAGE_ITEMS;
         }
         else $option['limit'] = DEFAULT_NO_OF_PAGE_ITEMS;
 
         if ( $option['limit'] > MAX_NO_OF_ITEMS ) return ERROR_MAX_NO_OF_ITEMS;
+
+
+
 
         /**
          * from
@@ -104,6 +122,9 @@ class Base {
         }
 
 
+        $option['org_limit'] = $option['limit'];
+
+
         //
         $option['limit'] = "LIMIT $option[from], $option[limit]";
 
@@ -120,6 +141,7 @@ class Base {
         else $option['order'] = null;
 
 
+        $option['done'] = TRUE;         /// Mark as
 
         return $option;
     }

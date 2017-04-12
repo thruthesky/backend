@@ -6,7 +6,8 @@ class User_Interface extends User {
 
 
     public function register() {
-        $record =  route()->get_route_variables();
+        $record = route()->get_route_variables();
+
         $re = user()->create( $record ); // session id.
 
 
@@ -74,8 +75,6 @@ class User_Interface extends User {
 
 
         $record = route()->get_route_optional_variables();
-
-
 
 
         if ( currentUser()->isAdmin() ) {
@@ -251,5 +250,6 @@ class User_Interface extends User {
         if ( is_success($re) ) success( ['id' => in('id') ]);
         else error( ERROR_DATABASE_DELETE_FAILED );
     }
+
 
 }
