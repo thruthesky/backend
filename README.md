@@ -15,6 +15,11 @@ Backend Server for Restful APIs
 * 'created' URL parameter is added on File URL for cache. Since a user deletes a file and upload a new file, then, it has same file.idx so, the browser cached image will be showed again to user..
 * default 'no. of items' of a page(list/search page) is '$DEFAULT_NO_OF_PAGE_ITEMS' which is in etc/config.
 * search/list api call now accepts 'page' and works as exptected.
+* when admin edits user information, session_id will not be returned. so, the session_id will be invalidated after 'admin edit'
+    * but, user edits user info, then session_id will be returned.
+    * so, admin edits admin and no session_id will be returned, meaning, admin has to login again.
+* you cannot update post_config_id. ( consider to make it updatable ).
+
 
 
 
@@ -46,6 +51,9 @@ Backend Server for Restful APIs
 
 
 # TODO
+
+- Write usage on category
+- Use category for forum.
 
 
 

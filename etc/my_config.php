@@ -1,6 +1,5 @@
 <?php
 
-
 //   git update-index --assume-unchanged etc/my_config.php
 //   git update-index --no-assume-unchanged etc/my_config.php
 

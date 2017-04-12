@@ -58,6 +58,22 @@ add_route('file.delete',[
 ]);
 
 
+
+add_route( 'file.list', [
+    'path' => "\\model\\file\\file_interface",
+    "method" => "search",
+    'variables' => [
+        'required' => [ 'session_id' ],
+        'optional' => [ 'from', 'limit', 'where', 'bind', 'order', 'select', 'page' ],
+        'system' => []
+    ],
+    'validator' => function() {
+        if ( ! currentUser()->isAdmin() ) return ERROR_PERMISSION_ADMIN;
+    }
+]);
+
+
+
 add_route('file.test', [
     'path'=> '\\model\\file\\file_test',
     'method'=>'run',

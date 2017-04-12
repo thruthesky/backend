@@ -151,7 +151,7 @@ class Taxonomy extends \model\base\Base  {
         if ( empty($this->getTable()) ) return ERROR_TABLE_NOT_SET;
 
 
-        $option = $this->getSearchVariables( $option );
+        $option = $this->processSearchVariables( $option );
                     if ( is_error( $option ) ) return error( $option );
 
 
@@ -169,7 +169,7 @@ class Taxonomy extends \model\base\Base  {
     }
 
     public function countSearch( $option = [] ) {
-        $option = $this->getSearchVariables( $option );
+        $option = $this->processSearchVariables( $option );
                     if ( is_error( $option ) ) return error( $option );
 
         $where = $this->getSearchCondition( $option );
@@ -179,6 +179,13 @@ class Taxonomy extends \model\base\Base  {
     }
 
 
+    /**
+     *
+     * Do binding based on 'where' and 'bind'
+     *
+     * @param $option
+     * @return int|mixed|null|string
+     */
     private function getSearchCondition( $option ) {
 
         $where = null;

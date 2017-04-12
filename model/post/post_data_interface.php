@@ -114,7 +114,7 @@ class Post_Data_Interface extends Post_Data {
 
 
 
-        $option = $this->getSearchVariables();
+        $option = $this->processSearchVariables();
                             if ( is_error( $option ) ) return error( $option );
 
 
@@ -123,7 +123,7 @@ class Post_Data_Interface extends Post_Data {
          */
 
         $extra = in('extra');
-	$post_config_id = '';
+    	$post_config_id = '';
         if ( isset($extra['post_config_id']) ) {
 		$post_config_id = $extra['post_config_id'];
             $config = config( $extra['post_config_id'] );
@@ -138,19 +138,20 @@ class Post_Data_Interface extends Post_Data {
         }
 
 
-        $re = parent::search(); if ( is_error( $re ) ) return error( $re );
+
+        $re = parent::search( $option ); if ( is_error( $re ) ) return error( $re );
         $posts = $re[0];
 
         $pre_option = [];
         if ( isset($_REQUEST['extra']) ) $pre_option['extra'] = $_REQUEST['extra'];
 
         success( [
-            'total' => parent::countSearch(),
+            'total' => parent::countSearch( $option ),
             'configs' => post()->getConfigs( $posts ),
             'posts' => post()->pres( $posts, $pre_option ),
             'page' => $option['page'],
-            'limit' => $option['limit'],
-		'post_config_id' => $post_config_id
+            'limit' => $option['org_limit'],
+    		'post_config_id' => $post_config_id
         ] );
 
     }

@@ -125,6 +125,13 @@ class Post_Data extends Post {
         return $new_records;
     }
 
+    /**
+     *
+     * Returns post_configs in an array ( number indexed )
+     *
+     * @param $records
+     * @return array
+     */
     public function getConfigs( & $records ) {
         if ( empty( $records ) ) return [];
 
@@ -132,7 +139,7 @@ class Post_Data extends Post {
         foreach( $records as $post ) {
             if ( isset($post['post_config_idx']) ) {
                 $config = config( $post['post_config_idx'] );
-                if ( $config->exist() ) $configs[ $config->id ] = $config->getRecord();
+                if ( $config->exist() ) $configs[] = $config->getRecord();
             }
         }
         return $configs;
