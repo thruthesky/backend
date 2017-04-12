@@ -125,7 +125,7 @@ class Post_Data_Interface extends Post_Data {
         $extra = in('extra');
     	$post_config_id = '';
         if ( isset($extra['post_config_id']) ) {
-		$post_config_id = $extra['post_config_id'];
+		    $post_config_id = $extra['post_config_id'];
             $config = config( $extra['post_config_id'] );
             if ( $config->exist() ) {
                 debug_log($option);
@@ -145,9 +145,13 @@ class Post_Data_Interface extends Post_Data {
         $pre_option = [];
         if ( isset($_REQUEST['extra']) ) $pre_option['extra'] = $_REQUEST['extra'];
 
+        /// fix: returns-post_config-of-requested-post-config-id-if-no-posts.
+        $configs = post()->getConfigs( $posts );
+        if ( empty( $configs ) && $post_config_id ) $configs = [ config( $post_config_id )->getRecord() ];
+
         success( [
             'total' => parent::countSearch( $option ),
-            'configs' => post()->getConfigs( $posts ),
+            'configs' => $configs,
             'posts' => post()->pres( $posts, $pre_option ),
             'page' => $option['page'],
             'limit' => $option['org_limit'],

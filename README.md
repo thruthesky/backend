@@ -20,6 +20,7 @@ Backend Server for Restful APIs
     * so, admin edits admin and no session_id will be returned, meaning, admin has to login again.
 * you cannot update post_config_id. ( consider to make it updatable ).
 
+* @fix: returns-post_config-of-requested-post-config-id-if-no-posts. Apr 11, 2017. When there is no post ( no posts are created. newly created forum ), then the no post-config information is responded. so, if there is no posts, the requested post config id's 'post config' will be responded by default.
 
 
 

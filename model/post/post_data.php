@@ -127,7 +127,9 @@ class Post_Data extends Post {
 
     /**
      *
-     * Returns post_configs in an array ( number indexed )
+     * Returns post_configs in an ( number indexed ) array based on the $records.
+     *
+     * @note $records has post_data records and this returns all the post configs of each post record.
      *
      * @param $records
      * @return array
@@ -139,9 +141,10 @@ class Post_Data extends Post {
         foreach( $records as $post ) {
             if ( isset($post['post_config_idx']) ) {
                 $config = config( $post['post_config_idx'] );
-                if ( $config->exist() ) $configs[] = $config->getRecord();
+                if ( $config->exist() ) $configs[ $config->idx ] = $config->getRecord();
             }
         }
+        $configs = array_values( $configs );
         return $configs;
 
     }
