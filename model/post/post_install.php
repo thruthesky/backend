@@ -50,6 +50,7 @@ function create_post_data_table( $_table_name ) {
         ->add('post_config_idx', 'INT UNSIGNED DEFAULT 0')
 
 
+        ->add('first_image_idx', 'INT UNSIGNED DEFAULT 0')
 
         ->add('vote_good', 'INT UNSIGNED DEFAULT 0')
         ->add('vote_bad', 'INT UNSIGNED DEFAULT 0')

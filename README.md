@@ -22,6 +22,8 @@ Backend Server for Restful APIs
 
 * @fix: returns-post_config-of-requested-post-config-id-if-no-posts. Apr 11, 2017. When there is no post ( no posts are created. newly created forum ), then the no post-config information is responded. so, if there is no posts, the requested post config id's 'post config' will be responded by default.
 
+* 'first_image_idx' is added on 'post_data' table. it holds the `file.idx' of first image.
+
 
 
 # Bugs

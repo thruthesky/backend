@@ -194,4 +194,19 @@ class Post_Data extends Post {
     }
 
 
+    /**
+     *
+     * Sets the first image idx on the post_data record.
+     *
+     */
+    public function updateFirstImage() {
+        $files = $this->file()->get();
+        foreach ( $files as $file ) {
+            if ( strpos($file['type'], 'image') !== false ) {
+                $this->update( [ 'first_image_idx' => $file['idx'] ] );
+                return;
+            }
+        }
+    }
+
 }

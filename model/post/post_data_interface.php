@@ -41,8 +41,7 @@ class Post_Data_Interface extends Post_Data {
 
 
         $re_upload = $this->hookUpload( post( $post_idx ) ); if ( is_error( $re_upload ) ) return error( $re_upload );
-
-
+        post( $post_idx )->updateFirstImage();
         $post = post( $post_idx );
         return success( $post->pre( [ 'extra' => [ 'user' => true, 'file' => true, 'comment' => true, 'meta' => true ] ] ) );
 
@@ -68,7 +67,7 @@ class Post_Data_Interface extends Post_Data {
 
         if ( is_success( $re ) ) {
             $re_upload = $post->hookUpload( post( in('idx') ) ); if ( is_error( $re_upload ) ) return error( $re_upload );
-
+            post( $post->idx )->updateFirstImage();
             $post = post( $post->idx );
             return success( $post->pre( [ 'extra' => [ 'user' => true, 'file' => true, 'comment' => true, 'meta' => true ] ] ) );
 
