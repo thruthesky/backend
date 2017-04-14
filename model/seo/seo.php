@@ -80,6 +80,9 @@ class SEO {
         if ( $this->post_data && $this->post_data->exist() ) {
             $description = $this->post_data->getSafeContent();
         }
+	$description = str_replace("\r","", $description);
+	$description = str_replace("\n"," ", $description);
+	$description = preg_replace("/\s+/"," ", $description);
         return $description;
     }
     public function getAuthor() {
