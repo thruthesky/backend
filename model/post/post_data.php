@@ -23,6 +23,12 @@ class Post_Data extends Post {
      *
      * @param array $option
      * @return array
+     *
+     * @code
+     *          return success( $post->pre( [ 'extra' => [ 'user' => true, 'file' => true, 'comment' => true, 'meta' => true ] ] ) );
+     * @endcode
+     *
+     *
      */
     public function pre( $option = [] ) {
         $record = $this->getRecord();
