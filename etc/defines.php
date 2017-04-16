@@ -172,4 +172,9 @@ define('ERROR_NOT_YOUR_FILE', -43300);                      $em[ERROR_NOT_YOUR_F
 
 
 // security
-define('ERROR_MAX_REQUEST_LENGTH', 60004);                  $em[ERROR_MAX_REQUEST_LENGTH] = "request-too-long";
+define('ERROR_MAX_REQUEST_LENGTH', -60004);                  $em[ERROR_MAX_REQUEST_LENGTH] = "request-too-long";
+
+
+
+define('ERROR_NOT_YOUR_META', -60010);                          $em[ERROR_NOT_YOUR_META] = "not-your-meta-data";
+define('ERROR_META_NOT_EXIST', -60011);                         $em[ERROR_META_NOT_EXIST] = "meta-not-exist";

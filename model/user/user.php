@@ -97,6 +97,8 @@ class User extends \model\entity\Entity {
      *          $user = user()->load( in( 'session_id' ) );
      * @endcode
      *
+     * @attention The return of this value MAYBE an error or $this.
+     *
      */
     public function load( $what, $reload = true ) { // for variable compatibilities with Entity
 
@@ -180,6 +182,7 @@ class User extends \model\entity\Entity {
     public function forceLogin( $id ) {
         if ( empty($id ) ) return ERROR_USER_ID_EMPTY;
         $user = $this->load( $id );
+        if ( is_error($user) ) return $user;
         if ( ! $user->exist() ) return ERROR_USER_NOT_EXIST;
         setCurrentUser( $user );
 

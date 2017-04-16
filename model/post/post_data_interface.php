@@ -125,6 +125,7 @@ class Post_Data_Interface extends Post_Data {
         if ( isset($extra['post_config_id']) ) {
 		    $post_config_id = $extra['post_config_id'];
             $config = config( $extra['post_config_id'] );
+            if ( is_error($config) ) return error( $config );
             if ( $config->exist() ) {
                 debug_log($option);
                 $option['where'] = "post_config_idx = ? " . ( $option['where']  ?  "AND ($option[where])" : '' );
@@ -138,6 +139,8 @@ class Post_Data_Interface extends Post_Data {
 
 
         $re = parent::search( $option ); if ( is_error( $re ) ) return error( $re );
+        if ( is_error($re) ) return error($re);
+
         $posts = $re[0];
 
         $pre_option = [];

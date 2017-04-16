@@ -125,6 +125,8 @@ class Post_Data extends Post {
     public function pres( & $records, $option = [] ) {
         $new_records = [];
         if ( empty( $records ) ) return $new_records;
+        debug_log("post_data::pres()");
+        debug_log( $records );
         foreach( $records as $record ) {
             $new_records[] = post()->reset( $record )->pre( $option );
         }

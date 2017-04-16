@@ -22,6 +22,10 @@ class Meta extends \model\entity\Entity
 
     /**
      *
+     * Creates a meta record.
+     *
+     * @attention if it exists, it deletes previous(existing) meta data.
+     *
      *
      * It supports the entity()->create()
      *
@@ -88,7 +92,12 @@ class Meta extends \model\entity\Entity
         if ( empty($code) ) return ERROR_CODE_IS_EMPTY;
 
 
-        // delete if model, idx, code exsits.
+        /// @add Apr 15, 2017 - user.idx is added.
+        $user_idx = currentUser()->idx;
+        $this->set('user_idx', $user_idx);
+
+
+        // delete if model, idx, code exists.
         $m = meta()->load( $model, $model_idx, $code );
         if ( $m->exist() ) {
             // debug_log( $m );
@@ -103,7 +112,11 @@ class Meta extends \model\entity\Entity
 
 
     /**
+     *
+     *
      * Return a data from a record.
+     *
+     * @attention it can accept only 'idx' or 'id' to load the meta. or 'model', 'model_idx', 'code' to load the meta.
      *
      * @param $model
      * @param $model_idx
@@ -111,7 +124,7 @@ class Meta extends \model\entity\Entity
      * @return $this
      */
     public function load( $model, $model_idx=null, $code=null ) {
-        if ( $model_idx === null ) return parent::load( $model );
+        if ( $model_idx === null ) return parent::load( $model ); // entity()->load( idx or id )
         else {
             $meta = $this->loadQuery("model = '$model' AND model_idx=$model_idx AND code='$code'");
             return $meta;

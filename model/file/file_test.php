@@ -61,18 +61,22 @@ class File_Test extends \model\test\Test {
 
         //
         $file = f ( $re );
-        test( $file->exist(), "check if file uploaded: $re");
-        $path = f()->path( $re );
-        test( file_exists( $path ), "file existence check : $path");
+        test( is_success($file), "file: " . get_error_string($file) );
+        if ( is_success($file) ) {
+            test( $file->exist(), "check if file uploaded: $re");
+            $path = f()->path( $re );
+            test( file_exists( $path ), "file existence check : $path");
 
-        //di($file);
-        $del = $file->delete();
-        test( is_success($del), "deleted: " . get_error_string($del));
-        //di($file);
-        //di(f($re));
-        test( f($re)->exist() == false,"file delete test ($re) : " . get_error_string($re));
-        test( ! file_exists( $path ), "file should be deleted : $path");
+            //di($file);
+            $del = $file->delete();
+            test( is_success($del), "deleted: " . get_error_string($del));
+            //di($file);
+            //di(f($re));
+            test( f($re)->exist() == false,"file delete test ($re) : " . get_error_string($re));
+            test( ! file_exists( $path ), "file should be deleted : $path");
 //        $re = $this->route('upload',$params);
+        }
+
     }
 
     public function delete_test(){
@@ -85,16 +89,18 @@ class File_Test extends \model\test\Test {
 
         $_FILES['userfile']['tmp_name'] = __ROOT_DIR__ . '/tmp/person.jpg';
         $re = f()->save( $_REQUEST, $_FILES['userfile']);
-        test(is_success($re), "delete_test::Upload  with model idx $re"  .get_error_string($re));
+        test(is_success($re), "delete_test::Upload  with model idx: "  .get_error_string($re));
 
+        if ( is_success($re) ) {
 
+            f()->deleteBy(111,222);
+            //test if file exist
+            $file = f ( $re );
+            test( ! $file->exist(), "delete_test::file should not exist: $re");
+            $path = f()->path( $re );
+            test( ! file_exists( $path ), "delete_test::file path should not exist : $path");
 
-        f()->deleteBy(111,222);
-        //test if file exist
-        $file = f ( $re );
-        test( ! $file->exist(), "delete_test::file should not exist: $re");
-        $path = f()->path( $re );
-        test( ! file_exists( $path ), "delete_test::file path should not exist : $path");
+        }
 
 
 
@@ -107,8 +113,11 @@ class File_Test extends \model\test\Test {
             $_FILES['userfile']['tmp_name'] = __ROOT_DIR__ . '/tmp/person.jpg';
             $re = f()->save( $_REQUEST, $_FILES['userfile']);
             test( is_success( $re ), "delete_test::Upload with code : "  . get_error_string($re));
-            $path = f()->path( $re );
-            test( file_exists( $path ), "delete_test::file path should exist : $path");
+            if ( is_success($re) ) {
+                $path = f()->path( $re );
+                test( file_exists( $path ), "delete_test::file path should exist : $path");
+            }
+
         }
         
         $re = f()->count( 333, 444);

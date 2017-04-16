@@ -5,5 +5,5 @@
 $DATABASE_NAME          = 'backend';
 // $DATABASE_HOST          = 'localhost';
 
-$DATABASE_TYPE          = 'sqlite';
+$DATABASE_TYPE          = 'mysql';
 

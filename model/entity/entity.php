@@ -144,9 +144,37 @@ class Entity extends \model\taxonomy\Taxonomy  {
      * - if success, array will be returned.
      *
      *
+     * @Attention IF there is an error, ERROR will be returned. So, it needs a careful.
+     * ( Korean Translation: 'load()' 는 에러를 리턴 할 수 있으므로, 반드시 return $obj->load(...) 와 같이 load() 의 결과를 리턴해야 한다.
+     *      또한 올바른 에러 메세지를 리턴해야 한다.
+     *      예를 들면 게시판 글 검색이나 회원 정보를 로드 할 때 예상치 못한 (DB 등) 에러가 발생 할 수 있으며 이 메세지를 사용자에게 까지 전달을 해야 한다.
+     *      2017년 4월 현재, 이런 부분이 좀 미약하다.
+     *
+     *
+     *
+            $user = $this->load( $id );
+            if ( is_error($user) ) return $user;
+     *
+     *
+     * )
+     * @code The code below explains the difference.
+     *      If '$what' is empty, it will never return ERROR code.
+     *      But if '$what' has a value, it MAY return an error LIKE 'table not exists'.
+     *      So, it MUST return the RETURN VALUE of 'load()', NOT the '$user'( or the object ).
+     *
+            $user = new \model\user\User();
+            if ( $what ) return $user->load( $what );
+            else return $user;
+     *
+     * @endcode
+     *
+     *
+     *
+     *
      */
     public function load( $what ) {
 
+        if ( is_error($what) ) return $what;    //////// ====> To secure unexpected error.
 
         if ( empty($what) ) return ERROR_EMPTY_SQL_CONDITION;
 
@@ -156,7 +184,14 @@ class Entity extends \model\taxonomy\Taxonomy  {
         if ( is_numeric($what) ) $cond = "idx=$what";
         else $cond = "id = '$what'";
 
-        $this->record = db()->row("SELECT * FROM $table WHERE $cond");
+
+        $row = db()->row("SELECT * FROM $table WHERE $cond");
+
+        if ( is_error( $row ) ) {    /// SQL error. Maybe 'table not exits'.
+            debug_log("debug log: " . get_error_string($row));
+            return $row;
+        }
+        $this->record = $row;
 
 
         // return static $this;
@@ -213,7 +248,9 @@ class Entity extends \model\taxonomy\Taxonomy  {
     public function loadQuery( $cond ) {
         $table = $this->getTable();
         if ( empty( $table) ) return ERROR_TABLE_NOT_SET;
-        $this->record = db()->row("SELECT * FROM $table WHERE $cond");
+        $re = db()->row("SELECT * FROM $table WHERE $cond");
+        if ( is_error($re) ) return $re;
+        $this->record = $re;
         return $this;
     }
 
