@@ -183,24 +183,6 @@ function get_index_php_url() {
 
 
 /**
- *
- * Returns User object
- *
- * @param $what -
- *      if it is numeric, then it is considered as idx
- *      if it is string, then it is considered as id
- * @return \model\user\User
- *
- */
-function user( $what = null ) {
-    $user = new \model\user\User();
-    if ( $what ) {
-        $user->load( $what );
-    }
-    return $user;
-}
-
-/**
  * Returns currently logged in user Object.
  *
  * @Attention IF there is error here, double check if the session_id has been invalidated.
@@ -231,6 +213,19 @@ function setCurrentUser( $user ) {
  * @Attention IF there is error here, double check if the session_id has been invalidated.
  *
  * @return \model\user\User
+ *      - This may return ERROR.
+ *      - If you are not sure that there will no error, Use is_error() to check if currentUser() is error.
+ *
+ *
+ * @code To make sure if the user really logged.
+ *
+        $user = currentUser();
+        if ( is_error( $user ) ) return $user;
+        if ( $user->logged() )
+ *
+ * @endcode
+ *
+ *
  */
 function currentUser()
 {
@@ -253,7 +248,8 @@ function currentUser()
             setCurrentUser( $user );     // set current user.
         }
         else {
-            user()->forceLogin( ANONYMOUS_ID );
+            $re = user()->forceLogin( ANONYMOUS_ID );
+            if ( is_error($re) ) return $re;
         }
     }
 
@@ -275,6 +271,23 @@ function thruthesky() {
 }
 
 
+
+
+/**
+ *
+ * Returns User object
+ *
+ * @param $what -
+ *      if it is numeric, then it is considered as idx
+ *      if it is string, then it is considered as id
+ * @return \model\user\User
+ *
+ */
+function user( $what = null ) {
+    $user = new \model\user\User();
+    if ( $what ) return $user->load( $what );
+    else return $user;
+}
 
 function entity() {
     return new \model\entity\Entity();
@@ -300,8 +313,10 @@ function route() {
  * @return \model\meta\Meta
  *
  */
-function meta() {
-    return new \model\meta\Meta();
+function meta( $what = null ) {
+    $meta = new \model\meta\Meta();
+    if ( $what ) return $meta->load( $what );
+    else return $meta;
 }
 function meta_proxy( $model, $model_idx ) {
     return new \model\meta\Meta_Proxy( $model, $model_idx);
@@ -315,9 +330,9 @@ function config( $what = null ) {
     $config = new \model\post\Post_Config();
 
     if ( $what ) {
-        $config->load( $what );
+        return $config->load( $what );
     }
-    return $config;
+    else return $config;
 }
 
 /**
@@ -327,9 +342,9 @@ function config( $what = null ) {
 function post( $what = null ) {
     $post = new \model\post\Post_Data();
     if ( $what ) {
-        $post->load( $what );
+        return $post->load( $what );
     }
-    return $post;
+    else return $post;
 }
 
 /**
@@ -339,9 +354,9 @@ function post( $what = null ) {
 function comment( $what = null ) {
     $obj = new \model\post\Post_Comment();
     if ( $what ) {
-        $obj->load( $what );
+        return $obj->load( $what );
     }
-    return $obj;
+    else return $obj;
 }
 
 /**
@@ -351,14 +366,14 @@ function comment( $what = null ) {
  */
 function post_report( $post_idx=null, $user_idx=null ) {
     $report = new \model\post\Post_Report();
-    if ( $user_idx ) $report->loadQuery( " post_idx=$post_idx AND user_idx=$user_idx " );
-    return $report;
+    if ( $user_idx ) return $report->loadQuery( " post_idx=$post_idx AND user_idx=$user_idx " );
+    else return $report;
 }
 
 function post_vote( $post_idx=null, $user_idx=null ) {
     $vote = new \model\post\Post_Vote();
-    if ( $user_idx ) $vote->loadQuery( " post_idx=$post_idx AND user_idx=$user_idx " );
-    return $vote;
+    if ( $user_idx ) return $vote->loadQuery( " post_idx=$post_idx AND user_idx=$user_idx " );
+    else return $vote;
 }
 
 
@@ -367,9 +382,9 @@ function post_vote( $post_idx=null, $user_idx=null ) {
 function f( $what = null ){
     $obj = new \model\file\File();
     if ( $what ) {
-        $obj->load($what);
+        return $obj->load($what);
     }
-    return $obj;
+    else return $obj;
 }
 
 function file_proxy( $model, $model_idx ) {
@@ -388,9 +403,9 @@ function file_proxy( $model, $model_idx ) {
 function category( $what = null ){
     $obj = new \model\category\Category();
     if ( $what ) {
-        $obj->load($what);
+        return $obj->load($what);
     }
-    return $obj;
+    else return $obj;
 }
 
 

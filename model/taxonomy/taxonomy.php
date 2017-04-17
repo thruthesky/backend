@@ -131,11 +131,12 @@ class Taxonomy extends \model\base\Base  {
      *
      *
      * @code
-                    $re = $this->route( 'user.list', [
+                    $re = $this->route( 'user.list', //<<< model.list
+     *                  [
                         'from' => 2,
                         'limit' => 3,
-                        'where' => "name LIKE ? AND gender=?",
-                        'bind' => "%name%,M",
+                        'where' => "name LIKE ? AND gender=?",  //<< no quotes
+                        'bind' => "%name%,M",                   //<< no quotes.
                         'order' => 'idx ASC, name DESC'
                     ]);
      * @endcode
@@ -163,6 +164,7 @@ class Taxonomy extends \model\base\Base  {
         debug_log("taxonomy_query: $q");
 
         $rows = db()->rows( $q );
+        if ( is_error($rows) ) return $rows;
 
         return [ $rows, $option ];
 
@@ -175,6 +177,7 @@ class Taxonomy extends \model\base\Base  {
         $where = $this->getSearchCondition( $option );
         if ( is_error( $where ) ) return $where;
         $row = db()->row("SELECT COUNT(*) as cnt FROM {$this->getTable()} $where");
+        if ( is_error($row) ) return $row;
         return $row['cnt'];
     }
 

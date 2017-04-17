@@ -20,6 +20,15 @@ Backend Server for Restful APIs
     * so, admin edits admin and no session_id will be returned, meaning, admin has to login again.
 * you cannot update post_config_id. ( consider to make it updatable ).
 
+* @fix: returns-post_config-of-requested-post-config-id-if-no-posts. Apr 11, 2017. When there is no post ( no posts are created. newly created forum ), then the no post-config information is responded. so, if there is no posts, the requested post config id's 'post config' will be responded by default.
+
+* 'first_image_idx' is added on 'post_data' table. it holds the `file.idx' of first image.
+
+* If there is an error while DATABASE query, it prints out error response and exits the script immediately. ( since it is not is to deliver DB error message that is in the bottom part way back up to the top part callers ).
+
+* 'user_idx' is added on meta table.
+    so, now, meta records knows whom it belongs to.
+    It is now only used for "meta.list" ( search ) and "meta.delete"
 
 
 
@@ -52,6 +61,8 @@ Backend Server for Restful APIs
 
 # TODO
 
+- Error handling after 'db()->row()' or 'db()->rows()'. it should return right error message of DB.
+    @see entity()->load() for detail.
 - Write usage on category
 - Use category for forum.
 

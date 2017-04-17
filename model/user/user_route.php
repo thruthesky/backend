@@ -14,7 +14,9 @@ add_route('register', [
         'system' => [ 'route', 'file_hooks', 'birthday' ]
     ],
     'validator' => function() {
-        if ( currentUser()->logged() ) return ERROR_USER_LOGGED_IN;
+        $user = currentUser();
+        if ( is_error( $user ) ) return $user;
+        if ( $user->logged() ) return ERROR_USER_LOGGED_IN;
         return OK;
     }
 ]);

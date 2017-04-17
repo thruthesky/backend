@@ -23,6 +23,12 @@ class Post_Data extends Post {
      *
      * @param array $option
      * @return array
+     *
+     * @code
+     *          return success( $post->pre( [ 'extra' => [ 'user' => true, 'file' => true, 'comment' => true, 'meta' => true ] ] ) );
+     * @endcode
+     *
+     *
      */
     public function pre( $option = [] ) {
         $record = $this->getRecord();
@@ -119,6 +125,8 @@ class Post_Data extends Post {
     public function pres( & $records, $option = [] ) {
         $new_records = [];
         if ( empty( $records ) ) return $new_records;
+        debug_log("post_data::pres()");
+        debug_log( $records );
         foreach( $records as $record ) {
             $new_records[] = post()->reset( $record )->pre( $option );
         }
@@ -127,7 +135,9 @@ class Post_Data extends Post {
 
     /**
      *
-     * Returns post_configs in an array ( number indexed )
+     * Returns post_configs in an ( number indexed ) array based on the $records.
+     *
+     * @note $records has post_data records and this returns all the post configs of each post record.
      *
      * @param $records
      * @return array
@@ -139,9 +149,10 @@ class Post_Data extends Post {
         foreach( $records as $post ) {
             if ( isset($post['post_config_idx']) ) {
                 $config = config( $post['post_config_idx'] );
-                if ( $config->exist() ) $configs[] = $config->getRecord();
+                if ( $config->exist() ) $configs[ $config->idx ] = $config->getRecord();
             }
         }
+        $configs = array_values( $configs );
         return $configs;
 
     }
@@ -190,5 +201,20 @@ class Post_Data extends Post {
         return user( $this->user_idx );
     }
 
+
+    /**
+     *
+     * Sets the first image idx on the post_data record.
+     *
+     */
+    public function updateFirstImage() {
+        $files = $this->file()->get();
+        foreach ( $files as $file ) {
+            if ( strpos($file['type'], 'image') !== false ) {
+                $this->update( [ 'first_image_idx' => $file['idx'] ] );
+                return;
+            }
+        }
+    }
 
 }

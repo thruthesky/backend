@@ -41,8 +41,7 @@ class Post_Data_Interface extends Post_Data {
 
 
         $re_upload = $this->hookUpload( post( $post_idx ) ); if ( is_error( $re_upload ) ) return error( $re_upload );
-
-
+        post( $post_idx )->updateFirstImage();
         $post = post( $post_idx );
         return success( $post->pre( [ 'extra' => [ 'user' => true, 'file' => true, 'comment' => true, 'meta' => true ] ] ) );
 
@@ -68,7 +67,7 @@ class Post_Data_Interface extends Post_Data {
 
         if ( is_success( $re ) ) {
             $re_upload = $post->hookUpload( post( in('idx') ) ); if ( is_error( $re_upload ) ) return error( $re_upload );
-
+            post( $post->idx )->updateFirstImage();
             $post = post( $post->idx );
             return success( $post->pre( [ 'extra' => [ 'user' => true, 'file' => true, 'comment' => true, 'meta' => true ] ] ) );
 
@@ -101,8 +100,7 @@ class Post_Data_Interface extends Post_Data {
         $post = $this->load( in('idx') );
         if ( is_error( $post ) ) return error( $post );
         if ( ! $post->exist() ) return error( ERROR_POST_DATA_NOT_EXIST );
-        success( ['post'=> $post->pre( $_REQUEST ) ] );
-
+        success( ['post'=> $post->pre( [ 'extra' => [ 'user' => true, 'file' => true, 'comment' => true, 'meta' => true ] ] ) ] );
     }
 
 
@@ -125,8 +123,9 @@ class Post_Data_Interface extends Post_Data {
         $extra = in('extra');
     	$post_config_id = '';
         if ( isset($extra['post_config_id']) ) {
-		$post_config_id = $extra['post_config_id'];
+		    $post_config_id = $extra['post_config_id'];
             $config = config( $extra['post_config_id'] );
+            if ( is_error($config) ) return error( $config );
             if ( $config->exist() ) {
                 debug_log($option);
                 $option['where'] = "post_config_idx = ? " . ( $option['where']  ?  "AND ($option[where])" : '' );
@@ -140,14 +139,20 @@ class Post_Data_Interface extends Post_Data {
 
 
         $re = parent::search( $option ); if ( is_error( $re ) ) return error( $re );
+        if ( is_error($re) ) return error($re);
+
         $posts = $re[0];
 
         $pre_option = [];
         if ( isset($_REQUEST['extra']) ) $pre_option['extra'] = $_REQUEST['extra'];
 
+        /// fix: returns-post_config-of-requested-post-config-id-if-no-posts.
+        $configs = post()->getConfigs( $posts );
+        if ( empty( $configs ) && $post_config_id ) $configs = [ config( $post_config_id )->getRecord() ];
+
         success( [
             'total' => parent::countSearch( $option ),
-            'configs' => post()->getConfigs( $posts ),
+            'configs' => $configs,
             'posts' => post()->pres( $posts, $pre_option ),
             'page' => $option['page'],
             'limit' => $option['org_limit'],

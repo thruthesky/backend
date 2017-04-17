@@ -16,6 +16,7 @@ add_route( 'post_data.create', [
     ],
     'validator' => function () {
         $config = config()->load( in( 'post_config_id' ) );
+
         if( ! $config->exist() ) return ERROR_POST_CONFIG_NOT_EXIST;
         return OK;
     }
