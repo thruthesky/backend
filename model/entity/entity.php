@@ -317,7 +317,7 @@ class Entity extends \model\taxonomy\Taxonomy  {
      *
      * @usage Use this method when you have 'idx' fields of an entity or a record of an entity.
      *
-     * @param $idx number|array
+     * @param $idx number|array|User
      *
      *  if it is a numeric, it assumes as 'idx'. it gets the record of 'idx' on the table and saves the records into $record.
      *  if it is an array, it assumes it is already the record, so it just sets to $record.

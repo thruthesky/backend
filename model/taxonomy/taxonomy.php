@@ -153,8 +153,7 @@ class Taxonomy extends \model\base\Base  {
 
 
         $option = $this->processSearchVariables( $option );
-                    if ( is_error( $option ) ) return error( $option );
-
+                    if ( is_error( $option ) ) return $option;
 
         //
         $where = $this->getSearchCondition( $option );

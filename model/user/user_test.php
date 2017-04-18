@@ -27,6 +27,8 @@ class User_Test extends \model\test\Test {
 
         $this->deleteTest();
 
+        $this->passwordChange();
+
     }
 
 
@@ -468,6 +470,48 @@ class User_Test extends \model\test\Test {
         test( ! user( $id )->exist(), "User not exists after delete" );
 
 
+
+    }
+
+    public function passwordChange() {
+
+        $re = $this->route("login", ['id'=>'thruthesky', 'password'=>md5(time())] );
+        test( is_error($re) == ERROR_WRONG_PASSWORD, "wrong password");
+
+
+        thruthesky()->setPassword('1234a');
+        $re = $this->route("login", ['id'=>'thruthesky', 'password'=>'1234a'] );
+        test( is_success($re), "login success" );
+
+        $re = $this->route("change_password", []);
+        test( is_error($re) == ERROR_REQUIRED_INPUT_IS_MISSING, "session is empty");
+
+        $re = $this->route("change_password", ['session_id' => thruthesky()->getSessionId()]);
+        test( is_error($re) == ERROR_REQUIRED_INPUT_IS_MISSING, "empty old password");
+
+        $re = $this->route("change_password", ['session_id' => thruthesky()->getSessionId(), 'old_password' => '12345']);
+        test( is_error($re) == ERROR_REQUIRED_INPUT_IS_MISSING, "empty new password");
+
+
+        $params = [
+            'session_id' => thruthesky()->getSessionId(),
+            'old_password' => '1234o',
+            'new_password' => 'abcd5'
+        ];
+        $re = $this->route("change_password", $params);
+        test( is_error($re) == ERROR_WRONG_PASSWORD, "old password is wrong");
+
+        $params['old_password'] = "1234a";
+        $re = $this->route("change_password", $params);
+        test( $re, "password changed");
+
+
+
+        $re = $this->route("login", ['id'=>'thruthesky', 'password'=>'1234a'] );
+        test( is_error($re) == ERROR_WRONG_PASSWORD, "worng password since password changed." );
+
+        $re = $this->route("login", ['id'=>'thruthesky', 'password'=>'abcd5'] );
+        test( is_success($re), "login success with new password." );
 
     }
 

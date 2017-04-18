@@ -253,4 +253,12 @@ class User_Interface extends User {
     }
 
 
+    public function changePassword( User $user ) {
+        $re = $user->setPassword( in('new_password') );
+        if ( $re ) {
+            $this->reset( $user );
+            success( $this->res() );
+        }
+        else error( ERROR_DATABASE_UPDATE_FAILED );
+    }
 }

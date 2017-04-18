@@ -128,3 +128,24 @@ add_route('user.test', [
     'method' => 'single_test'
 ]);
 
+
+
+route()->add('change_password', [
+    'path' => "\\model\\user\\user_interface",
+    'method' => 'changePassword',
+    'variables' => [
+        'required' => ['session_id', 'old_password', 'new_password']
+    ],
+    'validator' => function () {
+        if ( ! in('old_password') ) return ERROR_OLD_PASSWORD_IS_MISSING;
+        if ( ! in('new_password') ) return ERROR_NEW_PASSWORD_IS_MISSING;
+        $user = currentUser();
+        if ( is_error( $user ) ) return $user;
+        if ( ! $user->logged() ) return ERROR_USER_NOT_LOGIN;
+
+        //debug_log($user->getRecord());
+        if ( ! $user->checkPassword( in('old_password'), $user->password ) ) return ERROR_WRONG_PASSWORD;
+
+        return [ $user ];
+    }
+]);

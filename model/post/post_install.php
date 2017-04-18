@@ -74,6 +74,7 @@ function create_post_data_table( $_table_name ) {
         ->add('mobile', 'VARCHAR', 254)
         ->add('landline', 'VARCHAR', 254)
         ->add('contact', 'VARCHAR', 254)
+        ->add('link', 'VARCHAR', 254)
 
         ->add('country', 'VARCHAR', 64)
         ->add('province', 'VARCHAR', 256)
