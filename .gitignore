@@ -1,11 +1,11 @@
 
 
 
-*.js
-*.css
-*.html
-*.ico
-assets/
+./*.js
+./*.css
+./*.html
+./*.ico
+./assets/
 
 
 my_config.php
