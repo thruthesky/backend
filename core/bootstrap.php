@@ -16,15 +16,11 @@ header("Access-Control-Allow-Origin: $origin");	/** For ajax json calling from o
 header('P3P: CP="NOI ADM DEV COM NAV OUR STP"'); /** cookie share on iframe */
 
 
-
 require_once __ROOT_DIR__ . '/core/library.php';
 require_once __ROOT_DIR__ . '/etc/helpers.php';
 require_once __ROOT_DIR__ . '/etc/defines.php';
 require_once __ROOT_DIR__ . '/etc/config.php';
 require_once __ROOT_DIR__ . '/etc/external/spyc.php'; // yaml parser
-
-
-
 
 debug_log(">>>>>>>> Backend begins : $_SERVER[PHP_SELF] $_SERVER[REQUEST_URI] " . date('r') );
 debug_log( $_REQUEST );
