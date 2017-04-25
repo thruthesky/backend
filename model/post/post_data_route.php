@@ -2,7 +2,7 @@
 
 $_optional = [
     'password', 'title', 'content', 'parent_idx',
-    'name', 'middle_name', 'last_name', 'email', 'gender', 'birthdate', 'mobile', 'landline', 'contact',
+    'name', 'middle_name', 'last_name', 'email', 'gender', 'birthdate', 'mobile', 'landline', 'contact', 'link',
     'country', 'province', 'city', 'address'
 ];
 

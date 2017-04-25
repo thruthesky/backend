@@ -27,8 +27,10 @@ Backend Server for Restful APIs
 * If there is an error while DATABASE query, it prints out error response and exits the script immediately. ( since it is not is to deliver DB error message that is in the bottom part way back up to the top part callers ).
 
 * 'user_idx' is added on meta table.
-    so, now, meta records knows whom it belongs to.
-    It is now only used for "meta.list" ( search ) and "meta.delete"
+    so, a meta record is now able to refer to whom it belongs to.
+    It is only used for "meta.list" ( search ) and "meta.delete".
+
+* 'link' is added on post_data table to hold link information.
 
 
 

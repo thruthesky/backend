@@ -104,13 +104,17 @@ class Meta_Test extends Test {
 
         $params['code'] = 'mango';
         $re = $this->route('meta.create', $params);
-        if ( is_success($re) ) test( 1, 'moango clothes has created: ' . $re['data']['idx']);
+        if ( is_success($re) ) {
+		test( 1, 'moango clothes has created: ' . $re['data']['meta']['idx']);
+	}
         else test( 0, 'mango clothes meta creation failed: ' . get_error_string($re) );
 
 
         $params['code'] = 'marks';
         $re = $this->route('meta.create', $params);
-        if ( is_success($re) ) test( 1, 'marks clothes has created: ' . $re['data']['idx']);
+        if ( is_success($re) ) {
+		test( 1, 'marks clothes has created: ' . $re['data']['meta']['idx']);
+	}
         else test( 0, 'marks clothes meta creation failed: ' . get_error_string($re) );
 
 
@@ -139,7 +143,7 @@ class Meta_Test extends Test {
 
         $meta = $re['data']['meta'];
 
-        ///
+        /// delete
 
         $params = [];
         $re = $this->route("meta.delete", $params);
@@ -163,14 +167,24 @@ class Meta_Test extends Test {
         else test(0, "delete failed: " . get_error_string($re));
 
 
-
-
         $params['idx'] = $meta[1]['idx'];
         $re = $this->route('meta.delete', $params);
         if ( is_success($re) ) {
             test( $re['data']['idx'] == $meta[1]['idx'], "deleted");
         }
         else test(0, "delete failed: " . get_error_string($re));
+
+
+        ///
+
+        $params = [];
+        $params['where'] = 'model=? AND model_idx=?';
+        $params['bind'] = "clothes,1";
+        $params['session_id'] = thruthesky()->getSessionId();
+        $re = $this->route("meta.list", $params);
+        test( $re['data']['total'] == 0, "no data");
+
+
 
 
 

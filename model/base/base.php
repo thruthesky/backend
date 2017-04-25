@@ -51,6 +51,10 @@ class Base {
      * @param $plain_text_password
      * @param $encrypted_password
      * @return bool
+     *
+     * @code
+     *      if ( ! $user->checkPassword( in('old_password'), $user->password ) ) return ERROR_WRONG_PASSWORD;
+     * @endcode
      */
     public function checkPassword( $plain_text_password, $encrypted_password ) {
         return password_verify( $plain_text_password, $encrypted_password );

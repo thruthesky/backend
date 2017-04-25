@@ -23,7 +23,7 @@ class Meta_Interface extends Meta {
             ->set('data', in('data'))
             ->create();
         if ( is_error( $idx ) ) error( $idx );
-        else success( ['idx'=>$idx] );
+        else success( ['meta'=> meta( $idx )->getRecord() ] );
     }
 
 

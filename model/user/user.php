@@ -192,6 +192,21 @@ class User extends \model\entity\Entity {
     }
 
 
+    /**
+     *
+     * Sets users password.
+     *
+     * @attention it should not use 'un-secured user input'
+     *
+     * @param $password - plain text password.
+     * @return bool
+     */
+    public function setPassword( $password ) {
+
+        $enc = $this->encryptPassword( $password );
+        return $this->update([ 'password' => $enc ]);
+    }
+
 
     /**
      *

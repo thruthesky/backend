@@ -83,6 +83,9 @@ define('ERROR_USER_NOT_LOGIN', -4010001);                       $em[ERROR_USER_N
 define('ERROR_USER_LOGGED_IN', -4010002);               $em[ERROR_USER_LOGGED_IN] = 'user-already-logged-in';
 define('ERROR_MALFORMED_SESSION_ID', -400130);          $em[ERROR_MALFORMED_SESSION_ID] = 'session-id-is-malformed';
 define('ERROR_MALFORMED_ID', -400131);          $em[ERROR_MALFORMED_ID] = 'id-is-malformed';
+define('ERROR_OLD_PASSWORD_IS_MISSING', -40132);        $em[ERROR_OLD_PASSWORD_IS_MISSING] = "old-password-is-missing";
+define('ERROR_NEW_PASSWORD_IS_MISSING', -40133);        $em[ERROR_OLD_PASSWORD_IS_MISSING] = "new-password-is-missing";
+
 
 define('ERROR_USER_RESIGN_FAILED', -40150);             $em[ERROR_USER_RESIGN_FAILED] = 'user-resign-failed';
 define('ERROR_NOT_YOUR_POST_DATA', -40152);             $em[ERROR_NOT_YOUR_POST_DATA] = 'this-is-not-your-post-data';
