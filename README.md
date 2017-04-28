@@ -31,6 +31,7 @@ Backend Server for Restful APIs
     It is only used for "meta.list" ( search ) and "meta.delete".
 
 * 'link' is added on post_data table to hold link information.
+* no 'meta.data' interface? omitted by purposely? because there is no 'meta.update', no 'meta.data'? since meta is not for individual manipulation?
 
 
 
@@ -62,6 +63,12 @@ Backend Server for Restful APIs
 
 
 # TODO
+
+
+- ADMIN PAGE with Angular 4 on "http://backend.org/view/admin/www/"
+    ./view/admin/ is Angular Project for admin.
+    
+
 
 - Error handling after 'db()->row()' or 'db()->rows()'. it should return right error message of DB.
     @see entity()->load() for detail.
