@@ -60,10 +60,13 @@ route()->add( 'meta.list', [
     'path' => "\\model\\meta\\meta_interface",
     "method" => "search",
     'variables' => [
-        'required' => [],
-        'optional' => [ 'from', 'limit', 'where', 'bind', 'order', 'page' ],
+        'required' => [ 'where', 'bind' ],
+        'optional' => [ 'from', 'limit', 'order', 'page' ],
         'system' => [ 'session_id' ]
-    ]
+    ],
+    'validator' => function() {
+
+    }
 ]);
 
 

@@ -132,7 +132,7 @@ class Post_Data_Interface extends Post_Data {
                 $option['bind'] = $config->idx . ( isset($option['bind']) ? ",$option[bind]" : '' );
             }
             else {
-                return error( ERROR_FORUM_NOT_EXIST );
+                return error( ERROR_FORUM_NOT_EXIST, "$extra[post_config_id] forum does not exists." );
             }
         }
 

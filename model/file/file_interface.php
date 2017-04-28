@@ -34,8 +34,11 @@ class File_Interface extends File {
         $idx = $file->idx;
         $name = md5($file->name);
         $file_path = $file->path();
+
         //di("file path: $file_path");
-        //if ( ! file_exists( $file_path ) ) return "";
+
+        ///
+        if ( ! file_exists( $file_path ) ) return error( ERROR_FILE_NOT_EXIST_ON_HDD );
 
 
         $file->increaseNoOfDownload();
@@ -69,7 +72,9 @@ class File_Interface extends File {
         }
 
 
-        if ( !$type && !$width && !$height ) return $this->send( $file_path );
+        if ( !$type && !$width && !$height ) {
+            return $this->send( $file_path );
+        }
 
         if ( empty($resize) ) $resize = 'resize';
 
@@ -124,11 +129,14 @@ class File_Interface extends File {
 
 
     public function send( $cache_file_path ) {
-        {
+        try {
             $image = new ImageResize( $cache_file_path );
-            $image->output();
-            return;
         }
+        catch ( \Exception $e ) {
+            return error( ERROR_CAN_NOT_READ_IMAGE_FILE );
+        }
+        $image->output();
+        return;
     }
 
 

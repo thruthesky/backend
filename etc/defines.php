@@ -159,6 +159,9 @@ define('ERROR_FILE_NOT_EXIST_ON_HDD', -431051 );             $em[ERROR_FILE_NOT_
 define('ERROR_HOOK_FILE_IDX_IS_NOT_IN_ARRAY', -43106);      $em[ERROR_HOOK_FILE_IDX_IS_NOT_IN_ARRAY] = 'file-idx-must-be-in-array';
 define('ERROR_HOOK_FILE_IDX_IS_WRONG', -43108);             $em[ERROR_HOOK_FILE_IDX_IS_WRONG] = 'wrong-file-idx--maybe-empty--maybe-not-exist--may-be-wrong-input-value-like-undefined';
 define('ERROR_HOOK_NOT_YOUR_FILE', -43110);                 $em[ERROR_HOOK_NOT_YOUR_FILE] = 'uploaded-file-is-not-yours';
+define('ERROR_CAN_NOT_READ_IMAGE_FILE', -431115 );                $em[ERROR_CAN_NOT_READ_IMAGE_FILE] = 'file-exist-but-can-not-read--check-if-the-file-is-image-file-or-not';
+
+
 
 define('ERROR_UPLOAD_ERR_INI_SIZE', -43201);
 define('ERROR_UPLOAD_ERR_FORM_SIZE', -43202);
