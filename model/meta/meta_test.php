@@ -104,13 +104,17 @@ class Meta_Test extends Test {
 
         $params['code'] = 'mango';
         $re = $this->route('meta.create', $params);
-        if ( is_success($re) ) test( 1, 'moango clothes has created: ' . $re['data']['idx']);
+        if ( is_success($re) ) {
+		test( 1, 'moango clothes has created: ' . $re['data']['meta']['idx']);
+	}
         else test( 0, 'mango clothes meta creation failed: ' . get_error_string($re) );
 
 
         $params['code'] = 'marks';
         $re = $this->route('meta.create', $params);
-        if ( is_success($re) ) test( 1, 'marks clothes has created: ' . $re['data']['idx']);
+        if ( is_success($re) ) {
+		test( 1, 'marks clothes has created: ' . $re['data']['meta']['idx']);
+	}
         else test( 0, 'marks clothes meta creation failed: ' . get_error_string($re) );
 
 
