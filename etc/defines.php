@@ -43,7 +43,11 @@ define('ERROR_NO_DATA', -40086);                        $em[ERROR_NO_DATA] = 'no
 define('ERROR_DATABASE_DELETE_FAILED', -40088);         $em[ERROR_DATABASE_DELETE_FAILED] = 'database-delete-failed';
 
 define('ERROR_UNSECURE_STATEMENT_CONDITION', -40089);    $em[ERROR_UNSECURE_STATEMENT_CONDITION] = 'insecure-statement-condition';
+define('ERROR_WRONG_COLUMN', -40090);                            $em[ERROR_WRONG_COLUMN] = "wrong-database-table-column-provided.";
+
+
 define('ERROR_SEARCH_BIND_LACK', -40092);        $em[ERROR_SEARCH_BIND_LACK] = 'bind-lack-on-taxonomy-search';
+
 
 define('ERROR_MALFORMED_RESPONSE', -40093);             $em[ERROR_MALFORMED_RESPONSE] = 'malformed-response.return-data-is-not-array';
 

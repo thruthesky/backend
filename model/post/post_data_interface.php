@@ -36,6 +36,7 @@ class Post_Data_Interface extends Post_Data {
         if( isset($record['title']) && strlen( $record['title'] ) > 254 ) return error( ERROR_TITLE_TOO_LONG );
 
         $post_idx = parent::create( $record );
+
         if ( is_error( $post_idx ) ) return error( $post_idx );
 
 

@@ -6,7 +6,7 @@ $_optional = [
     'country', 'province', 'city', 'address'
 ];
 
-add_route( 'post_data.create', [
+route()->add( 'post_data.create', [
     'path' => "\\model\\post\\post_data_interface",
     "method" => "create",
     "variables" => [
@@ -16,13 +16,12 @@ add_route( 'post_data.create', [
     ],
     'validator' => function () {
         $config = config()->load( in( 'post_config_id' ) );
-
         if( ! $config->exist() ) return ERROR_POST_CONFIG_NOT_EXIST;
         return OK;
     }
 ]);
 
-add_route( 'post_data.edit', [
+route()->add( 'post_data.edit', [
     'path' => "\\model\\post\\post_data_interface",
     "method" => "edit",
     "variables" => [
@@ -49,7 +48,7 @@ add_route( 'post_data.edit', [
 ]);
 
 
-add_route( 'post_data.delete', [
+route()->add( 'post_data.delete', [
     'path' => "\\model\\post\\post_data_interface",
     "method" => "delete",
     "variables" => [
@@ -71,7 +70,7 @@ add_route( 'post_data.delete', [
 ]);
 
 
-add_route( 'post_data.data', [
+route()->add( 'post_data.data', [
     'path' => "\\model\\post\\post_data_interface",
     "method" => "data",
     "variables" => [
@@ -81,7 +80,7 @@ add_route( 'post_data.data', [
     ]
 ]);
 
-add_route( 'post_data.list', [
+route()->add( 'post_data.list', [
     'path' => "\\model\\post\\post_data_interface",
     "method" => "search",
     'variables' => [

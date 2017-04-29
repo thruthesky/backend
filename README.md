@@ -64,6 +64,10 @@ Backend Server for Restful APIs
 
 # TODO
 
+- For next version.
+    Create Error Object and return all the error information.
+    For instance, if SQL insert error happens, the error message is not delivered to the client.
+    
 
 - ADMIN PAGE with Angular 4 on "http://backend.org/view/admin/www/"
     ./view/admin/ is Angular Project for admin.
