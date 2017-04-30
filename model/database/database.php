@@ -503,7 +503,8 @@ class Database extends \PDO {
             $message = $e->getMessage();
             debug_database_log('Insert failed: ' . $message);
             if ( strpos( $message, "Integrity constraint") !== false ) return ERROR_DATABASE_UNIQUE_KEY;
-            return FALSE;
+            if ( strpos( $message, "has no column named" ) !== false ) return ERROR_WRONG_COLUMN;
+            return ERROR_DATABASE_INSERT_FAILED;
         }
 
 
