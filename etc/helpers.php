@@ -126,6 +126,13 @@ function in ( $code, $default = null ) {
  *      error('error-code', 'explanation message');
  *
  * @endcode
+ *
+ * @code How to exit after error()
+ *
+ *          exit( error( ERROR_WRONG_SESSION_ID ) );
+ *
+ * @endcode
+ *
  * @return mixed - error code.
  *
  *

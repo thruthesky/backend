@@ -144,6 +144,24 @@ class File_Test extends \model\test\Test {
         f()->deleteBy(333, 444 );
         $re = f()->count( 333, 444);
         test( $re == 0, "all model 333 and model_idx 444 should be deleted. count: $re" );
+
+
+
+
+
+        // route delete.
+        $_REQUEST = ['model'=>'post_data', 'model_idx'=>123];
+        $_FILES['userfile']['size'] = 12345;
+        $_FILES['userfile']['type'] = 'image/jpeg';
+        $_FILES['userfile']['name'] = 'person.jpg';
+        $_FILES['userfile']['tmp_name'] = __ROOT_DIR__ . '/tmp/person.jpg';
+        $re = f()->save( $_REQUEST, $_FILES['userfile']);
+        test(is_success($re), "delete_test::Upload  with model idx: "  .get_error_string($re));
+
+        $re = $this->route("file.delete", ['idx' => $re] );
+        // 이 에러는 hook 에서 처리하기 때문에, 에러를 받아서 처리하기가 어렵다
+//        test( $re['code'] == ERROR_PASSWORD_REQUIRED_FOR_ANONYMOUS, "Anonymous must put password for file delete on post.");
+
     }
 
 

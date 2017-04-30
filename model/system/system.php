@@ -35,7 +35,10 @@ class System {
     }
 
 
-
+    /**
+     * @return $this
+     * @see README.md#init
+     */
     private function loadInit() {
         $init_files = rsearch( __MODEL_DIR__, '_init.php' );
         foreach (  $init_files as $file ) {

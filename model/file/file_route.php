@@ -35,16 +35,19 @@ add_route('download',[
     }
 ]);
 
-add_route('file.delete',[
+route()->add('file.delete',[
     'path'=> '\\model\\file\\file_interface',
     'method'=> 'delete',
     'variables'=>[
         'required'=>[ 'idx' ],
-        'optional'=>[ ],
+        'optional'=>[ 'password' ],
         'system'=>[ ]
     ],
     'validator' => function() {
         $file = ( new model\file\File() )->load( in('idx' ) );
+        if ( is_error( $file ) ) return $file;
+
+        hook()->run("route.file.delete", $file);
         if ( $file->user_idx == currentUser()->idx ) {
         }
         else if ( currentUser()->isAdmin() ) {

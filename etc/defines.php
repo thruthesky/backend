@@ -188,3 +188,7 @@ define('ERROR_MAX_REQUEST_LENGTH', -60004);                  $em[ERROR_MAX_REQUE
 
 define('ERROR_NOT_YOUR_META', -60010);                          $em[ERROR_NOT_YOUR_META] = "not-your-meta-data";
 define('ERROR_META_NOT_EXIST', -60011);                         $em[ERROR_META_NOT_EXIST] = "meta-not-exist";
+
+
+
+define('ERROR_PASSWORD_REQUIRED_FOR_ANONYMOUS', -8000);         $em[ERROR_PASSWORD_REQUIRED_FOR_ANONYMOUS] = "password-required-for-anonymous";

@@ -39,6 +39,8 @@ class Post extends \model\entity\Entity
      * @Attention all post/comment must use this function.
      *
      * @return int
+     *      - OK if success
+     *      - ERROR on error.
      */
     public function editPermission() {
         if ( ! $this->exist() ) return ERROR_POST_NOT_EXIST;
@@ -57,6 +59,11 @@ class Post extends \model\entity\Entity
 
     }
 
+    /**
+     * This work for post_data / post_comment
+     *
+     * @return int
+     */
     public function deletePermission() {
 
         if ( ! $this->exist() ) return ERROR_POST_NOT_EXIST;
