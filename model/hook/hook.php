@@ -23,7 +23,10 @@ class Hook {
         if ( empty( $action ) ) exit( error( -4100, 'hooks: action is empty') );
 
         // variable adjusting.
-        if ( $func === null ) $func = $variables;
+        if ( $func === null ) {
+            $func = $variables;
+            $variables = null;
+        }
 
         if ( empty( $func ) ) exit( error( -4101, 'hooks: function is empty') );
 
@@ -35,6 +38,13 @@ class Hook {
     }
 
 
+    /**
+     * Returns hooks ( of an action )
+     *
+     * @see model\hook\hook_test
+     * @param null $action
+     * @return array
+     */
     public function get( $action = null ) {
         if ( $action ) {
             if ( isset( self::$hooks[ $action ] ) ) return self::$hooks[ $action ];
@@ -45,15 +55,18 @@ class Hook {
 
 
 
-    public function run( $action ) {
-
+    public function run( $action, $variables = null ) {
 
         $hooks = self::$hooks;
+
+        //debug_log("HOOK: run( $action )");
 
         if ( isset( $hooks[ $action ] ) && is_array($hooks[ $action ]) && $hooks[ $action ] ) {
             $hook_actions = $hooks[ $action ];
             foreach ( $hook_actions as $hook ) {
-                $hook[ 'function' ]( $hook[ 'variables'] );
+                $vars['add'] = $hook['variables'];
+                $vars['run'] = $variables;
+                $hook[ 'function' ]( $vars );
             }
         }
 

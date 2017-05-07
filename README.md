@@ -33,6 +33,16 @@ Backend Server for Restful APIs
 * 'link' is added on post_data table to hold link information.
 * no 'meta.data' interface? omitted by purposely? because there is no 'meta.update', no 'meta.data'? since meta is not for individual manipulation?
 
+* button options : allow like/dislike,
+
+
+* for 'file.delete', if the file was uploaded by anonymous, then the anonymous must input password of the post.
+* for 'file.upload', anonymous can upload without a password (whether the anonymous is on edit page or not), but the anonymous cannot attach the file to the post since he does not know the password( he cannot submit the edit form because he does not know the password ).
+* for, post/comment edit form, the anonymous can upload but cannot delete until he submit the edit form first because the uploaded file is not yet attached to the post/comment.
+    * Anyway, After all, it's safe and and no one will do those thing.
+    
+
+
 
 
 # Bugs
@@ -1051,6 +1061,14 @@ none.
 
 When you successfully uploaded a photo, you will get a file.idx and you can do whatever you want with the file.idx.
 
+## File Delete
+
+If a file is uploaded by an anonymous and not finish yet, then any anonymous can delete the file. It is a security hole but NOT a bit problem and rearly happens.
+If a file is uploaded by an anonymous and finished, then password is required to delete the password.
+
+
+
+
 
 #### Request
 
@@ -1114,6 +1132,12 @@ To hook image(s) you uploaded to an entity, you just send the file idx(es) in `f
 
 ## POST
 
+### POST EDIT
+
+* If a post/comment is created by anonymous, it is recommended to check password before showing the edit form.
+* Even if anonymous is able to upload a file on a post/comment edit form( that post/comment is not belong to him ), he/she cannot submit the post/comment since he does not know password, so the uploaded file will not be attached to the post/comment and will be deleted later by garbage collecton.
+
+
 ### POST LIST
 
 * If extra.file of request is set to true, you will get uploaded file information.
@@ -1125,25 +1149,29 @@ To hook image(s) you uploaded to an entity, you just send the file idx(es) in `f
 
 
 
-# Model Initialization
+# Initialization.
 
-Backend will load and run `*_init.php` scripts under each model. The purpose of this scripts is for initializing model like writing `hooks`, loading some data for the model, etc.
+Model initialization.
+
+Backend will load and run `*_init.php` scripts under each model.
+The purpose of this scripts is for initializing model like writing `hooks`, loading some data for the model, etc.
 
 
 * Be sure that you keep light `*_init.php` scripts.
-* `*_init.php` is a good place to write hooks.
+* `*_init.php` is a good place to write hooks. Name the script something like "post_hook_init.php"
 
 
 
 
 # Hooks
 
-Hook is one way to alter the behavior backend. By hooking, you can inject your code deep into Backend and do whatever you want.
+Hook is one way to alter the behavior of backend.
+By hooking, you can inject your code deep into the Backend and do whatever you want.
 
-* Best cases to write hooks are that you want to change the behavior of Backend but you do not want to touch the core code because
+* Best cases to write hooks are that you want to change the behavior of the Backend but you do not want to touch the core code because
 
 	* your changes will be deleted or have to rewrite when Backend updates.
-	* your changes may not be sharable if you change it in Backend core code.
+	* your changes may not be sharable if you change it in the Backend core code.
 
 * To write hook codes, create your own model and hook something by putting the code in `*_init.php`
 
@@ -1151,10 +1179,35 @@ Hook is one way to alter the behavior backend. By hooking, you can inject your c
 
 ## How to hook
 
+There are two steps to hook.
+
+Hook must NOT return any value because with one hook, there might be many handler.
+
+If there is any error, the hook should exit with appropriate JSON error.
+
+
+
 ````
-add_hook( 'after_route_load', function() { } );         // Run after route load complete.
-add_hook( 'after_route', 'user.register', function() use ( $var1 ) { } );       // Run after user register interface.
+hook()->run('after_init');                              // 1. Run hook with a name in a place.
+hook()->add( 'after_init', function() { ... } );           // 2. Add hook handler mostly in *_init.php
+hook()->add( 'after_init', $variables, function () => { ... } );   // How to pass variables.
+hook()->add( 'after_route', 'user.register', function() use ( $var1 ) { } );       // Run after user register interface.
 ````
+
+You can call hook()->add() any place BUT be sure the hook will be 'add'ed before 'run'.
+
+There are two kinds of variables.
+
+````
+hook()->run('after_init', $variables);                      // Variables from run-time.
+hook()->add('after_init', $variables, function( $vars ){ ... });   // Variables from add-time.
+````
+
+These two values will be on the hook handler.
+
+@see hook_test.php
+
+
 
 
 ## Hook List
