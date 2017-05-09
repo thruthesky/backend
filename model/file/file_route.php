@@ -12,16 +12,23 @@ add_route('upload',[
 
 
 
-add_route('download',[
+route()->add('download',[
     'path'=> '\\model\\file\\file_interface',
     'method'=> 'download',
     'variables'=>[
-        'required'=>[ 'idx' ],
-        'optional'=>[ 'type', 'width', 'height', 'quality', 'resize', 'x', 'y', 'enlarge', 'crop', 'xy' ],
+        'required'=>[],
+        'optional'=>[ 'idx', 'user_idx', 'code', 'type', 'width', 'height', 'quality', 'resize', 'x', 'y', 'enlarge', 'crop', 'xy' ],
         'system'=>[ 'name', 'created' ]
     ],
     'validator' => function () {
-        $file = ( new \model\file\File() )->load( in('idx') );
+        $file = new \model\file\File();
+        if ( in('idx') ) {
+            $file->load( in('idx') );
+        }
+        else if ( in('user_idx') && in('code') ) {
+            $file->loadQuery(" user_idx='".in('user_idx')."' AND code='".in('code')."' ");
+        }
+
         if ( ! $file->exist() ) {
             debug_log("download::validator, file not exists in Database");
             return ERROR_FILE_NOT_EXIST;

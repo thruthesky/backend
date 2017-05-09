@@ -16,7 +16,8 @@ db()
     ->add('finish',"char(1) DEFAULT 'N'")
     ->add('no_of_download','INT UNSIGNED DEFAULT 0')
     ->index('model,model_idx,code')
-    ->index('model,code');
+    ->index('model,code')
+    ->index('user_idx,code');
 
 
 
