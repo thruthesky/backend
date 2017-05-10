@@ -15,9 +15,11 @@ Backend Server for Restful APIs
 * 'created' URL parameter is added on File URL for cache. Since a user deletes a file and upload a new file, then, it has same file.idx so, the browser cached image will be showed again to user..
 * default 'no. of items' of a page(list/search page) is '$DEFAULT_NO_OF_PAGE_ITEMS' which is in etc/config.
 * search/list api call now accepts 'page' and works as exptected.
-* when admin edits user information, session_id will not be returned. so, the session_id will be invalidated after 'admin edit'
+* when admin edits user information, session_id will not be returned.
+    * so, the session_id will be invalidated after 'admin edit'
     * but, user edits user info, then session_id will be returned.
-    * so, admin edits admin and no session_id will be returned, meaning, admin has to login again.
+    * so, admin edits admin information(himself) and no session_id will be returned, meaning, admin has to login again.
+    
 * you cannot update post_config_id. ( consider to make it updatable ).
 
 * @fix: returns-post_config-of-requested-post-config-id-if-no-posts. Apr 11, 2017. When there is no post ( no posts are created. newly created forum ), then the no post-config information is responded. so, if there is no posts, the requested post config id's 'post config' will be responded by default.
@@ -42,9 +44,13 @@ Backend Server for Restful APIs
     * Anyway, After all, it's safe and and no one will do those thing.
     
 
+* file can be downloaded with `file.user_idx` and `file.code`
 
+    ex) http://backend.org/?route=download&user_idx=1&code=primary_photo
 
-
+ * admin can edit a post of anonymous even he input wrong password.
+ 
+ 
 # Bugs
 
 * On macOS Sierra 10.12.3 with SQLite,
@@ -161,6 +167,24 @@ config('abc')->timeFirstComment();
 
 * is it okay to let api search by id and email? phone numbers? isn't it breaking privacy policy?
 
+
+## Security of user information
+
+
+````
+User::getAvailableData()
+````
+
+
+     * Return available user information for the client ( who request the user information )
+     *
+     * If admin requests user information, then admin will get the full information.
+     * 
+     * If a user requests user information of his own, then he will get the full record.
+     * 
+     * If NOT, then the user will only get limited information for security and privacy.
+
+     
 
 ## User Level
 
@@ -894,7 +918,7 @@ Refer [API explanation page](https://eventviva.github.io/php-image-resize/class-
 
 # Admin
 
-* `admin id` is set in ./etc/config.php and if you want, you can chage it to any user id and that id becomes admin.
+* `admin id` is set in ./etc/config.php and if you want, you can change it to any user id and that id becomes admin.
 * admin password is the same as `admin id`. so, by default, admin id is `admin` and the password is `admin`. so, you can login as admin with `admin` as ID and `admin` as password.
 * You need to change the password of the admin immediately after you install.
 
@@ -1051,8 +1075,9 @@ none.
 
 #### Admin can edit user information.
 
-* When admin edits user information, user's session id will become invalid. So the user needs to login again.
-* When admin changes user information, admin's session id will be not regenerated. And there will be no session_id returned from the request if admin edits user information.
+* When admin edits user information, the user's session id will become invalid. So the user needs to login again.
+* When admin edits user information, admin's session id will be not regenerated.
+    And there will be no session_id returned from the request if admin edits user information.
 
 
 

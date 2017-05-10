@@ -320,13 +320,7 @@ class User extends \model\entity\Entity {
 
 
     /**
-     *
-     * Return available user information for the client ( who request the user information )
-     *
-     * If the requesting user is admin, then he will get the full information.
-     * If the requesting user is requesting the user information of his own, then he will get the full record.
-     * If NOT, then the user will only get limited information for security and privacy.
-     *
+     * @see README#security of user information.
      * @param $record
      * @return array
      */

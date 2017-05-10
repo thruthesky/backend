@@ -27,6 +27,7 @@ class File_Interface extends File {
 
     /**
      * @param File $file
+     * @return mixed|void
      */
     public function download( $file ) {
 
