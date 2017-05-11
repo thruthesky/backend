@@ -1,2 +1,76 @@
 <header-component></header-component>
-<h1>Users</h1>
+<div class="container-fluid margin-top-5 mt-sm-5">
+    <div class="row">
+        <main class="col-12">
+            <h2>User management By admin</h2>
+            <div class="mb-3">
+                <div class="">
+                  <div class="input-group mb-1">
+                    <span class="input-group-addon">UserID</span>
+                    <input type="text" class="form-control" [(ngModel)]="searchForm.id" placeholder="User ID..." maxlength="4" (keyup)="onChangeSearch()">
+                  </div>
+                  <div class="input-group mb-1">
+                    <span class="input-group-addon">Name</span>
+                    <input type="text" class="form-control" [(ngModel)]="searchForm.name" placeholder="Name..." maxlength="4" (keyup)="onChangeSearch()">
+                  </div>
+                  <div class="input-group mb-1">
+                    <span class="input-group-addon">Email</span>
+                    <input type="text" class="form-control" [(ngModel)]="searchForm.email" placeholder="Email..." maxlength="4" (keyup)="onChangeSearch()">
+                  </div>
+                  <div class="input-group mb-1">
+                    <span class="input-group-addon">Mobile</span>
+                    <input type="text" class="form-control" [(ngModel)]="searchForm.mobile" placeholder="Last 4 digit" maxlength="4" (keyup)="onChangeSearch()">
+                  </div>
+                </div>
+            </div>
+
+            <div *ngIf="paginationUsers" class="pagination-user" >
+                <table class="table table-responsive">
+                    <thead class="thead-inverse">
+                    <tr>
+                        <th>IDX</th>
+                        <th>User ID</th>
+                        <th>Name</th>
+                        <th>Gender</th>
+                        <th>Email</th>
+                        <th class="text-center">Edit</th>
+                        <th class="text-center">Delete</th>
+                    </tr>
+                    </thead>
+                    <tbody class="users">
+                    <tr *ngFor="let user of paginationUsers" class="user">
+                        <th scope="row">{{user.idx}}</th>
+                        <td>
+                            {{user.id}}
+                        </td>
+                        <td>
+                            <input type="email" name="email" [(ngModel)]="user.name" placeholder="Name">
+                        </td>
+                        <td>
+                            <select [(ngModel)]="user.gender">
+                                <option value="M">Male</option>
+                                <option value="F">Female</option>
+                            </select>
+                        </td>
+                        <td>
+                            <input type="email" name="email" [(ngModel)]="user.email" placeholder="Email Address">
+                        </td>
+                        <td (click)="onClickEdit( user )" class="text-center" role="button"><i class="fa fa-pencil"></i></td>
+                        <td (click)="onClickDelete( user.id )" class="text-center" role="button"><i class="fa fa-trash"></i></td>
+                    </tr>
+                    </tbody>
+                </table>
+                <page-navigator-basic
+                        [no_of_total_items]=" no_of_total_items "
+                        [no_of_items_in_one_page] = " no_of_items_in_one_page "
+                        [no_of_pages_in_navigator] = " no_of_pages_in_navigator "
+                        [no_of_current_page] = " no_of_current_page "
+                        [show_prev_next] = " true "
+                        (pageClick)="onPageClick($event)"
+                >
+                </page-navigator-basic>
+            </div>
+
+        </main>
+    </div>
+</div>

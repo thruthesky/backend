@@ -1,0 +1,3 @@
+[submodule "view/admin/src/app/angular-backend-components"]
+	path = view/admin/src/app/angular-backend-components
+	url = https://github.com/thruthesky/angular-backend-components
