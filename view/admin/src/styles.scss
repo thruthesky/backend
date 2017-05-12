@@ -6,7 +6,8 @@ $header-height: 60px;
 .fs-80 { font-size: 80%; }
 
 body {
-    margin-top: $header-height + $gutter;
+    margin-top: $header-height;
+    padding: $gutter;
 }
 
 header > nav {
