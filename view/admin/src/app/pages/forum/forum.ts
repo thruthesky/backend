@@ -131,6 +131,9 @@ export class ForumPage {
   onClickConfigEdit( config: _CONFIG ) {
     console.log(config);
 
+    let re = confirm("Save Changes for Config ID : " + config.id);
+    if ( !re ) return;
+
     let edit: _CONFIG_EDIT = {
       id: config.id,
       name: config.name,
@@ -148,7 +151,10 @@ export class ForumPage {
 
   onClickConfigDelete( _config ) {
     if( _config.deleted == '1' ) return;
-    console.log( _config );
+
+    let re = confirm("Delete post config : " + _config.name );
+    if( ! re) return;
+
     this.postConfig.delete( _config.id ).subscribe( (res: _DELETE_RESPONSE) => {
       console.log("delete response: ", res);
       if ( res.code == 0 ) {

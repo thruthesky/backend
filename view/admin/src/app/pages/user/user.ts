@@ -99,6 +99,8 @@ export class UserPage {
 
     onClickEdit( user: _USER_RESPONSE ) {
         console.log( user ) ;
+      let re = confirm("Save Changes for User ID : " + user.id);
+      if ( !re ) return;
         let edit: _USER_EDIT = <_USER_EDIT> {
             id: user.id,
             name: user.name,
@@ -113,6 +115,9 @@ export class UserPage {
     onClickDelete( id: string ) {
 
         console.log( id );
+
+        let re = confirm("Are you sure you want to delete ID: " + id);
+        if ( !re ) return;
 
         this.user.delete( id ).subscribe( (res: _DELETE_RESPONSE) => {
             console.log("delete response: ", res);
