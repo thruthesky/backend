@@ -3,7 +3,10 @@
     <main class="col-12">
       <ng-container>
         <h1>Forums</h1>
-        <div class="mb-3">
+        <div (click)=" showConfigForm = !showConfigForm " *ngIf=" ! showConfigForm ">
+          Add New Forum
+        </div>
+        <div class="mb-3" *ngIf=" showConfigForm ">
           <h2>Forum Create</h2>
           <div class="input-group mb-1">
             <span class="input-group-addon">ID</span>
@@ -44,15 +47,18 @@
 
         <div class="container mb-3">
           <h2>Forum Search</h2>
-          <div class="row">
-            <div class="col">
-              <div>ID: <input name="id" [(ngModel)]="searchConfigForm.id" (keyup)="onChangeConfigSearch()"></div>
+          <div>
+            <div class="input-group mb-1">
+              <span class="input-group-addon">ID</span>
+              <input type="text" class="form-control" [(ngModel)]="searchConfigForm.id" placeholder="Forum ID..." (keyup)="onChangeConfigSearch()">
             </div>
-            <div class="col">
-              <div>Name: <input name="name" [(ngModel)]="searchConfigForm.name" (keyup)="onChangeConfigSearch()"></div>
+            <div class="input-group mb-1">
+              <span class="input-group-addon">Name</span>
+              <input type="text" class="form-control" [(ngModel)]="searchConfigForm.name" placeholder="Forum Name" (keyup)="onChangeConfigSearch()">
             </div>
-            <div class="col">
-              <div>Description: <input name="description" [(ngModel)]="searchConfigForm.description" (keyup)="onChangeConfigSearch()"></div>
+            <div class="input-group mb-1">
+              <span class="input-group-addon">Description</span>
+              <input type="text" class="form-control" [(ngModel)]="searchConfigForm.description" placeholder="Forum Description" (keyup)="onChangeConfigSearch()">
             </div>
           </div>
         </div>

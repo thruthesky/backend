@@ -17,6 +17,8 @@ import {ActivatedRoute} from "@angular/router";
 
 export class ForumPage {
 
+  showConfigForm: boolean = false;
+
   config_idx: number = null;
   searchPostForm: _POST = <_POST>{};
 
@@ -152,7 +154,7 @@ export class ForumPage {
   onClickConfigDelete( _config ) {
     if( _config.deleted == '1' ) return;
 
-    let re = confirm("Delete post config : " + _config.name );
+    let re = confirm("Delete post config : " + _config.id );
     if( ! re) return;
 
     this.postConfig.delete( _config.id ).subscribe( (res: _DELETE_RESPONSE) => {
