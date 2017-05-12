@@ -15,11 +15,14 @@ import { UserLoginPage } from './pages/user-login/user-login';
 import { ForumPage } from './pages/forum/forum';
 import { HeaderComponent } from './components/header/header';
 
+import { RedirectComponent } from './pages/redirect/redirect';
+
 const appRoutes: Routes = [
   { path: 'forum', component: ForumPage },
   { path: 'users', component: UserPage },
   { path: 'login', component: UserLoginPage },
   { path: 'about', component: AboutPage },
+  { path: 'redirect', component: RedirectComponent },
   { path: '', component: HomePage, pathMatch: 'full' },
   { path: '**', component: HomePage }
 ]
@@ -32,7 +35,8 @@ const appRoutes: Routes = [
     AboutPage,
     UserPage,
     UserLoginPage,
-    ForumPage
+    ForumPage,
+    RedirectComponent
   ],
   imports: [
     BrowserModule,

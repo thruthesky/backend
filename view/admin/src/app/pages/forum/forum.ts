@@ -7,7 +7,7 @@ import {  PostConfig, PostData,
 
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/debounceTime';
-import {ActivatedRoute} from "@angular/router";
+import { Router } from "@angular/router";
 
 
 @Component({
@@ -18,13 +18,9 @@ import {ActivatedRoute} from "@angular/router";
 export class ForumPage {
 
   showConfigForm: boolean = false;
-
-  config_idx: number = null;
-  searchPostForm: _POST = <_POST>{};
+  showConfigSearch: boolean = false;
 
   posts: _POSTS = [];
-
-
 
   searchConfigForm: _CONFIG = <_CONFIG>{};
   postConfigs: _CONFIGS = [];
@@ -37,13 +33,10 @@ export class ForumPage {
   no_of_items_in_one_page: number = 4;
   no_of_pages_in_navigator: number = 5;
 
-
-
   searchConfigChangeDebounce = new Subject();
-  searchPostChangeDebounce = new Subject();
-
 
   constructor(
+    public router: Router,
     private postData: PostData,
     private postConfig: PostConfig,
   ) {
@@ -68,6 +61,7 @@ export class ForumPage {
   onClickCreateForum() {
     this.postConfig.create(this.configCreate).subscribe( (res: _CONFIG_CREATE_RESPONSE ) => {
       console.log(res);
+      this.router.navigate(['/redirect'])
     }, err => this.postConfig.alert(err));
   }
 

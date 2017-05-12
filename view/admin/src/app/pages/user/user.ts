@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/debounceTime';
 
@@ -113,9 +114,7 @@ export class UserPage {
     }
 
     onClickDelete( id: string ) {
-
         console.log( id );
-
         let re = confirm("Are you sure you want to delete ID: " + id);
         if ( !re ) return;
 

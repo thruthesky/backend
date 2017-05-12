@@ -3,9 +3,12 @@
     <main class="col-12">
       <ng-container>
         <h1>Forums</h1>
-        <div (click)=" showConfigForm = !showConfigForm " *ngIf=" ! showConfigForm ">
-          Add New Forum
-        </div>
+        <button role="button" (click)=" showConfigForm = !showConfigForm " *ngIf=" ! showConfigForm ">
+          Create Forum
+        </button>
+        <button role="button" (click)=" showConfigSearch = !showConfigSearch " *ngIf=" ! showConfigSearch ">
+          Search Forum
+        </button>
         <div class="mb-3" *ngIf=" showConfigForm ">
           <h2>Forum Create</h2>
           <div class="input-group mb-1">
@@ -45,7 +48,7 @@
           <button (click)="onClickCreateForum()" type="button">Forum Create</button>
         </div>
 
-        <div class="container mb-3">
+        <div class="mb-3" *ngIf=" showConfigSearch ">
           <h2>Forum Search</h2>
           <div>
             <div class="input-group mb-1">
