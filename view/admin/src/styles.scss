@@ -7,7 +7,9 @@ $header-height: 60px;
 
 body {
     margin-top: $header-height;
-    padding: $gutter;
+}
+.page {
+    padding: $gutter
 }
 
 header > nav {
