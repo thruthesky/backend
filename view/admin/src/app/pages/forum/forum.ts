@@ -1,13 +1,12 @@
 import { Component } from '@angular/core';
-import {  PostConfig, PostData,
-  _POST, _POSTS,
+import {  PostConfig, _POSTS,
   _LIST, _POST_LIST_RESPONSE, _DELETE_RESPONSE, _CONFIG_EDIT_RESPONSE,
   _CONFIG, _CONFIGS, _CONFIG_CREATE, _CONFIG_EDIT, _CONFIG_CREATE_RESPONSE,
 } from 'angular-backend';
 
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/debounceTime';
-import {ActivatedRoute} from "@angular/router";
+import { Router } from "@angular/router";
 
 
 @Component({
@@ -17,12 +16,10 @@ import {ActivatedRoute} from "@angular/router";
 
 export class ForumPage {
 
-  config_idx: number = null;
-  searchPostForm: _POST = <_POST>{};
+  showConfigForm: boolean = false;
+  showConfigSearch: boolean = false;
 
   posts: _POSTS = [];
-
-
 
   searchConfigForm: _CONFIG = <_CONFIG>{};
   postConfigs: _CONFIGS = [];
@@ -35,15 +32,11 @@ export class ForumPage {
   no_of_items_in_one_page: number = 4;
   no_of_pages_in_navigator: number = 5;
 
-
-
   searchConfigChangeDebounce = new Subject();
-  searchPostChangeDebounce = new Subject();
-
 
   constructor(
-    private postData: PostData,
-    private postConfig: PostConfig,
+    public router: Router,
+    public postConfig: PostConfig,
   ) {
 
     this.searchQuery['order'] = 'idx DESC';
@@ -66,6 +59,7 @@ export class ForumPage {
   onClickCreateForum() {
     this.postConfig.create(this.configCreate).subscribe( (res: _CONFIG_CREATE_RESPONSE ) => {
       console.log(res);
+      this.router.navigate(['/redirect'])
     }, err => this.postConfig.alert(err));
   }
 
@@ -117,15 +111,15 @@ export class ForumPage {
       console.log(res);
 
       this.postConfigs = res.data.configs;
-      this.no_of_total_items = parseInt( res.data.total );
-      this.no_of_current_page = parseInt(res.data.page);
+      this.no_of_total_items = res.data.total ;
+      this.no_of_current_page = res.data.page;
 
       this.postConfigs.map( (config: _CONFIG) => {
         config.created = ( new Date( parseInt(config.created) * 1000 ) ).toString();
       });
 
 
-    }, err => this.postData.alert( err ));
+    }, err => this.postConfig.alert( err ));
   }
 
   onClickConfigEdit( config: _CONFIG ) {
@@ -152,7 +146,7 @@ export class ForumPage {
   onClickConfigDelete( _config ) {
     if( _config.deleted == '1' ) return;
 
-    let re = confirm("Delete post config : " + _config.name );
+    let re = confirm("Delete post config : " + _config.id );
     if( ! re) return;
 
     this.postConfig.delete( _config.id ).subscribe( (res: _DELETE_RESPONSE) => {

@@ -90,8 +90,8 @@ export class UserPage {
         this.user.list(this.searchQuery).subscribe((res: _USER_LIST_RESPONSE) => {
             console.info( 'loadSearchedData', res );
             this.paginationUsers = res.data.users;
-            this.no_of_total_items = parseInt(res.data.total);
-            this.no_of_current_page = parseInt(res.data.page);
+            this.no_of_total_items = res.data.total;
+            this.no_of_current_page = res.data.page;
         }, err => this.user.alert(err));
     }
 
@@ -113,9 +113,7 @@ export class UserPage {
     }
 
     onClickDelete( id: string ) {
-
         console.log( id );
-
         let re = confirm("Are you sure you want to delete ID: " + id);
         if ( !re ) return;
 
