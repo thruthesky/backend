@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import {  PostConfig, PostData,
-  _POST, _POSTS,
+import {  PostConfig, _POSTS,
   _LIST, _POST_LIST_RESPONSE, _DELETE_RESPONSE, _CONFIG_EDIT_RESPONSE,
   _CONFIG, _CONFIGS, _CONFIG_CREATE, _CONFIG_EDIT, _CONFIG_CREATE_RESPONSE,
 } from 'angular-backend';
@@ -37,8 +36,7 @@ export class ForumPage {
 
   constructor(
     public router: Router,
-    private postData: PostData,
-    private postConfig: PostConfig,
+    public postConfig: PostConfig,
   ) {
 
     this.searchQuery['order'] = 'idx DESC';
@@ -113,15 +111,15 @@ export class ForumPage {
       console.log(res);
 
       this.postConfigs = res.data.configs;
-      this.no_of_total_items = parseInt( res.data.total );
-      this.no_of_current_page = parseInt(res.data.page);
+      this.no_of_total_items = res.data.total ;
+      this.no_of_current_page = res.data.page;
 
       this.postConfigs.map( (config: _CONFIG) => {
         config.created = ( new Date( parseInt(config.created) * 1000 ) ).toString();
       });
 
 
-    }, err => this.postData.alert( err ));
+    }, err => this.postConfig.alert( err ));
   }
 
   onClickConfigEdit( config: _CONFIG ) {

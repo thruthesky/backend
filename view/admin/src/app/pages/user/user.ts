@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/debounceTime';
 
@@ -91,8 +90,8 @@ export class UserPage {
         this.user.list(this.searchQuery).subscribe((res: _USER_LIST_RESPONSE) => {
             console.info( 'loadSearchedData', res );
             this.paginationUsers = res.data.users;
-            this.no_of_total_items = parseInt(res.data.total);
-            this.no_of_current_page = parseInt(res.data.page);
+            this.no_of_total_items = res.data.total;
+            this.no_of_current_page = res.data.page;
         }, err => this.user.alert(err));
     }
 

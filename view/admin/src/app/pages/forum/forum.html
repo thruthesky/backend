@@ -76,15 +76,17 @@
               <tr>
                 <th>IDX</th>
                 <th>ID</th>
-                <th>Name</th>
-                <th>Description</th>
-                <th>Moderators</th>
-                <th>List</th>
-                <th>View</th>
-                <th>Write</th>
-                <th>Comment</th>
-                <th class="text-center">Edit</th>
-                <th class="text-center">Delete</th>
+                <ng-container *ngIf=" postConfig.logged ">
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Moderators</th>
+                    <th>List</th>
+                    <th>View</th>
+                    <th>Write</th>
+                    <th>Comment</th>
+                    <th  class="text-center">Edit</th>
+                    <th  class="text-center">Delete</th>
+                </ng-container>
               </tr>
               </thead>
               <tbody class="users">
@@ -94,29 +96,31 @@
                   <!--div routerLink="/admin/forum/posts/{{config.id}}" role="button">{{config.id}}</div-->
                   <div>{{config.id}}</div>
                 </td>
-                <td>
-                  <input type="text" name="name" [(ngModel)]="config.name" placeholder="Name">
-                </td>
-                <td>
-                  <input type="text" name="description" [(ngModel)]="config.description" placeholder="Description">
-                </td>
-                <td>
-                  <input type="text" name="moderator" [(ngModel)]="config.moderators" placeholder="Moderator">
-                </td>
-                <td>
-                  <input type="number" name="list" [(ngModel)]="config.level_list" placeholder="Level List">
-                </td>
-                <td>
-                  <input type="number" name="view" [(ngModel)]="config.level_view" placeholder="Level View">
-                </td>
-                <td>
-                  <input type="number" name="write" [(ngModel)]="config.level_write" placeholder="Level Write">
-                </td>
-                <td>
-                  <input type="number" name="comment" [(ngModel)]="config.level_comment" placeholder="Level Comment">
-                </td>
-                <td (click)="onClickConfigEdit( config )" class="text-center" role="button"><i class="fa fa-pencil"></i></td>
-                <td (click)="onClickConfigDelete( config )" class="text-center" role="button"><i class="fa fa-trash"></i></td>
+                <ng-container *ngIf=" postConfig.logged ">
+                    <td>
+                      <input type="text" name="name" [(ngModel)]="config.name" placeholder="Name">
+                    </td>
+                    <td>
+                      <input type="text" name="description" [(ngModel)]="config.description" placeholder="Description">
+                    </td>
+                    <td>
+                      <input type="text" name="moderator" [(ngModel)]="config.moderators" placeholder="Moderator">
+                    </td>
+                    <td>
+                      <input type="number" name="list" [(ngModel)]="config.level_list" placeholder="Level List">
+                    </td>
+                    <td>
+                      <input type="number" name="view" [(ngModel)]="config.level_view" placeholder="Level View">
+                    </td>
+                    <td>
+                      <input type="number" name="write" [(ngModel)]="config.level_write" placeholder="Level Write">
+                    </td>
+                    <td>
+                      <input type="number" name="comment" [(ngModel)]="config.level_comment" placeholder="Level Comment">
+                    </td>
+                    <td (click)="onClickConfigEdit( config )" class="text-center" role="button"><i class="fa fa-pencil"></i></td>
+                    <td (click)="onClickConfigDelete( config )" class="text-center" role="button"><i class="fa fa-trash"></i></td>
+                </ng-container>
               </tr>
               </tbody>
             </table>
