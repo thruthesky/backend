@@ -7,20 +7,8 @@
 
                 <div>
                   <div class="input-group mb-1">
-                    <span class="input-group-addon">UserID</span>
-                    <input type="text" class="form-control" [(ngModel)]="searchForm.id" placeholder="User ID..." (keyup)="onChangeSearch()">
-                  </div>
-                  <div class="input-group mb-1">
-                    <span class="input-group-addon">Name</span>
-                    <input type="text" class="form-control" [(ngModel)]="searchForm.name" placeholder="Name..." (keyup)="onChangeSearch()">
-                  </div>
-                  <div class="input-group mb-1">
-                    <span class="input-group-addon">Email</span>
-                    <input type="text" class="form-control" [(ngModel)]="searchForm.email" placeholder="Email..." (keyup)="onChangeSearch()">
-                  </div>
-                  <div class="input-group mb-1">
-                    <span class="input-group-addon">Mobile</span>
-                    <input type="text" class="form-control" [(ngModel)]="searchForm.mobile" placeholder="Last 4 digit" maxlength="4" (keyup)="onChangeSearch()">
+                    <span class="input-group-addon">User Search</span>
+                    <input type="text" class="form-control" [(ngModel)]="searchString" placeholder="User ID, Name, Email..." (keyup)="onChangeSearch()">
                   </div>
                 </div>
             </div>
