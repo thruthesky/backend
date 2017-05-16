@@ -57,6 +57,8 @@ class Base {
      * @endcode
      */
     public function checkPassword( $plain_text_password, $encrypted_password ) {
+        $re = hook()->run( 'checkPassword', [ 'plain_text_password' => $plain_text_password, 'encrypted_password' => $encrypted_password ] ); // password hook.
+        if ( $re ) return TRUE; // password match.
         return password_verify( $plain_text_password, $encrypted_password );
     }
 

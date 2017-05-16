@@ -1222,7 +1222,17 @@ By hooking, you can inject your code deep into the Backend and do whatever you w
 
 There are two steps to hook.
 
-Hook must NOT return any value because with one hook, there might be many handler.
+@changed /* Hook must NOT return any value because with one hook, there might be many handler. */
+
+@updated Hook can return a value since May 16, 2017.
+
+Hook may return FALSE or any Truthy value.
+If a Hook returns null or does not returns any value(empty value), then it continues to run next hook(s).
+There might be many handlers on one hook. If any handler return values, the rest of hooks will not be run!!
+
+Be reminded, It often causes un-expected due to running many handlers on a hook when one of the hooks return a value.
+
+
 
 If there is any error, the hook should exit with appropriate JSON error.
 

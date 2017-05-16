@@ -66,7 +66,11 @@ class Hook {
             foreach ( $hook_actions as $hook ) {
                 $vars['add'] = $hook['variables'];
                 $vars['run'] = $variables;
-                $hook[ 'function' ]( $vars );
+
+                /// @see readme#hook return values
+                $re = $hook[ 'function' ]( $vars );
+                if ( $re === false ) return false;
+                else if ( $re ) return $re;
             }
         }
 

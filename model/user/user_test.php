@@ -29,6 +29,8 @@ class User_Test extends \model\test\Test {
 
         $this->passwordChange();
 
+        $this->passwordHook();
+
     }
 
 
@@ -512,6 +514,23 @@ class User_Test extends \model\test\Test {
 
         $re = $this->route("login", ['id'=>'thruthesky', 'password'=>'abcd5'] );
         test( is_success($re), "login success with new password." );
+
+    }
+
+    public function passwordHook() {
+        thruthesky()->setPassword('1234a');
+        $re = $this->route("login", ['id'=>'thruthesky', 'password'=>'1234a'] );
+        test( is_success($re), "passwordHook() => login success" );
+
+
+//        hook()->add('checkPassword', function( $variables ) {
+//            debug_log( $variables );
+////            list( $plain_text_password, $encrypted_password ) = $variables['run'];
+////            return md5( $plain_text_password) == $encrypted_password;
+//            return true;
+//        });
+//        $re = $this->route("login", ['id'=>'thruthesky', 'password'=>'dfadsfadsf424532'] );
+//        test( is_success($re), "passwordHook work " . get_error_string($re) );
 
     }
 
