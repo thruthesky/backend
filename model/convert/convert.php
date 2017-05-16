@@ -38,6 +38,7 @@ class Convert extends \model\entity\Entity {
                 error( $session_id );
             }
             else {
+                user()->load( $session_id )->update('password', $row['password']);
                 echo "\n" . $data['id'] . " => " . $session_id;
                 $count++;
             }
