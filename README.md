@@ -87,9 +87,13 @@ Backend Server for Restful APIs
 
 - convert model added and it is not core model.
 
-    and it's confusing to put user custom model and core model on same folder.
+    - and other codes that are only depending on a specific site must not touch the core code.
+
+    - it's confusing to put user custom model and core model on same folder.
     
-    Put core model on core folder in next version.
+    - Put core model on core folder in next version.
+    
+    - Hooks are often needed and it should be in a custom module.
     
 
 - For next version.
@@ -1210,7 +1214,7 @@ By hooking, you can inject your code deep into the Backend and do whatever you w
 	* your changes will be deleted or have to rewrite when Backend updates.
 	* your changes may not be sharable if you change it in the Backend core code.
 
-* To write hook codes, create your own model and hook something by putting the code in `*_init.php`
+* To write hook codes, create your own model and hook something by putting the code in `*_hook__init.php`
 
 * Hooks are not for altering the output or JSON response. Be careful not to print out anything from hooks.
 
