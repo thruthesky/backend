@@ -8,6 +8,12 @@ class Convert extends \model\entity\Entity {
         //print_r($rows[0]);
         $count = 0;
         foreach ( $rows as $row ) {
+
+            if( $row['id'] == 'admin' || $row['id'] == 'thruthesky' ) continue;
+
+            //if ( user()->load( $row['id'] )->exist() ) user()->load( $row['id'] )->delete();
+            if ( user( $row['id'] )->exist() ) user( $row['id'] )->delete();
+
             $data = null;
 
             $data['id'] = $row['id'] ? $row['id'] : null;
@@ -36,15 +42,18 @@ class Convert extends \model\entity\Entity {
             if ( is_error( $session_id ) ) {
                 echo "\n" . $data['id'] . " error :: ";
                 error( $session_id );
+                echo "\n";
             }
             else {
-                user()->load( $session_id )->update('password', $row['password']);
-                echo "\n" . $data['id'] . " => " . $session_id;
+                //user()->load( $session_id )->update(['password' => $row['password']]);
+                user( $session_id )->update(['password' => $row['password']]);
+                //echo "\n" . $data['id'] . " => " . $session_id;
                 $count++;
+                echo $count;
             }
 
         }
-        echo "\n Total::" . $count;
+        echo "\nTotal:: " . $count;
 
     }
 
