@@ -50,6 +50,11 @@ Backend Server for Restful APIs
 
  * admin can edit a post of anonymous even he input wrong password.
  
+ * Backend can now be run on CLI.
+ 
+    ex) $ php index.php "route=version"
+
+    
  
 # Bugs
 
@@ -79,6 +84,13 @@ Backend Server for Restful APIs
 
 
 # TODO
+
+- convert model added and it is not core model.
+
+    and it's confusing to put user custom model and core model on same folder.
+    
+    Put core model on core folder in next version.
+    
 
 - For next version.
     Create Error Object and return all the error information.

@@ -84,6 +84,16 @@ function in ( $code, $default = null ) {
 }
 
 
+/**
+ * @param $k
+ * @param null $default
+ * @return null
+ */
+function server( $k, $default = null ) {
+    if ( isset($_SERVER[ $k ] ) ) return $_SERVER[ $k ];
+    else return $default;
+}
+
 
 
 
@@ -273,7 +283,9 @@ function current_url() {
  * Returns a url string of the PHP script. ( before URL rewriting ).
  */
 function current_script_url() {
-    return (isset($_SERVER['HTTPS']) ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[PHP_SELF]";
+    $http_host = server('HTTP_HOST');
+    $php_self = server('PHP_SELF');
+    return ( server('HTTPS') ? "https" : "http") . "://$http_host$php_self";
 }
 
 
@@ -298,4 +310,14 @@ function strcut($str, $len, $suffix="")
     if (strlen($s) >= strlen($str))
         $suffix = "";
     return $s . $suffix;
+}
+
+
+function reset_request_from_argv() {
+    global $argv;
+    if ( isset( $argv ) ) {
+        if ( $argv[1] ) {
+            parse_str( $argv[1], $_REQUEST );
+        }
+    }
 }
