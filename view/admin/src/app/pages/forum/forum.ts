@@ -17,11 +17,12 @@ import { Router } from "@angular/router";
 export class ForumPage {
 
   showConfigForm: boolean = false;
-  showConfigSearch: boolean = false;
 
   posts: _POSTS = [];
 
-  searchConfigForm: _CONFIG = <_CONFIG>{};
+
+  searchString: string;
+  //searchConfigForm: _CONFIG = <_CONFIG>{};
   postConfigs: _CONFIGS = [];
   configCreate: _CONFIG_CREATE = <_CONFIG_CREATE>{};
 
@@ -72,27 +73,31 @@ export class ForumPage {
   onChangedConfigSearch() {
     //console.log('onChangeSearch', this.searchConfigForm);
 
-    if (this.searchConfigForm.id) {
-      if (this.searchConfigForm.id.length < 2) return;
-    }
-    if (this.searchConfigForm.name) {
-      if (this.searchConfigForm.name.length < 2) return;
-    }
-    if (this.searchConfigForm.description) {
-      if (this.searchConfigForm.description.length < 2) return;
+    if (this.searchString) {
+      if (this.searchString.length < 2) return;
     }
 
     let cond = '';
     let bind = '';
 
-    if (this.searchConfigForm.id) cond += "id LIKE ? ";
-    if (this.searchConfigForm.id) bind += `%${this.searchConfigForm.id}%`;
+    if ( this.searchString ) {
+      cond += "id LIKE ? OR" +
+        " name LIKE ? OR" +
+        " description LIKE ?";
 
-    if (this.searchConfigForm.name) cond += cond ? "AND name LIKE ? " : "name LIKE ?";
-    if (this.searchConfigForm.name) bind += bind ? `,%${this.searchConfigForm.name}%` : `%${this.searchConfigForm.name}%`;
+      bind += `%${this.searchString}%,` +
+        `%${this.searchString}%,` +
+        `%${this.searchString}%`;
+    }
 
-    if (this.searchConfigForm.description) cond += cond ? "AND description LIKE ? " : "description LIKE ? ";
-    if (this.searchConfigForm.description) bind += bind ? `,%${this.searchConfigForm.description}%` : `%${this.searchConfigForm.description}%`;
+    // if (this.searchConfigForm.id) cond += "id LIKE ? ";
+    // if (this.searchConfigForm.id) bind += `%${this.searchConfigForm.id}%`;
+    //
+    // if (this.searchConfigForm.name) cond += cond ? "AND name LIKE ? " : "name LIKE ?";
+    // if (this.searchConfigForm.name) bind += bind ? `,%${this.searchConfigForm.name}%` : `%${this.searchConfigForm.name}%`;
+    //
+    // if (this.searchConfigForm.description) cond += cond ? "AND description LIKE ? " : "description LIKE ? ";
+    // if (this.searchConfigForm.description) bind += bind ? `,%${this.searchConfigForm.description}%` : `%${this.searchConfigForm.description}%`;
 
     this.searchQuery.where = cond;
     this.searchQuery.bind = bind;
@@ -111,7 +116,7 @@ export class ForumPage {
       console.log(res);
 
       this.postConfigs = res.data.configs;
-      this.no_of_total_items = res.data.total ;
+      this.no_of_total_items = res.data.total;
       this.no_of_current_page = res.data.page;
 
       this.postConfigs.map( (config: _CONFIG) => {

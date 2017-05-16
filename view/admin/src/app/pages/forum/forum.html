@@ -6,9 +6,6 @@
         <button role="button" (click)=" showConfigForm = !showConfigForm " *ngIf=" ! showConfigForm ">
           Create Forum
         </button>
-        <button role="button" (click)=" showConfigSearch = !showConfigSearch " *ngIf=" ! showConfigSearch ">
-          Search Forum
-        </button>
         <div class="mb-3" *ngIf=" showConfigForm ">
           <h2>Forum Create</h2>
           <div class="input-group mb-1">
@@ -48,21 +45,11 @@
           <button (click)="onClickCreateForum()" type="button">Forum Create</button>
         </div>
 
-        <div class="mb-3" *ngIf=" showConfigSearch ">
+        <div class="mb-3">
           <h2>Forum Search</h2>
-          <div>
-            <div class="input-group mb-1">
+          <div class="input-group mb-1">
               <span class="input-group-addon">ID</span>
-              <input type="text" class="form-control" [(ngModel)]="searchConfigForm.id" placeholder="Forum ID..." (keyup)="onChangeConfigSearch()">
-            </div>
-            <div class="input-group mb-1">
-              <span class="input-group-addon">Name</span>
-              <input type="text" class="form-control" [(ngModel)]="searchConfigForm.name" placeholder="Forum Name" (keyup)="onChangeConfigSearch()">
-            </div>
-            <div class="input-group mb-1">
-              <span class="input-group-addon">Description</span>
-              <input type="text" class="form-control" [(ngModel)]="searchConfigForm.description" placeholder="Forum Description" (keyup)="onChangeConfigSearch()">
-            </div>
+              <input type="text" class="form-control" [(ngModel)]="searchString" placeholder="Forum ID, Name, Description..." (keyup)="onChangeConfigSearch()">
           </div>
         </div>
 
