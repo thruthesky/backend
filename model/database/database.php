@@ -57,7 +57,7 @@ class Database extends \PDO {
      * @return Database
      */
     public static function mysql($host, $dbname, $username, $password) {
-        $db = new Database("mysql:host=$host;dbname=$dbname", $username, $password);
+        $db = new Database("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
         $db->type = 'mysql';
         $db->setOptions();
         return $db;
