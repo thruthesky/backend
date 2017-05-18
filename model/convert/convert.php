@@ -2,16 +2,15 @@
 namespace model\convert;
 class Convert extends \model\entity\Entity {
     public function run() {
-
-        // $this->convertTalktativeMember();
-            $this->convertTalkativePost();
+        $this->convertTalktativeMember();
+        $this->convertTalkativePost();
     }
 
     public function convertTalkativePost(){
         echo "\n convertTalkativePost:: Start \n";
         $config_idx = $this->postConfigCheckDeleteCreate();
 
-        $rows = db()->rows("SELECT idx_root,idx_parent,idx_member, member_id, subject,content,password,email FROM post_data");
+        $rows = db()->rows("SELECT idx_root,idx_parent,member_id,subject,content,password,stamp FROM post_data");
         $count = 0;
 
         foreach ( $rows as $row ) {
@@ -22,12 +21,9 @@ class Convert extends \model\entity\Entity {
 
             $data['root_idx'] = $row['idx_root'];
             $data['parent_idx'] = $row['idx_parent'];
-
-
             $data['post_config_idx'] = $config_idx;
             $data['title']  = $row['subject'];
             $data['content'] = $row['content'];
-            $data['email'] = $row['email'];
 
             $post_idx = post()->create($data);
 
@@ -38,15 +34,23 @@ class Convert extends \model\entity\Entity {
             }
             else {
                 //user()->load( $session_id )->update(['password' => $row['password']]);
+                //echo "\n MEMBER INFO:: \n";
+                //print_r(user($row['member_id']));
 
-                $user_idx = user($row['member_id'])->idx;
-                post( $post_idx )->update(['password' => $row['password'], "user_idx"=>$user_idx]);
+                $user = user($row['member_id']);
+                post( $post_idx )->update([
+                    "password" => $row['password'],
+                    "user_idx" => $user->idx,
+                    "created"  => $row['stamp'],
+                    "name" => $user->name,
+                    "email" => $user->email
+                ]);
 
 
 
                 //echo "\n" . $data['id'] . " => " . $session_id;
                 $count++;
-                echo "$count : $user_idx\n" ;
+                echo "$count : $user->idx  |  name : $user->name \n" ;
             }
         }
     }
@@ -71,7 +75,7 @@ class Convert extends \model\entity\Entity {
 
         return $config_idx;
 
-        
+
     }
 
 
