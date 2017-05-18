@@ -3,6 +3,43 @@ namespace model\convert;
 class Convert extends \model\entity\Entity {
     public function run() {
 
+     //   $this->convertTalktativeMember();
+            $this->convertTalkativePost();
+    }
+
+    public function convertTalkativePost(){
+        echo "\n convertTalkativePost:: Start \n";
+        $this->postConfigCheckDeleteCreate();
+
+
+        $rows = db()->rows("SELECT * FROM post_data");
+       // print_r($rows[0]);
+    }
+
+
+    public function postConfigCheckDeleteCreate(){
+
+        //$admin_session_id = route("login", ['id'=>ADMIN_ID, 'password'=>ADMIN_ID]);
+        $admin_session_id = user(ADMIN_ID)->getSessionId();
+        echo "\n " . $admin_session_id . "\n";
+
+        if ( config( 'qna ')->exist() ) config( 'qna')->delete();
+
+        $data = [
+            'id' => 'qna',
+            'name' => 'Q&A',
+            'description' => 'Question and Answer'
+        ];
+        $config_id = config()->create( $data );
+
+        echo "\n Forum ID:: " . $config_id . "\n";
+
+        
+    }
+
+
+
+    public function convertTalktativeMember() {
         $rows = db()->rows("select idx,domain,id,password,name,nickname,landline,mobile,email,birthday,gender,address,zipcode,login_count,login_stamp,login_ip from member");
         //print_r($rows);
         //print_r($rows[0]);
@@ -54,7 +91,6 @@ class Convert extends \model\entity\Entity {
 
         }
         echo "\nTotal:: " . $count;
-
     }
 
 }
