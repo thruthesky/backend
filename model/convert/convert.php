@@ -9,11 +9,37 @@ class Convert extends \model\entity\Entity {
 
     public function convertTalkativePost(){
         echo "\n convertTalkativePost:: Start \n";
-        $this->postConfigCheckDeleteCreate();
+        $config_idx = $this->postConfigCheckDeleteCreate();
 
+        $rows = db()->rows("SELECT idx_root,idx_parent,idx_member,subject,content,password,email FROM post_data");
+        $count = 0;
 
-        $rows = db()->rows("SELECT * FROM post_data");
-       // print_r($rows[0]);
+        foreach ( $rows as $row ) {
+            $data = null;
+
+            $data['root_idx'] = $row['idx_root'] ? $row['idx_root'] : 0;
+            $data['parent_idx'] = $row['idx_parent'] ? $row['idx_parent'] : 0;
+            $data['user_idx'] = 0;
+            $data['post_config_idx'] = $config_idx;
+            $data['title']  = $row['subject'] ? $row['subject'] : null;
+            $data['content'] = $row['content'] ? $row['content'] : null;
+            $data['email'] = $row['email'] ? $row['email'] : null;
+
+            $post_idx = post()->create($data);
+
+            if ( is_error( $post_idx ) ) {
+                echo "\n" . $data['id'] . " error :: ";
+                error( $post_idx );
+                echo "\n";
+            }
+            else {
+                //user()->load( $session_id )->update(['password' => $row['password']]);
+                post( $post_idx )->update(['password' => $row['password']]);
+                //echo "\n" . $data['id'] . " => " . $session_id;
+                $count++;
+                echo $count;
+            }
+        }
     }
 
 
@@ -30,9 +56,11 @@ class Convert extends \model\entity\Entity {
             'name' => 'Q&A',
             'description' => 'Question and Answer'
         ];
-        $config_id = config()->create( $data );
+        $config_idx = config()->create( $data );
 
-        echo "\n Forum ID:: " . $config_id . "\n";
+        echo "\n Forum ID:: " . $config_idx . "\n";
+
+        return $config_idx;
 
         
     }
