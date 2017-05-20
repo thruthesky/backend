@@ -9,7 +9,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "publish": "ng build --output-path=page --base-href=./ && git commit -a -m 'publish' && git push"
+    "publish": "ng build --output-path=page --base-href=./ && git add --all && git commit -a -m 'publish' && git push"
   },
   "private": true,
   "dependencies": {
