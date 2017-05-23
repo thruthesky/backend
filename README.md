@@ -1,4 +1,95 @@
-# English
+# Backend-0.8
+
+Backend Server for Restful APIs
+
+
+# Changes
+
+* post_data.create/edit interface response with the full post data.
+* post_comment create/edit interface response with the full comment data.
+* post_data.data interface accepts `extra` property.
+* when user logs in, if the user is admin, "admin=1" will be set in response.
+* when user related information is responded, at least it has empty array if it has no photos.
+* When user has no primary photo, the responded empty value is Array.
+* When user has primary photo, the responded value is Object. NOT Array.
+* 'created' URL parameter is added on File URL for cache. Since a user deletes a file and upload a new file, then, it has same file.idx so, the browser cached image will be showed again to user..
+* default 'no. of items' of a page(list/search page) is '$DEFAULT_NO_OF_PAGE_ITEMS' which is in etc/config.
+* search/list api call now accepts 'page' and works as exptected.
+* when admin edits user information, session_id will not be returned.
+    * so, the session_id will be invalidated after 'admin edit'
+    * but, user edits user info, then session_id will be returned.
+    * so, admin edits admin information(himself) and no session_id will be returned, meaning, admin has to login again.
+    
+* you cannot update post_config_id. ( consider to make it updatable ).
+
+* @fix: returns-post_config-of-requested-post-config-id-if-no-posts. Apr 11, 2017. When there is no post ( no posts are created. newly created forum ), then the no post-config information is responded. so, if there is no posts, the requested post config id's 'post config' will be responded by default.
+
+* 'first_image_idx' is added on 'post_data' table. it holds the `file.idx' of first image.
+
+* If there is an error while DATABASE query, it prints out error response and exits the script immediately. ( since it is not is to deliver DB error message that is in the bottom part way back up to the top part callers ).
+
+* 'user_idx' is added on meta table.
+    so, a meta record is now able to refer to whom it belongs to.
+    It is only used for "meta.list" ( search ) and "meta.delete".
+
+* 'link' is added on post_data table to hold link information.
+* no 'meta.data' interface? omitted by purposely? because there is no 'meta.update', no 'meta.data'? since meta is not for individual manipulation?
+
+* button options : allow like/dislike,
+
+
+* for 'file.delete', if the file was uploaded by anonymous, then the anonymous must input password of the post.
+* for 'file.upload', anonymous can upload without a password (whether the anonymous is on edit page or not), but the anonymous cannot attach the file to the post since he does not know the password( he cannot submit the edit form because he does not know the password ).
+* for, post/comment edit form, the anonymous can upload but cannot delete until he submit the edit form first because the uploaded file is not yet attached to the post/comment.
+    * Anyway, After all, it's safe and and no one will do those thing.
+    
+
+* file can be downloaded with `file.user_idx` and `file.code`
+
+    ex) http://backend.org/?route=download&user_idx=1&code=primary_photo
+
+ * admin can edit a post of anonymous even he input wrong password.
+ 
+ * Backend can now be run on CLI.
+ 
+    ex) $ php index.php "route=version"
+
+  
+* You can add admin IDs.
+
+in config.php file, $ADMIN_ID is the primary admin id. and you can have many admin ID(s) on $ADMIN_IDS. They will have same privileges.
+
+````
+  $ADMIN_ID               = 'usera1';          // This is an admin id.
+  $ADMIN_IDS              = ['usera2', 'usera3', '', ''];             // Array. Put other admin ids.
+````
+
+
+
+ 
+# Bugs
+
+* On macOS Sierra 10.12.3 with SQLite,
+    when a user upload primary photo and delete immediately, the file is deleted but after 0.3 seconds it becomes alive with Zero Bytes.
+    And it produces an server error since SQLite will use the same file.idx for next photo upload.
+    ( delete immediately means, right after, ... like 0.1 second after upload )
+    If you give some time delay like 3 seconds, there is no error.
+
+
+
+# Resources
+
+* @see tests to understand Backend.
+
+
+# Work Environment
+
+## Work environment of thruthesky
+
+* http://localhost/www/backend/ for backend restful api access.
+* http://backend.org/ is same folder of http://localhost/www/backend
+* http://backend-seo.org/ for seo test. ( in this cone, Backend has many of client app files, so it looks a bit dirty )
+
 
 
 

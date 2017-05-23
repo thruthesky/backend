@@ -139,7 +139,8 @@ class User extends \model\entity\Entity {
      * @return bool
      */
     public function isAdmin() {
-        return $this->id == ADMIN_ID;
+        if ( $this->id == ADMIN_ID ) return true;
+        else return in_array( $this->id, $GLOBALS['ADMIN_IDS'] );
     }
     public function isAnonymous() {
         return $this->id == ANONYMOUS_ID;
