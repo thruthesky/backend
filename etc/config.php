@@ -51,7 +51,7 @@ $MAX_NO_OF_ITEMS           = 100;          // number
  *      - no log will be save.
  *      - no debug data will be printed on the browser ( to user ).
  */
-$DEBUG                  = true;
+$DEBUG                  = false;
 
 /**
  * If 'DEBUG_LOG_FILE_PATH' is not empty, then debug data will not be saved.
