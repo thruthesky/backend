@@ -36,6 +36,7 @@ class Post_Data_Interface extends Post_Data {
         if( isset($record['title']) && strlen( $record['title'] ) > 254 ) return error( ERROR_TITLE_TOO_LONG );
 
         $post_idx = parent::create( $record );
+
         if ( is_error( $post_idx ) ) return error( $post_idx );
 
 
@@ -125,19 +126,22 @@ class Post_Data_Interface extends Post_Data {
         if ( isset($extra['post_config_id']) ) {
 		    $post_config_id = $extra['post_config_id'];
             $config = config( $extra['post_config_id'] );
+            if ( is_error($config) ) return error( $config );
             if ( $config->exist() ) {
                 debug_log($option);
                 $option['where'] = "post_config_idx = ? " . ( $option['where']  ?  "AND ($option[where])" : '' );
                 $option['bind'] = $config->idx . ( isset($option['bind']) ? ",$option[bind]" : '' );
             }
             else {
-                return error( ERROR_FORUM_NOT_EXIST );
+                return error( ERROR_FORUM_NOT_EXIST, "$extra[post_config_id] forum does not exists." );
             }
         }
 
 
 
         $re = parent::search( $option ); if ( is_error( $re ) ) return error( $re );
+        if ( is_error($re) ) return error($re);
+
         $posts = $re[0];
 
         $pre_option = [];

@@ -1,11 +1,11 @@
+# For backend & backend-seo & Angular & Cordova
 
 
 
-*.js
-*.css
-*.html
-*.ico
-assets/
+/*.js
+/*.css
+/index.html
+/assets/
 
 
 /etc/my_config.php
@@ -44,5 +44,8 @@ $RECYCLE.BIN/
 .DS_Store
 Thumbs.db
 UserInterfaceState.xcuserstate
+
+
+
 
 

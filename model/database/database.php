@@ -57,7 +57,7 @@ class Database extends \PDO {
      * @return Database
      */
     public static function mysql($host, $dbname, $username, $password) {
-        $db = new Database("mysql:host=$host;dbname=$dbname", $username, $password);
+        $db = new Database("mysql:host=$host;dbname=$dbname;charset=utf8", $username, $password);
         $db->type = 'mysql';
         $db->setOptions();
         return $db;
@@ -421,13 +421,18 @@ class Database extends \PDO {
      *      $row = $db->row('temp', db_cond('name','JaeHo Song'));
      * @endcode
      *
-     * @Attention it returns false if there is no data.
+     * it returns ERROR CODE on ERROR.
+     * it returns empty array if there is no data.
      */
     public function row($q)
     {
         $re = $this->rows( $q );
-        if ( $re && isset($re[0]) ) return $re[0];
-        return FALSE;
+        if ( is_error($re) ) return $re;            /// IF error returned, return ERROR.
+        else if ( is_array($re) ) {                 /// IF array returned and NOT error.
+            if ( isset($re[0]) ) return $re[0];
+            else return [];
+        }
+        else return $re;                            ///
     }
 
 
@@ -453,7 +458,9 @@ class Database extends \PDO {
         catch ( \Exception $e ) {
 
             $this->log("Above SQL has Query ERROR");
-            return ERROR_DATABASE_ROWS_QUERY_ERROR;
+            $this->log( $e->getMessage() );
+            error( [ 'code' => ERROR_DATABASE_ROWS_QUERY_ERROR, 'message' => $e->getMessage() ] );
+            exit;
         }
 
         if ($statement) return $statement->fetchAll(\PDO::FETCH_ASSOC);
@@ -496,7 +503,8 @@ class Database extends \PDO {
             $message = $e->getMessage();
             debug_database_log('Insert failed: ' . $message);
             if ( strpos( $message, "Integrity constraint") !== false ) return ERROR_DATABASE_UNIQUE_KEY;
-            return FALSE;
+            if ( strpos( $message, "has no column named" ) !== false ) return ERROR_WRONG_COLUMN;
+            return ERROR_DATABASE_INSERT_FAILED;
         }
 
 

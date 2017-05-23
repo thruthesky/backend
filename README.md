@@ -15,17 +15,58 @@ Backend Server for Restful APIs
 * 'created' URL parameter is added on File URL for cache. Since a user deletes a file and upload a new file, then, it has same file.idx so, the browser cached image will be showed again to user..
 * default 'no. of items' of a page(list/search page) is '$DEFAULT_NO_OF_PAGE_ITEMS' which is in etc/config.
 * search/list api call now accepts 'page' and works as exptected.
-* when admin edits user information, session_id will not be returned. so, the session_id will be invalidated after 'admin edit'
+* when admin edits user information, session_id will not be returned.
+    * so, the session_id will be invalidated after 'admin edit'
     * but, user edits user info, then session_id will be returned.
-    * so, admin edits admin and no session_id will be returned, meaning, admin has to login again.
+    * so, admin edits admin information(himself) and no session_id will be returned, meaning, admin has to login again.
+    
 * you cannot update post_config_id. ( consider to make it updatable ).
 
 * @fix: returns-post_config-of-requested-post-config-id-if-no-posts. Apr 11, 2017. When there is no post ( no posts are created. newly created forum ), then the no post-config information is responded. so, if there is no posts, the requested post config id's 'post config' will be responded by default.
 
 * 'first_image_idx' is added on 'post_data' table. it holds the `file.idx' of first image.
 
+* If there is an error while DATABASE query, it prints out error response and exits the script immediately. ( since it is not is to deliver DB error message that is in the bottom part way back up to the top part callers ).
+
+* 'user_idx' is added on meta table.
+    so, a meta record is now able to refer to whom it belongs to.
+    It is only used for "meta.list" ( search ) and "meta.delete".
+
+* 'link' is added on post_data table to hold link information.
+* no 'meta.data' interface? omitted by purposely? because there is no 'meta.update', no 'meta.data'? since meta is not for individual manipulation?
+
+* button options : allow like/dislike,
 
 
+* for 'file.delete', if the file was uploaded by anonymous, then the anonymous must input password of the post.
+* for 'file.upload', anonymous can upload without a password (whether the anonymous is on edit page or not), but the anonymous cannot attach the file to the post since he does not know the password( he cannot submit the edit form because he does not know the password ).
+* for, post/comment edit form, the anonymous can upload but cannot delete until he submit the edit form first because the uploaded file is not yet attached to the post/comment.
+    * Anyway, After all, it's safe and and no one will do those thing.
+    
+
+* file can be downloaded with `file.user_idx` and `file.code`
+
+    ex) http://backend.org/?route=download&user_idx=1&code=primary_photo
+
+ * admin can edit a post of anonymous even he input wrong password.
+ 
+ * Backend can now be run on CLI.
+ 
+    ex) $ php index.php "route=version"
+
+  
+* You can add admin IDs.
+
+in config.php file, $ADMIN_ID is the primary admin id. and you can have many admin ID(s) on $ADMIN_IDS. They will have same privileges.
+
+````
+  $ADMIN_ID               = 'usera1';          // This is an admin id.
+  $ADMIN_IDS              = ['usera2', 'usera3', '', ''];             // Array. Put other admin ids.
+````
+
+
+
+ 
 # Bugs
 
 * On macOS Sierra 10.12.3 with SQLite,
@@ -55,6 +96,29 @@ Backend Server for Restful APIs
 
 # TODO
 
+- convert model added and it is not core model.
+
+    - and other codes that are only depending on a specific site must not touch the core code.
+
+    - it's confusing to put user custom model and core model on same folder.
+    
+    - Put core model on core folder in next version.
+    
+    - Hooks are often needed and it should be in a custom module.
+    
+
+- For next version.
+    Create Error Object and return all the error information.
+    For instance, if SQL insert error happens, the error message is not delivered to the client.
+    
+
+- ADMIN PAGE with Angular 4 on "http://backend.org/view/admin/www/"
+    ./view/admin/ is Angular Project for admin.
+    
+
+
+- Error handling after 'db()->row()' or 'db()->rows()'. it should return right error message of DB.
+    @see entity()->load() for detail.
 - Write usage on category
 - Use category for forum.
 
@@ -130,6 +194,24 @@ config('abc')->timeFirstComment();
 
 * is it okay to let api search by id and email? phone numbers? isn't it breaking privacy policy?
 
+
+## Security of user information
+
+
+````
+User::getAvailableData()
+````
+
+
+     * Return available user information for the client ( who request the user information )
+     *
+     * If admin requests user information, then admin will get the full information.
+     * 
+     * If a user requests user information of his own, then he will get the full record.
+     * 
+     * If NOT, then the user will only get limited information for security and privacy.
+
+     
 
 ## User Level
 
@@ -863,7 +945,7 @@ Refer [API explanation page](https://eventviva.github.io/php-image-resize/class-
 
 # Admin
 
-* `admin id` is set in ./etc/config.php and if you want, you can chage it to any user id and that id becomes admin.
+* `admin id` is set in ./etc/config.php and if you want, you can change it to any user id and that id becomes admin.
 * admin password is the same as `admin id`. so, by default, admin id is `admin` and the password is `admin`. so, you can login as admin with `admin` as ID and `admin` as password.
 * You need to change the password of the admin immediately after you install.
 
@@ -1020,8 +1102,9 @@ none.
 
 #### Admin can edit user information.
 
-* When admin edits user information, user's session id will become invalid. So the user needs to login again.
-* When admin changes user information, admin's session id will be not regenerated. And there will be no session_id returned from the request if admin edits user information.
+* When admin edits user information, the user's session id will become invalid. So the user needs to login again.
+* When admin edits user information, admin's session id will be not regenerated.
+    And there will be no session_id returned from the request if admin edits user information.
 
 
 
@@ -1029,6 +1112,14 @@ none.
 
 
 When you successfully uploaded a photo, you will get a file.idx and you can do whatever you want with the file.idx.
+
+## File Delete
+
+If a file is uploaded by an anonymous and not finish yet, then any anonymous can delete the file. It is a security hole but NOT a bit problem and rearly happens.
+If a file is uploaded by an anonymous and finished, then password is required to delete the password.
+
+
+
 
 
 #### Request
@@ -1093,6 +1184,12 @@ To hook image(s) you uploaded to an entity, you just send the file idx(es) in `f
 
 ## POST
 
+### POST EDIT
+
+* If a post/comment is created by anonymous, it is recommended to check password before showing the edit form.
+* Even if anonymous is able to upload a file on a post/comment edit form( that post/comment is not belong to him ), he/she cannot submit the post/comment since he does not know password, so the uploaded file will not be attached to the post/comment and will be deleted later by garbage collecton.
+
+
 ### POST LIST
 
 * If extra.file of request is set to true, you will get uploaded file information.
@@ -1104,36 +1201,75 @@ To hook image(s) you uploaded to an entity, you just send the file idx(es) in `f
 
 
 
-# Model Initialization
+# Initialization.
 
-Backend will load and run `*_init.php` scripts under each model. The purpose of this scripts is for initializing model like writing `hooks`, loading some data for the model, etc.
+Model initialization.
+
+Backend will load and run `*_init.php` scripts under each model.
+The purpose of this scripts is for initializing model like writing `hooks`, loading some data for the model, etc.
 
 
 * Be sure that you keep light `*_init.php` scripts.
-* `*_init.php` is a good place to write hooks.
+* `*_init.php` is a good place to write hooks. Name the script something like "post_hook_init.php"
 
 
 
 
 # Hooks
 
-Hook is one way to alter the behavior backend. By hooking, you can inject your code deep into Backend and do whatever you want.
+Hook is one way to alter the behavior of backend.
+By hooking, you can inject your code deep into the Backend and do whatever you want.
 
-* Best cases to write hooks are that you want to change the behavior of Backend but you do not want to touch the core code because
+* Best cases to write hooks are that you want to change the behavior of the Backend but you do not want to touch the core code because
 
 	* your changes will be deleted or have to rewrite when Backend updates.
-	* your changes may not be sharable if you change it in Backend core code.
+	* your changes may not be sharable if you change it in the Backend core code.
 
-* To write hook codes, create your own model and hook something by putting the code in `*_init.php`
+* To write hook codes, create your own model and hook something by putting the code in `*_hook__init.php`
 
 * Hooks are not for altering the output or JSON response. Be careful not to print out anything from hooks.
 
 ## How to hook
 
+There are two steps to hook.
+
+@changed /* Hook must NOT return any value because with one hook, there might be many handler. */
+
+@updated Hook can return a value since May 16, 2017.
+
+Hook may return FALSE or any Truthy value.
+If a Hook returns null or does not returns any value(empty value), then it continues to run next hook(s).
+There might be many handlers on one hook. If any handler return values, the rest of hooks will not be run!!
+
+Be reminded, It often causes un-expected due to running many handlers on a hook when one of the hooks return a value.
+
+
+
+If there is any error, the hook should exit with appropriate JSON error.
+
+
+
 ````
-add_hook( 'after_route_load', function() { } );         // Run after route load complete.
-add_hook( 'after_route', 'user.register', function() use ( $var1 ) { } );       // Run after user register interface.
+hook()->run('after_init');                              // 1. Run hook with a name in a place.
+hook()->add( 'after_init', function() { ... } );           // 2. Add hook handler mostly in *_init.php
+hook()->add( 'after_init', $variables, function () => { ... } );   // How to pass variables.
+hook()->add( 'after_route', 'user.register', function() use ( $var1 ) { } );       // Run after user register interface.
 ````
+
+You can call hook()->add() any place BUT be sure the hook will be 'add'ed before 'run'.
+
+There are two kinds of variables.
+
+````
+hook()->run('after_init', $variables);                      // Variables from run-time.
+hook()->add('after_init', $variables, function( $vars ){ ... });   // Variables from add-time.
+````
+
+These two values will be on the hook handler.
+
+@see hook_test.php
+
+
 
 
 ## Hook List

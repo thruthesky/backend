@@ -55,7 +55,8 @@ route()->add( 'post_comment.delete', [
     'path' => '\\model\\post\\post_comment_interface',
     'method' => 'delete',
     'variables' => [
-        'required' => [ 'idx' ]
+        'required' => [ 'idx' ],
+        'optional' => [ 'password' ],
     ],
     'validator' => function() {
         $comment = comment( in('idx') );

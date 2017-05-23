@@ -1,0 +1,84 @@
+<header class="">
+    <nav class="navbar fixed-top p-2 bg-slategrey pointers">
+        <div class="d-flex justify-content-between">
+            <div class="" routerLink="/">
+                <span class="fa-stack fa-lg">
+                <i class="fa fa-circle fa-stack-2x fa-inverse"></i>
+                <i class="fa fa-home fa-stack-1x slategrey"></i>
+            </span>
+            </div>
+            <div routerLink="/">
+                <h2 class="pt-1 white normal">Withcenter LMS</h2>
+            </div>
+            <div routerLink="/about">
+                <span class="fa-stack fa-lg">
+                <i class="fa fa-circle fa-stack-2x fa-inverse"></i>
+                <i class="fa fa-info fa-stack-1x slategrey"></i>
+            </span>
+            </div>
+        </div>
+    </nav>
+
+    <ul class="clearfix text-center p-1s bg-lightgrey">
+        <li class="user" routerLink="/users">
+            <span class="fa-stack fa-lg">
+            <i class="fa fa-square fa-stack-2x"></i>
+            <i class="fa fa-users fa-stack-1x fa-inverse"></i>
+        </span>
+            <div class="text fs-80">사용자</div>
+        </li>
+
+        <li class="forum" routerLink="/forum">
+            <span class="fa-stack fa-lg">
+            <i class="fa fa-square fa-stack-2x"></i>
+            <i class="fa fa-comments fa-stack-1x fa-inverse"></i>
+        </span>
+            <div class="text fs-80">게시판</div>
+        </li>
+        <li>
+            <span class="fa-stack fa-lg">
+            <i class="fa fa-square fa-stack-2x"></i>
+            <i class="fa fa-tasks fa-stack-1x fa-inverse"></i>
+        </span>
+            <div class="text fs-80">LMS</div>
+        </li>
+
+
+        <li>
+            <span class="fa-stack fa-lg">
+            <i class="fa fa-square fa-stack-2x"></i>
+            <i class="fa fa-book fa-stack-1x fa-inverse"></i>
+        </span>
+            <div class="text fs-80">예약수업</div>
+        </li>
+        <li>
+            <span class="fa-stack fa-lg">
+            <i class="fa fa-square fa-stack-2x"></i>
+            <i class="fa fa-calendar fa-stack-1x fa-inverse"></i>
+        </span>
+            <div class="text fs-80">지난수업</div>
+        </li>
+
+        <li *ngIf=" ! user.logged " routerLink="/login">
+            <span class="fa-stack fa-lg">
+                <i class="fa fa-square fa-stack-2x" aria-hidden="true"></i>
+                <i class="fa fa-sign-in fa-stack-1x fa-inverse" aria-hidden="true"></i>
+            </span>
+            <div class="text fs-80">로그인</div>
+        </li>
+        <li *ngIf=" user.logged " (click)="onClickLogout()">
+            <span class="fa-stack fa-lg">
+                <i class="fa fa-square fa-stack-2x" aria-hidden="true"></i>
+                <i class="fa fa-sign-out fa-stack-1x fa-inverse" aria-hidden="true"></i>
+            </span>
+            <div class="text fs-80">로그아웃</div>
+        </li>
+        <!--<li routerLink="/about">
+            <span class="fa-stack fa-lg">
+                <i class="fa fa-square fa-stack-2x" aria-hidden="true"></i>
+                <i class="fa fa-info fa-stack-1x fa-inverse" aria-hidden="true"></i>
+            </span>
+            <div class="text fs-80">About</div>
+        </li>-->
+    </ul>
+</header>

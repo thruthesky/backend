@@ -16,4 +16,3 @@ include_once 'core/bootstrap.php';
 // if ( DEBUG ) sleep(2);
 
 backend()->run();
-

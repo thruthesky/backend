@@ -27,6 +27,7 @@ class Post_Comment extends Post_Data
         $ret['vote_good'] = $this->vote_good;
         $ret['vote_bad'] = $this->vote_bad;
         $ret['report'] = $this->report;
+        $ret['deleted'] = $this->deleted();
         $user = user( $this->user_idx );
         //debug_log('user: ');
         //debug_log($user);

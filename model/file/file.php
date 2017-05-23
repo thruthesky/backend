@@ -101,7 +101,7 @@ class File extends \model\entity\Entity
              *
              */
 
-            $temp_idx = $this->reset( ['finish' => 'N' ] )->create();
+            if ( DATABASE_TYPE == 'sqlite' ) $temp_idx = $this->reset( ['finish' => 'N' ] )->create();
 
             $re = $this->deleteBy( $model, $model_idx, $code );
             if ( is_error($re) ) {
@@ -286,7 +286,7 @@ class File extends \model\entity\Entity
         if ( $code ) $and_code = "AND code='$code'";
         else $and_code = null;
         $files = db()->rows("SELECT idx FROM {$this->getTable()} WHERE model='$model' AND model_idx=$model_idx $and_code");
-
+        if ( is_error($files) ) return $files;
         debug_log("Found " . count($files) . " files to delete.");
         if ( $files ) {
             foreach ( $files as $file ) {

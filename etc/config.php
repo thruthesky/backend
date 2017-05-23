@@ -21,7 +21,9 @@ $DATABASE_TYPE          = 'mysql';         // 'mysql' | 'sqlite'
 
 
 
-$ADMIN_ID               = 'admin';          // This is admin id.
+$ADMIN_ID               = 'usera1';          // This is an admin id.
+$ADMIN_IDS              = ['usera2', 'usera3', '', ''];             // Array. Put other admin ids.
+
 $ANONYMOUS_ID           = 'anonymous';      // Anonymous ID.
 $TEST_USER_ID           = 'user';           // Test User ID.
 
@@ -72,6 +74,9 @@ $DEBUG_LOG_DATABASE         = true;
 $TIME_TO_DELETED_OLD_UNHOOKED_FILE = 1440; // minutes. Unhooked files will be deleted after this minutes. 24 hours is good to go.
 
 if ( file_exists( __ROOT_DIR__ . "/etc/my_config.php") ) require __ROOT_DIR__ . "/etc/my_config.php";
+
+
+
 
 
 /**

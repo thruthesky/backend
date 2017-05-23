@@ -236,8 +236,9 @@ class Route {
 
             foreach ( $number_if_contain as $contain ) {
                 if ( strpos( $k, $contain ) !== false ) {
-
-                    if ( $v && ! is_numeric($v) ) return [ 'code' => ERROR_MALFORMED_VARIABLE_NUMBER, 'message' => "variable $k must be number BUT $v"];
+                    if ( $v === 0 || $v ) {
+                        if ( ! is_numeric($v) ) return [ 'code' => ERROR_MALFORMED_VARIABLE_NUMBER, 'message' => "variable $k must be number BUT $v"];
+                    }
                 }
             }
 

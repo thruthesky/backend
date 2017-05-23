@@ -43,7 +43,11 @@ define('ERROR_NO_DATA', -40086);                        $em[ERROR_NO_DATA] = 'no
 define('ERROR_DATABASE_DELETE_FAILED', -40088);         $em[ERROR_DATABASE_DELETE_FAILED] = 'database-delete-failed';
 
 define('ERROR_UNSECURE_STATEMENT_CONDITION', -40089);    $em[ERROR_UNSECURE_STATEMENT_CONDITION] = 'insecure-statement-condition';
+define('ERROR_WRONG_COLUMN', -40090);                            $em[ERROR_WRONG_COLUMN] = "wrong-database-table-column-provided.";
+
+
 define('ERROR_SEARCH_BIND_LACK', -40092);        $em[ERROR_SEARCH_BIND_LACK] = 'bind-lack-on-taxonomy-search';
+
 
 define('ERROR_MALFORMED_RESPONSE', -40093);             $em[ERROR_MALFORMED_RESPONSE] = 'malformed-response.return-data-is-not-array';
 
@@ -83,6 +87,9 @@ define('ERROR_USER_NOT_LOGIN', -4010001);                       $em[ERROR_USER_N
 define('ERROR_USER_LOGGED_IN', -4010002);               $em[ERROR_USER_LOGGED_IN] = 'user-already-logged-in';
 define('ERROR_MALFORMED_SESSION_ID', -400130);          $em[ERROR_MALFORMED_SESSION_ID] = 'session-id-is-malformed';
 define('ERROR_MALFORMED_ID', -400131);          $em[ERROR_MALFORMED_ID] = 'id-is-malformed';
+define('ERROR_OLD_PASSWORD_IS_MISSING', -40132);        $em[ERROR_OLD_PASSWORD_IS_MISSING] = "old-password-is-missing";
+define('ERROR_NEW_PASSWORD_IS_MISSING', -40133);        $em[ERROR_OLD_PASSWORD_IS_MISSING] = "new-password-is-missing";
+
 
 define('ERROR_USER_RESIGN_FAILED', -40150);             $em[ERROR_USER_RESIGN_FAILED] = 'user-resign-failed';
 define('ERROR_NOT_YOUR_POST_DATA', -40152);             $em[ERROR_NOT_YOUR_POST_DATA] = 'this-is-not-your-post-data';
@@ -156,6 +163,9 @@ define('ERROR_FILE_NOT_EXIST_ON_HDD', -431051 );             $em[ERROR_FILE_NOT_
 define('ERROR_HOOK_FILE_IDX_IS_NOT_IN_ARRAY', -43106);      $em[ERROR_HOOK_FILE_IDX_IS_NOT_IN_ARRAY] = 'file-idx-must-be-in-array';
 define('ERROR_HOOK_FILE_IDX_IS_WRONG', -43108);             $em[ERROR_HOOK_FILE_IDX_IS_WRONG] = 'wrong-file-idx--maybe-empty--maybe-not-exist--may-be-wrong-input-value-like-undefined';
 define('ERROR_HOOK_NOT_YOUR_FILE', -43110);                 $em[ERROR_HOOK_NOT_YOUR_FILE] = 'uploaded-file-is-not-yours';
+define('ERROR_CAN_NOT_READ_IMAGE_FILE', -431115 );                $em[ERROR_CAN_NOT_READ_IMAGE_FILE] = 'file-exist-but-can-not-read--check-if-the-file-is-image-file-or-not';
+
+
 
 define('ERROR_UPLOAD_ERR_INI_SIZE', -43201);
 define('ERROR_UPLOAD_ERR_FORM_SIZE', -43202);
@@ -172,4 +182,13 @@ define('ERROR_NOT_YOUR_FILE', -43300);                      $em[ERROR_NOT_YOUR_F
 
 
 // security
-define('ERROR_MAX_REQUEST_LENGTH', 60004);                  $em[ERROR_MAX_REQUEST_LENGTH] = "request-too-long";
+define('ERROR_MAX_REQUEST_LENGTH', -60004);                  $em[ERROR_MAX_REQUEST_LENGTH] = "request-too-long";
+
+
+
+define('ERROR_NOT_YOUR_META', -60010);                          $em[ERROR_NOT_YOUR_META] = "not-your-meta-data";
+define('ERROR_META_NOT_EXIST', -60011);                         $em[ERROR_META_NOT_EXIST] = "meta-not-exist";
+
+
+
+define('ERROR_PASSWORD_REQUIRED_FOR_ANONYMOUS', -8000);         $em[ERROR_PASSWORD_REQUIRED_FOR_ANONYMOUS] = "password-required-for-anonymous";

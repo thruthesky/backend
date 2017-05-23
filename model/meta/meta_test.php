@@ -2,15 +2,19 @@
 
 namespace model\meta;
 
-class Meta_Test {
+use model\test\Test;
+
+class Meta_Test extends Test {
     public function __construct()
     {
     }
     public function run() {
 
         $this->create();
-
+        $this->crudRoute();
         $this->multi_create();
+
+
 /*
         $idx = meta()->set('abc', 123, 'code-unit-test', 'data');
         test( $idx, "Meta::set() code: code, data: data re: idx: $idx");
@@ -68,6 +72,123 @@ class Meta_Test {
             test( ! meta()->load( $idx )->exist(), "Meta deleted" );
 
         }
+
+
+
+
+    }
+
+    public function crudRoute() {
+
+
+
+        //////
+        //////      Creating meta data through routes.
+        //////
+        $re = $this->route('meta.create', []);
+        test( is_error($re) == ERROR_REQUIRED_INPUT_IS_MISSING, "session_id missing: " . get_error_string($re));
+
+        $params = [
+            'session_id' => thruthesky()->getSessionId()
+        ];
+        $re = $this->route('meta.create', $params);
+        test( is_error($re) == ERROR_MODEL_IS_EMPTY, 'model is empty: ' . get_error_string($re));
+
+        $params['model'] = 'clothes';
+        $re = $this->route('meta.create', $params);
+        test( is_error($re) == ERROR_MODEL_IDX_IS_EMPTY, 'model is empty: ' . get_error_string($re));
+
+        $params['model_idx'] = 1;
+        $re = $this->route('meta.create', $params);
+        test( is_error($re) == ERROR_CODE_IS_EMPTY, 'code is empty: ' . get_error_string($re));
+
+        $params['code'] = 'mango';
+        $re = $this->route('meta.create', $params);
+        if ( is_success($re) ) {
+		test( 1, 'moango clothes has created: ' . $re['data']['meta']['idx']);
+	}
+        else test( 0, 'mango clothes meta creation failed: ' . get_error_string($re) );
+
+
+        $params['code'] = 'marks';
+        $re = $this->route('meta.create', $params);
+        if ( is_success($re) ) {
+		test( 1, 'marks clothes has created: ' . $re['data']['meta']['idx']);
+	}
+        else test( 0, 'marks clothes meta creation failed: ' . get_error_string($re) );
+
+
+        ///
+        ///     Search
+        ///
+        $params = [];
+        $params['where'] = 'model=? AND model_idx=?';
+        $params['bind'] = "clothes,1";
+        $re = $this->route("meta.list", $params);
+        test( $re['data']['total'] == 0, "no data");
+
+
+
+
+        $params['session_id'] = anonymousUser()->getSessionId();
+        $re = $this->route("meta.list", $params);
+        test( $re['data']['total'] == 0, "no data for anonymous");
+
+
+        $params['session_id'] = thruthesky()->getSessionId();
+        $re = $this->route("meta.list", $params);
+        test( $re['data']['total'] == 2, "two records for thruthesky");
+        test( $re['data']['meta'][0]['code'] == 'mango', "mango meta");
+
+
+        $meta = $re['data']['meta'];
+
+        /// delete
+
+        $params = [];
+        $re = $this->route("meta.delete", $params);
+        test( is_error($re) == ERROR_REQUIRED_INPUT_IS_MISSING, "empty session id");
+
+        $params['session_id'] = testUser()->getSessionId();
+        $re = $this->route('meta.delete', $params);
+        test( is_error($re) == ERROR_REQUIRED_INPUT_IS_MISSING, "missing idx");
+
+
+        $params['idx'] = $meta[0]['idx'];
+        $re = $this->route('meta.delete', $params);
+        test( is_error($re) == ERROR_NOT_YOUR_META, "not your data.");
+
+
+        $params['session_id'] = thruthesky()->getSessionId();
+        $re = $this->route('meta.delete', $params);
+        if ( is_success($re) ) {
+            test( $re['data']['idx'] == $meta[0]['idx'], "deleted");
+        }
+        else test(0, "delete failed: " . get_error_string($re));
+
+
+        $params['idx'] = $meta[1]['idx'];
+        $re = $this->route('meta.delete', $params);
+        if ( is_success($re) ) {
+            test( $re['data']['idx'] == $meta[1]['idx'], "deleted");
+        }
+        else test(0, "delete failed: " . get_error_string($re));
+
+
+        ///
+
+        $params = [];
+        $params['where'] = 'model=? AND model_idx=?';
+        $params['bind'] = "clothes,1";
+        $params['session_id'] = thruthesky()->getSessionId();
+        $re = $this->route("meta.list", $params);
+        test( $re['data']['total'] == 0, "no data");
+
+
+
+
+
+
 
     }
 

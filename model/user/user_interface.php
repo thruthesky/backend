@@ -173,6 +173,7 @@ class User_Interface extends User {
 
     public function login() {
         $user = user( in('id') );
+        if ( is_error( $user ) ) return error( $user );
         if ( ! $user->exist() ) return error(ERROR_USER_NOT_EXIST);
         if ( ! $this->checkPassword( in('password'), $user->password ) ) return error(ERROR_WRONG_PASSWORD);
         $user->updateLoginInformation();
@@ -252,4 +253,12 @@ class User_Interface extends User {
     }
 
 
+    public function changePassword( User $user ) {
+        $re = $user->setPassword( in('new_password') );
+        if ( $re ) {
+            $this->reset( $user );
+            success( $this->res() );
+        }
+        else error( ERROR_DATABASE_UPDATE_FAILED );
+    }
 }

@@ -31,7 +31,7 @@ class SEO {
         $this->seo_config['image'] = str_replace('{site_url}', get_site_url(), $this->seo_config['image']);
 
 
-        $uri = substr($_SERVER['REQUEST_URI'], 1);
+        $uri = substr( server('REQUEST_URI'), 1);
 
         if ( empty( $uri ) ) {
 		$this->index = true;

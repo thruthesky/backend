@@ -97,6 +97,8 @@ class User extends \model\entity\Entity {
      *          $user = user()->load( in( 'session_id' ) );
      * @endcode
      *
+     * @attention The return of this value MAYBE an error or $this.
+     *
      */
     public function load( $what, $reload = true ) { // for variable compatibilities with Entity
 
@@ -137,7 +139,8 @@ class User extends \model\entity\Entity {
      * @return bool
      */
     public function isAdmin() {
-        return $this->id == ADMIN_ID;
+        if ( $this->id == ADMIN_ID ) return true;
+        else return in_array( $this->id, $GLOBALS['ADMIN_IDS'] );
     }
     public function isAnonymous() {
         return $this->id == ANONYMOUS_ID;
@@ -180,6 +183,7 @@ class User extends \model\entity\Entity {
     public function forceLogin( $id ) {
         if ( empty($id ) ) return ERROR_USER_ID_EMPTY;
         $user = $this->load( $id );
+        if ( is_error($user) ) return $user;
         if ( ! $user->exist() ) return ERROR_USER_NOT_EXIST;
         setCurrentUser( $user );
 
@@ -188,6 +192,21 @@ class User extends \model\entity\Entity {
         return OK;
     }
 
+
+    /**
+     *
+     * Sets users password.
+     *
+     * @attention it should not use 'un-secured user input'
+     *
+     * @param $password - plain text password.
+     * @return bool
+     */
+    public function setPassword( $password ) {
+
+        $enc = $this->encryptPassword( $password );
+        return $this->update([ 'password' => $enc ]);
+    }
 
 
     /**
@@ -302,13 +321,7 @@ class User extends \model\entity\Entity {
 
 
     /**
-     *
-     * Return available user information for the client ( who request the user information )
-     *
-     * If the requesting user is admin, then he will get the full information.
-     * If the requesting user is requesting the user information of his own, then he will get the full record.
-     * If NOT, then the user will only get limited information for security and privacy.
-     *
+     * @see README#security of user information.
      * @param $record
      * @return array
      */
