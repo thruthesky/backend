@@ -54,7 +54,18 @@ Backend Server for Restful APIs
  
     ex) $ php index.php "route=version"
 
-    
+  
+* You can add admin IDs.
+
+in config.php file, $ADMIN_ID is the primary admin id. and you can have many admin ID(s) on $ADMIN_IDS. They will have same privileges.
+
+````
+  $ADMIN_ID               = 'usera1';          // This is an admin id.
+  $ADMIN_IDS              = ['usera2', 'usera3', '', ''];             // Array. Put other admin ids.
+````
+
+
+
  
 # Bugs
 
