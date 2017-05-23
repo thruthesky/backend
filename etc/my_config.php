@@ -7,3 +7,6 @@ $DATABASE_NAME          = 'backend';
 
 $DATABASE_TYPE          = 'sqlite';
 
+$ADMIN_ID = "jaeho";
+$ADMIN_IDS = ['charles', 'manuel'];
+

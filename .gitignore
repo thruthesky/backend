@@ -8,7 +8,7 @@
 assets/
 
 
-my_config.php
+/etc/my_config.php
 data
 log
 .history
