@@ -65,6 +65,8 @@ in config.php file, $ADMIN_ID is the primary admin id. and you can have many adm
 ````
 
 
+* Admin now can change user password with 'admin_change_user_password' route.
+
 
  
 # Bugs

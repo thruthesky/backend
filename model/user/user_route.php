@@ -128,6 +128,11 @@ add_route('user.test', [
     'method' => 'single_test'
 ]);
 
+route()->add('user.test_admin_change_user_password', [
+    'path' => "\\model\\user\\user_test",
+    'method' => 'adminChangeUserPassword'
+]);
+
 
 
 route()->add('change_password', [
@@ -142,10 +147,29 @@ route()->add('change_password', [
         $user = currentUser();
         if ( is_error( $user ) ) return $user;
         if ( ! $user->logged() ) return ERROR_USER_NOT_LOGIN;
-
         //debug_log($user->getRecord());
         if ( ! $user->checkPassword( in('old_password'), $user->password ) ) return ERROR_WRONG_PASSWORD;
+        return [ $user ];
+    }
+]);
 
+
+
+route()->add('admin_change_user_password', [
+    'path' => "\\model\\user\\user_interface",
+    'method' => 'adminChangeUserPassword',
+    'variables' => [
+        'required' => ['session_id', 'user_idx', 'new_password']
+    ],
+    'validator' => function () {
+        if ( ! in('user_idx') ) return ERROR_USER_IDX_EMPTY;
+        if ( ! in('new_password') ) return ERROR_NEW_PASSWORD_IS_MISSING;
+        $admin = currentUser();
+        if ( is_error( $admin ) ) return $admin;
+        if ( ! $admin->isAdmin() ) return ERROR_PERMISSION_ADMIN;
+
+        $user = user()->load( in('user_idx') );
+        if ( is_error( $user ) ) return $user;
         return [ $user ];
     }
 ]);

@@ -28,6 +28,7 @@ class User_Test extends \model\test\Test {
         $this->deleteTest();
 
         $this->passwordChange();
+        $this->adminChangeUserPassword();
 
         $this->passwordHook();
 
@@ -514,6 +515,50 @@ class User_Test extends \model\test\Test {
 
         $re = $this->route("login", ['id'=>'thruthesky', 'password'=>'abcd5'] );
         test( is_success($re), "login success with new password." );
+
+    }
+
+    public function adminChangeUserPassword() {
+
+
+        thruthesky()->setPassword('1234a');
+        $re = $this->route("login", ['id'=>'thruthesky', 'password'=>'1234a'] );
+        test( is_success($re), "thruthesky login ok with password - 1234a");
+
+
+        $admin_session_id = $this->getAdminSessionId();
+
+
+        $admin_session_id = $this->getAdminSessionId();
+
+
+
+
+        $re = $this->route('admin_change_user_password', [ 'session_id' => $admin_session_id . 'a', 'user_idx' => thruthesky()->idx, 'new_password' =>'abcd5' ] );
+        test( is_error($re), "should fail. malformed session id. " . get_error_string($re));
+
+
+//        $re = $this->route('admin_change_user_password', [ 'session_id' => str_replace("a", "b", $admin_session_id ), 'user_idx' => thruthesky()->idx, 'new_password' =>'abcd5' ] );
+//        test( is_error($re), "should fail. wrong session id. " . get_error_string($re));
+
+
+
+        $re = $this->route('admin_change_user_password', [ 'session_id' => thruthesky()->getSessionId(), 'user_idx' => thruthesky()->idx, 'new_password' =>'abcd5' ] );
+        test( is_error($re), "should fail. user cannot call 'admin_change_user_password' route. " . get_error_string($re));
+
+
+        $re = $this->route('admin_change_user_password', [ 'session_id' => $admin_session_id, 'user_idx' => thruthesky()->idx, 'new_password' =>'abcd5' ] );
+        test( is_success($re), "admin changed thruthesky password to abcd5. " . get_error_string($re));
+
+
+
+        $re = $this->route("login", ['id'=>'thruthesky', 'password'=>'1234a'] );
+        test( is_error($re), "thruthesky failed on login now with old password - 1324a");
+
+        $re = $this->route("login", ['id'=>'thruthesky', 'password'=>'abcd5'] );
+        test( is_success($re), "thruthesky logs in okay with new password - abcd5");
+
+
 
     }
 

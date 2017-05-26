@@ -261,4 +261,13 @@ class User_Interface extends User {
         }
         else error( ERROR_DATABASE_UPDATE_FAILED );
     }
+
+    public function adminChangeUserPassword( User $user ) {
+        $re = $user->setPassword( in('new_password') );
+        if ( $re ) {
+            success( ['user_idx' => in('new_password')]);
+        }
+        else error( ERROR_DATABASE_UPDATE_FAILED );
+    }
+
 }
