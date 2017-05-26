@@ -54,6 +54,7 @@ route()->add('file.delete',[
         $file = ( new model\file\File() )->load( in('idx' ) );
         if ( is_error( $file ) ) return $file;
 
+
         hook()->run("route.file.delete", $file);
         if ( $file->user_idx == currentUser()->idx ) {
         }

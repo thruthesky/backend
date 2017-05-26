@@ -137,7 +137,7 @@ class File extends \model\entity\Entity
 
         if( ! $re ) {
             $error = error_get_last();
-            $this->load($idx)->delete();
+            self::load($idx)->delete();
             return [ 'code' => ERROR_MOVE_UPLOADED_FILE, 'message' => $error['message'] ];
         }
 
