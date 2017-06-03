@@ -23,6 +23,7 @@
                             <th>Name</th>
                             <th>Gender</th>
                             <th>Email</th>
+                            <th>Password</th>
                             <th class="text-center">Edit</th>
                             <th class="text-center">Delete</th>
                         </ng-container>
@@ -46,6 +47,13 @@
                             </td>
                             <td>
                               <input type="email" name="email" [(ngModel)]="userInfo.email" placeholder="Email Address">
+                            </td>
+                            <td (click)="userInfo['PW'] = !userInfo['PW']" class="text-center" role="button">
+                              <i *ngIf="!userInfo['PW']" class="fa fa-key"></i>
+                              <div *ngIf="!userInfo['PW']">
+                                <input type="password" name="password" [(ngModel)]="userInfo['password']">
+                                <i class="fa fa-floppy-o" (click)="onClickUpdatePassword( userInfo )"></i>
+                              </div>
                             </td>
                             <td (click)="onClickEdit( userInfo )" class="text-center" role="button"><i class="fa fa-pencil"></i></td>
                             <td (click)="onClickDelete( userInfo.id )" class="text-center" role="button"><i class="fa fa-trash"></i></td>

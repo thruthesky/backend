@@ -2,11 +2,12 @@ import { Component } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/debounceTime';
 
-import { User,
+import {
+  User,
   _USER_RESPONSE,
   _LIST,
   _USER_LIST_RESPONSE,
-  _USER_EDIT, _USER_EDIT_RESPONSE, _DELETE_RESPONSE
+  _USER_EDIT, _USER_EDIT_RESPONSE, _DELETE_RESPONSE, _USER_PASSWORD_CHANGE_RESPONSE
 } from 'angular-backend';
 
 @Component({
@@ -127,4 +128,21 @@ export class UserPage {
       this.paginationUsers = this.paginationUsers.filter( ( user: _USER_RESPONSE ) => user.id != id );
     }, err => this.user.alert( err ) );
   }
+
+  onClickUpdatePassword( userInfo ) {
+    if( !userInfo['password'] ) return alert( 'password is empty');
+    let re = confirm("Are you sure you want to change password of ID: " + userInfo.id);
+    if ( !re ) return;
+
+    let updatePass = {
+      user_idx: userInfo.idx,
+      new_password: userInfo['Password']
+    };
+
+    this.user.updatePassword( updatePass ).subscribe( (res: _USER_PASSWORD_CHANGE_RESPONSE ) => {
+      console.log('updatePassword: ', res );
+    }, err => this.user.alert( err ))
+  }
+
+
 }
