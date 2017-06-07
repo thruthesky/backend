@@ -11,6 +11,9 @@
 /index.html
 /assets/
 
+/admin/
+/e2e/
+
 
 /etc/my_config.php
 data
