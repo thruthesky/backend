@@ -149,18 +149,18 @@ export class ForumPage {
   }
 
   onClickConfigDelete( _config ) {
-    if( _config.deleted == '1' ) return;
+  if( _config.deleted == '1' ) return;
 
-    let re = confirm("Delete post config : " + _config.id );
-    if( ! re) return;
+  let re = confirm("Delete post config : " + _config.id );
+  if( ! re) return;
 
-    this.postConfig.delete( _config.id ).subscribe( (res: _DELETE_RESPONSE) => {
-      console.log("delete response: ", res);
-      if ( res.code == 0 ) {
-        _config.deleted = '1';
-      }
-      //this.postConfigs = this.postConfigs.filter( ( config: _CONFIG ) => config.id != id );
-    }, err => this.postConfig.alert( err ) );
-  }
+  this.postConfig.delete( _config.id ).subscribe( (res: _DELETE_RESPONSE) => {
+    console.log("delete response: ", res);
+    if ( res.code == 0 ) {
+      _config.deleted = '1';
+    }
+    //this.postConfigs = this.postConfigs.filter( ( config: _CONFIG ) => config.id != id );
+  }, err => this.postConfig.alert( err ) );
+}
 
 }

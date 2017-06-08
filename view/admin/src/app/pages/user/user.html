@@ -50,7 +50,7 @@
                             </td>
                             <td (click)="userInfo['PW'] = !userInfo['PW']" class="text-center" role="button">
                               <i *ngIf="!userInfo['PW']" class="fa fa-key"></i>
-                              <div *ngIf="!userInfo['PW']">
+                              <div *ngIf="userInfo['PW']">
                                 <input type="password" name="password" [(ngModel)]="userInfo['password']">
                                 <i class="fa fa-floppy-o" (click)="onClickUpdatePassword( userInfo )"></i>
                               </div>
