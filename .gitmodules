@@ -1,6 +1,0 @@
-[submodule "view/admin/src/app/angular-backend-components"]
-	path = view/admin/src/app/angular-backend-components
-	url = https://github.com/thruthesky/angular-backend-components
-[submodule "view/admin/src/app/enhancer"]
-	path = view/admin/src/app/enhancer
-	url = http://github.com/thruthesky/enhancer
