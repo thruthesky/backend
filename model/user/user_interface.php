@@ -265,7 +265,7 @@ class User_Interface extends User {
     public function adminChangeUserPassword( User $user ) {
         $re = $user->setPassword( in('new_password') );
         if ( $re ) {
-            success( ['user_idx' => in('new_password')]);
+            success( ['user_idx' => $user->idx]);
         }
         else error( ERROR_DATABASE_UPDATE_FAILED );
     }
