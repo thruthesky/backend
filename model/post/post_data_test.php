@@ -73,9 +73,7 @@ class Post_Data_Test extends Test {
 
 
         // anonymous get data
-        $re = $this->route( 'post_data.data', ['idx' => $post_idx] );
-        test( is_success($re), "Anonymous get data : " . get_error_string($re));
-        test( $re['data']['post']['title'] == $p['title'], "Post title comparison: ");
+        $re = $this->route( 0== $p['title'], "Post title comparison: ");
 
 
         // anonymous edit post without password
