@@ -159,7 +159,7 @@ class Taxonomy extends \model\base\Base  {
         $where = $this->getSearchCondition( $option );
         if ( is_error( $where ) ) return $where;
         $q = "SELECT $option[select] FROM {$this->getTable()} $where $option[order] $option[limit]";
-
+//print_r($q);
         debug_log("taxonomy_query: $q");
 
         $rows = db()->rows( $q );
@@ -174,6 +174,10 @@ class Taxonomy extends \model\base\Base  {
                     if ( is_error( $option ) ) return error( $option );
 
         $where = $this->getSearchCondition( $option );
+
+
+        if ( strpos( strtoupper($where), 'GROUP') !== false ) return 0;
+
         if ( is_error( $where ) ) return $where;
         $row = db()->row("SELECT COUNT(*) as cnt FROM {$this->getTable()} $where");
         if ( is_error($row) ) return $row;

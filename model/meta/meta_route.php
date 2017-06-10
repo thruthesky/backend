@@ -20,6 +20,7 @@ route()->add('meta.create', [
         if ( ! in('code') ) return ERROR_CODE_IS_EMPTY;
 
         $user = currentUser();
+
         if ( is_error( $user ) ) return $user;
         if ( ! $user->logged() ) return ERROR_USER_NOT_LOGIN;
         return;
