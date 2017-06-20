@@ -69,4 +69,11 @@ class Meta_Interface extends Meta {
 
     }
 
+
+    public function config() {
+        $meta = $this->loadQuery("model='config' AND code='config'");
+        success([
+            'config' => $meta->data
+        ]);
+    }
 }

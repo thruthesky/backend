@@ -343,7 +343,7 @@ class User extends \model\entity\Entity {
         $record = $this->getRecord();
         if ( empty($record) ) return [];
         if ( !isset( $record['idx'] ) ) return [];
-        
+
         unset( $record['password'], $record['session_id'] );
         $record['meta'] = meta()->get( $this->getTable(), $record['idx']);
 
