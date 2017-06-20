@@ -35,6 +35,8 @@ class User extends \model\entity\Entity {
      *
      * @attention it does not check if the user has authenticated or not.
      *
+     * @WARNING it generates new session id every time it called.
+     *
      * @work
      *          1. It just generate a new session id based on $this->record
      *          2. save the session id into database table record.

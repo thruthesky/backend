@@ -88,8 +88,9 @@ class Meta_Test extends Test {
         $re = $this->route('meta.create', []);
         test( is_error($re) == ERROR_REQUIRED_INPUT_IS_MISSING, "session_id missing: " . get_error_string($re));
 
+        $session_id_thruthesky = thruthesky()->getSessionId();
         $params = [
-            'session_id' => thruthesky()->getSessionId()
+            'session_id' => $session_id_thruthesky
         ];
         $re = $this->route('meta.create', $params);
         test( is_error($re) == ERROR_MODEL_IS_EMPTY, 'model is empty: ' . get_error_string($re));
@@ -105,7 +106,7 @@ class Meta_Test extends Test {
         $params['code'] = 'mango';
         $re = $this->route('meta.create', $params);
         if ( is_success($re) ) {
-		test( 1, 'moango clothes has created: ' . $re['data']['meta']['idx']);
+		test( 1, "mango clothes has created: width: session_id: $params[session_id] " . $re['data']['meta']['idx']);
 	}
         else test( 0, 'mango clothes meta creation failed: ' . get_error_string($re) );
 
@@ -127,18 +128,19 @@ class Meta_Test extends Test {
         $re = $this->route("meta.list", $params);
         test( $re['data']['total'] == 0, "no data");
 
-
-
-
         $params['session_id'] = anonymousUser()->getSessionId();
         $re = $this->route("meta.list", $params);
         test( $re['data']['total'] == 0, "no data for anonymous");
 
 
-        $params['session_id'] = thruthesky()->getSessionId();
+        $params['session_id'] = $session_id_thruthesky;
         $re = $this->route("meta.list", $params);
-        test( $re['data']['total'] == 2, "two records for thruthesky");
+        test( $re['data']['total'] == 2, "two records for thruthesky: re: total: {$re['data']['total']}");
         test( $re['data']['meta'][0]['code'] == 'mango', "mango meta");
+
+//        di($params);
+//        di($re);
+//        exit;
 
 
         $meta = $re['data']['meta'];
