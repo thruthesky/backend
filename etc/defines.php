@@ -133,8 +133,8 @@ define('ERROR_MAX_NO_OF_ITEMS', -40405);                     $em[ERROR_MAX_NO_OF
 
 define("ERROR_META_MULTI_CREATE_FAILED", -4091);            $em[ERROR_META_MULTI_CREATE_FAILED] = "meta-multi-creation-failed";
 define("ERROR_MODEL_IS_EMPTY", -4090);                     $em[ERROR_MODEL_IS_EMPTY] = "model-is-empty";
-define("ERROR_MODEL_IDX_IS_EMPTY", -4090);                     $em[ERROR_MODEL_IDX_IS_EMPTY] = "model-is-empty";
-define("ERROR_CODE_IS_EMPTY", -4090);                     $em[ERROR_CODE_IS_EMPTY] = "model-is-empty";
+define("ERROR_MODEL_IDX_IS_EMPTY", -4090);                     $em[ERROR_MODEL_IDX_IS_EMPTY] = "model_idx-empty";
+define("ERROR_CODE_IS_EMPTY", -4090);                     $em[ERROR_CODE_IS_EMPTY] = "code-is-empty";
 
 
 define('ERROR_FAKE_ERROR', -50999);                         $em[ERROR_FAKE_ERROR] = 'fake-error';
