@@ -99,7 +99,7 @@ class Convert extends \model\entity\Entity {
         $admin_session_id = user(ADMIN_ID)->getSessionId();
         echo "\n " . $admin_session_id . "\n";
 
-        if ( config( $data->id )->exist() ) config( $data->id )->delete();
+        if ( config( $data['id'] )->exist() ) config( $data['id'] )->delete();
 
 
         $config_idx = config()->create( $data );
