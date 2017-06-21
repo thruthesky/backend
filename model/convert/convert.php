@@ -120,7 +120,7 @@ class Convert extends \model\entity\Entity {
 
         $config_idx = $this->postConfigCheckDeleteCreate( $data );
 
-        $rows = db()->rows("SELECT idx_root,idx_parent,member_id,subject,content,password,stamp FROM post_data WHERE post_id = 'qna' ");
+        $rows = db()->rows("SELECT idx_root,idx_parent,member_id,subject,content,password,stamp FROM post_data WHERE post_id LIKE 'qna' ");
         $count = 0;
 
         foreach ( $rows as $row ) {
@@ -175,7 +175,7 @@ class Convert extends \model\entity\Entity {
 
         $config_idx = $this->postConfigCheckDeleteCreate( $data );
 
-        $rows = db()->rows("SELECT idx_root,idx_parent,member_id,subject,content,password,stamp FROM post_data WHERE post_id = 'postscript' ");
+        $rows = db()->rows("SELECT idx_root,idx_parent,member_id,subject,content,password,stamp FROM post_data WHERE post_id LIKE 'postscript' ");
         $count = 0;
 
         foreach ( $rows as $row ) {
