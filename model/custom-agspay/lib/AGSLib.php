@@ -7,7 +7,6 @@
  * Copyright NICEPayments.Co.,Ltd. All rights reserved.	
  *
  */
-
 /* GLOBAL */
 define("PROGRAM", "AgsPay40");
 define("TYPE", "php");
@@ -297,7 +296,7 @@ class agspay40
 		
 		/** 소켓 open **/
 		$this->log->WriteLog( INFO, "Connect IP:[".$this->LOCALADDR."] Port:[".$this->LOCALPORT."]" );
-		$this->fp = fsockopen( $this->LOCALADDR, $this->LOCALPORT , &$errno, &$errstr, $this->CONN_TIMEOUT );
+		$this->fp = fsockopen( $this->LOCALADDR, $this->LOCALPORT , $errno, $errstr, $this->CONN_TIMEOUT );
 		
 		if( !$this->fp )
 		{
@@ -1586,9 +1585,14 @@ class agspay40
 	*/
  	function GetResult( $name ) 
 	{
-		$result = $this->RESULT[$name];
-		if( strlen($result) == 0 || $result == "") $result = $this->REQUEST[$name];
+		
+		if ( isset($this->RESULT[$name]) ) $result = $this->RESULT[$name];
+		else $result = '';
+		if( strlen($result) == 0 || $result == "") {
+			if ( isset( $this->REQUEST[$name] ) ) $result = $this->REQUEST[$name];
+		}
 		return $result;
+		
 	}
 
 	/*
@@ -1902,17 +1906,34 @@ class PayLog
 	{
 		if( $this->log == "false" ) return;
 
+		if ( ! isset($this->REQUEST["Type"]) ) {
+			$this->REQUEST["Type"] = "";
+			// $this->REQUEST["Type"] = "Type-No-Set-By-Mr-Song-JaeHo";
+		} //
+
 		$Transaction_time=GetTime()-$this->starttime;
 		$this->WriteLog( INFO, "END ".$this->REQUEST["Type"]." ".$msg." Transaction time:[".round($Transaction_time,3)."sec]" );
 		$this->WriteLog( INFO, "===============================================================" );
 		fclose( $this->log_fd );
+/*
+		$Transaction_time=GetTime()-$this->starttime;
+		$this->WriteLog( INFO, "END ".$this->REQUEST["Type"]." ".$msg." Transaction time:[".round($Transaction_time,3)."sec]" );
+		$this->WriteLog( INFO, "===============================================================" );
+		fclose( $this->log_fd );
+		*/
 	}
 }
 
 function GetTime()
 {
-    list($sec1, $sec2) = explode(" ", microtime(true));
-    return (float)$sec1 + (float)$sec2;
+	
+	// 에러 수정. microtime 이 PHP 버젼 마다 틀린가 보다. 최신 버젼에는 공백이 없는 것 같다.
+	$mt = microtime(true);
+	if ( strpos( $mt, ' ') !== false ) {
+		list($sec1, $sec2) = explode(" ", microtime(true));
+		return (float)$sec1 + (float)$sec2;
+	}
+	else return $mt;
 }
 
 function SetTimeStamp()

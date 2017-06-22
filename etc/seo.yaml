@@ -47,11 +47,12 @@ image: '{site_url}/etc/res/img/backend.jpg'
 #           forums: [ discussion, qna, gallery ]
 # forums:
 
-forum_seo: N
+forum_seo: 'N'
 
 # header
 # if header_script is set, backend will load header_script and insert into <head>
 header_script: etc/header.php
+
 
 # footer
 # if footer_script is set, backend will load footer_script and insert right before </body>

@@ -261,7 +261,8 @@ EOP;
         // On app side, For the first loads, it may blanking, but no blinking on the next load or page move. Especially if it is Single Page App, it really would not be a big matter.
         // @todo Be sure this hidden links are indexed by google robots.
 
-        if ( $c['forum_seo'] != 'Y' ) { /// if FORUM SEO is not set to 'N',
+	di($c);
+        if ( $c['forum_seo'] != 'N' ) { /// if FORUM SEO is not set to 'N',
 
 $seo = <<<EOH
 <div class="seo-links">{$this->getLinks()}</div>

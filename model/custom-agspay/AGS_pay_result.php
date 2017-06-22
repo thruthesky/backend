@@ -1,68 +1,67 @@
 <?php
 /**********************************************************************************************
 *
-* ÆÄÀÏ¸í : AGS_pay_result.php
-* ÀÛ¼ºÀÏÀÚ : 2016/10/11
+* íŒŒì¼ëª… : AGS_pay_result.php
+* ìž‘ì„±ì¼ìž : 2016/10/11
 *
-* ¼ÒÄÏ°áÁ¦°á°ú¸¦ Ã³¸®ÇÕ´Ï´Ù.
+* ì†Œì¼“ê²°ì œê²°ê³¼ë¥¼ ì²˜ë¦¬í•©ë‹ˆë‹¤.
 *
 * Copyright NICEPayments.Co.,Ltd. All rights reserved.
 *
 **********************************************************************************************/
+//ê³µí†µì‚¬ìš©
+$AuthTy 		= trim( $_POST["AuthTy"] );				//ê²°ì œí˜•íƒœ
+$SubTy 			= trim( $_POST["SubTy"] );				//ì„œë¸Œê²°ì œí˜•íƒœ
+$rStoreId 		= trim( $_POST["rStoreId"] );			//ì—…ì²´ID
+$rAmt 			= trim( $_POST["rAmt"] );				//ê±°ëž˜ê¸ˆì•¡
+$rOrdNo 		= trim( $_POST["rOrdNo"] );				//ì£¼ë¬¸ë²ˆí˜¸
+$rProdNm 		= trim( $_POST["rProdNm"] );			//ìƒí’ˆëª…
+$rOrdNm			= trim( $_POST["rOrdNm"] );				//ì£¼ë¬¸ìžëª…
 
-//°øÅë»ç¿ë
-$AuthTy 		= trim( $_POST["AuthTy"] );				//°áÁ¦ÇüÅÂ
-$SubTy 			= trim( $_POST["SubTy"] );				//¼­ºê°áÁ¦ÇüÅÂ
-$rStoreId 		= trim( $_POST["rStoreId"] );			//¾÷Ã¼ID
-$rAmt 			= trim( $_POST["rAmt"] );				//°Å·¡±Ý¾×
-$rOrdNo 		= trim( $_POST["rOrdNo"] );				//ÁÖ¹®¹øÈ£
-$rProdNm 		= trim( $_POST["rProdNm"] );			//»óÇ°¸í
-$rOrdNm			= trim( $_POST["rOrdNm"] );				//ÁÖ¹®ÀÚ¸í
+//ì†Œì¼“í†µì‹ ê²°ì œ(ì‹ ìš©ì¹´ë“œ,í•¸ë“œí°,ì¼ë°˜ê°€ìƒê³„ì¢Œ)ì‹œ ì‚¬ìš©
+$rSuccYn 		= trim( $_POST["rSuccYn"] );			//ì„±ê³µì—¬ë¶€
+$rResMsg 		= trim( $_POST["rResMsg"] );			//ì‹¤íŒ¨ì‚¬ìœ 
+$rApprTm 		= trim( $_POST["rApprTm"] );			//ìŠ¹ì¸ì‹œê°
 
-//¼ÒÄÏÅë½Å°áÁ¦(½Å¿ëÄ«µå,ÇÚµåÆù,ÀÏ¹Ý°¡»ó°èÁÂ)½Ã »ç¿ë
-$rSuccYn 		= trim( $_POST["rSuccYn"] );			//¼º°ø¿©ºÎ
-$rResMsg 		= trim( $_POST["rResMsg"] );			//½ÇÆÐ»çÀ¯
-$rApprTm 		= trim( $_POST["rApprTm"] );			//½ÂÀÎ½Ã°¢
+//ì‹ ìš©ì¹´ë“œê³µí†µ
+$rBusiCd 		= trim( $_POST["rBusiCd"] );			//ì „ë¬¸ì½”ë“œ
+$rApprNo 		= trim( $_POST["rApprNo"] );			//ìŠ¹ì¸ë²ˆí˜¸
+$rCardCd 		= trim( $_POST["rCardCd"] );			//ì¹´ë“œì‚¬ì½”ë“œ
+$rDealNo 		= trim( $_POST["rDealNo"] );			//ê±°ëž˜ê³ ìœ ë²ˆí˜¸
 
-//½Å¿ëÄ«µå°øÅë
-$rBusiCd 		= trim( $_POST["rBusiCd"] );			//Àü¹®ÄÚµå
-$rApprNo 		= trim( $_POST["rApprNo"] );			//½ÂÀÎ¹øÈ£
-$rCardCd 		= trim( $_POST["rCardCd"] );			//Ä«µå»çÄÚµå
-$rDealNo 		= trim( $_POST["rDealNo"] );			//°Å·¡°íÀ¯¹øÈ£
-
-//½Å¿ëÄ«µå(¾È½É,ÀÏ¹Ý)
-$rCardNm 		= trim( $_POST["rCardNm"] );			//Ä«µå»ç¸í
-$rMembNo 		= trim( $_POST["rMembNo"] );			//°¡¸ÍÁ¡¹øÈ£
-$rAquiCd 		= trim( $_POST["rAquiCd"] );			//¸ÅÀÔ»çÄÚµå
-$rAquiNm 		= trim( $_POST["rAquiNm"] );			//¸ÅÀÔ»ç¸í
+//ì‹ ìš©ì¹´ë“œ(ì•ˆì‹¬,ì¼ë°˜)
+$rCardNm 		= trim( $_POST["rCardNm"] );			//ì¹´ë“œì‚¬ëª…
+$rMembNo 		= trim( $_POST["rMembNo"] );			//ê°€ë§¹ì ë²ˆí˜¸
+$rAquiCd 		= trim( $_POST["rAquiCd"] );			//ë§¤ìž…ì‚¬ì½”ë“œ
+$rAquiNm 		= trim( $_POST["rAquiNm"] );			//ë§¤ìž…ì‚¬ëª…
 
 
-//°èÁÂÀÌÃ¼
-$ICHE_OUTBANKNAME	= trim( $_POST["ICHE_OUTBANKNAME"] );		//ÀÌÃ¼°èÁÂÀºÇà¸í
-$ICHE_OUTACCTNO 	= trim( $_POST["ICHE_OUTACCTNO"] );			//ÀÌÃ¼°èÁÂ¹øÈ£
-$ICHE_OUTBANKMASTER = trim( $_POST["ICHE_OUTBANKMASTER"] );		//ÀÌÃ¼°èÁÂ¼ÒÀ¯ÁÖ
-$ICHE_AMOUNT 		= trim( $_POST["ICHE_AMOUNT"] );			//ÀÌÃ¼±Ý¾×
+//ê³„ì¢Œì´ì²´
+$ICHE_OUTBANKNAME	= trim( $_POST["ICHE_OUTBANKNAME"] );		//ì´ì²´ê³„ì¢Œì€í–‰ëª…
+if ( isset($_POST["ICHE_OUTACCTNO"]) ) $ICHE_OUTACCTNO 	= trim( $_POST["ICHE_OUTACCTNO"] );			//ì´ì²´ê³„ì¢Œë²ˆí˜¸
+$ICHE_OUTBANKMASTER = trim( $_POST["ICHE_OUTBANKMASTER"] );		//ì´ì²´ê³„ì¢Œì†Œìœ ì£¼
+$ICHE_AMOUNT 		= trim( $_POST["ICHE_AMOUNT"] );			//ì´ì²´ê¸ˆì•¡
 
-//ÇÚµåÆù
-$rHP_TID 		= trim( $_POST["rHP_TID"] );			//ÇÚµåÆù°áÁ¦TID
-$rHP_DATE 		= trim( $_POST["rHP_DATE"] );			//ÇÚµåÆù°áÁ¦³¯Â¥
-$rHP_HANDPHONE 	= trim( $_POST["rHP_HANDPHONE"] );		//ÇÚµåÆù°áÁ¦ÇÚµåÆù¹øÈ£
-$rHP_COMPANY 	= trim( $_POST["rHP_COMPANY"] );		//ÇÚµåÆù°áÁ¦Åë½Å»ç¸í(SKT,KTF,LGT)
+//í•¸ë“œí°
+$rHP_TID 		= trim( $_POST["rHP_TID"] );			//í•¸ë“œí°ê²°ì œTID
+$rHP_DATE 		= trim( $_POST["rHP_DATE"] );			//í•¸ë“œí°ê²°ì œë‚ ì§œ
+$rHP_HANDPHONE 	= trim( $_POST["rHP_HANDPHONE"] );		//í•¸ë“œí°ê²°ì œí•¸ë“œí°ë²ˆí˜¸
+$rHP_COMPANY 	= trim( $_POST["rHP_COMPANY"] );		//í•¸ë“œí°ê²°ì œí†µì‹ ì‚¬ëª…(SKT,KTF,LGT)
 
 //ARS
-$rARS_PHONE = trim( $_POST["rARS_PHONE"] );				//ARS°áÁ¦ÀüÈ­¹øÈ£
+$rARS_PHONE = trim( $_POST["rARS_PHONE"] );				//ARSê²°ì œì „í™”ë²ˆí˜¸
 
-//°¡»ó°èÁÂ
-$rVirNo 		= trim( $_POST["rVirNo"] );				//°¡»ó°èÁÂ¹øÈ£ °¡»ó°èÁÂÃß°¡
-$VIRTUAL_CENTERCD = trim( $_POST["VIRTUAL_CENTERCD"] );	//°¡»ó°èÁÂ ÀÔ±ÝÀºÇàÄÚµå
+//ê°€ìƒê³„ì¢Œ
+$rVirNo 		= trim( $_POST["rVirNo"] );				//ê°€ìƒê³„ì¢Œë²ˆí˜¸ ê°€ìƒê³„ì¢Œì¶”ê°€
+$VIRTUAL_CENTERCD = trim( $_POST["VIRTUAL_CENTERCD"] );	//ê°€ìƒê³„ì¢Œ ìž…ê¸ˆì€í–‰ì½”ë“œ
 
-//¿¡½ºÅ©·Î
-$ES_SENDNO	= trim( $_POST["ES_SENDNO"] );				//¿¡½ºÅ©·Î(Àü¹®¹øÈ£)
+//ì—ìŠ¤í¬ë¡œ
+$ES_SENDNO	= trim( $_POST["ES_SENDNO"] );				//ì—ìŠ¤í¬ë¡œ(ì „ë¬¸ë²ˆí˜¸)
 
 //*******************************************************************************
-//* MD5 °áÁ¦ µ¥ÀÌÅÍ Á¤»ó¿©ºÎ È®ÀÎ
-//* °áÁ¦Àü AGS_HASHDATA °ª°ú °áÁ¦ ÈÄ rAGS_HASHDATAÀÇ ÀÏÄ¡ ¿©ºÎ È®ÀÎ
-//* ÇüÅÂ : »óÁ¡¾ÆÀÌµð(StoreId) + ÁÖ¹®¹øÈ£(OrdNo) + °áÁ¦±Ý¾×(Amt)
+//* MD5 ê²°ì œ ë°ì´í„° ì •ìƒì—¬ë¶€ í™•ì¸
+//* ê²°ì œì „ AGS_HASHDATA ê°’ê³¼ ê²°ì œ í›„ rAGS_HASHDATAì˜ ì¼ì¹˜ ì—¬ë¶€ í™•ì¸
+//* í˜•íƒœ : ìƒì ì•„ì´ë””(StoreId) + ì£¼ë¬¸ë²ˆí˜¸(OrdNo) + ê²°ì œê¸ˆì•¡(Amt)
 //*******************************************************************************
 
 $AGS_HASHDATA	= trim( $_POST["AGS_HASHDATA"] );				
@@ -71,39 +70,35 @@ $rAGS_HASHDATA	= md5($rStoreId . $rOrdNo . (int)$rAmt);
 if($AGS_HASHDATA == $rAGS_HASHDATA){
 	$errResMsg   = "";
 }else{
-	$errResMsg   = "°áÀç±Ý¾× º¯Á¶ ¹ß»ý. È®ÀÎ ¹Ù¶÷";
+	$errResMsg   = "ê²°ìž¬ê¸ˆì•¡ ë³€ì¡° ë°œìƒ. í™•ì¸ ë°”ëžŒ";
 }
 
 ?>
 <html>
 <head>
-<title>¿Ã´õ°ÔÀÌÆ®</title>
+<meta charset="utf-8">
+<title>ì˜¬ë”ê²Œì´íŠ¸</title>
 <style type="text/css">
 <!--
-body { font-family:"µ¸¿ò"; font-size:9pt; color:#000000; font-weight:normal; letter-spacing:0pt; line-height:180%; }
-td { font-family:"µ¸¿ò"; font-size:9pt; color:#000000; font-weight:normal; letter-spacing:0pt; line-height:180%; }
+body { font-family:"Malgun Gothic", "AppleGothic","ë‹ì›€"; font-size:9pt; color:#000000; font-weight:normal; letter-spacing:0pt; line-height:240%; }
+td { font-family:"Malgun Gothic", "AppleGothic","ë‹ì›€"; font-size:9pt; color:#000000; font-weight:normal; letter-spacing:0pt; line-height:240%; }
 .clsright { padding-right:10px; text-align:right; }
 .clsleft { padding-left:10px; text-align:left; }
 -->
 </style>
-<script language=javascript> // "ÁöºÒÃ³¸®Áß" ÆË¾÷Ã¢ ´Ý±â
-<!--
-var openwin = window.open("AGS_progress.html","popup","width=300,height=160");
-openwin.close();
--->
-</script>
+
 <script language=javascript>
 <!--
 /***********************************************************************************
-* ¢Â ¿µ¼öÁõ Ãâ·ÂÀ» À§ÇÑ ÀÚ¹Ù½ºÅ©¸³Æ®
+* â—ˆ ì˜ìˆ˜ì¦ ì¶œë ¥ì„ ìœ„í•œ ìžë°”ìŠ¤í¬ë¦½íŠ¸
 *		
-*	¿µ¼öÁõ Ãâ·ÂÀº [Ä«µå°áÁ¦]½Ã¿¡¸¸ »ç¿ëÇÏ½Ç ¼ö ÀÖ½À´Ï´Ù.
+*	ì˜ìˆ˜ì¦ ì¶œë ¥ì€ [ì¹´ë“œê²°ì œ]ì‹œì—ë§Œ ì‚¬ìš©í•˜ì‹¤ ìˆ˜ ìžˆìŠµë‹ˆë‹¤.
 *  
-*   ¡Ø´çÀÏ °áÁ¦°Ç¿¡ ÇÑÇØ¼­ ¿µ¼öÁõ Ãâ·ÂÀÌ °¡´ÉÇÕ´Ï´Ù.
-*     ´çÀÏ ÀÌÈÄ¿¡´Â ¾Æ·¡ÀÇ ÁÖ¼Ò¸¦ ÆË¾÷(630X510)À¸·Î ¶ç¿ö ³»¿ª Á¶È¸ ÈÄ Ãâ·ÂÇÏ½Ã±â ¹Ù¶ø´Ï´Ù.
-*	  ¢¹ ÆË¾÷¿ë °áÁ¦³»¿ªÁ¶È¸ ÆÐÀÌÁö ÁÖ¼Ò : 
+*   â€»ë‹¹ì¼ ê²°ì œê±´ì— í•œí•´ì„œ ì˜ìˆ˜ì¦ ì¶œë ¥ì´ ê°€ëŠ¥í•©ë‹ˆë‹¤.
+*     ë‹¹ì¼ ì´í›„ì—ëŠ” ì•„ëž˜ì˜ ì£¼ì†Œë¥¼ íŒì—…(630X510)ìœ¼ë¡œ ë„ì›Œ ë‚´ì—­ ì¡°íšŒ í›„ ì¶œë ¥í•˜ì‹œê¸° ë°”ëžë‹ˆë‹¤.
+*	  â–· íŒì—…ìš© ê²°ì œë‚´ì—­ì¡°íšŒ íŒ¨ì´ì§€ ì£¼ì†Œ : 
 *	     	 http://www.allthegate.com/support/card_search.html
-*		¡æ (¹Ýµå½Ã ½ºÅ©·Ñ¹Ù¸¦ 'yes' »óÅÂ·Î ÇÏ¿© ÆË¾÷À» ¶ç¿ì½Ã±â ¹Ù¶ø´Ï´Ù.) ¡ç
+*		â†’ (ë°˜ë“œì‹œ ìŠ¤í¬ë¡¤ë°”ë¥¼ 'yes' ìƒíƒœë¡œ í•˜ì—¬ íŒì—…ì„ ë„ìš°ì‹œê¸° ë°”ëžë‹ˆë‹¤.) â†
 *
 ***********************************************************************************/
 function show_receipt() 
@@ -122,9 +117,13 @@ function show_receipt()
 	}
 	else
 	{
-		alert("ÇØ´çÇÏ´Â °áÁ¦³»¿ªÀÌ ¾ø½À´Ï´Ù");
+		alert("í•´ë‹¹í•˜ëŠ” ê²°ì œë‚´ì—­ì´ ì—†ìŠµë‹ˆë‹¤");
 	}
 }
+
+	
+	parent.postMessage('payment-result-<?=$rSuccYn?>', '*');
+
 -->
 </script>
 </head>
@@ -137,7 +136,7 @@ function show_receipt()
 				<td><hr></td>
 			</tr>
 			<tr>
-				<td class=clsleft>ÁöºÒ °á°ú</td>
+				<td class=clsleft>í™”ìƒì˜ì–´ ìˆ˜ì—…ë£Œ ì§€ë¶ˆ ê²°ê³¼</td>
 			</tr>
 			<tr>
 				<td><hr></td>
@@ -146,7 +145,7 @@ function show_receipt()
 				<td>
 				<table width=400 border=0 cellpadding=0 cellspacing=0>
 					<tr>
-						<td class=clsright width=150>°áÁ¦ÇüÅÂ : </td>
+						<td class=clsright width=150>ê²°ì œí˜•íƒœ : </td>
 						<td class=clsleft width=250>
 							<?php
 
@@ -154,207 +153,216 @@ function show_receipt()
 							{
 								if($SubTy == "isp")
 								{
-									echo "½Å¿ëÄ«µå°áÁ¦-¾ÈÀü°áÁ¦(ISP)";
+									echo "ì‹ ìš©ì¹´ë“œê²°ì œ-ì•ˆì „ê²°ì œ(ISP)";
 								}	
 								else if($SubTy == "visa3d")
 								{
-									echo "½Å¿ëÄ«µå°áÁ¦-¾È½ÉÅ¬¸¯";
+									echo "ì‹ ìš©ì¹´ë“œê²°ì œ-ì•ˆì‹¬í´ë¦­";
 								}
 								else if($SubTy == "normal")
 								{
-									echo "½Å¿ëÄ«µå°áÁ¦-ÀÏ¹Ý°áÁ¦";
+									echo "ì‹ ìš©ì¹´ë“œê²°ì œ-ì¼ë°˜ê²°ì œ";
 								}
 								
 							}
 							else if($AuthTy == "iche")
 							{
-								echo "°èÁÂÀÌÃ¼";
+								echo "ê³„ì¢Œì´ì²´";
 							}
 							else if($AuthTy == "hp")
 							{
-								echo "ÇÚµåÆù°áÁ¦";
+								echo "í•¸ë“œí°ê²°ì œ";
 							}
 							else if($AuthTy == "ars")
 							{
-								echo "ARS°áÁ¦";
+								echo "ARSê²°ì œ";
 							}
 							else if($AuthTy == "virtual")
 							{
-								echo "°¡»ó°èÁÂ°áÁ¦";
+								echo "ê°€ìƒê³„ì¢Œê²°ì œ";
 							}
 							?>
 						</td>
 					</tr>
 					<tr>
-						<td class=clsright>»óÁ¡¾ÆÀÌµð : </td>
+						<td class=clsright>ìƒì ì•„ì´ë”” : </td>
 						<td class=clsleft><?=$rStoreId?></td>
 					</tr>
 					<tr>
-						<td class=clsright>ÁÖ¹®¹øÈ£ : </td>
+						<td class=clsright>ì£¼ë¬¸ë²ˆí˜¸ : </td>
 						<td class=clsleft><?=$rOrdNo?></td>
 					</tr>
+					<?/*
 					<tr>
-						<td class=clsright>ÁÖ¹®ÀÚ¸í : </td>
+						<td class=clsright>ì£¼ë¬¸ìžëª… : </td>
 						<td class=clsleft><?=$rOrdNm?></td>
 					</tr>
 					<tr>
-						<td class=clsright>»óÇ°¸í : </td>
+						<td class=clsright>ìƒí’ˆëª… : </td>
 						<td class=clsleft><?=$rProdNm?></td>
 					</tr>
+					*/?>
 					<tr>
-						<td class=clsright>°áÁ¦±Ý¾× : </td>
+						<td class=clsright>ê²°ì œê¸ˆì•¡ : </td>
 						<td class=clsleft><?=$rAmt?></td>
 					</tr>
 					<tr>
-						<td class=clsright>¼º°ø¿©ºÎ : </td>
+						<td class=clsright>ì„±ê³µì—¬ë¶€ : </td>
 						<td class=clsleft><?=$rSuccYn?></td>
 					</tr>
 					<tr>
-						<td class=clsright>Ã³¸®¸Þ¼¼Áö : </td>
-						<td class=clsleft><?=$rResMsg?></td>
+						<td class=clsright>ì²˜ë¦¬ë©”ì„¸ì§€ : </td>
+						<td class=clsleft><?php echo iconv('euckr', 'utf8', $rResMsg)?></td>
 					</tr>
 <?				if($AuthTy == "card" || $AuthTy == "virtual") { ?>
 					<tr>
-						<td class=clsright>½ÂÀÎ½Ã°¢ : </td>
+						<td class=clsright>ìŠ¹ì¸ì‹œê° : </td>
 						<td class=clsleft><?=$rApprTm?></td>
 					</tr>
 <?				}
 				if($AuthTy == "card" && $rSuccYn == "y") {?>
+				<?/*
 					<tr>
-						<td class=clsright>Àü¹®ÄÚµå : </td>
+						<td class=clsright>ì „ë¬¸ì½”ë“œ : </td>
 						<td class=clsleft><?=$rBusiCd?></td>
 					</tr>
+					*/?>
 					<tr>
-						<td class=clsright>½ÂÀÎ¹øÈ£ : </td>
+						<td class=clsright>ìŠ¹ì¸ë²ˆí˜¸ : </td>
 						<td class=clsleft><?=$rApprNo?></td>
 					</tr>
+					<?/*
 					<tr>
-						<td class=clsright>Ä«µå»çÄÚµå : </td>
+						<td class=clsright>ì¹´ë“œì‚¬ì½”ë“œ : </td>
 						<td class=clsleft><?=$rCardCd?></td>
 					</tr>
 					<tr>
-						<td class=clsright>°Å·¡¹øÈ£ : </td>
+						<td class=clsright>ê±°ëž˜ë²ˆí˜¸ : </td>
 						<td class=clsleft><?=$rDealNo?></td>
 					</tr>
+					*/?>
 <?				}
 				if($AuthTy == "card" && ($SubTy == "visa3d" || $SubTy == "normal") && $rSuccYn == "y") {?>
 					<tr>
-						<td class=clsright>Ä«µå»ç¸í : </td>
+						<td class=clsright>ì¹´ë“œì‚¬ëª… : </td>
 						<td class=clsleft><?=$rCardNm?></td>
 					</tr>
 					<tr>
-						<td class=clsright>¸ÅÀÔ»çÄÚµå : </td>
+						<td class=clsright>ë§¤ìž…ì‚¬ì½”ë“œ : </td>
 						<td class=clsleft><?=$rAquiCd?></td>
 					</tr>
 					<tr>
-						<td class=clsright>¸ÅÀÔ»ç¸í : </td>
+						<td class=clsright>ë§¤ìž…ì‚¬ëª… : </td>
 						<td class=clsleft><?=$rAquiNm?></td>
 					</tr>
 					<tr>
-						<td class=clsright>°¡¸ÍÁ¡¹øÈ£ : </td>
+						<td class=clsright>ê°€ë§¹ì ë²ˆí˜¸ : </td>
 						<td class=clsleft><?=$rMembNo?></td>
 					</tr>					
 <?				}
 				if($AuthTy == "iche" ) {?>
 					<tr>
-						<td class=clsright>ÀÌÃ¼°èÁÂÀºÇà¸í : </td>
+						<td class=clsright>ì´ì²´ê³„ì¢Œì€í–‰ëª… : </td>
 						<td class=clsleft><?=$ICHE_OUTBANKNAME?><?=getCenter_cd($ICHE_OUTBANKNAME)?></td>
 					</tr>
 					<tr>
-						<td class=clsright>ÀÌÃ¼±Ý¾× : </td>
+						<td class=clsright>ì´ì²´ê¸ˆì•¡ : </td>
 						<td class=clsleft><?=$ICHE_AMOUNT?></td>
 					</tr>
 					<tr>
-						<td class=clsright>ÀÌÃ¼°èÁÂ¼ÒÀ¯ÁÖ : </td>
+						<td class=clsright>ì´ì²´ê³„ì¢Œì†Œìœ ì£¼ : </td>
 						<td class=clsleft><?=$ICHE_OUTBANKMASTER?></td>
 					</tr>
 					<tr>
-						<td class=clsright>¿¡½ºÅ©·Î(SEND_NO) : </td>
+						<td class=clsright>ì—ìŠ¤í¬ë¡œ(SEND_NO) : </td>
 						<td class=clsleft><?=$ES_SENDNO?></td>
 					</tr>
 <?				}
 				if($AuthTy == "hp" ) {?>
 					<tr>
-						<td class=clsright>ÇÚµåÆù°áÁ¦TID : </td>
+						<td class=clsright>í•¸ë“œí°ê²°ì œTID : </td>
 						<td class=clsleft><?=$rHP_TID?></td>
 					</tr>
 					<tr>
-						<td class=clsright>ÇÚµåÆù°áÁ¦³¯Â¥ : </td>
+						<td class=clsright>í•¸ë“œí°ê²°ì œë‚ ì§œ : </td>
 						<td class=clsleft><?=$rHP_DATE?></td>
 					</tr>
 					<tr>
-						<td class=clsright>ÇÚµåÆù°áÁ¦ÇÚµåÆù¹øÈ£ : </td>
+						<td class=clsright>í•¸ë“œí°ê²°ì œí•¸ë“œí°ë²ˆí˜¸ : </td>
 						<td class=clsleft><?=$rHP_HANDPHONE?></td>
 					</tr>
 					<tr>
-						<td class=clsright>ÇÚµåÆù°áÁ¦Åë½Å»ç¸í : </td>
+						<td class=clsright>í•¸ë“œí°ê²°ì œí†µì‹ ì‚¬ëª… : </td>
 						<td class=clsleft><?=$rHP_COMPANY?></td>
 					</tr>
 <?				}
 				if($AuthTy == "ars" ) {?>
 					<tr>
-						<td class=clsright>ARS°áÁ¦TID : </td>
+						<td class=clsright>ARSê²°ì œTID : </td>
 						<td class=clsleft><?=$rHP_TID?></td>
 					</tr>
 					<tr>
-						<td class=clsright>ARS°áÁ¦³¯Â¥ : </td>
+						<td class=clsright>ARSê²°ì œë‚ ì§œ : </td>
 						<td class=clsleft><?=$rHP_DATE?></td>
 					</tr>
 					<tr>
-						<td class=clsright>ARS°áÁ¦ÀüÈ­¹øÈ£ : </td>
+						<td class=clsright>ARSê²°ì œì „í™”ë²ˆí˜¸ : </td>
 						<td class=clsleft><?=$rARS_PHONE?></td>
 					</tr>
 					<tr>
-						<td class=clsright>ARS°áÁ¦Åë½Å»ç¸í : </td>
+						<td class=clsright>ARSê²°ì œí†µì‹ ì‚¬ëª… : </td>
 						<td class=clsleft><?=$rHP_COMPANY?></td>
 					</tr>
 <?				}
 				if($AuthTy == "virtual" ) {?>
 					<tr>
-						<td class=clsright>ÀÔ±Ý°èÁÂ¹øÈ£ : </td>
+						<td class=clsright>ìž…ê¸ˆê³„ì¢Œë²ˆí˜¸ : </td>
 						<td class=clsleft><?=$rVirNo?></td>
 					</tr>
-                    <tr><!-- ÀºÇàÄÚµå(20) : ¿ì¸®ÀºÇà -->
-						<td class=clsright>ÀÔ±ÝÀºÇà : </td>
+                    <tr><!-- ì€í–‰ì½”ë“œ(20) : ìš°ë¦¬ì€í–‰ -->
+						<td class=clsright>ìž…ê¸ˆì€í–‰ : </td>
 						<td class=clsleft><?=getCenter_cd($VIRTUAL_CENTERCD)?></td>
 					</tr>
                     <tr>
-					<!--¿Ã´õ°ÔÀÌÆ®¿¡ µî·ÏµÈ »óÁ¡¸íÀ¸·Î Ç¥±â-------->
-						<td class=clsright>¿¹±ÝÁÖ¸í : </td>
-						<td class=clsleft>³ªÀÌ½ºÆäÀÌ¸ÕÃ÷(ÁÖ)</td>
+					<!--ì˜¬ë”ê²Œì´íŠ¸ì— ë“±ë¡ëœ ìƒì ëª…ìœ¼ë¡œ í‘œê¸°-------->
+						<td class=clsright>ì˜ˆê¸ˆì£¼ëª… : </td>
+						<td class=clsleft>ë‚˜ì´ìŠ¤íŽ˜ì´ë¨¼ì¸ (ì£¼)</td>
 					</tr>
 					<tr>
-						<td class=clsright>¿¡½ºÅ©·Î(SEND_NO) : </td>
+						<td class=clsright>ì—ìŠ¤í¬ë¡œ(SEND_NO) : </td>
 						<td class=clsleft><?=$ES_SENDNO?></td>
 					</tr>
 <?				}
 				if($AuthTy == "card" ) {?>
 					<tr>
-						<td class=clsright>¿µ¼öÁõ :</td>
-						<!--¿µ¼öÁõÃâ·ÂÀ»À§ÇØ¼­º¸³»ÁÖ´Â°ª-------------------->
-						<input type=hidden name=sRetailer_id value="<?=$rStoreId?>"><!--»óÁ¡¾ÆÀÌµð-->
-						<input type=hidden name=approve value="<?=$rApprNo?>"><!---½ÂÀÎ¹øÈ£-->
-						<input type=hidden name=send_no value="<?=$rDealNo?>"><!--°Å·¡°íÀ¯¹øÈ£-->
-						<input type=hidden name=appr_tm value="<?=$rApprTm?>"><!--½ÂÀÎ½Ã°¢-->
-						<!--¿µ¼öÁõÃâ·ÂÀ»À§ÇØ¼­º¸³»ÁÖ´Â°ª-------------------->
-						<td class=clsleft><input type="button" value="¿µ¼öÁõ" onclick="javascript:show_receipt();"></td>
+						<td class=clsright>ì˜ìˆ˜ì¦ :</td>
+						<!--ì˜ìˆ˜ì¦ì¶œë ¥ì„ìœ„í•´ì„œë³´ë‚´ì£¼ëŠ”ê°’-------------------->
+						<input type=hidden name=sRetailer_id value="<?=$rStoreId?>"><!--ìƒì ì•„ì´ë””-->
+						<input type=hidden name=approve value="<?=$rApprNo?>"><!---ìŠ¹ì¸ë²ˆí˜¸-->
+						<input type=hidden name=send_no value="<?=$rDealNo?>"><!--ê±°ëž˜ê³ ìœ ë²ˆí˜¸-->
+						<input type=hidden name=appr_tm value="<?=$rApprTm?>"><!--ìŠ¹ì¸ì‹œê°-->
+						<!--ì˜ìˆ˜ì¦ì¶œë ¥ì„ìœ„í•´ì„œë³´ë‚´ì£¼ëŠ”ê°’-------------------->
+						<td class=clsleft><input type="button" value="ì˜ìˆ˜ì¦ ì¶œë ¥í•˜ê¸°" onclick="javascript:show_receipt();"></td>
 					</tr>
 					<tr>
 						<td colspan=2>&nbsp;</td>
 					</tr>
 					<tr>
-						<td align=center colspan=2>Ä«µå ÀÌ¿ë¸í¼¼¼­¿¡ ±¸ÀÔÃ³°¡ <font color=red>³ªÀÌ½ºÆäÀÌ¸ÕÃ÷(ÁÖ)</font>·Î Ç¥±âµË´Ï´Ù.</td>
+						<td align=center colspan=2>ì¹´ë“œ ì´ìš©ëª…ì„¸ì„œì— êµ¬ìž…ì²˜ê°€ <font color=red>ë‚˜ì´ìŠ¤íŽ˜ì´ë¨¼ì¸ (ì£¼)</font>ë¡œ í‘œê¸°ë©ë‹ˆë‹¤.</td>
 					</tr>
 <?				}	?>
+
 					<tr>
 						<td colspan="2"><?=$errResMsg?></td>
 					</tr>
+					<?/*
 					<tr>
-						<td colspan="2">¿øº» ÇØ½¬ : <?=$AGS_HASHDATA?></td>
+						<td colspan="2">ì›ë³¸ í•´ì‰¬ : <?=$AGS_HASHDATA?></td>
 					</tr>
 					<tr>
-						<td colspan="2">°á°ú ÇØ½¬ :<?=$rAGS_HASHDATA?></td>
+						<td colspan="2">ê²°ê³¼ í•´ì‰¬ :<?=$rAGS_HASHDATA?></td>
 					</tr>
+					*/?>
 					<tr>
 						<td colspan=2>&nbsp;</td>
 					</tr>
@@ -366,7 +374,7 @@ function show_receipt()
 				<td><hr></td>
 			</tr>
 			<tr>
-				<td class=clsleft>Copyright NICEPayments.Co.,Ltd. All rights reserved.</td> 
+				<td class=clsleft>ê²°ìž¬ê°€ ì™„ë£Œë˜ì—ˆìŠµë‹ˆë‹¤.</td> 
 			</tr>
 		</table>
 		</td>
@@ -377,49 +385,49 @@ function show_receipt()
 <?
 	function getCenter_cd($VIRTUAL_CENTERCD){
 		if($VIRTUAL_CENTERCD == "39"){
-			echo "°æ³²ÀºÇà";
+			echo "ê²½ë‚¨ì€í–‰";
 		}else if($VIRTUAL_CENTERCD == "34"){
-			echo "±¤ÁÖÀºÇà";
+			echo "ê´‘ì£¼ì€í–‰";
 		}else if($VIRTUAL_CENTERCD == "04"){
-			echo "±¹¹ÎÀºÇà";
+			echo "êµ­ë¯¼ì€í–‰";
 		}else if($VIRTUAL_CENTERCD == "11"){
-			echo "³óÇùÁß¾ÓÈ¸";
+			echo "ë†í˜‘ì¤‘ì•™íšŒ";
 		}else if($VIRTUAL_CENTERCD == "31"){
-			echo "´ë±¸ÀºÇà";
+			echo "ëŒ€êµ¬ì€í–‰";
 		}else if($VIRTUAL_CENTERCD == "32"){
-			echo "ºÎ»êÀºÇà";
+			echo "ë¶€ì‚°ì€í–‰";
 		}else if($VIRTUAL_CENTERCD == "02"){
-			echo "»ê¾÷ÀºÇà";
+			echo "ì‚°ì—…ì€í–‰";
 		}else if($VIRTUAL_CENTERCD == "45"){
-			echo "»õ¸¶À»±Ý°í";
+			echo "ìƒˆë§ˆì„ê¸ˆê³ ";
 		}else if($VIRTUAL_CENTERCD == "07"){
-			echo "¼öÇùÁß¾ÓÈ¸";
+			echo "ìˆ˜í˜‘ì¤‘ì•™íšŒ";
 		}else if($VIRTUAL_CENTERCD == "48"){
-			echo "½Å¿ëÇùµ¿Á¶ÇÕ";
+			echo "ì‹ ìš©í˜‘ë™ì¡°í•©";
 		}else if($VIRTUAL_CENTERCD == "26"){
-			echo "(±¸)½ÅÇÑÀºÇà";
+			echo "(êµ¬)ì‹ í•œì€í–‰";
 		}else if($VIRTUAL_CENTERCD == "05"){
-			echo "¿ÜÈ¯ÀºÇà";
+			echo "ì™¸í™˜ì€í–‰";
 		}else if($VIRTUAL_CENTERCD == "20"){
-			echo "¿ì¸®ÀºÇà";
+			echo "ìš°ë¦¬ì€í–‰";
 		}else if($VIRTUAL_CENTERCD == "71"){
-			echo "¿ìÃ¼±¹";
+			echo "ìš°ì²´êµ­";
 		}else if($VIRTUAL_CENTERCD == "37"){
-			echo "ÀüºÏÀºÇà";
+			echo "ì „ë¶ì€í–‰";
 		}else if($VIRTUAL_CENTERCD == "23"){
-			echo "Á¦ÀÏÀºÇà";
+			echo "ì œì¼ì€í–‰";
 		}else if($VIRTUAL_CENTERCD == "35"){
-			echo "Á¦ÁÖÀºÇà";
+			echo "ì œì£¼ì€í–‰";
 		}else if($VIRTUAL_CENTERCD == "21"){
-			echo "(±¸)Á¶ÈïÀºÇà";
+			echo "(êµ¬)ì¡°í¥ì€í–‰";
 		}else if($VIRTUAL_CENTERCD == "03"){
-			echo "Áß¼Ò±â¾÷ÀºÇà";
+			echo "ì¤‘ì†Œê¸°ì—…ì€í–‰";
 		}else if($VIRTUAL_CENTERCD == "81"){
-			echo "ÇÏ³ªÀºÇà";
+			echo "í•˜ë‚˜ì€í–‰";
 		}else if($VIRTUAL_CENTERCD == "88"){
-			echo "½ÅÇÑÀºÇà";
+			echo "ì‹ í•œì€í–‰";
 		}else if($VIRTUAL_CENTERCD == "27"){
-			echo "ÇÑ¹ÌÀºÇà";
+			echo "í•œë¯¸ì€í–‰";
 		}
 				}
 ?>

@@ -5,9 +5,14 @@
 /*.otf
 /*.woff*
 /*.ttf
+/*.eot
+/*.svg
 
 /*.js
 /*.css
+/*.jpg
+/*.png
+/*.gif
 /index.html
 /assets/
 

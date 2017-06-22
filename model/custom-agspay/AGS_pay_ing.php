@@ -1,4 +1,5 @@
 <?php
+header('Content-type: text/html; charset=euc-kr');
 /********************************************************************************
 *
 * 파일명 : AGS_pay_ing.php
@@ -40,7 +41,7 @@
 
 	/*공통사용*/
 	//$agspay->SetValue("AgsPayHome","C:/htdocs/agspay");			//올더게이트 결제설치 디렉토리 (상점에 맞게 수정)
-	$agspay->SetValue("AgsPayHome","/data2/local_docs/agspay40/php");			//올더게이트 결제설치 디렉토리 (상점에 맞게 수정)
+	$agspay->SetValue("AgsPayHome","../../data");			//올더게이트 결제설치 디렉토리 (상점에 맞게 수정)
 	$agspay->SetValue("StoreId",trim($_POST["StoreId"]));		//상점아이디
 	$agspay->SetValue("log","true");							//true : 로그기록, false : 로그기록안함.
 	$agspay->SetValue("logLevel","INFO");						//로그레벨 : DEBUG, INFO, WARN, ERROR, FATAL (해당 레벨이상의 로그만 기록됨)
@@ -107,11 +108,11 @@
 	$agspay->SetValue("HP_SERVERINFO",trim($_POST["HP_SERVERINFO"]));	//SERVER_INFO(핸드폰결제)
 	$agspay->SetValue("HP_HANDPHONE",trim($_POST["HP_HANDPHONE"]));		//HANDPHONE(핸드폰결제)
 	$agspay->SetValue("HP_COMPANY",trim($_POST["HP_COMPANY"]));			//COMPANY(핸드폰결제)
-	$agspay->SetValue("HP_ID",trim($_POST["HP_ID"]));					//HP_ID(핸드폰결제)
-	$agspay->SetValue("HP_SUBID",trim($_POST["HP_SUBID"]));				//HP_SUBID(핸드폰결제)
-	$agspay->SetValue("HP_UNITType",trim($_POST["HP_UNITType"]));		//HP_UNITType(핸드폰결제)
-	$agspay->SetValue("HP_IDEN",trim($_POST["HP_IDEN"]));				//HP_IDEN(핸드폰결제)
-	$agspay->SetValue("HP_IPADDR",trim($_POST["HP_IPADDR"]));			//HP_IPADDR(핸드폰결제)
+	if ( isset($_POST["HP_ID"]) ) $agspay->SetValue("HP_ID",trim($_POST["HP_ID"]));					//HP_ID(핸드폰결제)
+	if ( isset($_POST["HP_SUBID"] ) ) $agspay->SetValue("HP_SUBID",trim($_POST["HP_SUBID"]));				//HP_SUBID(핸드폰결제)
+	if ( isset( $_POST["HP_UNITType"] ) ) $agspay->SetValue("HP_UNITType",trim($_POST["HP_UNITType"]));		//HP_UNITType(핸드폰결제)
+	if ( isset( $_POST["HP_IDEN"] ) ) $agspay->SetValue("HP_IDEN",trim($_POST["HP_IDEN"]));				//HP_IDEN(핸드폰결제)
+	if ( isset( $_POST["HP_IPADDR"] ) ) $agspay->SetValue("HP_IPADDR",trim($_POST["HP_IPADDR"]));			//HP_IPADDR(핸드폰결제)
 
 	/*ARS사용*/
 	$agspay->SetValue("ARS_NAME",trim($_POST["ARS_NAME"]));				//ARS_NAME(ARS결제)
@@ -119,9 +120,9 @@
 
 	/*가상계좌사용*/
 	$agspay->SetValue("VIRTUAL_CENTERCD",trim($_POST["VIRTUAL_CENTERCD"]));	//은행코드(가상계좌)
-	$agspay->SetValue("VIRTUAL_DEPODT",trim($_POST["VIRTUAL_DEPODT"]));		//입금예정일(가상계좌)
+	if ( isset($_POST["VIRTUAL_DEPODT"]) ) $agspay->SetValue("VIRTUAL_DEPODT",trim($_POST["VIRTUAL_DEPODT"]));		//입금예정일(가상계좌)
 	$agspay->SetValue("ZuminCode",trim($_POST["ZuminCode"]));				//주민번호(가상계좌)
-	$agspay->SetValue("MallPage",trim($_POST["MallPage"]));					//상점 입/출금 통보 페이지(가상계좌)
+	if ( isset($_POST["MallPage"]) ) $agspay->SetValue("MallPage",trim($_POST["MallPage"]));					//상점 입/출금 통보 페이지(가상계좌)
 	$agspay->SetValue("VIRTUAL_NO",trim($_POST["VIRTUAL_NO"]));				//가상계좌번호(가상계좌)
 
 	/*에스크로사용*/
@@ -264,10 +265,14 @@
 	}
 	*/
 	
-
+function ln($v) {
+	return $v;
+//	return iconv("utf-8", "euc-kr", $v);
+}
 ?>
 <html>
 <head>
+<meta charset="euc-kr">
 </head>
 <body onload="javascript:frmAGS_pay_ing.submit();">
 <form name=frmAGS_pay_ing method=post action=AGS_pay_result.php>
@@ -277,13 +282,13 @@
 <input type=hidden name=SubTy value="<?=$agspay->GetResult("SubTy")?>">			<!-- 서브결제형태 -->
 <input type=hidden name=rStoreId value="<?=$agspay->GetResult("rStoreId")?>">	<!-- 상점아이디 -->
 <input type=hidden name=rOrdNo value="<?=$agspay->GetResult("rOrdNo")?>">		<!-- 주문번호 -->
-<input type=hidden name=rProdNm value="<?=$agspay->GetResult("ProdNm")?>">		<!-- 상품명 -->
+<input type=hidden name=rProdNm value="<?=ln($agspay->GetResult("ProdNm"))?>">		<!-- 상품명 -->
 <input type=hidden name=rAmt value="<?=$agspay->GetResult("rAmt")?>">			<!-- 결제금액 -->
-<input type=hidden name=rOrdNm value="<?=$agspay->GetResult("OrdNm")?>">		<!-- 주문자명 -->
+<input type=hidden name=rOrdNm value="<?=ln($agspay->GetResult("OrdNm"))?>">		<!-- 주문자명 -->
 <input type=hidden name=AGS_HASHDATA value="<?=$AGS_HASHDATA?>">				<!-- 암호화 HASHDATA -->
 
 <input type=hidden name=rSuccYn value="<?=$agspay->GetResult("rSuccYn")?>">	<!-- 성공여부 -->
-<input type=hidden name=rResMsg value="<?=$agspay->GetResult("rResMsg")?>">	<!-- 결과메시지 -->
+<input type=hidden name=rResMsg value="<?=ln($agspay->GetResult("rResMsg"))?>">	<!-- 결과메시지 -->
 <input type=hidden name=rApprTm value="<?=$agspay->GetResult("rApprTm")?>">	<!-- 결제시간 -->
 
 <!-- 신용카드 결제 사용 변수 -->
