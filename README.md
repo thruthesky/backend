@@ -76,6 +76,9 @@ in config.php file, $ADMIN_ID is the primary admin id. and you can have many adm
                 * in LMS ( Center-1 ), each site needs 'branch domain' and 'header_script' is right place to put 'branch domain'.
                 
 
+* warning. Do not config 'thruthesky', 'anonymous', 'user' as admin. some of the tests will be failed.
+
+
  
 # Bugs
 
