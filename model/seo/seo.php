@@ -254,6 +254,13 @@ EOP;
         $this->replace("/<\/head>/i", "<meta property=\"og:image\" content=\"$image\">\n</head>");
 
 
+        /// --------- header script
+        if ( $c['header_script'] ) {
+            ob_start();
+            include $c['header_script'];
+            $header = ob_get_clean();
+            $this->replace("/<\/head>/i", "$header\n</head>");
+        }
 
 
         // display forum/post links.
@@ -275,6 +282,17 @@ $seo = <<<EOH
 EOH;
 
         $this->replace("/<\/body>/i", "$seo\n</body>");
+
+
+            /// --------- footer script
+            if ( $c['footer_script'] ) {
+                ob_start();
+                include $c['footer_script'];
+                $footer = ob_get_clean();
+                $this->replace("/<\/body>/i", "$footer\n</body>");
+            }
+
+
         }
 
         return $this;
