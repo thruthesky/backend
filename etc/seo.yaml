@@ -42,6 +42,17 @@ image: '{site_url}/etc/res/img/backend.jpg'
 
 # Forums to display SEO links for Robots
 # if it is left in blank(empty), then all forum links will be displayed.
+# if forum_seo is set to N, then FORUM data will not be display as sESO.
 # Example)
 #           forums: [ discussion, qna, gallery ]
 # forums:
+
+forum_seo: N
+
+# header
+# if header_script is set, backend will load header_script and insert into <head>
+header_script: etc/header.php
+
+# footer
+# if footer_script is set, backend will load footer_script and insert right before </body>
+footer_script: etc/footer.php

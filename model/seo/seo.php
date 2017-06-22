@@ -260,6 +260,9 @@ EOP;
         // To avoid SEO robots exclude hidden links, it hides through Javascript.
         // On app side, For the first loads, it may blanking, but no blinking on the next load or page move. Especially if it is Single Page App, it really would not be a big matter.
         // @todo Be sure this hidden links are indexed by google robots.
+
+        if ( $c['forum_seo'] != 'Y' ) { /// if FORUM SEO is not set to 'N',
+
 $seo = <<<EOH
 <div class="seo-links">{$this->getLinks()}</div>
 <script>
@@ -272,7 +275,7 @@ $seo = <<<EOH
 EOH;
 
         $this->replace("/<\/body>/i", "$seo\n</body>");
-
+        }
 
         return $this;
     }
