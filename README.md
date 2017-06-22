@@ -334,6 +334,55 @@ To do SEO, the home page(hosting site) of client app must be in the same place o
 
 
 
+### Nginx Configuration for SEO
+
+
+Example ) How to configure Nginx for SEO
+
+````
+    server {
+        listen       80;
+        server_name  backend.org;
+        root   /Users/thruthesky/www/backend;
+        location / {
+            index  index.php;
+            try_files $uri $uri/ /index.php?$args;
+        }
+        location ~ \.php$ {
+            fastcgi_pass   127.0.0.1:9000;
+            fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
+            include        fastcgi_params;
+        }
+    }
+````
+
+
+Ex ) englishfordevelopoers.com Server configuration for SEO
+````
+server {
+	server_name	.englishfordevelopers.com;
+	listen		80;
+	rewrite ^ https://$host$request_uri? permanent;
+}
+server {
+	server_name	.englishfordevelopers.com;
+	listen		443 ssl;
+	root		/home/englishfordevelopers/www;
+	index		index.php
+	
+	include		/etc/nginx/gzip.conf;
+	include		/etc/nginx/expire.conf;
+	
+	ssl_certificate     /etc/letsencrypt/live/englishfordevelopers.com/fullchain.pem;
+	ssl_certificate_key /etc/letsencrypt/live/englishfordevelopers.com/privkey.pem;
+	include		/etc/nginx/rewrite-index-php.conf;
+	include		/etc/nginx/php.conf;
+}
+````
+
+
+
+
 ## What would be installed
 
 ### User accounts
@@ -1366,54 +1415,6 @@ When index.php is access without `route` parameter, SEO works by `system::run()`
 ### Customizing and Testing
 
 [Google Webmaster Tools](https://www.google.com/webmasters/tools/) is known to be the best helpful tool when it comes to 'SEO' related works.
-
-
-
-### Nginx Configuration for SEO
-
-
-Example ) How to configure Nginx for SEO
-
-````
-    server {
-        listen       80;
-        server_name  backend.org;
-        root   /Users/thruthesky/www/backend;
-        location / {
-            index  index.php;
-            try_files $uri $uri/ /index.php?$args;
-        }
-        location ~ \.php$ {
-            fastcgi_pass   127.0.0.1:9000;
-            fastcgi_param  SCRIPT_FILENAME  $document_root$fastcgi_script_name;
-            include        fastcgi_params;
-        }
-    }
-````
-
-
-Ex ) englishfordevelopoers.com Server configuration for SEO
-````
-server {
-	server_name	.englishfordevelopers.com;
-	listen		80;
-	rewrite ^ https://$host$request_uri? permanent;
-}
-server {
-	server_name	.englishfordevelopers.com;
-	listen		443 ssl;
-	root		/home/englishfordevelopers/www;
-	index		index.php
-	
-	include		/etc/nginx/gzip.conf;
-	include		/etc/nginx/expire.conf;
-	
-	ssl_certificate     /etc/letsencrypt/live/englishfordevelopers.com/fullchain.pem;
-	ssl_certificate_key /etc/letsencrypt/live/englishfordevelopers.com/privkey.pem;
-	include		/etc/nginx/rewrite-index-php.conf;
-	include		/etc/nginx/php.conf;
-}
-````
 
 
 
