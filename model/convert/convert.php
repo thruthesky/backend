@@ -12,7 +12,7 @@ class Convert extends \model\entity\Entity {
 
         $config_idx = $this->postConfigCheckDeleteCreate( $data );
 
-        $rows = db()->rows("SELECT idx_root,idx_parent,member_id,subject,content,password,stamp,post_id FROM post_data WHERE post_id LIKE '$old_post_config' AND idx_root = 0 AND idx_parent = 0 ");
+        $rows = db()->rows("SELECT idx,idx_root,idx_parent,member_id,subject,content,password,stamp,post_id FROM post_data WHERE post_id LIKE '$old_post_config' AND idx_root = 0 AND idx_parent = 0 ");
         $count = 0;
 
         foreach ( $rows as $row ) {
@@ -57,7 +57,7 @@ class Convert extends \model\entity\Entity {
 
 
     public function getPostDataParentComment( $old_parent_idx, $new_parent_idx, $config_idx, $old_post_config  ) {
-        $rows = db()->rows("SELECT idx_root,idx_parent,member_id,subject,content,password,stamp,post_id FROM post_data WHERE post_id LIKE '$old_post_config' AND idx_root = $old_parent_idx ");
+        $rows = db()->rows("SELECT idx,idx_root,idx_parent,member_id,subject,content,password,stamp,post_id FROM post_data WHERE post_id LIKE '$old_post_config' AND idx_root = $old_parent_idx ");
         $count = 0;
 
         foreach ( $rows as $row ) {
