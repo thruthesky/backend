@@ -11,18 +11,18 @@
 
 
 
-$DATABASE_USER          = 'root';
-$DATABASE_PASSWORD      = '7777';
-$DATABASE_NAME          = 'backend';
-$DATABASE_PREFIX        = "be046_";
+$DATABASE_USER          = 'katalkenglish';
+$DATABASE_PASSWORD      = 'xpm~june222017';
+$DATABASE_NAME          = 'katalkenglish';
+$DATABASE_PREFIX        = "";
 $DATABASE_HOST          = 'localhost';
 $DATABASE_TYPE          = 'mysql';         // 'mysql' | 'sqlite'
 
 
 
 
-$ADMIN_ID               = 'usera1';          // This is an admin id.
-$ADMIN_IDS              = ['usera2', 'usera3', '', ''];             // Array. Put other admin ids.
+$ADMIN_ID               = 'admin';          // This is an admin id.
+$ADMIN_IDS              = ['charles', '', ''];             // Array. Put other admin ids.
 
 $ANONYMOUS_ID           = 'anonymous';      // Anonymous ID.
 $TEST_USER_ID           = 'user';           // Test User ID.

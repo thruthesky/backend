@@ -1,6 +1,6 @@
 
 # Site name
-site_name: Backend
+site_name: 카톡영어
 
 
 # Url of the site
@@ -24,7 +24,7 @@ description: Backed is a Restful API server for client side applications like An
 
 
 # keywords of the site
-keywords: Backend,API,Angular
+keywords: 카톡영어,화상영어
 
 
 # Default Author of the site.
