@@ -751,6 +751,11 @@ See category tests to get some sample codes.
 
 
 
+### site configuration with meta.
+
+If admin save a meta with model=config and code=config, then user can read the data of this meta using `meta.config` route.
+
+
 
 ## Post
 
@@ -1334,13 +1339,15 @@ For installation of SEO, see Installaction section.
 
 ## How it works
 
+When index.php is access without `route` parameter, SEO works by `system::run()`
 
-* By configuring web server's `directory index` to seo.php, Backend has a separate start script for seo service.
 	* XHR/Ajax/Resful Reqeust will access 'index.php'
-	* While robots and web browsers will access 'seo.php'
+	* While robots and web browsers will access `index.php` ==> `model/seo.php`
+	
+
 
 * Save all client files on Backend root folder. ( Add .gitignore to make it easy work. )
-* When browsers, robots access, `seo.php` starts and reads 'index.html'
+* When browsers, robots access, `index.php` without `route` starts and reads `index.html`
 	* it will patch 'SEO' things into 'index.html' based on the request URI.
 		* Metas
 		* Open Grahps
@@ -1382,6 +1389,30 @@ Example ) How to configure Nginx for SEO
             include        fastcgi_params;
         }
     }
+````
+
+
+Ex ) englishfordevelopoers.com Server configuration for SEO
+````
+server {
+	server_name	.englishfordevelopers.com;
+	listen		80;
+	rewrite ^ https://$host$request_uri? permanent;
+}
+server {
+	server_name	.englishfordevelopers.com;
+	listen		443 ssl;
+	root		/home/englishfordevelopers/www;
+	index		index.php
+	
+	include		/etc/nginx/gzip.conf;
+	include		/etc/nginx/expire.conf;
+	
+	ssl_certificate     /etc/letsencrypt/live/englishfordevelopers.com/fullchain.pem;
+	ssl_certificate_key /etc/letsencrypt/live/englishfordevelopers.com/privkey.pem;
+	include		/etc/nginx/rewrite-index-php.conf;
+	include		/etc/nginx/php.conf;
+}
 ````
 
 
