@@ -67,6 +67,14 @@ in config.php file, $ADMIN_ID is the primary admin id. and you can have many adm
 
 * Admin now can change user password with 'admin_change_user_password' route.
 
+* in SEO
+    * If `forum_seo` is set to 'N', then it will not SEO for forum posts. Be careful to type in 'N' with quote.
+    * Added 'header_script' for adding extra code in <head> and 'footer_script' for adding extra code before '</body>'
+        * with this 'header_script' and 'footer_script', you can do almost unlimited things like
+            * adding Google analystics
+            * adding some extra javascript code to pass the Javascript like
+                * in LMS ( Center-1 ), each site needs 'branch domain' and 'header_script' is right place to put 'branch domain'.
+                
 
  
 # Bugs
