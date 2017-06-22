@@ -11,10 +11,10 @@
 
 
 
-$DATABASE_USER          = 'katalkenglish';
-$DATABASE_PASSWORD      = 'xpm~june222017';
-$DATABASE_NAME          = 'katalkenglish';
-$DATABASE_PREFIX        = "";
+$DATABASE_USER          = 'newtalkative';
+$DATABASE_PASSWORD      = 'Wc~lynx*,4133';
+$DATABASE_NAME          = 'newtalkative';
+$DATABASE_PREFIX        = "_";
 $DATABASE_HOST          = 'localhost';
 $DATABASE_TYPE          = 'mysql';         // 'mysql' | 'sqlite'
 
