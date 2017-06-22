@@ -1,7 +1,7 @@
 <?php
 
 
-route()->add('convert.talkative', [
+route()->add('convert.talkative.run', [
     'path' => "\\model\\convert\\convert",
     'method' => 'run'
 ]);

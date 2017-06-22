@@ -5,11 +5,103 @@ class Convert extends \model\entity\Entity {
             $this->convertTalktativeMember();
             $this->convertTalkativeQna();
             $this->convertTalkativeReview();
-//        $this->convertTalkativePost();
     }
 
-    public function convertTalkativePost(){
-        $config_id = 'review';
+
+    public function convertPOSTDATA( $data ) {
+
+        $config_idx = $this->postConfigCheckDeleteCreate( $data );
+
+        $rows = db()->rows("SELECT idx_root,idx_parent,member_id,subject,content,password,stamp,post_id FROM post_data WHERE post_id LIKE 'qna' AND idx_root = 0 AND idx_parent = 0 ");
+        $count = 0;
+
+        foreach ( $rows as $row ) {
+
+            post( $row['idx_root'] )->delete();
+
+            $data = null;
+//
+//            $data['root_idx'] = $row['idx_root'];
+//            $data['parent_idx'] = $row['idx_parent'];
+            $data['post_config_idx'] = $config_idx;
+            $data['title']  = $row['subject'];
+            $data['content'] = $row['content'];
+
+            $post_idx = post()->create($data);
+
+            if ( is_error( $post_idx ) ) {
+                echo "\n" . $data['id'] . " error :: ";
+                error( $post_idx );
+                echo "\n";
+            }
+            else {
+
+                $user = user($row['member_id']);
+                post( $post_idx )->update([
+                    "password" => $row['password'],
+                    "user_idx" => $user->idx,
+                    "created"  => $row['stamp'],
+                    "name" => $user->name,
+                    "email" => $user->email
+                ]);
+
+                $this->getPostDataParentComment( $row['idx'], $post_idx, $config_idx  );
+
+                $count++;
+                echo "POST::$count : $user->idx  |  name : $user->name \n" ;
+            }
+        }
+
+    }
+
+
+
+    public function getPostDataParentComment( $old_parent_idx, $new_parent_idx, $config_idx  ) {
+        $rows = db()->rows("SELECT idx_root,idx_parent,member_id,subject,content,password,stamp,post_id FROM post_data WHERE post_id LIKE 'qna' AND idx_root = $old_parent_idx ");
+        $count = 0;
+
+        foreach ( $rows as $row ) {
+
+            post( $row['idx_root'] )->delete();
+
+            $data = null;
+
+            $data['root_idx'] = $new_parent_idx;
+            $data['parent_idx'] = $new_parent_idx;
+            $data['post_config_idx'] = $config_idx;
+            $data['title']  = $row['subject'];
+            $data['content'] = $row['content'];
+
+            $post_idx = post()->create($data);
+
+            if ( is_error( $post_idx ) ) {
+                echo "\n" . $data['id'] . " error :: ";
+                error( $post_idx );
+                echo "\n";
+            }
+            else {
+
+                $user = user($row['member_id']);
+                post( $post_idx )->update([
+                    "password" => $row['password'],
+                    "user_idx" => $user->idx,
+                    "created"  => $row['stamp'],
+                    "name" => $user->name,
+                    "email" => $user->email
+                ]);
+                $count++;
+                echo "Comment::$count : $user->idx  |  name : $user->name \n" ;
+            }
+        }
+    }
+
+
+    /**
+     * CONVERTING POSTDATA OF QNA
+     */
+
+    public function convertTalkativeQna() {
+        echo "\n convertTalkativePostQna:: Start \n";
 
         $data = [
             'id' => 'qna',
@@ -17,38 +109,38 @@ class Convert extends \model\entity\Entity {
             'description' => 'Question and Answer'
         ];
 
-        echo "SELECT idx_root,idx_parent,member_id,subject,content,password,stamp FROM post_data WHERE post_id = '$data[id]' ";
-
-        $admin_session_id = user(ADMIN_ID)->getSessionId();
-        echo "\n " . $admin_session_id . "\n";
-
-        if ( config( $config_id )->exist() ) {
-            $config_idx = config( $config_id )->idx;
-            //print_r($config_idx);
-            echo " Forum ID:: " . $config_idx . "\n";
-        }
-        else {
-            $config_idx = config()->create( $config_id );
-            echo "\n Forum ID:: " . $config_idx . "\n";
-        }
+        $this->convertPOSTDATA( $data );
 
     }
 
+    /**
+     * CONVERTING POSTDATA OF REVIEW
+     */
+    public function convertTalkativeReview() {
+        echo "\n convertTalkativePostReview:: Start \n";
 
+        $data = [
+            'id' => 'review',
+            'name' => 'Student Review',
+            'description' => 'Student Testimonial'
+        ];
+        $this->convertPOSTDATA( $data );
+    }
 
-
-
+    /**
+     * CONVERTING MEMBER TO BACKEND USERS
+     */
 
     public function convertTalktativeMember() {
+
         $rows = db()->rows("select idx,domain,id,password,name,nickname,landline,mobile,email,birthday,gender,address,zipcode,login_count,login_stamp,login_ip from member");
-        //print_r($rows);
-        //print_r($rows[0]);
         $count = 0;
+
         foreach ( $rows as $row ) {
 
             if( $row['id'] == 'admin' || $row['id'] == 'thruthesky' ) continue;
 
-            //if ( user()->load( $row['id'] )->exist() ) user()->load( $row['id'] )->delete();
+
             if ( user( $row['id'] )->exist() ) user( $row['id'] )->delete();
 
             $data = null;
@@ -82,9 +174,9 @@ class Convert extends \model\entity\Entity {
                 echo "\n";
             }
             else {
-                //user()->load( $session_id )->update(['password' => $row['password']]);
+
                 user( $session_id )->update(['password' => $row['password']]);
-                //echo "\n" . $data['id'] . " => " . $session_id;
+
                 $count++;
                 echo $count;
             }
@@ -93,129 +185,24 @@ class Convert extends \model\entity\Entity {
         echo "\nTotal:: " . $count;
     }
 
+
+    /**
+     * GET POST_CONFIG_IDX
+     */
     public function postConfigCheckDeleteCreate( $data ){
+        $admin_session_id = user(ADMIN_ID )->getSessionId();
+        echo "\n ADMIN SESSION" . $admin_session_id . "\n";
 
-        //$admin_session_id = route("login", ['id'=>ADMIN_ID, 'password'=>ADMIN_ID]);
-        $admin_session_id = user(ADMIN_ID)->getSessionId();
-        echo "\n " . $admin_session_id . "\n";
-
-        if ( config( $data['id'] )->exist() ) config( $data['id'] )->delete();
-
-
-        $config_idx = config()->create( $data );
+        if ( config( $data['id'] )->exist() ) {
+            $config_idx = config( $data['id'] )->idx;
+        } else {
+            $config_idx = config()->create( $data );
+        }
 
         echo "\n Forum ID:: " . $config_idx . "\n";
 
         return $config_idx;
     }
 
-    public function convertTalkativeQna() {
-        echo "\n convertTalkativePostQna:: Start \n";
-
-        $data = [
-            'id' => 'qna',
-            'name' => 'Q&A',
-            'description' => 'Question and Answer'
-        ];
-
-        $config_idx = $this->postConfigCheckDeleteCreate( $data );
-
-        $rows = db()->rows("SELECT idx_root,idx_parent,member_id,subject,content,password,stamp FROM post_data WHERE post_id LIKE 'qna' ");
-        $count = 0;
-
-        foreach ( $rows as $row ) {
-
-            post( $row['idx_root'] )->delete();
-
-            $data = null;
-
-            $data['root_idx'] = $row['idx_root'];
-            $data['parent_idx'] = $row['idx_parent'];
-            $data['post_config_idx'] = $config_idx;
-            $data['title']  = $row['subject'];
-            $data['content'] = $row['content'];
-
-            $post_idx = post()->create($data);
-
-            if ( is_error( $post_idx ) ) {
-                echo "\n" . $data['id'] . " error :: ";
-                error( $post_idx );
-                echo "\n";
-            }
-            else {
-                //user()->load( $session_id )->update(['password' => $row['password']]);
-                //echo "\n MEMBER INFO:: \n";
-                //print_r(user($row['member_id']));
-
-                $user = user($row['member_id']);
-                post( $post_idx )->update([
-                    "password" => $row['password'],
-                    "user_idx" => $user->idx,
-                    "created"  => $row['stamp'],
-                    "name" => $user->name,
-                    "email" => $user->email
-                ]);
-
-                //echo "\n" . $data['id'] . " => " . $session_id;
-                $count++;
-                echo "$count : $user->idx  |  name : $user->name \n" ;
-            }
-        }
-    }
-
-
-    public function convertTalkativeReview() {
-        echo "\n convertTalkativePostReview:: Start \n";
-
-        $data = [
-            'id' => 'review',
-            'name' => 'Student Review',
-            'description' => 'Student Testimonial'
-        ];
-
-        $config_idx = $this->postConfigCheckDeleteCreate( $data );
-
-        $rows = db()->rows("SELECT idx_root,idx_parent,member_id,subject,content,password,stamp FROM post_data WHERE post_id LIKE 'postscript' ");
-        $count = 0;
-
-        foreach ( $rows as $row ) {
-
-            post( $row['idx_root'] )->delete();
-
-            $data = null;
-
-            $data['root_idx'] = $row['idx_root'];
-            $data['parent_idx'] = $row['idx_parent'];
-            $data['post_config_idx'] = $config_idx;
-            $data['title']  = $row['subject'];
-            $data['content'] = $row['content'];
-
-            $post_idx = post()->create($data);
-
-            if ( is_error( $post_idx ) ) {
-                echo "\n" . $data['id'] . " error :: ";
-                error( $post_idx );
-                echo "\n";
-            }
-            else {
-                //user()->load( $session_id )->update(['password' => $row['password']]);
-                //echo "\n MEMBER INFO:: \n";
-                //print_r(user($row['member_id']));
-
-                $user = user($row['member_id']);
-                post( $post_idx )->update([
-                    "password" => $row['password'],
-                    "user_idx" => $user->idx,
-                    "created"  => $row['stamp'],
-                    "name" => $user->name,
-                    "email" => $user->email
-                ]);
-
-                //echo "\n" . $data['id'] . " => " . $session_id;
-                $count++;
-                echo "$count : $user->idx  |  name : $user->name \n" ;
-            }
-        }
-    }
 
 }
