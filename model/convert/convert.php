@@ -20,9 +20,7 @@ class Convert extends \model\entity\Entity {
             post( $row['idx_root'] )->delete();
 
             $data = null;
-//
-//            $data['root_idx'] = $row['idx_root'];
-//            $data['parent_idx'] = $row['idx_parent'];
+
             $data['post_config_idx'] = $config_idx;
             $data['title']  = $row['subject'];
             $data['content'] = $row['content'];
@@ -124,7 +122,7 @@ class Convert extends \model\entity\Entity {
             'name' => 'Student Review',
             'description' => 'Student Testimonial'
         ];
-        $this->convertPOSTDATA( $data, 'postscript' );
+        $this->convertPOSTDATAReviewOnly( $data, 'postscript' );
     }
 
     /**
@@ -202,6 +200,97 @@ class Convert extends \model\entity\Entity {
         echo "\n Forum ID:: " . $config_idx . "\n";
 
         return $config_idx;
+    }
+
+
+
+
+
+
+
+    public function convertPOSTDATAReviewOnly( $data, $old_post_config ) {
+
+        $config_idx = $this->postConfigCheckDeleteCreate( $data );
+
+        $rows = db()->rows("SELECT idx,idx_root,idx_parent,member_id,subject,content,password,stamp,post_id FROM post_data WHERE post_id LIKE '$old_post_config' AND idx_root = 0 AND idx_parent = 0 AND member_id != 'admin' ");
+        $count = 0;
+
+        foreach ( $rows as $row ) {
+
+            post( $row['idx_root'] )->delete();
+
+            $data = null;
+
+            $data['post_config_idx'] = $config_idx;
+            $data['title']  = $row['subject'];
+            $data['content'] = $row['content'];
+
+            $post_idx = post()->create($data);
+
+            if ( is_error( $post_idx ) ) {
+                echo "\n" . $data['id'] . " error :: ";
+                error( $post_idx );
+                echo "\n";
+            }
+            else {
+
+                $user = user($row['member_id']);
+                post( $post_idx )->update([
+                    "password" => $row['password'],
+                    "user_idx" => $user->idx,
+                    "created"  => $row['stamp'],
+                    "name" => $user->name,
+                    "email" => $user->email
+                ]);
+
+                $this->getPostDataParentCommentReviewOnly( $row['idx'], $post_idx, $config_idx, $old_post_config  );
+
+                $count++;
+                echo "POST::$count : $user->idx  |  name : $user->name \n" ;
+            }
+        }
+
+    }
+
+
+
+    public function getPostDataParentCommentReviewOnly( $old_parent_idx, $new_parent_idx, $config_idx, $old_post_config  ) {
+        $rows = db()->rows("SELECT idx,idx_root,idx_parent,member_id,subject,content,password,stamp,post_id FROM post_data WHERE post_id LIKE '$old_post_config' AND idx_root = $old_parent_idx ");
+        $count = 0;
+
+        foreach ( $rows as $row ) {
+
+            post( $row['idx_root'] )->delete();
+
+            $data = null;
+
+            $data['root_idx'] = $new_parent_idx;
+            $data['parent_idx'] = $new_parent_idx;
+            $data['post_config_idx'] = $config_idx;
+            $data['title']  = $row['subject'];
+            $data['content'] = $row['content'];
+
+            $post_idx = post()->create($data);
+
+            if ( is_error( $post_idx ) ) {
+                echo "\n" . $data['id'] . " error :: ";
+                error( $post_idx );
+                echo "\n";
+            }
+            else {
+
+                $user = user($row['member_id']);
+                post( $post_idx )->update([
+                    "password" => $row['password'],
+                    "user_idx" => $user->idx,
+                    "created"  => $row['stamp'],
+                    "name" => $user->name,
+                    "email" => $user->email
+                ]);
+                $count++;
+                echo "Comment::$count : $user->idx  |  name : $user->name \n" ;
+            }
+        }
     }
 
 
