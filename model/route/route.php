@@ -223,8 +223,8 @@ class Route {
         // number only.
         $number_if_contain = [ 'idx', 'birth_year', 'birth_month', 'birth_day' ];
 
-        // string only. cannot be numeric, no empty, no array.
-        $string = [ 'route', 'session', 'id', 'password', 'name', 'email', 'nickname', 'gender', 'address', 'country', 'province', 'city' ];
+        // string only. cannot be numeric, no empty, no array.  password was removed 23/06/2017
+        $string = [ 'route', 'session', 'id', 'name', 'email', 'nickname', 'gender', 'address', 'country', 'province', 'city' ];
 
         // title, content, data can be a numeric, string, empty, boolean.
 
