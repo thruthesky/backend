@@ -1,5 +1,13 @@
 <?php
-
+function domain_name()
+{
+	if ( isset( $_SERVER['HTTP_HOST'] ) ) {
+		$domain = $_SERVER['HTTP_HOST'];
+		$domain = strtolower($domain);
+		return $domain;
+	}
+	else return NULL;
+}
 header('Content-type: text/html; charset=euc-kr');
 $StoreId 	= "thruthesky2";
 $OrdNo 		= date("ymdhis");
@@ -7,7 +15,7 @@ $amt 		= $_GET['amount'];
 $AGS_HASHDATA = md5($StoreId . $OrdNo . $amt); 
 
 
-$MallUrl	= "https://www.englishfordevelopers.com";
+$MallUrl	= "https://" . domain_name();
 $StoreNm	= "화상영어";
 $ProdNm		= "화상영어수업료";
 $UserEmail	= $_GET['email'];
