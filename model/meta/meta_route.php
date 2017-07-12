@@ -75,7 +75,7 @@ route()->add('meta.config', [
     'path' => '\\model\\meta\\meta_interface',
     'method' => 'config',
     'variables' => [
-
+        'optional' => [ 'name' ]
     ]
 ]);
 
