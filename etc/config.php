@@ -22,7 +22,7 @@ $DATABASE_TYPE          = 'mysql';         // 'mysql' | 'sqlite'
 
 
 $ADMIN_ID               = 'admin';          // This is an admin id.
-$ADMIN_IDS              = ['charles', 'admin2', ''];             // Array. Put other admin ids.
+$ADMIN_IDS              = ['charles', 'admin2', 'thruthesky'];             // Array. Put other admin ids.
 
 $ANONYMOUS_ID           = 'anonymous';      // Anonymous ID.
 $TEST_USER_ID           = 'user';           // Test User ID.
