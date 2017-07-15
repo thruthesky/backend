@@ -32,11 +32,14 @@ class File_Interface extends File {
     public function download( $file ) {
 
 
+
+
         $idx = $file->idx;
         $name = md5($file->name);
         $file_path = $file->path();
 
-        //di("file path: $file_path");
+
+        // di("file path: $file_path"); exit;
 
         ///
         if ( ! file_exists( $file_path ) ) return error( ERROR_FILE_NOT_EXIST_ON_HDD );
@@ -90,7 +93,6 @@ class File_Interface extends File {
         }
 
         $image = new ImageResize( $file_path );
-
 
         // resize
         if ( $width || $height ) {
