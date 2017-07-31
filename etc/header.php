@@ -3,10 +3,12 @@
     if ( strpos( $host, 'katalkenglish.com' ) !== false ) $naver_login_client_id = "RQ5aql3x2TQKjwi2Pkh4";
     else if ( strpos( $host, 'iamtalkative.com' ) !== false ) $naver_login_client_id = "hLsDccGynf0Kci1AxLjL";
     else $naver_login_client_id = "RQ5aql3x2TQKjwi2Pkh4";
+    $ip_address = $_SERVER['REMOTE_ADDR']?:($_SERVER['HTTP_X_FORWARDED_FOR']?:$_SERVER['HTTP_CLIENT_IP']);
 ?>
 <script>
     var naver_login_client_id = "<?php echo $naver_login_client_id?>";
     var use_facebook = true;
+    var client_ip_address = "<?php echo $ip_address?>";
 </script>
 
 
