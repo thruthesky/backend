@@ -1,8 +1,6 @@
 <?php
 
-
-
-
+date_default_timezone_set("Asia/Seoul");
 
 require_once __ROOT_DIR__ . '/etc/helpers.php';
 reset_request_from_argv();

@@ -1,4 +1,5 @@
 <?php
+date_default_timezone_set("Asia/Seoul");
 function domain_name()
 {
 	if ( isset( $_SERVER['HTTP_HOST'] ) ) {
@@ -8,7 +9,29 @@ function domain_name()
 	}
 	else return NULL;
 }
+function input_check( $name, $txt ) {
+	if ( isset($_REQUEST[$name]) && $name ) {
+  }
+  else {
+		echo <<<EOH
+			<script>
+				alert("$txt 정보가 올바르지 않습니다.");
+				history.go(-1);
+			</script>
+EOH;
+		exit;
+  } 
+}
 header('Content-type: text/html; charset=euc-kr');
+
+input_check('amount', '금액');
+input_check('email', '이메일');
+input_check('id', '아이디');
+input_check('mobile', '전화번호');
+input_check('name', '이름');
+
+
+
 $StoreId 	= "thruthesky2";
 $OrdNo 		= date("ymdhis");
 $amt 		= $_GET['amount'];
@@ -39,7 +62,7 @@ $Remark	= $OrdAddr;
 <html>
 <head>
 <meta charset="euc-kr">
-<title>화상영어 수업료 결재</title>
+<title>화상영어 수업료 결제</title>
 <style type="text/css">
 
 </style>
@@ -92,6 +115,124 @@ function Disable_Flag(form){
 </script>
 </head>
 <body topmargin=0 leftmargin=0 rightmargin=0 bottommargin=0 onload="javascript:Enable_Flag(frmAGS_pay);">
+
+
+<!-- design -->
+<style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: "AppleGothic", "Malgun Gothic";
+				font-size: 11pt;
+      }
+			a {
+				text-decoration: none;
+			}
+      .top .menu {
+        padding: 1em;
+        height: 3em;
+        overflow: hidden;
+        background-color: rgba( 0, 0, 0, .8 );
+      }
+			.top .menu, .top td, .top a {
+				color: white;
+			}
+      .top .menu table {
+        margin: 0 auto;
+        width: 100%;
+        max-width: 912px;
+      }
+
+			h1.title {
+				font-weight: 100;
+				font-size: 2em;
+			}
+			.go-back {
+				font-size: .9em;
+				font-weight: 100;
+				text-align: center;
+				line-height: 140%;
+			}
+      .content {
+        position: relative;
+        margin: 3em auto 2em;
+        padding: 1em;
+        max-width: 912px;
+        background-repeat: no-repeat;
+        background-position: center 0;
+        line-height: 180%;
+        text-align: center;
+      }
+      .content h2 {
+        margin-bottom: 20px;
+				font-weight: 100;
+				font-size: 1.4em;
+      }
+			.content .amount {
+				font-weight: 100;
+				font-size: 1.2em;
+			}
+      .logo img {
+        width: 140px;
+      }
+
+.bottom-go-back {
+	margin-top: 8em;
+	padding: 1em;
+	border: 0;
+	background-color: #e8e8e8;
+	text-align: center;
+}
+.bottom-go-back a {
+	color: black;
+}
+
+.payment-button { text-align: center; }
+.payment-button input {
+	padding: 1em 2em;
+	border: 0;
+	background-color: #e3e3e3;
+}
+
+.click-again-text {
+	margin-top: 2em;
+	font-size: .85em;
+	font-weight: normal;
+	color: #ce3d06;
+}
+
+.phone-text {
+	margin-top: 1em;
+	font-size: .95em;
+	font-weight: normal;
+	color: #0b7ca9;
+}
+	
+
+    </style>
+		<div class="top">
+      <div class="menu">
+        <table cellpadding=0 cellspacing=0 border=0>
+          <tr valign=top>
+            <td><a href="https://iamtalkative.com"><span class="logo"><img src="https://iamtalkative.com/assets/images/logo/logo24.png"></span></a></td>
+            <td>
+								<h1 class="title">
+									굿톡 화상영어 수업료 결제
+								</h1>
+            </td>
+            <td class="go-back" valign="middle">
+							<a href="https://iamtalkative.com">굿톡 화상영어<br>홈페이지로 돌아가기</a>
+            </td>
+          </tr>
+        </table>
+      </div><!--/menu-->
+      <div class="content">
+  			<h2><?php echo $_REQUEST['name']?>님, 굿톡 화상영어 수업료를 결제합니다.</h2>
+      	<div class="amount">결제 금액 : <?php echo number_format($_REQUEST['amount'])?>원</div>
+      </div><!--/content-->
+    </div>
+<!-- eo design -->
+
 <form name=frmAGS_pay method=post action=AGS_pay_ing.php>
 <input type=hidden name=Job maxlength=20 value="onlycard">
 <input type=hidden name=StoreId value="<?php echo $StoreId?>">
@@ -195,13 +336,21 @@ function Disable_Flag(form){
 <input type=hidden name=ICHEARS_HPNO value="">		
 
 
-<div style="margin-top: 100px; text-align: center;">
+<div class="payment-button">
 <input type="button" value="화상영어 수업료 결제하기" onclick="javascript:Pay(frmAGS_pay);">
+<div class="click-again-text">수업료 결제창이 1분 이내에 뜨지 않으면 위의 버튼을 클릭 해 주세요.</div>
+<div class="phone-text">결제가 어려우면 070-7893-1741 로 전화주세요.</div>
 </div>
+
+
+<div class="bottom-go-back">
+	<a href="https://iamtalkative.com">굿톡 화상영어 홈페이지로 돌아가기</a>
+</div>
+
 
 </form>
 <script>
-	parent.postMessage('payment-begin', '*');
+	//parent.postMessage('payment-begin', '*');
 	setTimeout( function() { Pay(frmAGS_pay); }, 100 );
 </script>
 </body>
