@@ -1,5 +1,11 @@
 <?php
 date_default_timezone_set("Asia/Seoul");
+function echo_euckr($org_str) {
+	// echo $org_str;
+	$str = @iconv('utf8', 'euckr', $org_str);
+	if ( $str ) echo $str;
+	else echo $org_str;
+}
 function domain_name()
 {
 	if ( isset( $_SERVER['HTTP_HOST'] ) ) {
@@ -207,8 +213,6 @@ function Disable_Flag(form){
 	font-weight: normal;
 	color: #0b7ca9;
 }
-	
-
     </style>
 		<div class="top">
       <div class="menu">
@@ -227,7 +231,7 @@ function Disable_Flag(form){
         </table>
       </div><!--/menu-->
       <div class="content">
-  			<h2><?php echo $_REQUEST['name']?>님, 굿톡 화상영어 수업료를 결제합니다.</h2>
+  			<h2><?php echo_euckr($_REQUEST['name'])?>님, 굿톡 화상영어 수업료를 결제합니다.</h2>
       	<div class="amount">결제 금액 : <?php echo number_format($_REQUEST['amount'])?>원</div>
       </div><!--/content-->
     </div>
@@ -354,4 +358,4 @@ function Disable_Flag(form){
 	setTimeout( function() { Pay(frmAGS_pay); }, 100 );
 </script>
 </body>
-</html> 
+</html>
