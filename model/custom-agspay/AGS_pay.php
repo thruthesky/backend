@@ -342,7 +342,7 @@ function Disable_Flag(form){
 
 <div class="payment-button">
 <input type="button" value="화상영어 수업료 결제하기" onclick="javascript:Pay(frmAGS_pay);">
-<div class="click-again-text">수업료 결제창이 1분 이내에 뜨지 않으면 위의 버튼을 클릭 해 주세요.</div>
+<div class="click-again-text">수업료 결제창이 5분 이내에 뜨지 않으면 위의 버튼을 클릭 해 주세요.</div>
 <div class="phone-text">결제가 어려우면 070-7893-1741 로 전화주세요.</div>
 </div>
 
