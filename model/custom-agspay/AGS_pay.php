@@ -6,6 +6,16 @@ function echo_euckr($org_str) {
 	if ( $str ) echo $str;
 	else echo $org_str;
 }
+
+function _euckr($org_str) {            
+	// echo $org_str;                        
+	$str = @iconv('utf8', 'euckr', $org_str);
+	if ( $str ) return $str;                   
+	else return $org_str;                      
+}                                          
+
+
+
 function domain_name()
 {
 	if ( isset( $_SERVER['HTTP_HOST'] ) ) {
@@ -58,8 +68,8 @@ $SubjectData = "$StoreNm;$ProdNm;$amt;$date";
 
 
 
-$OrdNm		= $_GET['name'];
-$OrdAddr	= "¥Î«—πŒ±π $OrdNm $OrdPhone";
+$OrdNm		= _euckr($_GET['name']);
+$OrdAddr	= "$OrdNm $OrdPhone";
 
 $Remark	= $OrdAddr;
 
