@@ -1,10 +1,10 @@
 <?php
 date_default_timezone_set("Asia/Seoul");
 function echo_utf8($org_str) {
-	// echo $org_str;
-	$str = @iconv('euckr', 'utf8', $org_str);
-	if ( $str ) echo $str;
-	else echo $org_str;
+	echo $org_str;
+	// $str = @iconv('euckr', 'utf8', $org_str);
+	// if ( $str ) echo $str;
+	// else echo $org_str;
 }
 /**********************************************************************************************
 *
@@ -83,7 +83,7 @@ if($AGS_HASHDATA == $rAGS_HASHDATA){
 ?>
 <html>
 <head>
-<meta charset="utf-8">
+<meta charset="euc-kr">
 <title>올더게이트</title>
 <style type="text/css">
 <!--
