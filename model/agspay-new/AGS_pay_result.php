@@ -119,7 +119,8 @@ function show_receipt()
 {
 	if("<?=$rSuccYn?>"== "y" && "<?=$AuthTy?>"=="card")
 	{
-		var send_dt = appr_tm.value;
+//		var send_dt = appr_tm.value;
+		var send_dt = document.querySelector('[name="appr_tm"]').value; // by jaeho song.
 		
 		url="https://www.allthegate.com/customer/receiptLast3.jsp"
 		url=url+"?sRetailer_id="+sRetailer_id.value;
