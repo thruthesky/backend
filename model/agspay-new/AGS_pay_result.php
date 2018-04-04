@@ -225,7 +225,12 @@ function show_receipt()
 					</tr>
 					<tr>
 						<td class=clsright>성공여부 : </td>
-						<td class=clsleft><?=$rSuccYn?></td>
+						<td class=clsleft>
+                            <?php
+                            if ( $rSuccYn == 'y' ) echo "결제 성공";
+                            else echo "결제 실패";
+                            ?>
+                        </td>
 					</tr>
 					<tr>
 						<td class=clsright>처리메세지 : </td>
