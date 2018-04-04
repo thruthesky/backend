@@ -1,13 +1,78 @@
 <?php
+date_default_timezone_set("Asia/Seoul");
+function echo_euckr($org_str) {
+    // echo $org_str;
+    $str = @iconv('utf8', 'euckr', $org_str);
+    if ( $str ) echo $str;
+    else echo $org_str;
+}
 
-//*******************************************************************************
-// MD5 결제 데이터 암호화 처리
-// 형태 : 상점아이디(StoreId) + 주문번호(OrdNo) + 결제금액(Amt)
-//*******************************************************************************
+function _euckr($org_str) {
+    // echo $org_str;
+    $str = @iconv('utf8', 'euckr', $org_str);
+    if ( $str ) return $str;
+    else return $org_str;
+}
 
-$StoreId 	= "aegis";
-$OrdNo 		= "1000000001";
-$amt 		= "1000";
+
+
+function domain_name()
+{
+    if ( isset( $_SERVER['HTTP_HOST'] ) ) {
+        $domain = $_SERVER['HTTP_HOST'];
+        $domain = strtolower($domain);
+        return $domain;
+    }
+    else return NULL;
+}
+function input_check( $name, $txt ) {
+    if ( isset($_REQUEST[$name]) && $name ) {
+    }
+    else {
+        echo <<<EOH
+			<script>
+				alert("$txt 정보가 올바르지 않습니다.");
+				history.go(-1);
+			</script>
+EOH;
+        exit;
+    }
+}
+//header('Content-type: text/html; charset=euc-kr');
+
+input_check('amount', '금액');
+input_check('email', '이메일');
+input_check('id', '아이디');
+input_check('mobile', '전화번호');
+input_check('name', '이름');
+
+
+
+$StoreId 	= "thruthesky2";
+$OrdNo 		= date("ymdhis");
+$amt 		= $_GET['amount'];
+$AGS_HASHDATA = md5($StoreId . $OrdNo . $amt);
+
+
+$MallUrl	= "https://" . domain_name();
+$StoreNm	= "화상영어";
+$ProdNm		= "화상영어수업료";
+$UserEmail	= $_GET['email'];
+$UserId		= $_GET['id'];
+$OrdPhone	= $_GET['mobile'];
+
+
+$date	= date("Y.m.d") . " ~ " . date("Y.m.d", time() + 60 * 60 * 24 * 180 );
+
+$SubjectData = "$StoreNm;$ProdNm;$amt;$date";
+
+
+
+$OrdNm		= _euckr($_GET['name']);
+$OrdAddr	= "$OrdNm $OrdPhone";
+
+$Remark	= $OrdAddr;
+
 
 $AGS_HASHDATA = md5($StoreId . $OrdNo . $amt); 
 
@@ -47,7 +112,7 @@ function Pay(form){
 		// 입력된 데이타의 유효성을 검사합니다.
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		
-		if(Check_Common(form) == true){
+//		if(Check_Common(form) == true){
 			
 			if(document.AGSPay == null || document.AGSPay.object == null){
 				alert("플러그인 설치 후 다시 시도 하십시오.");
@@ -156,7 +221,7 @@ function Pay(form){
 
 			}
 		}
-	}
+//	}
 }
 
 function Enable_Flag(form){
@@ -166,70 +231,185 @@ function Enable_Flag(form){
 function Disable_Flag(form){
         form.Flag.value = "disable"
 }
-
-function Check_Common(form){
-	if(form.StoreId.value == ""){
-		alert("상점아이디를 입력하십시오.");
-		return false;
-	}
-	else if(form.StoreNm.value == ""){
-		alert("상점명을 입력하십시오.");
-		return false;
-	}
-	else if(form.OrdNo.value == ""){
-		alert("주문번호를 입력하십시오.");
-		return false;
-	}
-	else if(form.ProdNm.value == ""){
-		alert("상품명을 입력하십시오.");
-		return false;
-	}
-	else if(form.Amt.value == ""){
-		alert("금액을 입력하십시오.");
-		return false;
-	}
-	else if(form.MallUrl.value == ""){
-		alert("상점URL을 입력하십시오.");
-		return false;
-	}
-	return true;
-}
-
-function Display(form){
-	if(form.Job.value == "onlycard" || form.TempJob.value == "onlycard"){
-		document.all.card_hp.style.display= "";
-		document.all.card.style.display= "";
-		document.all.hp.style.display= "none";
-		document.all.virtual.style.display= "none";
-	}else if(form.Job.value == "onlyhp" || form.TempJob.value == "onlyhp"){
-		document.all.card_hp.style.display= "";
-		document.all.card.style.display= "none";
-		document.all.hp.style.display= "";
-		document.all.virtual.style.display= "none";
-	}else if(form.Job.value == "onlyvirtual" || form.TempJob.value == "onlyvirtual" ){
-		document.all.card_hp.style.display= "none";
-		document.all.card.style.display= "";
-		document.all.hp.style.display= "none";
-		document.all.virtual.style.display= "";
-	}else if(form.Job.value == "onlyiche" || form.TempJob.value == "onlyiche"  ){
-		document.all.card_hp.style.display= "none";
-		document.all.card.style.display= "none";
-		document.all.hp.style.display= "none";
-		document.all.virtual.style.display= "none";
-	}else{
-		document.all.card_hp.style.display= "";
-		document.all.card.style.display= "";
-		document.all.hp.style.display= "";
-		document.all.virtual.style.display= "";
-	}
-}
+//
+//function Check_Common(form){
+//	if(form.StoreId.value == ""){
+//		alert("상점아이디를 입력하십시오.");
+//		return false;
+//	}
+//	else if(form.StoreNm.value == ""){
+//		alert("상점명을 입력하십시오.");
+//		return false;
+//	}
+//	else if(form.OrdNo.value == ""){
+//		alert("주문번호를 입력하십시오.");
+//		return false;
+//	}
+//	else if(form.ProdNm.value == ""){
+//		alert("상품명을 입력하십시오.");
+//		return false;
+//	}
+//	else if(form.Amt.value == ""){
+//		alert("금액을 입력하십시오.");
+//		return false;
+//	}
+//	else if(form.MallUrl.value == ""){
+//		alert("상점URL을 입력하십시오.");
+//		return false;
+//	}
+//	return true;
+//}
+//
+//function Display(form){
+//	if(form.Job.value == "onlycard" || form.TempJob.value == "onlycard"){
+//		document.all.card_hp.style.display= "";
+//		document.all.card.style.display= "";
+//		document.all.hp.style.display= "none";
+//		document.all.virtual.style.display= "none";
+//	}else if(form.Job.value == "onlyhp" || form.TempJob.value == "onlyhp"){
+//		document.all.card_hp.style.display= "";
+//		document.all.card.style.display= "none";
+//		document.all.hp.style.display= "";
+//		document.all.virtual.style.display= "none";
+//	}else if(form.Job.value == "onlyvirtual" || form.TempJob.value == "onlyvirtual" ){
+//		document.all.card_hp.style.display= "none";
+//		document.all.card.style.display= "";
+//		document.all.hp.style.display= "none";
+//		document.all.virtual.style.display= "";
+//	}else if(form.Job.value == "onlyiche" || form.TempJob.value == "onlyiche"  ){
+//		document.all.card_hp.style.display= "none";
+//		document.all.card.style.display= "none";
+//		document.all.hp.style.display= "none";
+//		document.all.virtual.style.display= "none";
+//	}else{
+//		document.all.card_hp.style.display= "";
+//		document.all.card.style.display= "";
+//		document.all.hp.style.display= "";
+//		document.all.virtual.style.display= "";
+//	}
+//}
 -->
 </script>
 </head>
 <!-- 주의) onload 이벤트에서 아래와 같이 javascript 함수를 호출하지 마십시오. -->
 <!-- onload="javascript:Enable_Flag(frmAGS_pay);Pay(frmAGS_pay);" -->
 <body topmargin=0 leftmargin=0 rightmargin=0 bottommargin=0 onload="javascript:Enable_Flag(frmAGS_pay);">
+
+<!-- design -->
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: "AppleGothic", "Malgun Gothic";
+        font-size: 11pt;
+    }
+    a {
+        text-decoration: none;
+    }
+    .top .menu {
+        padding: 1em;
+        height: 3em;
+        overflow: hidden;
+        background-color: rgba( 0, 0, 0, .8 );
+    }
+    .top .menu, .top td, .top a {
+        color: white;
+    }
+    .top .menu table {
+        margin: 0 auto;
+        width: 100%;
+        max-width: 912px;
+    }
+
+    h1.title {
+        font-weight: 100;
+        font-size: 2em;
+    }
+    .go-back {
+        font-size: .9em;
+        font-weight: 100;
+        text-align: center;
+        line-height: 140%;
+    }
+    .content {
+        position: relative;
+        margin: 3em auto 2em;
+        padding: 1em;
+        max-width: 912px;
+        background-repeat: no-repeat;
+        background-position: center 0;
+        line-height: 180%;
+        text-align: center;
+    }
+    .content h2 {
+        margin-bottom: 20px;
+        font-weight: 100;
+        font-size: 1.4em;
+    }
+    .content .amount {
+        font-weight: 100;
+        font-size: 1.2em;
+    }
+    .logo img {
+        width: 140px;
+    }
+
+    .bottom-go-back {
+        margin-top: 8em;
+        padding: 1em;
+        border: 0;
+        background-color: #e8e8e8;
+        text-align: center;
+    }
+    .bottom-go-back a {
+        color: black;
+    }
+
+    .payment-button { text-align: center; }
+    .payment-button input {
+        padding: 1em 2em;
+        border: 0;
+        background-color: #e3e3e3;
+    }
+
+    .click-again-text {
+        margin-top: 2em;
+        font-size: .85em;
+        font-weight: normal;
+        color: #ce3d06;
+    }
+
+    .phone-text {
+        margin-top: 1em;
+        font-size: .95em;
+        font-weight: normal;
+        color: #0b7ca9;
+    }
+</style>
+<div class="top">
+    <div class="menu">
+        <table cellpadding=0 cellspacing=0 border=0>
+            <tr valign=top>
+                <td><a href="https://iamtalkative.com"><span class="logo"><img src="https://iamtalkative.com/assets/images/logo/logo24.png"></span></a></td>
+                <td>
+                    <h1 class="title">
+                        굿톡 화상영어 수업료 결제
+                    </h1>
+                </td>
+                <td class="go-back" valign="middle">
+                    <a href="https://iamtalkative.com">굿톡 화상영어<br>홈페이지로 돌아가기</a>
+                </td>
+            </tr>
+        </table>
+    </div><!--/menu-->
+    <div class="content">
+        <h2><?php echo_euckr($_REQUEST['name'])?>님, 굿톡 화상영어 수업료를 결제합니다.</h2>
+        <div class="amount">결제 금액 : <?php echo number_format($_REQUEST['amount'])?>원</div>
+    </div><!--/content-->
+</div>
+<!-- eo design -->
 <form name=frmAGS_pay method=post action=AGS_pay_ing.php>
+    <!--
 <table border=0 width=100% height=100% cellpadding=0 cellspacing=0>
 	<tr>
 		<td align=center>
@@ -264,6 +444,7 @@ function Display(form){
 						<!-- 신용카드만 사용하도록 연동 <input type=hidden name=Job value="onlycard"> -->
 						<!-- 계좌이체만 사용하도록 연동 <input type=hidden name=Job value="onlyiche"> -->
 						<!-- 핸드폰결제만 사용하도록 연동 <input type=hidden name=Job value="onlyhp"> -->
+    <!--
 						<select name=Job style=width:150px onchange="javascript:Display(frmAGS_pay);">
 							<option value="" selected>선택하십시오.
 							<option value="card">신용카드
@@ -294,6 +475,7 @@ function Display(form){
 					<tr>
 						<td class=clsleft >☞ 상점아이디 (20)</td>
 						<!--상점아이디를 실거래 전환후에는 발급받은 아이디로 바꾸시기 바랍니다.-->
+    <!--
 						<td colspan=2><input type=text style=width:100px name=StoreId maxlength=20 value="aegis"></td>
 					</tr>
 					<tr>
@@ -317,6 +499,7 @@ function Display(form){
 						<td class=clsleft>☞ 상점URL (50)</td>
 						<!-- 주의) 상점홈페이지주소를 반드시 입력해 주십시오. -->
 						<!-- (미입력시 특정 카드사 신용카드 결제 및 가상계좌 결제가 이뤄지지 않을 수 있습니다.) -->
+    <!--
 						<td><input type=text style=width:300px name=MallUrl value="https://www.allthegate.com"></td>
 						<td class=clsleft>예) http://www.abc.com</td>
 					</tr>
@@ -327,6 +510,7 @@ function Display(form){
 					<tr>
 						<!-- 결제창 좌측상단에 상점의 로고이미지(85 * 38)를 표시할 수 있습니다. -->
 						<!-- 잘못된 값을 입력하거나 미입력시 올더게이트의 로고가 표시됩니다. -->
+    <!--
 						<td class=clsleft>상점로고이미지 URL</td>
 						<td colspan=2><input type=text style=width:400px name=ags_logoimg_url maxlength=200 value="https://www.allthegate.com/plugin/images/nice_logo.png"></td>
 					</tr>
@@ -334,6 +518,7 @@ function Display(form){
 						<td class=clsleft>결제창제목입력</td>
 						<!-- 제목은 1컨텐츠당 5자 이내이며, 상점명;상품명;결제금액;제공기간; 순으로 입력해 주셔야 합니다. -->
 						<!-- 입력 예)업체명;판매상품;계산금액;제공기간; -->
+    <!--
 						<td><input type=text style=width:300px name=SubjectData value="업체명;판매상품;계산금액;2018.01.01 ~ 2018.12.31;"></td>
 						<td width=170 class=clsleft>예)업체명;판매상품;계산금액;제공기간;</td>
 					</tr>
@@ -343,6 +528,7 @@ function Display(form){
 					<tr>
 						<td width=156 class=clsleft>회원아이디 (20)</td>
 						<!-- [신용카드, 핸드폰] 결제와 [현금영수증자동발행]을 사용하시는 경우에 반드시 입력해 주시기 바랍니다. -->
+    <!--
 						<td colspan=2><input type=text style=width:100px name=UserId maxlength=20 value="test"></td>
 					</tr>
 				</table>
@@ -364,6 +550,7 @@ function Display(form){
 					</tr>
                		<tr>
 						<td class=clsleft>주문자주소 (100)</td><!-- 가상계좌추가 -->
+    <!--
 						<td colspan=2><input type=text style=width:300px name=OrdAddr maxlength=100 value="서울시 강남구 청담동"></td>
 					</tr>
 					<tr>
@@ -390,6 +577,7 @@ function Display(form){
 											    국민 만 사용하고자 하는 경우 ☞ 200
 							 모두 사용하고자 할 때에는 아무 값도 입력하지 않습니다.
 							 카드사별 코드는 매뉴얼에서 확인해 주시기 바랍니다. -->
+    <!--
 			  </tr>
 				</table>
 				</div>
@@ -402,22 +590,26 @@ function Display(form){
 					<tr>
 						<td width=158 class=clsleft>CP아이디 (10)</td>
 						<!-- CP아이디를 핸드폰 결제 실거래 전환후에는 발급받으신 CPID로 변경하여 주시기 바랍니다. -->
+    <!--
 						<td width=300><input type=text style=width:100px name=HP_ID maxlength=10 value=""></td>
 						<td width=192></td>
 					</tr>
 					<tr>
 						<td class=clsleft>CP비밀번호 (10)</td>
 						<!-- CP비밀번호를 핸드폰 결제 실거래 전환후에는 발급받으신 비밀번호로 변경하여 주시기 바랍니다. -->
+    <!--
 						<td colspan=2><input type=text style=width:100px name=HP_PWD maxlength=10 value=""></td>
 					</tr>
 					<tr>
 						<td class=clsleft>SUB-CP아이디 (10)</td>
 						<!-- SUB-CPID는 핸드폰 결제 실거래 전환후에 발급받으신 상점만 입력하여 주시기 바랍니다. -->
+    <!--
 						<td colspan=2><input type=text style=width:100px name=HP_SUBID maxlength=10 value=""></td>
 					</tr>
 					<tr>
 						<td class=clsleft>상품코드 (10)</td>
 						<!-- 상품코드를 핸드폰 결제 실거래 전환후에는 발급받으신 상품코드로 변경하여 주시기 바랍니다. -->
+    <!--
 						<td colspan=2><input type=text style=width:100px name=ProdCode maxlength=10 value=""></td>
 					</tr>
 					<tr>
@@ -425,6 +617,7 @@ function Display(form){
 						<td colspan=2>
 						<!-- 상품종류를 핸드폰 결제 실거래 전환후에는 발급받으신 상품종류로 변경하여 주시기 바랍니다. -->
 						<!-- 판매하는 상품이 디지털(컨텐츠)일 경우 = 1, 실물(상품)일 경우 = 2 -->
+    <!--
 						<select name=HP_UNITType style=width:100px>
 							<option value="1">디지털:1
 							<option value="2">실물:2
@@ -443,6 +636,7 @@ function Display(form){
 						<td width=180 class=clsleft>통보페이지 (100)</td>
 						<!-- 가상계좌 결제에서 입/출금 통보를 위한 필수 입력 사항 입니다. -->
 						<!-- 페이지주소는 도메인주소를 제외한 '/'이후 주소를 적어주시면 됩니다. -->
+    <!--
 						<td width=300><input type=text style=width:300px name=MallPage value="/mall/AGS_VirAcctResult.php"></td>
 						<td width=170 class=clsleft>예) /ab/AGS_VirAcctResult.jsp</td>
 					</tr>
@@ -451,6 +645,7 @@ function Display(form){
 						<!-- 가상계좌 결제에서 입금가능한 기한을 지정하는 기능입니다. -->
 						<!-- 발급일자로부터 최대 15일 이내로만 설정하셔야 합니다. -->
 						<!-- 값을 입력하지 않을 경우, 자동으로 발급일자로부터 5일 이후로 설정됩니다. -->
+    <!--
 						<td width=300><input type=text style=width:300px name=VIRTUAL_DEPODT value=""></td>
 						<td width=170 class=clsleft>예) 20100120</td>
 					</tr>
@@ -465,6 +660,7 @@ function Display(form){
 				<!--
 				<a href="javascript:Pay(frmAGS_pay);"><img src="button.gif" border="0"></a>
 				-->
+    <!--
 				</td>
 			</tr>
 			<tr><td>&nbsp;</td></tr>
@@ -472,6 +668,26 @@ function Display(form){
 		</td>
 	</tr>
 </table>
+-->
+
+    <input type=hidden name=Job maxlength=20 value="onlycard">
+    <input type=hidden name=StoreId value="<?php echo $StoreId?>">
+    <input type=hidden name=StoreNm value="<?php echo $StoreNm?>">
+    <input type=hidden name=OrdNo value="<?php echo $OrdNo?>">
+    <input type=hidden name=Amt value="<?php echo $amt?>">
+    <input type=hidden name=UserId value="<?php echo $UserId?>">
+    <input type=hidden name=ProdNm  value="<?php echo $ProdNm?>">
+    <input type=hidden name=MallUrl value="<?php echo $MallUrl?>">
+    <input type=hidden name=UserEmail maxlength=50 value="<?php echo $UserEmail?>">
+    <input type=hidden name=SubjectData value="<?php echo $SubjectData?>">
+    <input type=hidden name=OrdNm maxlength=40 value="<?php echo $OrdNm?>">
+    <input type=hidden name=OrdPhone maxlength=21 value="<?php echo $OrdPhone?>">
+    <input type=hidden name=OrdAddr maxlength=100 value="<?php echo $OrdAddr?>">
+    <input type=hidden name=RcpNm maxlength=40 value="<?php echo $OrdNm?>">
+    <input type=hidden name=RcpPhone maxlength=21 value="<?php echo $OrdPhone?>">
+    <input type=hidden name=DlvAddr maxlength=100 value="<?php echo $OrdAddr?>">
+    <input type=hidden name=Remark maxlength=350 value="<?php echo $Remark?>">
+    <input type=hidden name=CardSelect value="">
 
 
 
@@ -563,8 +779,29 @@ function Display(form){
 <!-- 스크립트 및 플러그인에서 값을 설정하는 Hidden 필드  !!수정을 하시거나 삭제하지 마십시오-->
 
 </form>
-</body>
+
+<div class="payment-button">
+    <input type="button" value="화상영어 수업료 결제하기" onclick="javascript:Pay(frmAGS_pay);">
+    <div class="click-again-text">수업료 결제창을 설치하는데 5분 이상 걸릴 수 있습니다. 충분히 기다려주세요.</div>
+    <div class="phone-text">결제가 어려우면 070-7893-1741 로 전화주세요.</div>
+</div>
+
+
+<div class="bottom-go-back">
+    <a href="https://iamtalkative.com">굿톡 화상영어 홈페이지로 돌아가기</a>
+</div>
+
 <!-- 아래 JS는 반드시 frmAGS_pay Form 하단에 위치시켜 주세요 -->
 <script type="text/javascript" src="https://www.allthegate.com/plugin/jquery-1.11.1.js"></script>
 <script type="text/javascript" src="https://www.allthegate.com/payment/webPay/js/ATGClient_new.js"></script>
+
+
+<script>
+    //parent.postMessage('payment-begin', '*');
+    setTimeout( function() { Pay(frmAGS_pay); }, 100 );
+</script>
+</body>
+
+
+
 </html> 
