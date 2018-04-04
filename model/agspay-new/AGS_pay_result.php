@@ -122,10 +122,10 @@ function show_receipt()
 //		var send_dt = appr_tm.value;
 		var send_dt = document.querySelector('[name="appr_tm"]').value; // by jaeho song.
 		
-		url="https://www.allthegate.com/customer/receiptLast3.jsp"
-		url=url+"?sRetailer_id="+sRetailer_id.value;
-		url=url+"&approve="+approve.value;
-		url=url+"&send_no="+send_no.value;
+		url="https://www.allthegate.com/customer/receiptLast3.jsp";
+		url=url+"?sRetailer_id="+document.querySelector('[name="sRetailer_id"]').value;
+		url=url+"&approve="+document.querySelector('[name="approve"]').value;
+		url=url+"&send_no="+document.querySelector('[name="send_no"]').value;
 		url=url+"&send_dt="+send_dt.substring(0,8);
 		
 		window.open(url, "window","toolbar=no,location=no,directories=no,status=,menubar=no,scrollbars=no,resizable=no,width=420,height=700,top=0,left=150");
@@ -232,10 +232,12 @@ function show_receipt()
                             ?>
                         </td>
 					</tr>
-					<tr>
-						<td class=clsright>처리메세지 : </td>
-						<td class=clsleft><?php echo_utf8($rResMsg)?></td>
-					</tr>
+
+<!--					<tr>-->
+<!--						<td class=clsright>처리메세지 : </td>-->
+<!--						<td class=clsleft>--><?php //echo_utf8($rResMsg)?><!--</td>-->
+<!--					</tr>-->
+
 <?				if($AuthTy == "card" || $AuthTy == "virtual") { ?>
 					<tr>
 						<td class=clsright>승인시각 : </td>
