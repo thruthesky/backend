@@ -398,7 +398,7 @@ function show_receipt()
 			<tr>
 				<td class=clsleft>
 결재가 완료되었습니다.
-<div style="float: right;"><a href="https://iamtalkative.com">굿톡 화상영어 홈페이지로 돌아가기</a></div>
+<div style="float: right;"><a href="https://www.iamtalkative.com">굿톡 화상영어 홈페이지로 돌아가기</a></div>
 </td>
 			</tr>
 		</table>
